@@ -49,7 +49,7 @@ class SubmitFile extends Component {
           {this.state.buttonText}
         </label>
         <input
-          className="btn btn-primary"
+          className="btn btn-primary m-2"
           name="Submit"
           id="Submit"
           type="submit"

@@ -5,11 +5,16 @@
   "dependencies": {
     "axios": "^0.18.0",
     "jquery": "^1.9.1",
+    "mdbreact": "^4.8.5-patch.1",
     "popper.js": "^1.14.6",
     "react": "^16.6.3",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
     "react-helmet": "^5.2.0",
+    "react-native": "^0.57.8",
     "react-native-circular-progress": "^1.0.1",
+    "react-native-cli": "^2.0.1",
+    "react-native-svg": "^8.0.10",
     "react-native-vector-icons": "^6.1.0",
     "react-native-view": "^1.1.0",
     "react-scripts": "2.1.1"
@@ -32,6 +37,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.2.1",
     "@babel/preset-env": "^7.2.0",
-    "@babel/preset-react": "^7.0.0"
+    "@babel/preset-react": "^7.0.0",
+    "babel-preset-react-native": "4.0.0"
   }
 }

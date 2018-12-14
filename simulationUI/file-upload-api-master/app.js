@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const cors = require('cors')
-
+const shell = require('shelljs');
 const app = express()
 
 // view engine setup
@@ -41,6 +41,16 @@ app.post('/upload', (req, res, next) => {
       })
     },
   )
+})
+
+app.post('/transfer', (req, res, next) => {
+  console.log(req.body.name)
+  shell.exec('/home/sitewhere/simulate.sh')
+})
+
+app.get('/simulation', (req, res, next) => {
+  image = shell.exec('cat /home/sitewhere/graph.jpg | base64')
+  res.send(image)
 })
 
 // catch 404 and forward to error handler

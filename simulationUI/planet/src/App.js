@@ -3,6 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./components/SubmitFile";
 import SubmitFile from "./components/SubmitFile";
+import Simulate from "./components/Simulate";
 
 class App extends Component {
   backgroundImgStyle =
@@ -22,6 +23,7 @@ class App extends Component {
         />
         <SubmitFile message="Upload Energy Load File" id="file2" />
         <SubmitFile message="Upload Simulink File" id="file3" />
+        <Simulate />
         <style>{this.backgroundImgStyle}</style>
       </div>
     );
