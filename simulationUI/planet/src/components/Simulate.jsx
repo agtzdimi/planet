@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import { post, get } from "axios";
+import { CsvToHtmlTable } from "react-csv-to-table";
 
 class Simulate extends Component {
   constructor(props, context) {
@@ -9,10 +10,10 @@ class Simulate extends Component {
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
+      csvData: "",
       isLoading: false,
       url: "http://localhost:8000/transfer",
-      data: { name: "Transfering" },
-      imageBase64: ""
+      data: { name: "Transfering" }
     };
   }
 
@@ -22,9 +23,10 @@ class Simulate extends Component {
       console.log("result", response)
     );
 
-    get("http://localhost:8000/simulation").then(response =>
-      this.setState({ imageBase64: "base64," + response.data })
-    );
+    get("http://localhost:8000/simulation").then(response => {
+      this.setState({ data: response.data });
+      this.setState({ csvData: response.data });
+    });
 
     // This probably where you would have an `ajax` call
     setTimeout(() => {
@@ -47,9 +49,10 @@ class Simulate extends Component {
         >
           {isLoading ? "Processing..." : "Simulate"}
         </Button>
-        <img
-          src={"data:image/jpeg;" + this.state.imageBase64}
-          style={{ width: "30%", height: "30%" }}
+        <CsvToHtmlTable
+          data={this.state.csvData}
+          csvDelimiter=","
+          tableClassName="table table-striped table-hover"
         />
       </div>
     );

@@ -49,8 +49,8 @@ app.post('/transfer', (req, res, next) => {
 })
 
 app.get('/simulation', (req, res, next) => {
-  image = shell.exec('cat /home/sitewhere/graph.jpg | base64')
-  res.send(image)
+  results = shell.exec('cat /home/sitewhere/results.csv')
+  res.send(results)
 })
 
 // catch 404 and forward to error handler

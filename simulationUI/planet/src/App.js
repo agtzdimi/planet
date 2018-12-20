@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./components/SubmitFile";
+import DashBoard from "./Views/DashBoard";
 import SubmitFile from "./components/SubmitFile";
 import Simulate from "./components/Simulate";
+import { BrowserRouter, Route } from "react-router-dom";
 
 class App extends Component {
   backgroundImgStyle =
@@ -16,16 +18,35 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <SubmitFile
-          message="Upload Components and Simulation Parameter File"
-          id="file1"
-        />
-        <SubmitFile message="Upload Energy Load File" id="file2" />
-        <SubmitFile message="Upload Simulink File" id="file3" />
-        <Simulate />
-        <style>{this.backgroundImgStyle}</style>
-      </div>
+      <BrowserRouter>
+        <div>
+          <Route
+            exact={true}
+            path="/"
+            render={() => (
+              <div className="App">
+                <SubmitFile
+                  message="Upload Components and Simulation Parameter File"
+                  id="file1"
+                />
+                <SubmitFile message="Upload Energy Load File" id="file2" />
+                <SubmitFile message="Upload Simulink File" id="file3" />
+                <a href="dashboard">Go to results page</a>
+                <style>{this.backgroundImgStyle}</style>
+              </div>
+            )}
+          />
+          <Route
+            exact={true}
+            path="/dashboard"
+            render={() => (
+              <div className="App">
+                <Simulate />
+              </div>
+            )}
+          />
+        </div>
+      </BrowserRouter>
     );
   }
 }
