@@ -10,6 +10,8 @@ import subprocess
 import numpy as np
 import argparse
 import scipy.io as sio
+import os
+import glob
 
 if __name__ == "__main__":
    # Parse the filename passed from the wrapper script
@@ -40,5 +42,9 @@ if __name__ == "__main__":
                   sig = signal['values'][0][idx]
                   np.savetxt(str(label[0]) + ".csv", sig, delimiter=",", fmt="%.5f", header=label[0], comments='')
 
-   subprocess.Popen(['pscp','-pw','7156471564','*.csv','sitewhere@192.168.42.128:/home/sitewhere/uploadedFiles'])
+   p1 = subprocess.Popen(['pscp','-pw','7156471564','*.csv','sitewhere@192.168.42.128:/home/sitewhere/uploadedFiles'])
+   p1.wait()
    subprocess.Popen(['mosquitto_pub','-m','Simulation File','-h','192.168.42.128','-t','simulate'])
+   fileList = glob.glob('*.csv') + glob.glob('*.mat')
+   for file in fileList:
+      os.remove(file)

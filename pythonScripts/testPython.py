@@ -21,36 +21,36 @@ Notes: In order for this script to run you have to install mosquitto MQTT and re
       - field3: the "userName@IP:" of the remote server
 """
 import subprocess
-import os
+import glob, os
 
 def load(flName):
-""" Function to be called when a user wants to load a simulink model
+   """ Function to be called when a user wants to load a simulink model
        This function will run the corresponding python script for load process of the simulink model
-"""
+   """
    subprocess.Popen(['python','load.py',flName])
 
 def execute(flName):
-""" Function to be called when a user wants to execute a simulink model
+   """ Function to be called when a user wants to execute a simulink model
        This function will run the corresponding python script for executing a simulink model
-"""
+   """
    subprocess.Popen(['python','execute.py',flName])
 
 def reset(flName):
-""" Function to be called when a user wants to reset a simulink model
+   """ Function to be called when a user wants to reset a simulink model
        This function will run the corresponding python script for reseting a simulink model
-"""
+   """
    subprocess.Popen(['python','reset.py',flName])
 
 def edit(flName):
-""" Function to be called when a user wants to build a simulink model
+   """ Function to be called when a user wants to build a simulink model
        This function will run the corresponding python script for building a simulink model
-"""
+   """
    subprocess.Popen(['python','edit.py',flName])
 
-def executeMode(mode,filePath):
-""" Function to be called when the user sends a message to execute a specific mode
+def executeMode(mode,path):
+   """ Function to be called when the user sends a message to execute a specific mode
        This function will initiate the process given in the recieved message
-"""
+   """
    switcher = {
       "load": load,
       "execute": execute,
@@ -60,8 +60,12 @@ def executeMode(mode,filePath):
    # Get the function from switcher dictionary
    func = switcher.get(mode.rstrip(), lambda: "Invalid Mode")
    # Execute the function
-   fileName = os.path.basename(filePath)
-   fileNameNoExt = os.path.splitext(fileName)[0]
+   os.chdir('C:\\Users\\Owner\\Documents\\paiko')
+   res = [f for f in glob.glob("*") if ".slx" in f or ".mdl" in f]
+   for f in res:
+      path = str(f)
+
+   fileNameNoExt = os.path.splitext(path)[0]
    func(fileNameNoExt)
 
 if __name__ == "__main__":
@@ -70,5 +74,6 @@ if __name__ == "__main__":
       msg, path, logInInfo = msg.decode("utf-8").split(",")
       destPath='C:\\Users\\Owner\\Documents\\paiko'
       logInInfo = logInInfo.rstrip() + path
-      subprocess.Popen(['pscp','-pw','7156471564',logInInfo,destPath])
+      p1 = subprocess.Popen(['pscp','-pw','7156471564',logInInfo,destPath])
+      p1.wait()
       executeMode(msg,path)

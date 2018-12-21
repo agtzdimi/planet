@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
-import { post, get } from "axios";
-import { CsvToHtmlTable } from "react-csv-to-table";
+import { post } from "axios";
+import Table from "./Table";
 
 class Simulate extends Component {
   constructor(props, context) {
@@ -19,14 +19,10 @@ class Simulate extends Component {
 
   handleClick() {
     this.setState({ isLoading: true });
+    console.log("I am HERE");
     post(this.state.url, this.state.data).then(response =>
       console.log("result", response)
     );
-
-    get("http://localhost:8000/simulation").then(response => {
-      this.setState({ data: response.data });
-      this.setState({ csvData: response.data });
-    });
 
     // This probably where you would have an `ajax` call
     setTimeout(() => {
@@ -49,11 +45,7 @@ class Simulate extends Component {
         >
           {isLoading ? "Processing..." : "Simulate"}
         </Button>
-        <CsvToHtmlTable
-          data={this.state.csvData}
-          csvDelimiter=","
-          tableClassName="table table-striped table-hover"
-        />
+        <Table />
       </div>
     );
   }
