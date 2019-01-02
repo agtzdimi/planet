@@ -14,6 +14,14 @@ app.set('view engine', 'jade')
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(function(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+})
+.options('*', function(req, res, next){
+    res.end();
+});
 app.use(logger('dev'))
 app.use(cors())
 app.use(bodyParser.json())
@@ -43,12 +51,13 @@ app.post('/upload', (req, res, next) => {
   )
 })
 
-app.post('/transfer', (req, res, next) => {
-  console.log(req.body.name)
+app.post('/transfer', (req, res) => {
+  console.log(req.body)
   shell.exec('/home/sitewhere/simulate.sh')
+  return res.send("Transfer Completed")
 })
 
-app.get('/simulation', (req, res, next) => {
+app.get('/simulation', (req, res) => {
   results = shell.exec('cat /home/sitewhere/results.csv')
   res.send(results)
 })

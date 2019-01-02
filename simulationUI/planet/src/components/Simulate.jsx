@@ -4,32 +4,34 @@ import { post } from "axios";
 import Table from "./Table";
 
 class Simulate extends Component {
-  constructor(props, context) {
-    super(props, context);
+  state = {
+    csvData: "",
+    isLoading: false,
+    displayTable: false,
+    url: "http://localhost:8000/transfer",
+    data: { name: "Transfering" }
+  };
 
-    this.handleClick = this.handleClick.bind(this);
-
-    this.state = {
-      csvData: "",
-      isLoading: false,
-      url: "http://localhost:8000/transfer",
-      data: { name: "Transfering" }
-    };
+  async sendData() {
+    try {
+      await post(this.state.url, this.state.data).then(response => {
+        console.log(response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  handleClick() {
+  handleClick = () => {
     this.setState({ isLoading: true });
-    console.log("I am HERE");
-    post(this.state.url, this.state.data).then(response =>
-      console.log("result", response)
-    );
 
-    // This probably where you would have an `ajax` call
+    this.sendData();
+
     setTimeout(() => {
       // Completed of async action, set loading state back
-      this.setState({ isLoading: false });
+      this.setState({ isLoading: false, displayTable: true });
     }, 2000);
-  }
+  };
 
   render() {
     const { isLoading } = this.state;
@@ -45,7 +47,7 @@ class Simulate extends Component {
         >
           {isLoading ? "Processing..." : "Simulate"}
         </Button>
-        <Table />
+        {this.state.displayTable && <Table />}
       </div>
     );
   }

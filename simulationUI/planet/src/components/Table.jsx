@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { post, get } from "axios";
+import { get } from "axios";
 import { CsvToHtmlTable } from "react-csv-to-table";
 
 class Table extends Component {

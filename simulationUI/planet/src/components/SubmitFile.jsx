@@ -25,11 +25,11 @@ class SubmitFile extends Component {
     }
   }
 
-  handleUpload() {
+  handleUpload = () => {
     post(this.state.url, this.state.data).then(response =>
       console.log("result", response)
     );
-  }
+  };
 
   render() {
     return (
@@ -54,7 +54,7 @@ class SubmitFile extends Component {
           id="Submit"
           type="submit"
           value="Upload"
-          onClick={() => this.handleUpload()}
+          onClick={this.handleUpload}
         />
       </div>
     );
