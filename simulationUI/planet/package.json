@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "babel-cli": "^6.26.0",
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
@@ -13,6 +12,7 @@
     "express": "^4.16.4",
     "express-fileupload": "^1.1.1-alpha.1",
     "express-session": "^1.15.6",
+    "jade": "^1.11.0",
     "jquery": "^1.9.1",
     "mdbreact": "^4.8.5-patch.1",
     "mongodb": "^3.1.10",
@@ -62,6 +62,8 @@
     "@babel/plugin-proposal-class-properties": "^7.2.1",
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-preset-react-native": "4.0.0"
+    "babel-preset-react-native": "4.0.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }

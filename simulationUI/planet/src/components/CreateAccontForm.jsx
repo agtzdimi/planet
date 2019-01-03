@@ -1,67 +1,55 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { Label } from "react-bootstrap";
 
 // semantic-ui
 import { Container, Form, Input, Button, Grid } from "semantic-ui-react";
 
-// alert
-import Alert from "react-s-alert";
-
 // API
 import * as MyAPI from "../utils/MyAPI";
 import { LOCAL_STRAGE_KEY } from "../utils/Settings";
-
 import { loginWithEmailRedux } from "../actions/UserActions";
 
-class LoginForm extends Component {
+class CreateAccontForm extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    message: ""
   };
 
   onSubmit = () => {
     const { email, password } = this.state;
+
     const params = {
       email: email,
-      password: password
+      password: password,
+      message: ""
     };
 
     // create account
-    MyAPI.signinWithPassword(params)
+    MyAPI.createAccount(params)
       .then(data => {
-        return new Promise((resolve, reject) => {
-          if (data.status !== "success") {
-            let error_text = "Error";
-            if (data.detail) {
-              error_text = data.detail;
-            }
-            reject(error_text);
-          } else {
-            // success
-            const params = {
-              user: data.user,
-              login_token: data.login_token
-            };
+        // save account
+        if(data.status === "error") {
+          throw new Error(data.detail);
+        }
+        // success
+        const params = {
+          user: data.user,
+          login_token: data.login_token
+        };
 
-            localStorage.setItem(LOCAL_STRAGE_KEY, JSON.stringify(params));
-            this.props.mapDispatchToLoginWithPassword(params);
-            resolve();
-          }
-        });
+        localStorage.setItem(LOCAL_STRAGE_KEY, JSON.stringify(params));
+
+        this.props.mapDispatchToLoginWithPassword(params);
       })
       .then(() => {
         // redirect
-        this.props.history.push("/home");
+        this.props.history.push("/");
       })
       .catch(err => {
-        console.log("err:", err);
-
-        Alert.error(err, {
-          position: "top-right",
-          effect: "slide",
-          timeout: 5000
-        });
+        this.setState({message: "Error: " + err})
       });
   };
 
@@ -109,8 +97,11 @@ class LoginForm extends Component {
                 disabled={this.state.loading}
                 type="submit"
               >
-                Sign in
+                Create an account
               </Button>
+            </Grid.Column>
+            <Grid.Column textAlign="center" width={16}>
+            <Label className="text-danger" style={{fontSize: "16px"}}>{this.state.message} </Label>
             </Grid.Column>
           </Grid>
         </Form>
@@ -138,5 +129,5 @@ export default withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(LoginForm)
+  )(CreateAccontForm)
 );

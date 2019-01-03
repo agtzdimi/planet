@@ -6,19 +6,19 @@ import { Link } from "react-router-dom";
 // semantic-ui
 import { Container, Grid } from "semantic-ui-react";
 
-import LoginForm from "./LoginForm";
+import CreateAccontForm from "./CreateAccontForm";
 
-class Home extends Component {
+class CreateAccont extends Component {
   render() {
     return (
-      <Container className="home" style={{ textAlign: "center" }}>
+      <Container className="create_acount" style={{ textAlign: "center" }}>
         <Grid style={{ marginTop: 60 }}>
           <Grid.Column textAlign="right" width={16}>
-            <Link to="/create_acount">Create an account</Link>
+            <Link to="/">Sign in</Link>
           </Grid.Column>
         </Grid>
 
-        <LoginForm />
+        <CreateAccontForm />
       </Container>
     );
   }
@@ -32,4 +32,4 @@ function mapStateToProps({ user }) {
 }
 
 // export default withRouter(MainPage);
-export default withRouter(connect(mapStateToProps)(Home));
+export default withRouter(connect(mapStateToProps)(CreateAccont));
