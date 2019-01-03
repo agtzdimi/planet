@@ -37,13 +37,18 @@ class Simulate extends Component {
     const { isLoading } = this.state;
 
     return (
-      <div>
-        <h3>Simulate Results</h3>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
         <Button
-          className="m-2"
-          bsStyle="primary"
+          className="btn btn-primary m-2"
           disabled={isLoading}
           onClick={!isLoading ? this.handleClick : null}
+          style={{ width: "15%" }}
         >
           {isLoading ? "Processing..." : "Simulate"}
         </Button>

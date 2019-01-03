@@ -32,13 +32,13 @@ app.use(
 )
 app.use(cookieParser())
 app.use(fileUpload())
-app.use('/public', express.static(__dirname + '/public'))
+app.use('/public', express.static(__dirname + '../public'))
 
 app.post('/upload', (req, res, next) => {
   let uploadFile = req.files.file
   const fileName = req.files.file.name
   uploadFile.mv(
-    `${__dirname}/public/files/${fileName}`,
+    `${__dirname}/../public/files/${fileName}`,
     function (err) {
       if (err) {
         return res.status(500).send(err)
