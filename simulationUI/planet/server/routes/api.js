@@ -48,6 +48,7 @@ exports.echo = (req, res) => {
 exports.create_user = (req, res) => {
   let password = req.body.password;
   let email = req.body.email;
+  let isAdmin = req.body.isAdmin;
   let api_key = req.headers.authorization;
 
   if (api_key !== API_KEY) {
@@ -115,6 +116,9 @@ exports.create_user = (req, res) => {
             verified: false
           }
         ],
+        isAdmin: [
+          { admin: isAdmin }
+        ],
         profile: {}
       };
 
@@ -142,7 +146,7 @@ exports.create_user = (req, res) => {
     .catch(err => {
       res.json({ status: "error", detail: err });
     });
-    
+
 };
 
 // login with email and password
@@ -297,7 +301,7 @@ exports.logout = (req, res) => {
       return mongoDbHelper.collection("users").update(find_param, upd_param);
     })
     .then(() => {
-      return new Promise((resolve, reject) => {});
+      return new Promise((resolve, reject) => { });
       req.session.destroy(err => {
         if (err) {
           reject(err);

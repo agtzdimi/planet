@@ -28,11 +28,13 @@ class Table extends Component {
 
   render() {
     return (
-      <CsvToHtmlTable
-        data={this.state.csvData}
-        csvDelimiter=","
-        tableClassName="table table-striped table-hover"
-      />
+      <div style={{ marginLeft: "20vh" }}>
+        <CsvToHtmlTable
+          data={this.state.csvData}
+          csvDelimiter=","
+          tableClassName="table table-striped table-hover"
+        />
+      </div>
     );
   }
 }

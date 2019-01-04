@@ -4,13 +4,12 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./components/SubmitFile";
 import SubmitFile from "./components/SubmitFile";
 import Simulate from "./components/Simulate";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import NoMatch from "./components/NoMatch";
 import CreateAccont from "./components/CreateAccont";
-
-import Alert from "react-s-alert";
+import { Segment, Menu, Image, Icon, Sidebar } from "semantic-ui-react";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
 
@@ -69,11 +68,37 @@ class App extends Component {
       });
   };
 
+  getSideBar = () => {
+    return (
+      <div style={{ height: '100vh', position: "absolute", width: "17vh" }}>
+        < Sidebar.Pushable as={Segment}>
+          <Sidebar as={Menu} animation='overlay' icon='labeled' inverted vertical visible width='thin'>
+            <Menu.Item as={Link} to="/home">
+              <Icon name='home' />
+              Home
+                </Menu.Item>
+            <Menu.Item as={Link} to="/dashboard">
+              <Icon name='line graph' />
+              Simulations
+                </Menu.Item>
+            <Menu.Item as={Link} to="/manage_acounts">
+              <Icon name='users' />
+              Manage Acounts
+                </Menu.Item>
+          </Sidebar>
+        </Sidebar.Pushable >
+      </div >)
+  }
+
   render() {
     return (
       <BrowserRouter>
         <div>
-          
+          <Segment inverted>
+            <Menu inverted secondary>
+              <Image src='./planet.png' style={{ height: "85px", width: "120px" }} />
+            </Menu>
+          </Segment>
           <Route exact path="/" render={() => <Home />} />
           <Route exact path="/notfound" component={NoMatch} />
 
@@ -86,19 +111,12 @@ class App extends Component {
             path="/home"
             render={() => (
               <div className="App">
-              <ul className="header">
-            <li>
-              <a href="/home">Home</a>
-            </li>
-            <li>
-              <a href="dashboard">Simulation Results</a>
-            </li>
-          </ul>
                 <SubmitFile
                   message="Upload Components and Simulation Parameter File"
                   id="file1"
+                  sideBar={this.getSideBar()}
                 />
-                <SubmitFile message="Upload Energy Load File" id="file2" />
+                <SubmitFile message="Upload Energy Load File" id="file2" userData={mapDispatchToProps} />
                 <SubmitFile message="Upload Simulink File" id="file3" />
               </div>
             )}
@@ -108,15 +126,7 @@ class App extends Component {
             path="/dashboard"
             render={() => (
               <div className="App">
-              <ul className="header">
-            <li>
-              <a href="/home">Home</a>
-            </li>
-            <li>
-              <a href="dashboard">Simulation Results</a>
-            </li>
-          </ul>
-                <Simulate />
+                <Simulate sideBar={this.getSideBar()} />
               </div>
             )}
           />
@@ -139,4 +149,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default App;
+// export default App;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
