@@ -87,8 +87,10 @@ exports.create_user = (req, res) => {
         .digest("base64");
 
       const token_object = {
-        when: new Date(),
-        hashedToken: hashed_token
+        loggedIn: new Date(),
+        hashedToken: hashed_token,
+        loggedOut: new Date(),
+        logStatus: "false"
       };
 
       let insert_params = {
@@ -116,9 +118,7 @@ exports.create_user = (req, res) => {
             verified: false
           }
         ],
-        isAdmin: [
-          { admin: isAdmin }
-        ],
+        isAdmin: isAdmin,
         profile: {}
       };
 
@@ -189,6 +189,7 @@ exports.login_with_email_password = (req, res) => {
         // set user info
         user_info._id = results._id;
         user_info.profile = results.profile;
+        user_info.isAdmin = results.isAdmin;
 
         let password2 = sha256(password);
 
@@ -222,8 +223,10 @@ exports.login_with_email_password = (req, res) => {
         .digest("base64");
 
       const token_object = {
-        when: new Date(),
-        hashedToken: hashed_token
+        loggedIn: new Date(),
+        hashedToken: hashed_token,
+        loggedOut: "",
+        logStatus: "true"
       };
 
       let upd_param = {
@@ -252,8 +255,7 @@ exports.login_with_email_password = (req, res) => {
 
 // logout
 exports.logout = (req, res) => {
-  // let login_token = req.body.login_token;
-  let login_token = req.session.login_token;
+  let login_token = req.body.login_token;
   if (!login_token) {
     // user is not login
     res.json({ status: "success" });
@@ -288,26 +290,42 @@ exports.logout = (req, res) => {
         return Promise.reject("no such token");
       }
 
+      let index = 0
+      for (let i = 0; i < results.services.resume.loginTokens.length; i++) {
+        if (results.services.resume.loginTokens[i].hashedToken === hashed_token) {
+          index = i
+        }
+      }
+
+
       let find_param = {
-        _id: results._id
+        loggedOut: results.services.resume.loginTokens.loggedOut,
+        logStatus: results.services.resume.loginTokens.logStatus
       };
-      var upd_param = {
-        $pull: {
-          "services.resume.loginTokens": {
-            type: "ios"
-          }
+
+      const token_object = {
+        loggedOut: new Date(),
+        logStatus: "false"
+      };
+
+      let upd_param = {
+        $set: {
+          ["services.resume.loginTokens." + index + ".loggedOut"]: token_object.loggedOut,
+          ["services.resume.loginTokens." + index + ".logStatus"]: token_object.logStatus,
         }
       };
+
       return mongoDbHelper.collection("users").update(find_param, upd_param);
     })
     .then(() => {
-      return new Promise((resolve, reject) => { });
-      req.session.destroy(err => {
-        if (err) {
-          reject(err);
-        }
-        resolve();
-      });
+      return new Promise((resolve, reject) => {
+        req.session.destroy(err => {
+          if (err) {
+            reject(err);
+          }
+          resolve();
+        });
+      })
     })
     .then(() => {
       res.json({ status: "success" });
@@ -355,6 +373,7 @@ exports.login_with_token = (req, res) => {
 
       user_info._id = results._id;
       user_info.profile = results.profile;
+      user_info.isAdmin = results.isAdmin;
 
       // set session
       req.session.login_token;

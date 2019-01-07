@@ -34,7 +34,6 @@ class SubmitFile extends Component {
   };
 
   render() {
-    console.log("HERE", this.props)
     return (
       <div onSubmit={this.onFormSubmit}>
         {this.props.sideBar}

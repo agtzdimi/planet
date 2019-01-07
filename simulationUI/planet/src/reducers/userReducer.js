@@ -2,12 +2,12 @@ import {
   LOGIN_WITH_EMAIL,
 } from '../actions/UserActions'
 
-function user (state = {}, action) {
+function user(state = {}, action) {
 
   switch (action.type) {
 
-    case LOGIN_WITH_EMAIL :
-    
+    case LOGIN_WITH_EMAIL:
+
       const { login_token, user } = action.params
 
       return {
@@ -16,7 +16,7 @@ function user (state = {}, action) {
         user: user,
       }
 
-    default :
+    default:
       return state
   }
 }

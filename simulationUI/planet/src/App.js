@@ -38,6 +38,13 @@ class App extends Component {
     }
   }
 
+  state = {
+    renderAcounts: false
+  };
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ renderAcounts: nextProps.user.user.isAdmin })
+  }
   signinWithTokenRequest = login_token => {
     // login with token
 
@@ -54,7 +61,8 @@ class App extends Component {
             // success
             const params = {
               user: data.user,
-              login_token: data.login_token
+              login_token: data.login_token,
+              isAdmin: data.isAdmin
             };
             localStorage.setItem(LOCAL_STRAGE_KEY, JSON.stringify(params));
             this.props.mapDispatchToLoginWithPassword(params);
@@ -81,9 +89,13 @@ class App extends Component {
               <Icon name='line graph' />
               Simulations
                 </Menu.Item>
-            <Menu.Item as={Link} to="/manage_acounts">
+            {this.state.renderAcounts ? (<Menu.Item as={Link} to="/manage_acounts">
               <Icon name='users' />
               Manage Acounts
+                </Menu.Item>) : null}
+            <Menu.Item as={Link} to="/logout">
+              <Icon name='log out' />
+              Log Out
                 </Menu.Item>
           </Sidebar>
         </Sidebar.Pushable >
@@ -96,7 +108,7 @@ class App extends Component {
         <div>
           <Segment inverted>
             <Menu inverted secondary>
-              <Image src='./planet.png' style={{ height: "85px", width: "120px" }} />
+              <Image src='./planet.png' style={{ height: "85px", width: "120px" }} href="/home" />
             </Menu>
           </Segment>
           <Route exact path="/" render={() => <Home />} />
@@ -104,7 +116,7 @@ class App extends Component {
 
           <Route exact path="/logout" render={() => <Dashboard />} />
 
-          <Route exact path="/create_acount" render={() => <CreateAccont />} />
+          <Route exact path="/manage_accounts" render={() => <CreateAccont />} />
 
           <Route
             exact={true}
@@ -116,7 +128,7 @@ class App extends Component {
                   id="file1"
                   sideBar={this.getSideBar()}
                 />
-                <SubmitFile message="Upload Energy Load File" id="file2" userData={mapDispatchToProps} />
+                <SubmitFile message="Upload Energy Load File" id="file2" />
                 <SubmitFile message="Upload Simulink File" id="file3" />
               </div>
             )}
@@ -136,9 +148,9 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({ categories }) {
+function mapStateToProps({ user }) {
   return {
-    categories
+    user
   };
 }
 
