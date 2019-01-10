@@ -28,7 +28,7 @@ class Table extends Component {
 
   render() {
     return (
-      <div style={{ marginLeft: "20vh" }}>
+      <div style={{ marginLeft: "13vh" }}>
         <CsvToHtmlTable
           data={this.state.csvData}
           csvDelimiter=","

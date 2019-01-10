@@ -2,17 +2,19 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { Label } from "react-bootstrap";
+import { newUser } from "../actions/UserActions";
 
 // semantic-ui
 import { Container, Form, Input, Button, Grid, Checkbox, Icon } from "semantic-ui-react";
 
 // API
 import * as MyAPI from "../utils/MyAPI";
-import { LOCAL_STRAGE_KEY } from "../utils/Settings";
 import { loginWithEmailRedux } from "../actions/UserActions";
 
 class CreateAccontForm extends Component {
     state = {
+        name: "",
+        surname: "",
         email: "",
         password: "",
         message: "",
@@ -25,12 +27,14 @@ class CreateAccontForm extends Component {
     }
 
     onSubmit = () => {
-        const { email, password, isAdmin } = this.state;
+        const { email, password, isAdmin, name, surname } = this.state;
 
         const params = {
             email: email,
             password: password,
-            isAdmin: isAdmin
+            isAdmin: isAdmin,
+            name: name,
+            surname: surname
         };
 
         // create account
@@ -40,19 +44,11 @@ class CreateAccontForm extends Component {
                 if (data.status === "error") {
                     throw new Error(data.detail);
                 }
-                // success
-                const params = {
-                    user: data.user,
-                    login_token: data.login_token
-                };
-
-                localStorage.setItem(LOCAL_STRAGE_KEY, JSON.stringify(params));
-
-                this.props.mapDispatchToLoginWithPassword(params);
+                this.props.mapDispatchNewUser()
             })
             .then(() => {
                 // redirect
-                this.props.history.push("/");
+                this.props.history.push("/manage_accounts");
             })
             .catch(err => {
                 this.setState({ message: "" + err })
@@ -64,7 +60,7 @@ class CreateAccontForm extends Component {
     };
 
     render() {
-        const { email, password } = this.state;
+        const { email, password, name, surname } = this.state;
 
         return (
             <Container text className="create_acount_form">
@@ -73,6 +69,32 @@ class CreateAccontForm extends Component {
 
                         <Grid.Column textAlign="center" width={16}>
                             <Icon size='massive' name='user circle' />
+                        </Grid.Column>
+
+                        <Grid.Column textAlign="left" width={16}>
+                            <label>Name</label>
+                            <Input
+                                style={{ width: "100%" }}
+                                icon="id card outline"
+                                iconPosition="left"
+                                name="name"
+                                onChange={this.handleChange}
+                                value={name}
+                                placeholder="Name"
+                            />
+                        </Grid.Column>
+
+                        <Grid.Column textAlign="left" width={16}>
+                            <label>Surname</label>
+                            <Input
+                                style={{ width: "100%" }}
+                                icon="id card"
+                                iconPosition="left"
+                                name="surname"
+                                onChange={this.handleChange}
+                                value={surname}
+                                placeholder="Surname"
+                            />
                         </Grid.Column>
 
                         <Grid.Column textAlign="left" width={16}>
@@ -140,7 +162,9 @@ function mapStateToProps({ user }) {
 function mapDispatchToProps(dispatch) {
     return {
         mapDispatchToLoginWithPassword: data =>
-            dispatch(loginWithEmailRedux({ params: data }))
+            dispatch(loginWithEmailRedux({ params: data })),
+        mapDispatchNewUser: () =>
+            dispatch(newUser())
     };
 }
 

@@ -5,15 +5,15 @@ import { connect } from "react-redux";
 // semantic-ui
 import { Container } from "semantic-ui-react";
 
-import CreateAccontForm from "./CreateAccontForm";
+import UpdateAccountForm from "./UpdateAccountForm";
 
-class CreateAccont extends Component {
+class UpdateAccount extends Component {
   render() {
     return (
       <div>
         {this.props.sideBar}
         <Container className="create_acount" style={{ textAlign: "center" }}>
-          <CreateAccontForm />
+          <UpdateAccountForm />
         </Container>
       </div>
     );
@@ -28,4 +28,4 @@ function mapStateToProps({ user }) {
 }
 
 // export default withRouter(MainPage);
-export default withRouter(connect(mapStateToProps)(CreateAccont));
+export default withRouter(connect(mapStateToProps)(UpdateAccount));

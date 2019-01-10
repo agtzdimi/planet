@@ -1,6 +1,4 @@
-import {
-  LOGIN_WITH_EMAIL,
-} from '../actions/UserActions'
+import { LOGIN_WITH_EMAIL, NEW_USER, RESET_NEW_ACCOUNT, UPDATE_USER } from '../actions/UserActions'
 
 function user(state = {}, action) {
 
@@ -15,6 +13,29 @@ function user(state = {}, action) {
         login_token: login_token,
         user: user,
       }
+
+    case NEW_USER:
+
+      return {
+        ...state,
+        newAccount: true
+      }
+
+    case RESET_NEW_ACCOUNT:
+
+      return {
+        ...state,
+        newAccount: false
+      }
+
+    case UPDATE_USER:
+      const userInfo = { ...action.params }
+
+      return {
+        ...state,
+        userInfo: userInfo
+      }
+
 
     default:
       return state

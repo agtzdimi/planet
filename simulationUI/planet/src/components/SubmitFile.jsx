@@ -37,7 +37,7 @@ class SubmitFile extends Component {
     return (
       <div onSubmit={this.onFormSubmit}>
         {this.props.sideBar}
-        <div style={{ marginLeft: "20vh" }}>
+        <div style={{ marginLeft: "13vh" }}>
           <h3>{this.props.message}</h3>
           <input
             type="file"

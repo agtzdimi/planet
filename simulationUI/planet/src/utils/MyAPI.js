@@ -21,6 +21,19 @@ const createAccount = async (params) =>
 
 export { createAccount }
 
+// create an account
+const updateAccount = async (params) =>
+    await fetch(`${api}/update_user`, {
+        method: "POST",
+        headers: {
+            ...headers,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(params)
+    }).then(res => res.json());
+
+export { updateAccount }
+
 // signin
 const signinWithPassword = async (params) =>
     await fetch(`${api}/login_with_email_password`, {
@@ -33,6 +46,33 @@ const signinWithPassword = async (params) =>
     }).then(res => res.json());
 
 export { signinWithPassword }
+
+// get user list
+const getUserList = async () =>
+    await fetch(`${api}/get_user_list`, {
+        method: "POST",
+        headers: {
+            ...headers,
+            "Content-Type": "application/json"
+        }
+    }).then(res => res.json());
+
+export { getUserList }
+
+// remove user from list
+const removeUser = async (userID) => {
+    let user = { userId: userID }
+    await fetch(`${api}/remove_user`, {
+        method: "POST",
+        headers: {
+            ...headers,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    }).then(res => res.json());
+}
+
+export { removeUser }
 
 // upload
 export const upload = data =>
