@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col">
+    <nb-card>
+      <nb-card-header>Upload Simulation Input Files</nb-card-header>
+      <nb-card-body>
+
+        <button nbButton type="button" class="start-upload-btn m-2" (click)="startSimulation()">
+          Start Simulation
+        </button>
+
+        <button nbButton type="button" class="start-upload-btn" (click)="simulateChart()">
+          Start Simulation
+        </button>
+
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>Electrical Demand, RES producibility, dsipatch of the electric surplus</nb-card-header>
+      <nb-card-body>
+        <ngx-simulation-area-stack [data]="areaChart1"></ngx-simulation-area-stack>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

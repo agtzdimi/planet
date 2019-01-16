@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col">
+    <nb-card>
+      <nb-card-header>Upload Simulation Input Files</nb-card-header>
+      <nb-card-body>
+
+        <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
+          [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+          <div class="row label label-info">
+            <p>Upload Energy Load File</p>
+          </div>
+          <label class="upload-button m-2">
+            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput"
+              multiple>
+            or choose file(s)
+          </label>
+          <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
+            Start Upload
+          </button>
+          <hr>
+        </div>
+
+        <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
+          [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+          <div class="row label label-info">
+            <p>Upload Simulink File</p>
+          </div>
+          <label class="upload-button m-2">
+            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput"
+              multiple>
+            or choose file(s)
+          </label>
+          <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
+            Start Upload
+          </button>
+          <hr>
+        </div>
+
+        <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
+          [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+          <div class="row label label-info">
+            <p>Upload Simulation Input Files</p>
+          </div>
+          <label class="upload-button m-2">
+            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput"
+              multiple>
+            or choose file(s)
+          </label>
+          <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
+            Start Upload
+          </button>
+          <hr>
+        </div>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
