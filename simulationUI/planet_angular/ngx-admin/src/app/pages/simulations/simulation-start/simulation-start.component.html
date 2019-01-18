@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col">
+
     <nb-card>
       <nb-card-header>Upload Simulation Input Files</nb-card-header>
       <nb-card-body>
@@ -14,11 +15,27 @@
 
       </nb-card-body>
     </nb-card>
+
     <nb-card>
-      <nb-card-header>Electrical Demand, RES producibility, dsipatch of the electric surplus</nb-card-header>
+      <nb-card-header>Electrical Demand, RES producibility, dispatch of the electric surplus</nb-card-header>
       <nb-card-body>
         <ngx-simulation-area-stack [data]="areaChart1"></ngx-simulation-area-stack>
       </nb-card-body>
     </nb-card>
+
+    <nb-card>
+      <nb-card-header>Fulfilment of the Element Demand</nb-card-header>
+      <nb-card-body>
+        <ngx-simulation-area-stack [data]="areaChart2"></ngx-simulation-area-stack>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card>
+      <nb-card-header>Fulfilment of the Heat Demand (Both DH and LHD)</nb-card-header>
+      <nb-card-body>
+        <ngx-simulation-area-stack [data]="areaChart3"></ngx-simulation-area-stack>
+      </nb-card-body>
+    </nb-card>
+
   </div>
 </div>

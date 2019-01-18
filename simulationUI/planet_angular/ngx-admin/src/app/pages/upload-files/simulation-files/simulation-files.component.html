@@ -1,58 +1,92 @@
 <div class="row">
-  <div class="col">
+  <div class="col-xxl-12">
+
     <nb-card>
-      <nb-card-header>Upload Simulation Input Files</nb-card-header>
       <nb-card-body>
-
-        <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
-          [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
-          <div class="row label label-info">
-            <p>Upload Energy Load File</p>
-          </div>
-          <label class="upload-button m-2">
-            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput"
-              multiple>
-            or choose file(s)
-          </label>
-          <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
-            Start Upload
-          </button>
-          <hr>
+        <div class="row label label-info">
+          <h3>Upload Energy Load File</h3>
         </div>
-
-        <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
-          [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
-          <div class="row label label-info">
-            <p>Upload Simulink File</p>
-          </div>
-          <label class="upload-button m-2">
-            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput"
-              multiple>
-            or choose file(s)
-          </label>
-          <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
-            Start Upload
-          </button>
-          <hr>
-        </div>
-
-        <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
-          [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
-          <div class="row label label-info">
-            <p>Upload Simulation Input Files</p>
-          </div>
-          <label class="upload-button m-2">
-            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput"
-              multiple>
-            or choose file(s)
-          </label>
-          <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
-            Start Upload
-          </button>
-          <hr>
-        </div>
-
+        <label class="upload-button m-2">
+          <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,1)" [uploadInput]="uploadInput"
+            multiple class="btn btn-primary">
+          <span class="btn btn-primary m-2">{{getFileName(1)}}</span>
+        </label>
+        <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
+          Start Upload
+        </button>
       </nb-card-body>
     </nb-card>
+
+    <div class="row">
+      <div class="col-md-4">
+
+        <nb-card>
+          <nb-card-header>Simulation Parameters</nb-card-header>
+          <nb-card-body>
+            <div class="form-group row">
+              <label for="dt" class="col-sm-8 col-form-label">DT</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" id="dt" placeholder="">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="simulation-time" class="col-sm-8 col-form-label">Simulation Time</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" id="simulation-time" placeholder="">
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Control System</nb-card-header>
+          <nb-card-body>
+            <div class="form-group row">
+              <label for="dt" class="col-sm-8 col-form-label">Option</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" id="control-system" placeholder="1">
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+
+      <div class="col-md-8">
+        <ngx-tech-param></ngx-tech-param>
+      </div>
+    </div>
+
+    <nb-card>
+      <nb-card-body>
+        <div class="row label label-info">
+          <h3>Upload Simulink File</h3>
+        </div>
+        <label class="upload-button m-2">
+          <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,2)" [uploadInput]="uploadInput"
+            multiple>
+          <span class="btn btn-primary m-2">{{getFileName(2)}}</span>
+        </label>
+        <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
+          Start Upload
+        </button>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card>
+      <nb-card-body>
+        <div class="row label label-info">
+          <h3>Upload Simulation Input Files</h3>
+        </div>
+        <label class="upload-button m-2">
+          <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,3)" [uploadInput]="uploadInput"
+            multiple>
+          <span class="btn btn-primary m-2">{{getFileName(3)}}</span>
+        </label>
+        <button nbButton type="button" class="start-upload-btn" (click)="startUpload()">
+          Start Upload
+        </button>
+      </nb-card-body>
+    </nb-card>
+
   </div>
 </div>

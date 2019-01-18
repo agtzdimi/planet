@@ -8,44 +8,62 @@ import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions }
 })
 export class UploadSimulationFilesComponent {
 
-  selectedFile: File;
-
-  onFileChanged(event) {
-    this.selectedFile = event.target.files[0]
-  }
-
-  onUpload() {
-
-  }
   options: UploaderOptions;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
   humanizeBytes: Function;
   dragOver: boolean;
+  fileName1: string = "Upload Files"
+  fileName2: string = "Upload Files"
+  fileName3: string = "Upload Files"
+  text1 = {}
+  private alive = true;
+  revealed = false;
+  period: string = 'paok';
+
 
   constructor() {
-    this.options = { concurrency: 1, maxUploads: 3 };
+    this.options = { concurrency: 1, maxUploads: 1 };
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
   }
 
-  onUploadOutput(output: UploadOutput): void {
+  updateFilename(id, output) {
+
+    let fileReader = new FileReader();
+    fileReader.onload = () => {
+      let text = fileReader.result as string;
+      this.text1 = JSON.parse(text)
+    };
+    fileReader.readAsText(output.file.nativeFile);
+    switch (id) {
+      case 1:
+        this.fileName1 = output.file.name
+        break;
+      case 2:
+        this.fileName2 = output.file.name
+        break;
+      case 3:
+        this.fileName3 = output.file.name
+        break;
+    }
+  }
+
+  onUploadOutput(output: UploadOutput, id): void {
     switch (output.type) {
-      case 'allAddedToQueue':
-        // uncomment this if you want to auto upload files when added
-        // const event: UploadInput = {
-        //   type: 'uploadAll',
-        //   url: '/upload',
-        //   method: 'POST',
-        //   data: { foo: 'bar' }
-        // };
-        // this.uploadInput.emit(event);
+      case 'rejected':
+        if (typeof output.file !== 'undefined') {
+          this.files = [];
+          this.files.push(output.file);
+          this.updateFilename(id, output)
+        }
         break;
       case 'addedToQueue':
         if (typeof output.file !== 'undefined') {
           this.files.push(output.file);
+          this.updateFilename(id, output)
         }
         break;
       case 'uploading':
@@ -93,5 +111,23 @@ export class UploadSimulationFilesComponent {
 
   removeAllFiles(): void {
     this.uploadInput.emit({ type: 'removeAll' });
+  }
+
+  getFileName(id) {
+    switch (id) {
+      case 1:
+        return this.fileName1
+        break;
+      case 2:
+        return this.fileName2
+        break;
+      case 3:
+        return this.fileName3
+        break;
+    }
+  }
+
+  ngOnDestroy() {
+    this.alive = false;
   }
 }

@@ -128,3 +128,15 @@
     }
   }
 }
+
+input[type=file] {
+  display:none;
+}
+
+input[type=text] { 
+  text-align: center; 
+}
+
+label {
+  line-height: 31px;
+}

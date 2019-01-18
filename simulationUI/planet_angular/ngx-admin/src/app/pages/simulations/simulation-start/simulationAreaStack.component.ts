@@ -47,18 +47,35 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
             let time
 
             for (let index = 0; index < headers.length; index++) {
-                if (headers[index] === "Time") {
-                    time = csvData[index];
-                    continue
+                let tempData;
+                switch (headers[index]) {
+                    case 'Time':
+                        time = csvData[index];
+                        break;
+                    case 'Surplus':
+                    case 'Electric_demand':
+                    case 'RES_direct_utilization':
+                    case 'Total_heat_demand':
+                        tempData = {
+                            name: headers[index],
+                            type: 'line',
+                            stack: 'Total amount',
+                            smooth: true,
+                            data: csvData[index],
+                        }
+                        series.push(tempData)
+                        break;
+                    default:
+                        tempData = {
+                            name: headers[index],
+                            type: 'line',
+                            stack: 'Total amount',
+                            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+                            data: csvData[index],
+                        }
+                        series.push(tempData)
+                        break;
                 }
-                let tempData = {
-                    name: headers[index],
-                    type: 'line',
-                    stack: 'Total amount',
-                    smooth: true,
-                    data: csvData[index],
-                }
-                series.push(tempData)
             }
 
             this.options = {
@@ -88,6 +105,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                 xAxis: [
                     {
                         type: 'category',
+                        boundaryGap: false,
                         data: time,
                         axisTick: {
                             alignWithLabel: true,

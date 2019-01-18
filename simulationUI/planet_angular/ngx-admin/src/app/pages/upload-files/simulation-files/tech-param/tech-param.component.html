@@ -1,0 +1,78 @@
+<nb-card>
+    <nb-card-body>
+        <ngx-param-header [type]="period" (periodChange)="setPeriodAngGetData($event)"></ngx-param-header>
+
+        <div class="row">
+            <div class="col-md-1">
+                <label>PV</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal" (change)="checkVal ? checkVal : checkVal" id="check1">
+                    <label class="label" for="check1"></label>
+                </section>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="dt" class="col-sm-2 col-form-label">Nominal Power</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="control-system" placeholder="">
+            </div>
+            <label for="dt" class="col-sm-1 col-form-label">MW</label>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                <label>P2G</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal" (change)="checkVal ? checkVal : checkVal" id="check2">
+                    <label class="label" for="check2"></label>
+                </section>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                <label>EB</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkBoxValue" (change)="checkVal ? checkVal : !checkVal" id="check3">
+                    <label class="label" for="check3"></label>
+                </section>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                <label>G2H</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal" (change)="checkVal ? checkVal : checkVal" id="check4">
+                    <label class="label" for="check4"></label>
+                </section>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="dt" class="col-sm-2 col-form-label">Nominal Power</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="control-system" placeholder="">
+            </div>
+            <label for="dt" class="col-sm-1 col-form-label">MW</label>
+        </div>
+
+        <div class="form-group row">
+            <label for="dt" class="col-sm-2 col-form-label">Efficiency</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="control-system" placeholder="90">
+            </div>
+            <label for="dt" class="col-sm-1 col-form-label">%</label>
+        </div>
+
+    </nb-card-body>
+</nb-card>
