@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NbRegisterComponent } from '@nebular/auth';
 
 @Component({
-  selector: 'nb-register',
+  selector: 'ngx-register',
   templateUrl: './register.component.html',
 })
 

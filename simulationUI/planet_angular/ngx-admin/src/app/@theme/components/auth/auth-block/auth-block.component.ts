@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NbAuthBlockComponent } from '@nebular/auth';
+// import { NbAuthBlockComponent } from '@nebular/auth';
 
 @Component({
   selector: 'ngx-auth-block',

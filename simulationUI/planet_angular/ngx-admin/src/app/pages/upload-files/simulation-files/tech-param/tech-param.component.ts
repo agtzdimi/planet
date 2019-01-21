@@ -1,11 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, OnInit } from '@angular/core';
 
 @Component({
     selector: 'ngx-tech-param',
     styleUrls: ['./tech-param.component.scss'],
     templateUrl: './tech-param.component.html',
 })
-export class TechParamComponent {
+export class TechParamComponent implements OnInit, OnChanges {
 
     checkVal = false;
     @Input() data;
@@ -86,7 +86,7 @@ export class TechParamComponent {
     afterDataRecieved(data) {
         this.nodeData = data;
         if (this.nodeData.payload.technologies) {
-            this.nodes = Object.getOwnPropertyNames(this.nodeData.payload.technologies);)
+            this.nodes = Object.getOwnPropertyNames(this.nodeData.payload.technologies);
             this.displayingNode = this.nodes[0];
         }
     }

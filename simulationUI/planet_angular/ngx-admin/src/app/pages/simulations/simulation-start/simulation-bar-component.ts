@@ -39,8 +39,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
             });
 
             let headers = [];
-            for (const obj in ObjHeaders) {
-
+            for (const obj of ObjHeaders) {
                 headers = [...headers, ObjHeaders[obj][0]];
             }
 
@@ -70,7 +69,8 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                 }];
             this.options = {
                 backgroundColor: echarts.bg,
-                color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
+                color: [colors.warningLight, colors.infoLight, colors.dangerLight,
+                colors.successLight, colors.primaryLight],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {

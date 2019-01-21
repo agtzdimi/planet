@@ -26,10 +26,10 @@ export class SimulationsFilesComponent {
       })
       .subscribe(
         data => {
-          console.log('POST Request is successful ', data);
+          // console.log('POST Request is successful ', data);
         },
         error => {
-          console.log('Error', error);
+          // console.log('Error', error);
         },
       );
   }
@@ -38,22 +38,22 @@ export class SimulationsFilesComponent {
     this.httpClient.get('http://localhost:8000/simulation')
       .subscribe(
         data => {
-          console.log('GET Request is successful ');
+          // console.log('GET Request is successful ');
           this.spreadValuesToCharts(data);
         },
         error => {
-          console.log('Error', error);
+          // console.log('Error', error);
         },
       );
 
     this.httpClient.get('http://localhost:8000/simulation2')
       .subscribe(
         data => {
-          console.log('GET Request is successful ');
+          // console.log('GET Request is successful ');
           this.spreadValuesToCharts2(data);
         },
         error => {
-          console.log('Error', error);
+          // console.log('Error', error);
         },
       );
   }

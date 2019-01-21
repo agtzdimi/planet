@@ -10,7 +10,7 @@ import { NbAuthService } from '@nebular/auth/services/auth.service';
 import { takeWhile } from 'rxjs/operators';
 
 @Component({
-  selector: 'nb-auth',
+  selector: 'ngx-auth',
   styleUrls: ['./auth.component.scss'],
   template: `
     <nb-layout>

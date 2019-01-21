@@ -12,7 +12,7 @@ import { NbAuthService } from '@nebular/auth/services/auth.service';
 import { NbAuthResult } from '@nebular/auth/services/auth-result';
 
 @Component({
-  selector: 'nb-logout',
+  selector: 'ngx-logout',
   template: `
     <div>Logging out, please wait...</div>
   `,
@@ -23,8 +23,8 @@ export class NbLogoutComponent implements OnInit {
   strategy: string = '';
 
   constructor(protected service: NbAuthService,
-              @Inject(NB_AUTH_OPTIONS) protected options = {},
-              protected router: Router) {
+    @Inject(NB_AUTH_OPTIONS) protected options = {},
+    protected router: Router) {
     this.redirectDelay = this.getConfigValue('forms.logout.redirectDelay');
     this.strategy = this.getConfigValue('forms.logout.strategy');
   }

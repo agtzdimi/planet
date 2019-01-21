@@ -90,7 +90,8 @@ export class UploadSimulationFilesComponent {
             case 'uploading':
                 if (typeof output.file !== 'undefined') {
                     // update current data in files array for uploading file
-                    const index = this.files.findIndex((file) => typeof output.file !== 'undefined' && file.id === output.file.id);
+                    const index = this.files.findIndex(
+                        (file) => typeof output.file !== 'undefined' && file.id === output.file.id);
                     this.files[index] = output.file;
                 }
                 break;

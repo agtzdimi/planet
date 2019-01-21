@@ -166,7 +166,8 @@ const NB_THEME_PROVIDERS = [
 @NgModule({
   imports: [...BASE_MODULES, ...NB_MODULES, RouterModule],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES],
-  declarations: [...COMPONENTS, ...PIPES, NgxAuthBlockComponent, NgxLoginComponent, NbAuthComponent, NgxRegisterComponent, NgxResetPasswordComponent, NgxRequestPasswordComponent],
+  declarations: [...COMPONENTS, ...PIPES, NgxAuthBlockComponent, NgxLoginComponent,
+    NbAuthComponent, NgxRegisterComponent, NgxResetPasswordComponent, NgxRequestPasswordComponent],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {
