@@ -20,7 +20,7 @@
 
   // framework global styles
   @include nb-theme-global();
-  @include ngx-auth-global();
+  @include nb-auth-global();
   @include nb-bootstrap-global();
 
   // loading progress bar

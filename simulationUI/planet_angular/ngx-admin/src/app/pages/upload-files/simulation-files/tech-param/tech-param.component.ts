@@ -9,7 +9,7 @@ export class TechParamComponent implements OnInit, OnChanges {
 
     checkVal = false;
     @Input() data;
-    nodeData: Object;
+    nodeData: any;
     displayingNode: string;
     nodes = [];
 

@@ -17,7 +17,7 @@ export class UploadSimulationFilesComponent {
     fileName1: string = 'Upload Files';
     fileName2: string = 'Upload Files';
     fileName3: string = 'Upload Files';
-    text: {};
+    text: any;
     jsonText1 = {
         'file.name': '',
         'payload': {

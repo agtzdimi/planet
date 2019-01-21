@@ -4,8 +4,8 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
 
-@mixin ngx-auth-block-theme() {
-  ngx-auth-block {
+@mixin nb-auth-block-theme() {
+  nb-auth-block {
 
     .form-text a {
       color: nb-theme(color-fg);
