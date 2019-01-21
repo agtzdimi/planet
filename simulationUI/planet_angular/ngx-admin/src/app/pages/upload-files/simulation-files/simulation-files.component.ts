@@ -14,25 +14,25 @@ export class UploadSimulationFilesComponent {
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
     dragOver: boolean;
-    fileName1: string = "Upload Files"
-    fileName2: string = "Upload Files"
-    fileName3: string = "Upload Files"
-    text: {}
+    fileName1: string = 'Upload Files';
+    fileName2: string = 'Upload Files';
+    fileName3: string = 'Upload Files';
+    text: {};
     jsonText1 = {
-        "file.name": "",
-        "payload": {
+        'file.name': '',
+        'payload': {
 
-            "simulation": {
-                "time.step": "",
-                "simulation.time": ""
-            }
-        }
-    }
+            'simulation': {
+                'time.step': '',
+                'simulation.time': '',
+            },
+        },
+    };
     jsonText2 = {
-        "payload": {
-            control: ""
-        }
-    }
+        'payload': {
+            control: '',
+        },
+    };
     revealed = false;
     period: string = 'paok';
 
@@ -45,15 +45,15 @@ export class UploadSimulationFilesComponent {
 
     updateFilename(id, output) {
 
-        let fileReader = new FileReader();
+        const fileReader = new FileReader();
         fileReader.onload = () => {
-            let text = fileReader.result as string;
-            this.text = JSON.parse(text)
-            switch (this.text["file.name"]) {
-                case "Parameters_initialization":
+            const text = fileReader.result as string;
+            this.text = JSON.parse(text);
+            switch (this.text['file.name']) {
+                case 'Parameters_initialization':
                     this.jsonText1 = this.text;
                     break;
-                case "Control_initialization":
+                case 'Control_initialization':
                     this.jsonText2 = this.text;
                     break;
             }
@@ -61,13 +61,13 @@ export class UploadSimulationFilesComponent {
         fileReader.readAsText(output.file.nativeFile);
         switch (id) {
             case 1:
-                this.fileName1 = output.file.name
+                this.fileName1 = output.file.name;
                 break;
             case 2:
-                this.fileName2 = output.file.name
+                this.fileName2 = output.file.name;
                 break;
             case 3:
-                this.fileName3 = output.file.name
+                this.fileName3 = output.file.name;
                 break;
         }
     }
@@ -78,13 +78,13 @@ export class UploadSimulationFilesComponent {
                 if (typeof output.file !== 'undefined') {
                     this.files = [];
                     this.files.push(output.file);
-                    this.updateFilename(id, output)
+                    this.updateFilename(id, output);
                 }
                 break;
             case 'addedToQueue':
                 if (typeof output.file !== 'undefined') {
                     this.files.push(output.file);
-                    this.updateFilename(id, output)
+                    this.updateFilename(id, output);
                 }
                 break;
             case 'uploading':
@@ -116,7 +116,7 @@ export class UploadSimulationFilesComponent {
             type: 'uploadAll',
             url: 'http://localhost:8000/upload',
             method: 'POST',
-            data: { foo: 'bar' }
+            data: { foo: 'bar' },
         };
 
         this.uploadInput.emit(event);
@@ -137,13 +137,13 @@ export class UploadSimulationFilesComponent {
     getFileName(id) {
         switch (id) {
             case 1:
-                return this.fileName1
+                return this.fileName1;
                 break;
             case 2:
-                return this.fileName2
+                return this.fileName2;
                 break;
             case 3:
-                return this.fileName3
+                return this.fileName3;
                 break;
         }
     }

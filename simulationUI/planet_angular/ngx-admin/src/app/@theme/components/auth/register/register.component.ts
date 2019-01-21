@@ -3,7 +3,7 @@ import { NbRegisterComponent } from '@nebular/auth';
 
 @Component({
   selector: 'nb-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
 })
 
 export class NgxRegisterComponent extends NbRegisterComponent {

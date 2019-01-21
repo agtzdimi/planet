@@ -8,7 +8,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Simulation Files',
         link: '/pages/upload-files/simulation',
-      }
+      },
     ],
   },
   {
@@ -18,7 +18,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Start Simulations',
         link: '/pages/simulations/simulations',
-      }
+      },
     ],
-  }
+  },
 ];

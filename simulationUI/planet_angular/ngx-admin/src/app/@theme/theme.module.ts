@@ -5,8 +5,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxLoginComponent } from './components/auth/login/login.component';
 import { NgxAuthBlockComponent } from './components/auth/auth-block/auth-block.component';
 import { NgxResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
-import { NgxRequestPasswordComponent } from './components/auth/request-password/request-password.component'
-import { NgxRegisterComponent } from './components/auth/register/register.component'
+import { NgxRequestPasswordComponent } from './components/auth/request-password/request-password.component';
+import { NgxRegisterComponent } from './components/auth/register/register.component';
 import { NbAuthComponent } from './components/auth/auth.component';
 import { RouterModule } from '@angular/router';
 

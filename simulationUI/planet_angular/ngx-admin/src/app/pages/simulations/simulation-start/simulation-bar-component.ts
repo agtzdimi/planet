@@ -6,11 +6,11 @@ import { NbThemeService } from '@nebular/theme';
     selector: 'ngx-simulation-bar',
     template: `
     <div echarts [options]="options" class="echart"></div>
-  `
+  `,
 })
 export class SimulationsBarComponent implements OnDestroy, OnChanges {
 
-    @Input() data
+    @Input() data;
 
     ngOnChanges(changes: SimpleChanges) {
         this.afterDataRecieved(changes.data.currentValue);
@@ -28,26 +28,26 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
 
             const colors: any = config.variables;
             const echarts: any = config.variables.echarts;
-            let csvData = data;
+            const csvData = data;
             const ObjHeaders = csvData.map((val) => {
                 const res = val.filter((v, index) => {
                     if (index === 0) {
-                        return v
+                        return v;
                     }
-                })
-                return res
-            })
+                });
+                return res;
+            });
 
-            let headers = []
-            for (let obj in ObjHeaders) {
+            let headers = [];
+            for (const obj in ObjHeaders) {
 
-                headers = [...headers, ObjHeaders[obj][0]]
+                headers = [...headers, ObjHeaders[obj][0]];
             }
 
-            let series: any = []
-            let tempArr = []
+            let series: any = [];
+            const tempArr = [];
             for (let index = 0; index < headers.length; index++) {
-                tempArr[index] = csvData[index][1]
+                tempArr[index] = csvData[index][1];
             }
 
             series = [
@@ -56,18 +56,18 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         normal: {
                             color: function (params) {
                                 // build a color map as your need.
-                                var colorList = [
+                                const colorList = [
                                     '#C1232B', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
                                     '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
-                                    '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
+                                    '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0',
                                 ];
-                                return colorList[params.dataIndex]
+                                return colorList[params.dataIndex];
                             },
-                        }
+                        },
                     },
                     data: tempArr,
                     type: 'bar',
-                }]
+                }];
             this.options = {
                 backgroundColor: echarts.bg,
                 color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
@@ -84,9 +84,9 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                     feature: {
                         saveAsImage: {
                             show: true,
-                            title: "Save"
-                        }
-                    }
+                            title: 'Save',
+                        },
+                    },
                 },
                 legend: {
                     textStyle: {
@@ -94,7 +94,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                     },
                 },
                 grid: {
-                    right: '20%'
+                    right: '20%',
 
                 },
                 xAxis: [
@@ -103,12 +103,12 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         axisTick: {
                             alignWithLabel: true,
                         },
-                        data: headers
+                        data: headers,
                     },
                 ],
                 yAxis: [
                     {
-                        name: "Expenses and Revenues",
+                        name: 'Expenses and Revenues',
                         type: 'value',
                         axisLine: {
                             lineStyle: {
@@ -125,7 +125,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         },
                     },
                     {
-                        name: "LCOE",
+                        name: 'LCOE',
                         type: 'value',
                         axisLine: {
                             lineStyle: {

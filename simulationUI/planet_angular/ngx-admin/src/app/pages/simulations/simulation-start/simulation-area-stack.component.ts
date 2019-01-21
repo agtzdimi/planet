@@ -6,11 +6,11 @@ import { NbThemeService } from '@nebular/theme';
     selector: 'ngx-simulation-area-stack',
     template: `
     <div echarts [options]="options" class="echart"></div>
-  `
+  `,
 })
 export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
 
-    @Input() data
+    @Input() data;
 
     ngOnChanges(changes: SimpleChanges) {
         this.afterDataRecieved(changes.data.currentValue);
@@ -27,24 +27,24 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
 
             const colors: any = config.variables;
             const echarts: any = config.variables.echarts;
-            let csvData = data;
+            const csvData = data;
             const ObjHeaders = csvData.map((val) => {
                 const res = val.filter((v, index) => {
                     if (index === 0) {
-                        return v
+                        return v;
                     }
-                })
-                return res
-            })
+                });
+                return res;
+            });
 
-            let headers = []
-            for (let obj in ObjHeaders) {
+            let headers = [];
+            for (const obj in ObjHeaders) {
 
-                headers = [...headers, ObjHeaders[obj][0]]
+                headers = [...headers, ObjHeaders[obj][0]];
             }
 
-            let series: any = []
-            let time
+            const series: any = [];
+            let time;
 
             for (let index = 0; index < headers.length; index++) {
                 let tempData;
@@ -62,8 +62,8 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                             stack: 'Total amount',
                             smooth: true,
                             data: csvData[index],
-                        }
-                        series.push(tempData)
+                        };
+                        series.push(tempData);
                         break;
                     default:
                         tempData = {
@@ -72,8 +72,8 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                             stack: 'Total amount',
                             areaStyle: { normal: { opacity: echarts.areaOpacity } },
                             data: csvData[index],
-                        }
-                        series.push(tempData)
+                        };
+                        series.push(tempData);
                         break;
                 }
             }
@@ -124,7 +124,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                 ],
                 yAxis: [
                     {
-                        name: "MW",
+                        name: 'MW',
                         type: 'value',
                         axisLine: {
                             lineStyle: {
