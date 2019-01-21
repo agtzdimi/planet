@@ -33,7 +33,7 @@ $unchecked-color: #888;
   .label {
     position: relative;
     padding-left: 46px;
-    &::before, &:after {
+    &::before, &::after {
       position: absolute;
       -webkit-border-radius: 10px;
       -moz-border-radius: 10px;
