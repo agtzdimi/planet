@@ -1,6 +1,6 @@
 <nb-card>
     <nb-card-body>
-        <ngx-param-header [type]="period" (periodChange)="setPeriodAngGetData($event)"></ngx-param-header>
+        <ngx-param-header [type]="displayingNode" [types]="nodes" (periodChange)="setPeriodAngGetData($event)"></ngx-param-header>
 
         <div class="row">
             <div class="col-md-1">
@@ -15,11 +15,12 @@
         </div>
 
         <div class="form-group row">
-            <label for="dt" class="col-sm-2 col-form-label">Nominal Power</label>
+            <label for="nom-pow1" class="col-sm-2 col-form-label">Nominal Power</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" id="control-system" placeholder="">
+                <input type="text" class="form-control" id="nom-pow1" [value]="displayData()">
             </div>
-            <label for="dt" class="col-sm-1 col-form-label">MW</label>
+            <label for="
+                    nom-pow1" class="col-sm-1 col-form-label">MW</label>
         </div>
 
         <div class="row">
@@ -59,19 +60,19 @@
         </div>
 
         <div class="form-group row">
-            <label for="dt" class="col-sm-2 col-form-label">Nominal Power</label>
+            <label for="nom-pow2" class="col-sm-2 col-form-label">Nominal Power</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" id="control-system" placeholder="">
+                <input type="text" class="form-control" id="nom-pow2" placeholder="">
             </div>
-            <label for="dt" class="col-sm-1 col-form-label">MW</label>
+            <label for="nom-pow2" class="col-sm-1 col-form-label">MW</label>
         </div>
 
         <div class="form-group row">
-            <label for="dt" class="col-sm-2 col-form-label">Efficiency</label>
+            <label for="efficiency" class="col-sm-2 col-form-label">Efficiency</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" id="control-system" placeholder="90">
+                <input type="text" class="form-control" id="efficiency" placeholder="90">
             </div>
-            <label for="dt" class="col-sm-1 col-form-label">%</label>
+            <label for="efficiency" class="col-sm-1 col-form-label">%</label>
         </div>
 
     </nb-card-body>

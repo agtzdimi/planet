@@ -84,6 +84,11 @@ app.get("/simulation", (req, res) => {
     res.send(results);
 });
 
+app.get("/simulation2", (req, res) => {
+    results = shell.exec("cat /home/sitewhere/results2.csv");
+    res.send(results);
+});
+
 app.post("/create_user", api.create_user);
 app.post("/update_user", api.update_user);
 app.post("/login_with_email_password", api.login_with_email_password);

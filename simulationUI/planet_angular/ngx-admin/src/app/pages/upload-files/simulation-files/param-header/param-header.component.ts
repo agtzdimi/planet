@@ -14,7 +14,7 @@ export class ParamHeaderComponent implements OnDestroy {
 
     @Input() type: string;
 
-    types: string[] = ['week', 'month', 'year'];
+    @Input() types: string[];
     currentTheme: string;
 
     constructor(private themeService: NbThemeService) {

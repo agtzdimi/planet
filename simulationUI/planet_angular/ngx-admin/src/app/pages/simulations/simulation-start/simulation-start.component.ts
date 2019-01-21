@@ -12,8 +12,6 @@ export class SimulationsFilesComponent {
   areaChart2: object
   areaChart3: object
   areaChart4: object
-  areaChart5: object
-  areaChart6: object
 
   options: any = {};
   themeSubscription: any;
@@ -131,72 +129,35 @@ export class SimulationsFilesComponent {
   }
 
   spreadValuesToCharts2(data) {
+
     let lines = data.split("\n")
-    const headers = lines[0].split(",");
-    let chart1Data = [];
-    let chart2Data = [];
-    let chart3Data = [];
-    for (let index = 0; index < headers.length; index++) {
-      switch (headers[index]) {
-        case 'Time':
-          chart1Data.push(this.getColumnData(lines, index))
-          chart2Data.push(this.getColumnData(lines, index))
-          chart3Data.push(this.getColumnData(lines, index))
+    let chart4Data = [];
+    for (let index = 0; index < lines.length; index++) {
+      let keyVal = lines[index].split(",")
+      switch (keyVal[0]) {
+        case 'Total technologies annual cost':
+          chart4Data.push(keyVal)
           break;
-        case 'P2H_heat':
-          chart1Data.push(this.getColumnData(lines, index))
+        case 'CO2 emissions cost':
+          chart4Data.push(keyVal)
           break;
-        case 'P2G_heat':
-          chart1Data.push(this.getColumnData(lines, index))
+        case 'Revenue for heat production':
+          chart4Data.push(keyVal)
           break;
-        case 'EB_output':
-          chart1Data.push(this.getColumnData(lines, index))
+        case 'NG expenditure':
+          chart4Data.push(keyVal)
           break;
-        case 'RES_Curtailment':
-          chart1Data.push(this.getColumnData(lines, index))
+        case 'Revenue for SNG':
+          chart4Data.push(keyVal)
           break;
-        case 'Surplus':
-          chart1Data.push(this.getColumnData(lines, index))
-          break;
-        case 'Electric_demand':
-          chart1Data.push(this.getColumnData(lines, index))
-          chart3Data.push(this.getColumnData(lines, index))
-          break;
-        case 'RES_direct_utilization':
-          chart1Data.push(this.getColumnData(lines, index))
-          break;
-        case 'P2H_input':
-          chart2Data.push(this.getColumnData(lines, index))
-          break;
-        case 'CHP_el_production':
-          chart2Data.push(this.getColumnData(lines, index))
-          chart3Data.push(this.getColumnData(lines, index))
-          break;
-        case 'P2G_input':
-          chart2Data.push(this.getColumnData(lines, index))
-          break;
-        case 'G2H_heat':
-          chart2Data.push(this.getColumnData(lines, index))
-          break;
-        case 'Total_heat_demand':
-          chart2Data.push(this.getColumnData(lines, index))
-          break;
-        case 'RES_power':
-          chart3Data.push(this.getColumnData(lines, index))
-          break;
-        case 'EB_input':
-          chart3Data.push(this.getColumnData(lines, index))
-          break;
-        case '':
-          chart3Data.push(this.getColumnData(lines, index))
+        case 'LCOE':
+          chart4Data.push(keyVal)
           break;
         default:
           break;
       }
     }
-    this.areaChart4 = chart3Data;
-    this.areaChart5 = chart2Data;
-    this.areaChart6 = chart1Data;
+    this.areaChart4 = chart4Data;
 
   }
 

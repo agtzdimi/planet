@@ -10,18 +10,21 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { SimulationsRoutingModule } from './simulations-routing.module';
 import { SimulationsComponent } from './simulations.component';
 import { SimulationsFilesComponent } from './simulation-start/simulation-start.component'
-import { SimulationsAreaStackComponent } from './simulation-start/simulationAreaStack.component'
+import { SimulationsAreaStackComponent } from './simulation-start/simulation-area-stack.component'
+import { SimulationsBarComponent } from './simulation-start/simulation-bar-component'
 
 const COMPONENTS = [
   SimulationsComponent,
   SimulationsFilesComponent,
-  SimulationsAreaStackComponent
+  SimulationsAreaStackComponent,
+  SimulationsBarComponent
 ];
 
 const ENTRY_COMPONENTS = [
   SimulationsComponent,
   SimulationsFilesComponent,
-  SimulationsAreaStackComponent
+  SimulationsAreaStackComponent,
+  SimulationsBarComponent
 ];
 
 
