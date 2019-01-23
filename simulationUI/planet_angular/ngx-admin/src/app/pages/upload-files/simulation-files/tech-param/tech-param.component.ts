@@ -13,7 +13,7 @@ export class TechParamComponent implements OnInit, OnChanges {
     nodeData: any;
     displayingNode: string;
     nodes = [];
-    CHECKBOX_COUNT = 6
+    CHECKBOX_COUNT = 6;
 
     constructor() {
         for (let i = 0; i < this.CHECKBOX_COUNT; i++) {
@@ -99,7 +99,7 @@ export class TechParamComponent implements OnInit, OnChanges {
             this.nodes = Object.getOwnPropertyNames(this.nodeData.payload.technologies);
             this.displayingNode = this.nodes[0];
         }
-        this.dataChange.emit(this.nodeData)
+        this.dataChange.emit(this.nodeData);
     }
 
     setPeriodAngGetData(value: string): void {
@@ -107,7 +107,7 @@ export class TechParamComponent implements OnInit, OnChanges {
     }
 
     changeCheckBoxVal(id) {
-        this.checkVal[id] = !this.checkVal[id]
+        this.checkVal[id] = !this.checkVal[id];
     }
 
 }

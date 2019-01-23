@@ -19,7 +19,7 @@ export class TechInputFieldComponent {
     }
 
     onChange(event) {
-        this.val = event.target.value
+        this.val = event.target.value;
         this.valChange.emit(this.val);
     }
 

@@ -12,6 +12,8 @@ export class SimulationsFilesComponent {
   areaChart2: object;
   areaChart3: object;
   areaChart4: object;
+  simulationStarted: boolean = false;
+  loading = false;
 
   options: any = {};
   themeSubscription: any;
@@ -19,7 +21,12 @@ export class SimulationsFilesComponent {
   constructor(private httpClient: HttpClient) {
   }
 
+  toggleLoadingAnimation() {
+    this.loading = true;
+  }
+
   startSimulation(): void {
+    this.toggleLoadingAnimation()
     this.httpClient.post('http://localhost:8000/transfer',
       {
         'name': 'transfering',
@@ -32,30 +39,36 @@ export class SimulationsFilesComponent {
           // console.log('Error', error);
         },
       );
-  }
 
-  simulateChart(): void {
-    this.httpClient.get('http://localhost:8000/simulation')
-      .subscribe(
-        data => {
-          // console.log('GET Request is successful ');
-          this.spreadValuesToCharts(data);
-        },
-        error => {
-          // console.log('Error', error);
-        },
-      );
+    const interval = setInterval(() => {
+      this.httpClient.get('http://localhost:8000/simulation')
+        .subscribe(
+          data => {
+            // console.log('GET Request is successful ');
+            if (typeof data === "string" && data !== "") {
+              this.spreadValuesToCharts(data);
+            }
+          },
+          error => {
+            // console.log('Error', error);
+          },
+        );
 
-    this.httpClient.get('http://localhost:8000/simulation2')
-      .subscribe(
-        data => {
-          // console.log('GET Request is successful ');
-          this.spreadValuesToCharts2(data);
-        },
-        error => {
-          // console.log('Error', error);
-        },
-      );
+      this.httpClient.get('http://localhost:8000/simulation2')
+        .subscribe(
+          data => {
+            // console.log('GET Request is successful ');
+            if (typeof data === "string" && data !== "") {
+              clearInterval(interval);
+              this.spreadValuesToCharts2(data);
+            }
+          },
+          error => {
+            // console.log('Error', error);
+          },
+        );
+    }, 10000);
+
   }
 
   spreadValuesToCharts(data) {
@@ -158,7 +171,8 @@ export class SimulationsFilesComponent {
       }
     }
     this.areaChart4 = chart4Data;
-
+    this.simulationStarted = true;
+    this.loading = false;
   }
 
   getColumnData(lines, column: number) {

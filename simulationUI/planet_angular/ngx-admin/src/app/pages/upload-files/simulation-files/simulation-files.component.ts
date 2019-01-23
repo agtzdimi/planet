@@ -14,7 +14,7 @@ export class UploadSimulationFilesComponent {
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
     dragOver: boolean;
-    fileName: string[] = []
+    fileName: string[] = [];
     text: any;
     paramInit: Object = {
         'file.name': '',
@@ -34,18 +34,18 @@ export class UploadSimulationFilesComponent {
 
     econEnv: Object = {
         'payload': {
-            "NG.cost": "",
-            "SNG.cost": "",
-            "heat.cost": "",
-            "carbon.tax": "",
-            "NG.emission.factor": "",
+            'NG.cost': '',
+            'SNG.cost': '',
+            'heat.cost': '',
+            'carbon.tax': '',
+            'NG.emission.factor': '',
         },
-    }
+    };
     revealed = false;
 
     constructor() {
         for (let i = 0; i < 7; i++) {
-            this.fileName.push("Upload File")
+            this.fileName.push('Upload File');
         }
         this.options = { concurrency: 1, maxUploads: 1 };
         this.files = []; // local uploading files array
@@ -55,23 +55,25 @@ export class UploadSimulationFilesComponent {
 
     updateFilename(id, output) {
 
-        const fileReader = new FileReader();
-        fileReader.onload = () => {
-            const text = fileReader.result as string;
-            this.text = JSON.parse(text);
-            switch (this.text['file.name']) {
-                case 'Parameters_initialization':
-                    this.paramInit = this.text;
-                    break;
-                case 'Control_initialization':
-                    this.controlSystem = this.text;
-                    break;
-                case 'Economy_environment_initialization':
-                    this.econEnv = this.text;
-                    break;
-            }
-        };
-        fileReader.readAsText(output.file.nativeFile);
+        if (!output.file.name.includes(".xlsx")) {
+            const fileReader = new FileReader();
+            fileReader.onload = () => {
+                const text = fileReader.result as string;
+                this.text = JSON.parse(text);
+                switch (this.text['file.name']) {
+                    case 'Parameters_initialization':
+                        this.paramInit = this.text;
+                        break;
+                    case 'Control_initialization':
+                        this.controlSystem = this.text;
+                        break;
+                    case 'Economy_environment_initialization':
+                        this.econEnv = this.text;
+                        break;
+                }
+            };
+            fileReader.readAsText(output.file.nativeFile);
+        }
         this.fileName[id] = output.file.name;
     }
 
@@ -123,7 +125,7 @@ export class UploadSimulationFilesComponent {
             data: {
                 param1: JSON.stringify(this.paramInit),
                 param2: JSON.stringify(this.controlSystem),
-                param3: JSON.stringify(this.econEnv)
+                param3: JSON.stringify(this.econEnv),
             },
         };
 

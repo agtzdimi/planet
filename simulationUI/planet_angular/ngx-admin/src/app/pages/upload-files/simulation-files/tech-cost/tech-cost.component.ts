@@ -11,7 +11,7 @@ export class TechCostComponent implements OnInit, OnChanges {
     @Input() data: Object;
     @Output() dataChange: EventEmitter<Object>;
     nodeData: any;
-    CHECKBOX_COUNT = 6
+    CHECKBOX_COUNT = 6;
 
     constructor() {
         for (let i = 0; i < this.CHECKBOX_COUNT; i++) {
@@ -24,44 +24,44 @@ export class TechCostComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.nodeData = {
             'payload': {
-                "technologies.cost": {
-                    "WT": {
-                        "CAPEX": "",
-                        "OPEX": "",
-                        "life.time": ""
+                'technologies.cost': {
+                    'WT': {
+                        'CAPEX': '',
+                        'OPEX': '',
+                        'life.time': '',
                     },
-                    "PV": {
-                        "CAPEX": "",
-                        "OPEX": "",
-                        "life.time": ""
+                    'PV': {
+                        'CAPEX': '',
+                        'OPEX': '',
+                        'life.time': '',
                     },
-                    "CHP": {
-                        "CAPEX": "",
-                        "OPEX": "",
-                        "life.time": ""
+                    'CHP': {
+                        'CAPEX': '',
+                        'OPEX': '',
+                        'life.time': '',
                     },
-                    "HP": {
-                        "CAPEX": "",
-                        "OPEX": "",
-                        "life.time": ""
+                    'HP': {
+                        'CAPEX': '',
+                        'OPEX': '',
+                        'life.time': '',
                     },
-                    "EH": {
-                        "CAPEX": "",
-                        "OPEX": "",
-                        "life.time": ""
+                    'EH': {
+                        'CAPEX': '',
+                        'OPEX': '',
+                        'life.time': '',
                     },
-                    "EB": {
-                        "CAPEX": "",
-                        "OPEX": "",
-                        "life.time": ""
+                    'EB': {
+                        'CAPEX': '',
+                        'OPEX': '',
+                        'life.time': '',
                     },
-                    "P2G": {
-                        "CAPEX": "",
-                        "OPEX": "",
-                        "life.time": ""
-                    }
-                }
-            }
+                    'P2G': {
+                        'CAPEX': '',
+                        'OPEX': '',
+                        'life.time': '',
+                    },
+                },
+            },
         };
     }
 
@@ -71,10 +71,10 @@ export class TechCostComponent implements OnInit, OnChanges {
 
     afterDataRecieved(data: Object) {
         this.nodeData = data;
-        this.dataChange.emit(this.nodeData)
+        this.dataChange.emit(this.nodeData);
     }
 
     changeCheckBoxVal(id) {
-        this.checkVal[id] = !this.checkVal[id]
+        this.checkVal[id] = !this.checkVal[id];
     }
 }

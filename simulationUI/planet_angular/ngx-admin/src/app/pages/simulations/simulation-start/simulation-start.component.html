@@ -5,11 +5,8 @@
       <nb-card-header>Upload Simulation Input Files</nb-card-header>
       <nb-card-body>
 
-        <button nbButton type="button" class="start-upload-btn m-2" (click)="startSimulation()">
-          Start Simulation
-        </button>
-
-        <button nbButton type="button" class="start-upload-btn" (click)="simulateChart()">
+        <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+          nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startSimulation()">
           Start Simulation
         </button>
 
@@ -19,28 +16,36 @@
     <nb-card>
       <nb-card-header>Electrical Demand, RES producibility, dispatch of the electric surplus</nb-card-header>
       <nb-card-body>
-        <ngx-simulation-area-stack [data]="areaChart1"></ngx-simulation-area-stack>
+        <div *ngIf="simulationStarted">
+          <ngx-simulation-area-stack [data]="areaChart1"></ngx-simulation-area-stack>
+        </div>
       </nb-card-body>
     </nb-card>
 
     <nb-card>
       <nb-card-header>Fulfilment of the Element Demand</nb-card-header>
       <nb-card-body>
-        <ngx-simulation-area-stack [data]="areaChart2"></ngx-simulation-area-stack>
+        <div *ngIf="simulationStarted">
+          <ngx-simulation-area-stack [data]="areaChart2"></ngx-simulation-area-stack>
+        </div>
       </nb-card-body>
     </nb-card>
 
     <nb-card>
       <nb-card-header>Fulfilment of the Heat Demand (Both DH and LHD)</nb-card-header>
       <nb-card-body>
-        <ngx-simulation-area-stack [data]="areaChart3"></ngx-simulation-area-stack>
+        <div *ngIf="simulationStarted">
+          <ngx-simulation-area-stack [data]="areaChart3"></ngx-simulation-area-stack>
+        </div>
       </nb-card-body>
     </nb-card>
 
     <nb-card>
-      <nb-card-header>Fulfilment of the Heat Demand (Both DH and LHD)</nb-card-header>
+      <nb-card-header>LCOE and economical Results</nb-card-header>
       <nb-card-body>
-        <ngx-simulation-bar [data]="areaChart4"></ngx-simulation-bar>
+        <div *ngIf="simulationStarted">
+          <ngx-simulation-bar [data]="areaChart4"></ngx-simulation-bar>
+        </div>
       </nb-card-body>
     </nb-card>
 

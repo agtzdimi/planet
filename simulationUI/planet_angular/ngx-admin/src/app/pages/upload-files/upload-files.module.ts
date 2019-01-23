@@ -20,7 +20,7 @@ const COMPONENTS = [
   ParamHeaderComponent,
   TechParamComponent,
   TechInputFieldComponent,
-  TechCostComponent
+  TechCostComponent,
 ];
 
 const ENTRY_COMPONENTS = [

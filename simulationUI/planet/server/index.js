@@ -89,12 +89,12 @@ app.post("/transfer", (req, res) => {
 });
 
 app.get("/simulation", (req, res) => {
-    results = shell.exec("cat /home/sitewhere/results.csv");
+    results = shell.exec("cat /home/sitewhere/Results1.csv");
     res.send(results);
 });
 
 app.get("/simulation2", (req, res) => {
-    results = shell.exec("cat /home/sitewhere/results2.csv");
+    results = shell.exec("cat /home/sitewhere/Results2.csv");
     res.send(results);
 });
 

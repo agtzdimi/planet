@@ -38,7 +38,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
             });
 
             let headers = [];
-            for (const obj of ObjHeaders) {
+            for (const obj in ObjHeaders) {
 
                 headers = [...headers, ObjHeaders[obj][0]];
             }
