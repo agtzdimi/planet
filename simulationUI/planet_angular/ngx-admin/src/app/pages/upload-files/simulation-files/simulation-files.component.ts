@@ -14,11 +14,9 @@ export class UploadSimulationFilesComponent {
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
     dragOver: boolean;
-    fileName1: string = 'Upload Files';
-    fileName2: string = 'Upload Files';
-    fileName3: string = 'Upload Files';
+    fileName: string[] = []
     text: any;
-    jsonText1 = {
+    paramInit: Object = {
         'file.name': '',
         'payload': {
 
@@ -28,15 +26,27 @@ export class UploadSimulationFilesComponent {
             },
         },
     };
-    jsonText2 = {
+    controlSystem: Object = {
         'payload': {
             control: '',
         },
     };
+
+    econEnv: Object = {
+        'payload': {
+            "NG.cost": "",
+            "SNG.cost": "",
+            "heat.cost": "",
+            "carbon.tax": "",
+            "NG.emission.factor": "",
+        },
+    }
     revealed = false;
-    period: string = 'paok';
 
     constructor() {
+        for (let i = 0; i < 7; i++) {
+            this.fileName.push("Upload File")
+        }
         this.options = { concurrency: 1, maxUploads: 1 };
         this.files = []; // local uploading files array
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
@@ -51,25 +61,18 @@ export class UploadSimulationFilesComponent {
             this.text = JSON.parse(text);
             switch (this.text['file.name']) {
                 case 'Parameters_initialization':
-                    this.jsonText1 = this.text;
+                    this.paramInit = this.text;
                     break;
                 case 'Control_initialization':
-                    this.jsonText2 = this.text;
+                    this.controlSystem = this.text;
+                    break;
+                case 'Economy_environment_initialization':
+                    this.econEnv = this.text;
                     break;
             }
         };
         fileReader.readAsText(output.file.nativeFile);
-        switch (id) {
-            case 1:
-                this.fileName1 = output.file.name;
-                break;
-            case 2:
-                this.fileName2 = output.file.name;
-                break;
-            case 3:
-                this.fileName3 = output.file.name;
-                break;
-        }
+        this.fileName[id] = output.file.name;
     }
 
     onUploadOutput(output: UploadOutput, id): void {
@@ -117,7 +120,11 @@ export class UploadSimulationFilesComponent {
             type: 'uploadAll',
             url: 'http://localhost:8000/upload',
             method: 'POST',
-            data: { foo: 'bar' },
+            data: {
+                param1: JSON.stringify(this.paramInit),
+                param2: JSON.stringify(this.controlSystem),
+                param3: JSON.stringify(this.econEnv)
+            },
         };
 
         this.uploadInput.emit(event);
@@ -136,16 +143,6 @@ export class UploadSimulationFilesComponent {
     }
 
     getFileName(id) {
-        switch (id) {
-            case 1:
-                return this.fileName1;
-                break;
-            case 2:
-                return this.fileName2;
-                break;
-            case 3:
-                return this.fileName3;
-                break;
-        }
+        return this.fileName[id];
     }
 }

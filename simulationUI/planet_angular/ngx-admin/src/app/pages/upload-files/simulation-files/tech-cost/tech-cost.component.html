@@ -1,0 +1,160 @@
+<nb-card>
+    <nb-card-header>Technologies Cost</nb-card-header>
+    <nb-card-body>
+
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>WT</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[0]" (change)="changeCheckBoxVal(0)" id="techCostCheck1"
+                        #techCostCheck1>
+                    <label class="label" for="techCostCheck1"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="nodeData.payload['technologies.cost']">
+            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].WT['CAPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].WT['CAPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].WT['OPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].WT['OPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].WT['life.time']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].WT['life.time']"></ngx-input-field>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>PV</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[1]" (change)="changeCheckBoxVal(1)" id="techCostCheck2"
+                        #techCostCheck2>
+                    <label class="label" for="techCostCheck2"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="nodeData.payload['technologies.cost']">
+            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].PV['CAPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].PV['CAPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].PV['OPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].PV['OPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].PV['life.time']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].PV['life.time']"></ngx-input-field>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>CHP</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[2]" (change)="changeCheckBoxVal(2)" id="techCostCheck3"
+                        #techCostCheck3>
+                    <label class="label" for="techCostCheck3"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="nodeData.payload['technologies.cost']">
+            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].CHP['CAPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].CHP['CAPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].CHP['OPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].CHP['OPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].CHP['life.time']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].CHP['life.time']"></ngx-input-field>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>HP</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[3]" (change)="changeCheckBoxVal(3)" id="techCostCheck4"
+                        #techCostCheck4>
+                    <label class="label" for="techCostCheck4"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="nodeData.payload['technologies.cost']">
+            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].HP['CAPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].HP['CAPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].HP['OPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].HP['OPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].HP['life.time']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].HP['life.time']"></ngx-input-field>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>EH</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[4]" (change)="changeCheckBoxVal(4)" id="techCostCheck5"
+                        #techCostCheck5>
+                    <label class="label" for="techCostCheck5"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="nodeData.payload['technologies.cost']">
+            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EH['CAPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].EH['CAPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EH['OPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].EH['OPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EH['life.time']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].EH['life.time']"></ngx-input-field>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>EB</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[5]" (change)="changeCheckBoxVal(5)" id="techCostCheck6"
+                        #techCostCheck6>
+                    <label class="label" for="techCostCheck6"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="nodeData.payload['technologies.cost']">
+            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EB['CAPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].EB['CAPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EB['OPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].EB['OPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EB['life.time']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].EB['life.time']"></ngx-input-field>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>P2G</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[6]" (change)="changeCheckBoxVal(6)" id="techCostCheck7"
+                        #techCostCheck7>
+                    <label class="label" for="techCostCheck7"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="nodeData.payload['technologies.cost']">
+            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].P2G['CAPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].P2G['CAPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].P2G['OPEX']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].P2G['OPEX']"></ngx-input-field>
+            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].P2G['life.time']=$event"
+                [(val)]="nodeData.payload['technologies.cost'].P2G['life.time']"></ngx-input-field>
+        </div>
+
+    </nb-card-body>
+</nb-card>

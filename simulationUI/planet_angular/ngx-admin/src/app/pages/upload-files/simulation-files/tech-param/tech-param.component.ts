@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, EventEmitter, Output, SimpleChanges, OnChanges, OnInit } from '@angular/core';
 
 @Component({
     selector: 'ngx-tech-param',
@@ -7,11 +7,21 @@ import { Component, Input, SimpleChanges, OnChanges, OnInit } from '@angular/cor
 })
 export class TechParamComponent implements OnInit, OnChanges {
 
-    checkVal = false;
-    @Input() data;
+    checkVal: boolean[] = [];
+    @Input() data: Object;
+    @Output() dataChange: EventEmitter<Object>;
     nodeData: any;
     displayingNode: string;
     nodes = [];
+    CHECKBOX_COUNT = 6
+
+    constructor() {
+        for (let i = 0; i < this.CHECKBOX_COUNT; i++) {
+            this.checkVal.push(false);
+        }
+        this.data = {};
+        this.dataChange = new EventEmitter<Object>();
+    }
 
     ngOnInit() {
         this.nodeData = {
@@ -89,16 +99,15 @@ export class TechParamComponent implements OnInit, OnChanges {
             this.nodes = Object.getOwnPropertyNames(this.nodeData.payload.technologies);
             this.displayingNode = this.nodes[0];
         }
-    }
-
-    displayData() {
-        if (this.nodeData.payload.technologies && this.displayingNode) {
-            return this.nodeData.payload.technologies[this.displayingNode].WT['nominal.electric.power'];
-        }
-        return '';
+        this.dataChange.emit(this.nodeData)
     }
 
     setPeriodAngGetData(value: string): void {
         this.displayingNode = value;
     }
+
+    changeCheckBoxVal(id) {
+        this.checkVal[id] = !this.checkVal[id]
+    }
+
 }

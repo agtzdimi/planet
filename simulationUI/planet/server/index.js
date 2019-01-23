@@ -66,6 +66,15 @@ app.post("/upload", (req, res, next) => {
         if (err) {
             return res.status(500).send(err);
         }
+        if(fileName === "Parameters_initialization.txt") {
+           shell.echo(req.body.param1).to(`${__dirname}/../public/files/${fileName}`);
+        }
+        else if(fileName === "Control_initialization.txt") {
+           shell.echo(req.body.param2).to(`${__dirname}/../public/files/${fileName}`);
+        }
+        else if(fileName === "Economy_environment_initialization.txt") {
+           shell.echo(req.body.param3).to(`${__dirname}/../public/files/${fileName}`);
+        }
 
         res.json({
             file: `public/${req.files.file.name}`
