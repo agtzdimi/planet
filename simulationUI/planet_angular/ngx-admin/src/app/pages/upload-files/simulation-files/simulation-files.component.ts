@@ -55,7 +55,7 @@ export class UploadSimulationFilesComponent {
 
     updateFilename(id, output) {
 
-        if (!output.file.name.includes(".xlsx")) {
+        if (!output.file.name.includes('.xlsx')) {
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 const text = fileReader.result as string;

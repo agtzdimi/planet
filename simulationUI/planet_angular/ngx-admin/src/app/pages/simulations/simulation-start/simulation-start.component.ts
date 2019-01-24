@@ -26,7 +26,7 @@ export class SimulationsFilesComponent {
   }
 
   startSimulation(): void {
-    this.toggleLoadingAnimation()
+    this.toggleLoadingAnimation();
     this.httpClient.post('http://localhost:8000/transfer',
       {
         'name': 'transfering',
@@ -45,7 +45,7 @@ export class SimulationsFilesComponent {
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
-            if (typeof data === "string" && data !== "") {
+            if (typeof data === 'string' && data !== '') {
               this.spreadValuesToCharts(data);
             }
           },
@@ -58,7 +58,7 @@ export class SimulationsFilesComponent {
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
-            if (typeof data === "string" && data !== "") {
+            if (typeof data === 'string' && data !== '') {
               clearInterval(interval);
               this.spreadValuesToCharts2(data);
             }

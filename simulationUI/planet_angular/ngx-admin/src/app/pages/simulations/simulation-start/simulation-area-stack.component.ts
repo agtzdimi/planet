@@ -13,7 +13,9 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
     @Input() data;
 
     ngOnChanges(changes: SimpleChanges) {
-        this.afterDataRecieved(changes.data.currentValue);
+        if (changes.data.currentValue) {
+            this.afterDataRecieved(changes.data.currentValue);
+        }
     }
 
     options: any = {};
@@ -38,7 +40,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
             });
 
             let headers = [];
-            for (const obj in ObjHeaders) {
+            for (const obj of Object.keys(ObjHeaders)) {
 
                 headers = [...headers, ObjHeaders[obj][0]];
             }
