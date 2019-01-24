@@ -1,5 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
-import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions } from 'ngx-uploader';
+import { UploadOutput, UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -120,17 +120,17 @@ export class UploadSimulationFilesComponent {
             formData.append('file', file, file.name);
         }
         formData.append('method', 'POST');
-        formData.append('param1', JSON.stringify(this.paramInit))
-        formData.append('param2', JSON.stringify(this.controlSystem))
-        formData.append('param3', JSON.stringify(this.econEnv))
-        this.httpClient.post('http://localhost:8000/upload', formData
+        formData.append('param1', JSON.stringify(this.paramInit));
+        formData.append('param2', JSON.stringify(this.controlSystem));
+        formData.append('param3', JSON.stringify(this.econEnv));
+        this.httpClient.post('http://localhost:8000/upload', formData,
         )
             .subscribe(
                 data => {
-                    console.log('POST Request is successful ', data);
+                    // console.log('POST Request is successful ', data);
                 },
                 error => {
-                    console.log('Error', error);
+                    // console.log('Error', error);
                 },
             );
     }
