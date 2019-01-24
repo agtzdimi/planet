@@ -3,7 +3,7 @@ import { NbMenuItem } from '@nebular/theme';
 export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Upload-Files',
-    icon: 'nb-bar-chart',
+    icon: 'nb-compose',
     children: [
       {
         title: 'Simulation Files',

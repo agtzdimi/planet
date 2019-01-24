@@ -105,6 +105,12 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                     bottom: '3%',
                     containLabel: true,
                 },
+                dataZoom: {
+                    type: 'slider',
+                    show: true,
+                    start: 0,
+                    end: 4,
+                },
                 xAxis: [
                     {
                         type: 'category',

@@ -1,5 +1,6 @@
 import { Component, EventEmitter } from '@angular/core';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions } from 'ngx-uploader';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'ngx-simulation-files',
@@ -10,7 +11,7 @@ export class UploadSimulationFilesComponent {
 
     options: UploaderOptions;
     formData: FormData;
-    files: UploadFile[];
+    files: File[];
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
     dragOver: boolean;
@@ -43,11 +44,11 @@ export class UploadSimulationFilesComponent {
     };
     revealed = false;
 
-    constructor() {
+    constructor(private httpClient: HttpClient) {
         for (let i = 0; i < 7; i++) {
             this.fileName.push('Upload File');
         }
-        this.options = { concurrency: 1, maxUploads: 1 };
+        this.options = { concurrency: 1, maxUploads: Number.MAX_SAFE_INTEGER };
         this.files = []; // local uploading files array
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
@@ -78,31 +79,25 @@ export class UploadSimulationFilesComponent {
     }
 
     onUploadOutput(output: UploadOutput, id): void {
+
         switch (output.type) {
             case 'rejected':
                 if (typeof output.file !== 'undefined') {
                     this.files = [];
-                    this.files.push(output.file);
+                    this.files.push(output.file.nativeFile);
                     this.updateFilename(id, output);
                 }
                 break;
             case 'addedToQueue':
                 if (typeof output.file !== 'undefined') {
-                    this.files.push(output.file);
+                    this.files.push(output.file.nativeFile);
                     this.updateFilename(id, output);
                 }
                 break;
             case 'uploading':
-                if (typeof output.file !== 'undefined') {
-                    // update current data in files array for uploading file
-                    const index = this.files.findIndex(
-                        (file) => typeof output.file !== 'undefined' && file.id === output.file.id);
-                    this.files[index] = output.file;
-                }
                 break;
             case 'removed':
                 // remove file from array when removed
-                this.files = this.files.filter((file: UploadFile) => file !== output.file);
                 break;
             case 'dragOver':
                 this.dragOver = true;
@@ -118,30 +113,38 @@ export class UploadSimulationFilesComponent {
     }
 
     startUpload(): void {
-        const event: UploadInput = {
-            type: 'uploadAll',
-            url: 'http://localhost:8000/upload',
-            method: 'POST',
-            data: {
-                param1: JSON.stringify(this.paramInit),
-                param2: JSON.stringify(this.controlSystem),
-                param3: JSON.stringify(this.econEnv),
-            },
-        };
+        const formData: FormData = new FormData();
 
-        this.uploadInput.emit(event);
+        for (let i = 0; i < this.files.length; i++) {
+            const file: File = this.files[i];
+            formData.append('file', file, file.name);
+        }
+        formData.append('method', 'POST');
+        formData.append('param1', JSON.stringify(this.paramInit))
+        formData.append('param2', JSON.stringify(this.controlSystem))
+        formData.append('param3', JSON.stringify(this.econEnv))
+        this.httpClient.post('http://localhost:8000/upload', formData
+        )
+            .subscribe(
+                data => {
+                    console.log('POST Request is successful ', data);
+                },
+                error => {
+                    console.log('Error', error);
+                },
+            );
     }
 
     cancelUpload(id: string): void {
-        this.uploadInput.emit({ type: 'cancel', id: id });
+        //  this.uploadInput.emit({ type: 'cancel', id: id });
     }
 
     removeFile(id: string): void {
-        this.uploadInput.emit({ type: 'remove', id: id });
+        //  this.uploadInput.emit({ type: 'remove', id: id });
     }
 
     removeAllFiles(): void {
-        this.uploadInput.emit({ type: 'removeAll' });
+        //  this.uploadInput.emit({ type: 'removeAll' });
     }
 
     getFileName(id) {

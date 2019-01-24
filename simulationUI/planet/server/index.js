@@ -60,8 +60,9 @@ app.use(fileUpload());
 app.use("/public", express.static(__dirname + "../public"));
 
 app.post("/upload", (req, res, next) => {
-    let uploadFile = req.files.file;
-    const fileName = req.files.file.name;
+    for (const fil of Object.keys(req.files.file)) {
+    let uploadFile = req.files.file[fil];
+    const fileName = req.files.file[fil].name;
     uploadFile.mv(`${__dirname}/../public/files/${fileName}`, function (err) {
         if (err) {
             return res.status(500).send(err);
@@ -76,10 +77,10 @@ app.post("/upload", (req, res, next) => {
            shell.echo(req.body.param3).to(`${__dirname}/../public/files/${fileName}`);
         }
 
-        res.json({
+    });}
+    res.json({
             file: `public/${req.files.file.name}`
         });
-    });
 });
 
 app.post("/transfer", (req, res) => {
