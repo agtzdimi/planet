@@ -49,5 +49,23 @@
       </nb-card-body>
     </nb-card>
 
+    <nb-card>
+      <nb-card-header>Yearly CO2 emissions</nb-card-header>
+      <nb-card-body>
+        <div *ngIf="simulationStarted">
+          <ngx-simulation-bar [data]="areaChart5"></ngx-simulation-bar>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card>
+      <nb-card-header>Yearly RES producibility dispatch</nb-card-header>
+      <nb-card-body>
+        <div *ngIf="simulationStarted">
+          <ngx-simulation-bar [data]="areaChart6"></ngx-simulation-bar>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
   </div>
 </div>

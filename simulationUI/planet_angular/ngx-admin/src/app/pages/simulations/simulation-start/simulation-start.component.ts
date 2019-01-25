@@ -12,6 +12,8 @@ export class SimulationsFilesComponent {
   areaChart2: object;
   areaChart3: object;
   areaChart4: object;
+  areaChart5: object;
+  areaChart6: object;
   simulationStarted: boolean = false;
   loading = false;
 
@@ -145,6 +147,9 @@ export class SimulationsFilesComponent {
 
     const lines = data.split('\n');
     const chart4Data = [];
+    const chart5Data = [];
+    const chart6Data = [];
+    let directUtil = 0;
     for (let index = 0; index < lines.length; index++) {
       const keyVal = lines[index].split(',');
       switch (keyVal[0]) {
@@ -166,11 +171,46 @@ export class SimulationsFilesComponent {
         case 'LCOE':
           chart4Data.push(keyVal);
           break;
+        case 'G2H CO2 emissions':
+          chart5Data.push(keyVal);
+          break;
+        case 'P2G CO2 savings':
+          chart5Data.push(keyVal);
+          break;
+        case 'CHP CO2 emissions':
+          chart5Data.push(keyVal);
+          break;
+        case 'Total CO2 emissions':
+          chart5Data.push(keyVal);
+          break;
+        case 'RES curtailment':
+          chart6Data.push(keyVal);
+          break;
+        case 'RES to P2G':
+          chart6Data.push(keyVal);
+          break;
+        case 'RES to EB':
+          chart6Data.push(keyVal);
+          break;
+        case 'RES to P2H':
+          chart6Data.push(keyVal);
+          break;
+        case 'RES direct utilization':
+          if (directUtil === 0) {
+            chart6Data.push(keyVal);
+            directUtil += 1;
+          }
+          break;
+        case 'RES producibility':
+          chart6Data.push(keyVal);
+          break;
         default:
           break;
       }
     }
     this.areaChart4 = chart4Data;
+    this.areaChart5 = chart5Data;
+    this.areaChart6 = chart6Data;
     this.simulationStarted = true;
     this.loading = false;
   }

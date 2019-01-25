@@ -43,30 +43,57 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                 headers = [...headers, ObjHeaders[obj][0]];
             }
 
-            let series: any = [];
-            const tempArr = [];
+            const colorList = [
+                '#C1232B', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
+                '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
+                '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0',
+            ];
+            let yAxisLabel: string;
+            const series: any = [];
+            let yIndex: number;
+            let barGap: string;
+            let type: string;
             for (let index = 0; index < headers.length; index++) {
-                tempArr[index] = csvData[index][1];
-            }
-
-            series = [
-                {
+                switch (headers[index]) {
+                    // RES producibility is the first option so it will enable stack option for all the Items
+                    case 'RES producibility':
+                        type = 'bar';
+                        yIndex = 0;
+                        barGap = '-100%';
+                        yAxisLabel = '';
+                        break;
+                    case 'Total CO2 emissions':
+                        type = 'scatter';
+                        yIndex = 0;
+                        yAxisLabel = '';
+                        barGap = '0%';
+                        break;
+                    case 'LCOE':
+                        yAxisLabel = 'LCOE';
+                        type = 'scatter';
+                        yIndex = 1;
+                        barGap = '30%';
+                        break;
+                    default:
+                        type = 'bar';
+                        yIndex = 0;
+                        break;
+                }
+                const tempData = {
                     itemStyle: {
                         normal: {
-                            color: function (params) {
-                                // build a color map as your need.
-                                const colorList = [
-                                    '#C1232B', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
-                                    '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
-                                    '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0',
-                                ];
-                                return colorList[params.dataIndex];
-                            },
+                            color: colorList[index],
                         },
                     },
-                    data: tempArr,
-                    type: 'bar',
-                }];
+                    name: headers[index],
+                    type: type,
+                    barGap: barGap,
+                    yAxisIndex: yIndex,
+                    symbolSize: [40, 40],
+                    data: [csvData[index][1], csvData[index][0]],
+                };
+                series.push(tempData);
+            }
             this.options = {
                 backgroundColor: echarts.bg,
                 color: [colors.warningLight, colors.infoLight, colors.dangerLight,
@@ -80,6 +107,12 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         },
                     },
                 },
+                legend: {
+                    data: headers,
+                    textStyle: {
+                        color: echarts.textColor,
+                    },
+                },
                 toolbox: {
                     feature: {
                         saveAsImage: {
@@ -88,26 +121,22 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         },
                     },
                 },
-                legend: {
-                    textStyle: {
-                        color: echarts.textColor,
-                    },
-                },
                 grid: {
-                    right: '20%',
+                    right: '10%',
 
                 },
                 xAxis: [
                     {
                         type: 'category',
                         axisTick: {
-                            alignWithLabel: true,
+                            show: false,
                         },
-                        data: headers,
+                        data: [''],
                     },
                 ],
                 yAxis: [
                     {
+                        id: 0,
                         name: 'Expenses and Revenues',
                         type: 'value',
                         axisLine: {
@@ -115,8 +144,6 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                                 color: echarts.axisLineColor,
                             },
                         },
-                        min: -100,
-                        max: 250,
                         position: 'left',
                         axisLabel: {
                             textStyle: {
@@ -125,15 +152,14 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         },
                     },
                     {
-                        name: 'LCOE',
+                        id: 1,
+                        name: yAxisLabel,
                         type: 'value',
                         axisLine: {
                             lineStyle: {
                                 color: echarts.axisLineColor,
                             },
                         },
-                        min: 70,
-                        max: 120,
                         position: 'right',
                         axisLabel: {
                             textStyle: {
