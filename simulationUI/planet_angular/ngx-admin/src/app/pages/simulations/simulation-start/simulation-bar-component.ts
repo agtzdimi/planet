@@ -11,6 +11,8 @@ import { NbThemeService } from '@nebular/theme';
 export class SimulationsBarComponent implements OnDestroy, OnChanges {
 
     @Input() data;
+    @Input() yRightAxisLabel;
+    @Input() yAxisLabel;
 
     ngOnChanges(changes: SimpleChanges) {
         this.afterDataRecieved(changes.data.currentValue);
@@ -48,7 +50,6 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                 '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
                 '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0',
             ];
-            let yAxisLabel: string;
             const series: any = [];
             let yIndex: number;
             let barGap: string;
@@ -60,16 +61,13 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         type = 'bar';
                         yIndex = 0;
                         barGap = '-100%';
-                        yAxisLabel = '';
                         break;
                     case 'Total CO2 emissions':
                         type = 'scatter';
                         yIndex = 0;
-                        yAxisLabel = '';
-                        barGap = '0%';
+                        barGap = '30%';
                         break;
                     case 'LCOE':
-                        yAxisLabel = 'LCOE';
                         type = 'scatter';
                         yIndex = 1;
                         barGap = '30%';
@@ -137,7 +135,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                 yAxis: [
                     {
                         id: 0,
-                        name: 'Expenses and Revenues',
+                        name: this.yAxisLabel,
                         type: 'value',
                         axisLine: {
                             lineStyle: {
@@ -153,7 +151,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                     },
                     {
                         id: 1,
-                        name: yAxisLabel,
+                        name: this.yRightAxisLabel,
                         type: 'value',
                         axisLine: {
                             lineStyle: {

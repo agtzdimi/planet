@@ -8,12 +8,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SimulationsFilesComponent {
 
-  areaChart1: object;
-  areaChart2: object;
-  areaChart3: object;
-  areaChart4: object;
-  areaChart5: object;
-  areaChart6: object;
+  CHARTS_TOTAL = 3;
+  areaChart = [];
+  barChart = [];
   simulationStarted: boolean = false;
   loading = false;
 
@@ -21,6 +18,14 @@ export class SimulationsFilesComponent {
   themeSubscription: any;
 
   constructor(private httpClient: HttpClient) {
+    for (let i = 0; i < this.CHARTS_TOTAL; i++) {
+      this.areaChart[i] = {
+        data: [],
+      };
+      this.barChart[i] = {
+        data: [],
+      };
+    }
   }
 
   toggleLoadingAnimation() {
@@ -76,141 +81,138 @@ export class SimulationsFilesComponent {
   spreadValuesToCharts(data) {
     const lines = data.split('\n');
     const headers = lines[0].split(',');
-    const chart1Data = [];
-    const chart2Data = [];
-    const chart3Data = [];
     for (let index = 0; index < headers.length; index++) {
       switch (headers[index]) {
         case 'Time':
-          chart1Data.push(this.getColumnData(lines, index));
-          chart2Data.push(this.getColumnData(lines, index));
-          chart3Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'P2H_heat':
-          chart1Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'P2G_heat':
-          chart1Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'EB_output':
-          chart1Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_Curtailment':
-          chart1Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'Surplus':
-          chart1Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'Electric_demand':
-          chart1Data.push(this.getColumnData(lines, index));
-          chart3Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_direct_utilization':
-          chart1Data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'P2H_input':
-          chart2Data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'CHP_el_production':
-          chart2Data.push(this.getColumnData(lines, index));
-          chart3Data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'P2G_input':
-          chart2Data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'G2H_heat':
-          chart2Data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'Total_heat_demand':
-          chart2Data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_power':
-          chart3Data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'EB_input':
-          chart3Data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case '':
-          chart3Data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         default:
           break;
       }
     }
-    this.areaChart3 = chart3Data;
-    this.areaChart2 = chart2Data;
-    this.areaChart1 = chart1Data;
-
+    this.areaChart[0].title = 'Electric demand, RES producibility, dispatch of the electric surplus';
+    this.areaChart[1].title = 'Fulfilment of the Electric Demand';
+    this.areaChart[2].title = 'Fulfilment of the Heat Demand (both DH and LHD)';
   }
 
   spreadValuesToCharts2(data) {
 
     const lines = data.split('\n');
-    const chart4Data = [];
-    const chart5Data = [];
-    const chart6Data = [];
     let directUtil = 0;
     for (let index = 0; index < lines.length; index++) {
       const keyVal = lines[index].split(',');
       switch (keyVal[0]) {
         case 'Total technologies annual cost':
-          chart4Data.push(keyVal);
+          this.barChart[0].data.push(keyVal);
           break;
         case 'CO2 emissions cost':
-          chart4Data.push(keyVal);
+          this.barChart[0].data.push(keyVal);
           break;
         case 'Revenue for heat production':
-          chart4Data.push(keyVal);
+          this.barChart[0].data.push(keyVal);
           break;
         case 'NG expenditure':
-          chart4Data.push(keyVal);
+          this.barChart[0].data.push(keyVal);
           break;
         case 'Revenue for SNG':
-          chart4Data.push(keyVal);
+          this.barChart[0].data.push(keyVal);
           break;
         case 'LCOE':
-          chart4Data.push(keyVal);
+          this.barChart[0].data.push(keyVal);
           break;
         case 'G2H CO2 emissions':
-          chart5Data.push(keyVal);
+          this.barChart[1].data.push(keyVal);
           break;
         case 'P2G CO2 savings':
-          chart5Data.push(keyVal);
+          this.barChart[1].data.push(keyVal);
           break;
         case 'CHP CO2 emissions':
-          chart5Data.push(keyVal);
+          this.barChart[1].data.push(keyVal);
           break;
         case 'Total CO2 emissions':
-          chart5Data.push(keyVal);
+          this.barChart[1].data.push(keyVal);
           break;
         case 'RES curtailment':
-          chart6Data.push(keyVal);
+          this.barChart[2].data.push(keyVal);
           break;
         case 'RES to P2G':
-          chart6Data.push(keyVal);
+          this.barChart[2].data.push(keyVal);
           break;
         case 'RES to EB':
-          chart6Data.push(keyVal);
+          this.barChart[2].data.push(keyVal);
           break;
         case 'RES to P2H':
-          chart6Data.push(keyVal);
+          this.barChart[2].data.push(keyVal);
           break;
         case 'RES direct utilization':
           if (directUtil === 0) {
-            chart6Data.push(keyVal);
+            this.barChart[2].data.push(keyVal);
             directUtil += 1;
           }
           break;
         case 'RES producibility':
-          chart6Data.push(keyVal);
+          this.barChart[2].data.push(keyVal);
           break;
         default:
           break;
       }
     }
-    this.areaChart4 = chart4Data;
-    this.areaChart5 = chart5Data;
-    this.areaChart6 = chart6Data;
+    this.barChart[0].title = 'LCOE and economic resultsYearly CO2 emissions ';
+    this.barChart[0].yAxisLabel = 'Expenses and Revenues M€/y';
+    this.barChart[0].yRightAxisLabel = 'LCOE €/MWh';
+    this.barChart[1].title = 'Yearly CO' + '\u2082' + ' emissions';
+    this.barChart[1].yAxisLabel = 'CO' + '\u2082' + ' emissions 10' + '\u00B3' + ' t/y';
+    this.barChart[2].title = 'Yearly RES producibility dispatch';
+    this.barChart[2].yAxisLabel = 'RES producibility GWh/y';
     this.simulationStarted = true;
     this.loading = false;
   }
