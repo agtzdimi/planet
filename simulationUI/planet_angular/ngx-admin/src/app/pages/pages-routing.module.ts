@@ -51,6 +51,9 @@ const routes: Routes = [{
   }, {
     path: 'simulations',
     loadChildren: './simulations/simulations.module#SimulationsModule',
+  }, {
+    path: 'manage-accounts',
+    loadChildren: './manage-accounts/manage-accounts.module#ManageAccountsModule',
   },
   {
     path: '',

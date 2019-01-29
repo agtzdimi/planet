@@ -11,7 +11,8 @@ export class SimulationsFilesComponent {
   CHARTS_TOTAL = 3;
   areaChart = [];
   barChart = [];
-  simulationStarted: boolean = false;
+  showBar: boolean = false;
+  showArea: boolean = false;
   loading = false;
 
   options: any = {};
@@ -34,7 +35,7 @@ export class SimulationsFilesComponent {
 
   startSimulation(): void {
     this.toggleLoadingAnimation();
-    this.httpClient.post('http://localhost:8000/transfer',
+    this.httpClient.post('http://80.106.151.108:8000/transfer',
       {
         'name': 'transfering',
       })
@@ -48,7 +49,7 @@ export class SimulationsFilesComponent {
       );
 
     const interval = setInterval(() => {
-      this.httpClient.get('http://localhost:8000/simulation')
+      this.httpClient.get('http://80.106.151.108:8000/simulation')
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
@@ -61,7 +62,7 @@ export class SimulationsFilesComponent {
           },
         );
 
-      this.httpClient.get('http://localhost:8000/simulation2')
+      this.httpClient.get('http://80.106.151.108:8000/simulation2')
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
@@ -142,6 +143,8 @@ export class SimulationsFilesComponent {
     this.areaChart[0].title = 'Electric demand, RES producibility, dispatch of the electric surplus';
     this.areaChart[1].title = 'Fulfilment of the Electric Demand';
     this.areaChart[2].title = 'Fulfilment of the Heat Demand (both DH and LHD)';
+    this.showArea = true;
+    this.loading = false;
   }
 
   spreadValuesToCharts2(data) {
@@ -213,8 +216,7 @@ export class SimulationsFilesComponent {
     this.barChart[1].yAxisLabel = 'CO' + '\u2082' + ' emissions 10' + '\u00B3' + ' t/y';
     this.barChart[2].title = 'Yearly RES producibility dispatch';
     this.barChart[2].yAxisLabel = 'RES producibility GWh/y';
-    this.simulationStarted = true;
-    this.loading = false;
+    this.showBar = true;
   }
 
   getColumnData(lines, column: number) {

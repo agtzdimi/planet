@@ -14,14 +14,16 @@
     </nb-card>
 
 
-    <div *ngIf="simulationStarted">
+    <div *ngIf="showArea">
       <nb-card *ngFor="let areaCh of areaChart">
         <nb-card-header>{{areaCh.title}}</nb-card-header>
         <nb-card-body>
           <ngx-simulation-area-stack [data]="areaCh.data"></ngx-simulation-area-stack>
         </nb-card-body>
       </nb-card>
+    </div>
 
+    <div *ngIf="showBar">
       <nb-card *ngFor="let barCh of barChart">
         <nb-card-header>{{barCh.title}}</nb-card-header>
         <nb-card-body>

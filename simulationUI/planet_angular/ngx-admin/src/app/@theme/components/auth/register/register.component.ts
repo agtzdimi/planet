@@ -7,4 +7,16 @@ import { NbRegisterComponent } from '@nebular/auth';
 })
 
 export class NgxRegisterComponent extends NbRegisterComponent {
+
+  doRegister: boolean = false;
+  checkBoxVal: boolean = false;
+
+  registerUser() {
+    this.doRegister = !this.doRegister;
+  }
+
+  checkBoxValue() {
+    this.checkBoxVal = !this.checkBoxVal;
+  }
+
 }

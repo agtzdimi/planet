@@ -13,6 +13,7 @@
         </nb-alert>
 
         <div class="form-group">
+            <label for="input-name">Full name</label>
             <label for="input-name" class="sr-only">Full name</label>
             <input nbInput [(ngModel)]="user.fullName" #fullName="ngModel" id="input-name" name="fullName" placeholder="Full name"
                 autofocus fullWidth [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : ''" [required]="getConfigValue('forms.validation.fullName.required')"
@@ -29,6 +30,7 @@
         </div>
 
         <div class="form-group">
+            <label for="input-email">Email address</label>
             <label for="input-email" class="sr-only">Email address</label>
             <input nbInput [(ngModel)]="user.email" #email="ngModel" id="input-email" name="email" pattern=".+@.+..+"
                 placeholder="Email address" fullWidth [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : ''"
@@ -42,6 +44,7 @@
         </div>
 
         <div class="form-group">
+            <label for="input-password">Password</label>
             <label for="input-password" class="sr-only">Password</label>
             <input nbInput [(ngModel)]="user.password" #password="ngModel" type="password" id="input-password" name="password"
                 placeholder="Password" fullWidth [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : ''"
@@ -59,6 +62,7 @@
         </div>
 
         <div class="form-group">
+            <label for="input-re-password">Repeat password</label>
             <label for="input-re-password" class="sr-only">Repeat password</label>
             <input nbInput [(ngModel)]="user.confirmPassword" #rePass="ngModel" type="password" id="input-re-password"
                 name="rePass" placeholder="Confirm Password" fullWidth [status]="email.dirty ? (email.invalid || password.value != rePass.value  ? 'danger' : 'success') : ''"
@@ -71,15 +75,16 @@
             </small>
         </div>
 
-        <button nbButton status="success" fullWidth [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
+        <label for="input-admin">Is Admin</label>
+        <br>
+        <nb-checkbox id="input-admin" (click)="checkBoxValue()"></nb-checkbox>
+
+        <button nbButton status="success" fullWidth [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted"
+            (click)="registerUser()">
             Register
         </button>
     </form>
 
-    <div class="links">
-
-        <small class="form-text">
-            Already have an account? <a routerLink="../login"><strong>Sign in</strong></a>
-        </small>
-    </div>
 </nb-auth-block>
+
+<ngx-create-acc *ngIf="doRegister" [params]="user" [isAdmin]="checkBoxVal"></ngx-create-acc>

@@ -44,7 +44,6 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
 
                 headers = [...headers, ObjHeaders[obj][0]];
             }
-
             const series: any = [];
             let time;
 

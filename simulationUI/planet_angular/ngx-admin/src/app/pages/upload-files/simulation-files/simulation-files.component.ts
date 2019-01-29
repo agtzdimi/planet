@@ -17,7 +17,7 @@ export class UploadSimulationFilesComponent {
     dragOver: boolean;
     fileName: string[] = [];
     text: any;
-    paramInit: Object = {
+    paramInit = {
         'file.name': '',
         'payload': {
 
@@ -27,13 +27,13 @@ export class UploadSimulationFilesComponent {
             },
         },
     };
-    controlSystem: Object = {
+    controlSystem = {
         'payload': {
             control: '',
         },
     };
 
-    econEnv: Object = {
+    econEnv = {
         'payload': {
             'NG.cost': '',
             'SNG.cost': '',
@@ -123,7 +123,7 @@ export class UploadSimulationFilesComponent {
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
-        this.httpClient.post('http://localhost:8000/upload', formData,
+        this.httpClient.post('http://80.106.151.108:8000/upload', formData,
         )
             .subscribe(
                 data => {
