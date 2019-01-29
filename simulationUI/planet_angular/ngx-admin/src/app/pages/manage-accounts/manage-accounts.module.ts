@@ -10,7 +10,7 @@ import { MatSlideToggleModule } from '@angular/material';
 
 const COMPONENTS = [
   ManageAccountsComponent,
-  ManageAccComponent
+  ManageAccComponent,
 ];
 
 const ENTRY_COMPONENTS = [
