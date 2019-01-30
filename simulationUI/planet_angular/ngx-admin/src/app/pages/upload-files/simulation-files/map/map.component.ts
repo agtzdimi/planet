@@ -1,4 +1,4 @@
-import { Component, NgZone, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, NgZone, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
 @Component({
@@ -6,7 +6,7 @@ import * as mapboxgl from 'mapbox-gl';
   styleUrls: ['./map.component.scss'],
   templateUrl: './map.component.html',
 })
-export class LeafletMapComponent {
+export class LeafletMapComponent implements OnInit {
   @Input() coordinates: number[];
   @Input() load: boolean = false;
   @Output() coordChange: EventEmitter<number[]>;
@@ -17,7 +17,8 @@ export class LeafletMapComponent {
     this.coordChange = new EventEmitter<number[]>();
   }
   ngOnInit() {
-    Object.getOwnPropertyDescriptor(mapboxgl, "accessToken").set('pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw');
+    Object.getOwnPropertyDescriptor(mapboxgl, 'accessToken')
+      .set('pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw');
   }
   onDragEnd(marker: mapboxgl.Marker) {
     NgZone.assertInAngularZone();
@@ -26,7 +27,7 @@ export class LeafletMapComponent {
   }
 
   handleResult(event) {
-    let lngLat = new mapboxgl.LngLat(event.result.center[0], event.result.center[1]);
+    const lngLat = new mapboxgl.LngLat(event.result.center[0], event.result.center[1]);
     this.lngLat = lngLat;
     this.coordinates = event.result.center;
     this.coordChange.emit(this.coordinates);
@@ -34,9 +35,9 @@ export class LeafletMapComponent {
 
   handleClick(event) {
     if (event.lngLat) {
-      let lngLat = new mapboxgl.LngLat(event.lngLat.lng, event.lngLat.lat);
+      const lngLat = new mapboxgl.LngLat(event.lngLat.lng, event.lngLat.lat);
       this.lngLat = lngLat;
-      this.coordinates = [event.lngLat.lng, event.lngLat.lat]
+      this.coordinates = [event.lngLat.lng, event.lngLat.lat];
       this.coordChange.emit(this.coordinates);
     }
   }

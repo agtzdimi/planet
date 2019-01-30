@@ -23,7 +23,7 @@ const COMPONENTS = [
   TechParamComponent,
   TechInputFieldComponent,
   TechCostComponent,
-  LeafletMapComponent
+  LeafletMapComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -40,8 +40,9 @@ const ENTRY_COMPONENTS = [
     FormsModule,
     MatSlideToggleModule,
     NgxMapboxGLModule.withConfig({
-      accessToken: 'pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw', // Optionnal, can also be set per map (accessToken input of mgl-map)
-      geocoderAccessToken: 'pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw' // Optionnal, specify if different from the map access token, can also be set per mgl-geocoder (accessToken input of mgl-geocoder)
+      accessToken: 'pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw',
+      geocoderAccessToken:
+        'pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw',
     }),
   ],
   declarations: [

@@ -20,8 +20,8 @@ export class UploadSimulationFilesComponent {
     text: any;
     showMap = false;
     coordinates: number[] = [7.6825, 45.0678];
-    capacity = 1
-    systemLoss = 10
+    capacity = 1;
+    systemLoss = 10;
     minDate: Date;
     startDate: Date;
     endDate: Date;
@@ -165,8 +165,8 @@ export class UploadSimulationFilesComponent {
     }
 
     generateData(technology) {
-        let date1 = formatDate(this.startDate, 'yyyy-MM-dd', 'en-US', '+0530');
-        let date2 = formatDate(this.endDate, 'yyyy-MM-dd', 'en-US', '+0530');
+        const date1 = formatDate(this.startDate, 'yyyy-MM-dd', 'en-US', '+0530');
+        const date2 = formatDate(this.endDate, 'yyyy-MM-dd', 'en-US', '+0530');
         this.httpClient.post('http://80.106.151.108:8000/generateData', {
             id: technology,
             systemLoss: this.systemLoss,
@@ -181,7 +181,7 @@ export class UploadSimulationFilesComponent {
                     // console.log('POST Request is successful ', data);
                 },
                 error => {
-                    console.log('Error', error);
+                    // console.log('Error', error);
                 },
             );
     }
