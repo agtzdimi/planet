@@ -2,49 +2,95 @@
   <div class="col-xxl-12">
 
     <nb-card>
-      <nb-card-header>Timeseries Files</nb-card-header>
       <nb-card-body>
-        <div class="row">
-          <div class="col-md-3">
-            <h5>Upload PV FIle</h5>
-            <div class="row">
-              <label class="upload-button m-2">
-                <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,0)"
-                  [uploadInput]="uploadInput" multiple class="btn btn-primary">
-                <span class="btn btn-primary m-2">{{getFileName(0)}}</span>
-              </label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <h5>Upload Wind File</h5>
-            <div class="row">
+        <div class="col-md-12">
+          <div id='map'> </div>
+          <nb-tabset fullWidth>
+            <nb-tab tabTitle="PV Input">
+              <div class="summary-container">
+                <div class="title">Upload File or Instantiate with Ninja module</div>
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="row">
+                    <label class="upload-button m-2">
+                      <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,0)"
+                        [uploadInput]="uploadInput" multiple class="btn btn-primary">
+                      <span class="btn btn-primary m-2">{{getFileName(0)}}</span>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-1">
+                      <button nbButton type="button" class="btn btn-primary m-2" (click)="revealMap()"> Show Map
+                      </button></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-1">
+                      <button nbButton type="button" class="btn btn-primary m-2" (click)="generateData('pv')"> Generate
+                        Data
+                      </button></div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group row">
+                    <label for="lat" class="col-sm-6 col-form-label">Lat</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="lat" [value]="coordinates[1]">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="lon" class="col-sm-6 col-form-label">Lon</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="lon" [value]="coordinates[0]">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="capacity" class="col-sm-6 col-form-label">Capacity (kW)</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="capacity" [(ngModel)]="capacity">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="system-loss" class="col-sm-6 col-form-label">System Loss (%)</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="system-loss" [(ngModel)]="systemLoss">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="datePicker" class="col-sm-4 col-form-label">Date Range</label>
+                    <div class="col-sm-8">
+                      <input nbInput placeholder="Form Picker" [nbDatepicker]="formpicker" id="datePicker">
+                      <nb-rangepicker #formpicker [min]="minDate" [max]="maxDate" (rangeChange)="datepicked($event)"></nb-rangepicker>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)"></ngx-leaflet-map>
+                </div>
+              </div>
+            </nb-tab>
+            <nb-tab tabTitle="Wind Input">
               <label class="upload-button m-2">
                 <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,1)"
                   [uploadInput]="uploadInput" multiple class="btn btn-primary">
                 <span class="btn btn-primary m-2">{{getFileName(1)}}</span>
               </label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <h5>Upload Electricity File</h5>
-            <div class="row">
+            </nb-tab>
+            <nb-tab tabTitle="Electricity Input">
               <label class="upload-button m-2">
                 <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,2)"
                   [uploadInput]="uploadInput" multiple class="btn btn-primary">
                 <span class="btn btn-primary m-2">{{getFileName(2)}}</span>
               </label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <h5>Upload Heat FIle</h5>
-            <div class="row">
+            </nb-tab>
+            <nb-tab tabTitle="Heat Input">
               <label class="upload-button m-2">
                 <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,3)"
                   [uploadInput]="uploadInput" multiple class="btn btn-primary">
                 <span class="btn btn-primary m-2">{{getFileName(3)}}</span>
               </label>
-            </div>
-          </div>
+            </nb-tab>
+          </nb-tabset>
         </div>
       </nb-card-body>
     </nb-card>
@@ -172,6 +218,5 @@
         </button>
       </div>
     </div>
-
   </div>
 </div>

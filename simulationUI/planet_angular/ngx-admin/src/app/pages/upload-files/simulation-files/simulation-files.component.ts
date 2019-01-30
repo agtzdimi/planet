@@ -1,6 +1,7 @@
 import { Component, EventEmitter } from '@angular/core';
 import { UploadOutput, UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
+import { formatDate } from '@angular/common';
 
 @Component({
     selector: 'ngx-simulation-files',
@@ -17,6 +18,20 @@ export class UploadSimulationFilesComponent {
     dragOver: boolean;
     fileName: string[] = [];
     text: any;
+    showMap = false;
+    coordinates: number[] = [7.6825, 45.0678];
+    capacity = 1
+    systemLoss = 10
+    minDate: Date;
+    startDate: Date;
+    endDate: Date;
+    maxDate: Date;
+
+    setCoord(event) {
+        this.coordinates[0] = event[0];
+        this.coordinates[1] = event[1];
+    }
+
     paramInit = {
         'file.name': '',
         'payload': {
@@ -52,6 +67,8 @@ export class UploadSimulationFilesComponent {
         this.files = []; // local uploading files array
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
+        this.minDate = new Date('2010-01-01');
+        this.maxDate = new Date('2016-12-31');
     }
 
     updateFilename(id, output) {
@@ -112,7 +129,12 @@ export class UploadSimulationFilesComponent {
         }
     }
 
+    revealMap() {
+        this.showMap = true;
+    }
+
     startUpload(): void {
+
         const formData: FormData = new FormData();
 
         for (let i = 0; i < this.files.length; i++) {
@@ -135,16 +157,33 @@ export class UploadSimulationFilesComponent {
             );
     }
 
-    cancelUpload(id: string): void {
-        //  this.uploadInput.emit({ type: 'cancel', id: id });
+    datepicked(event) {
+        if (event.start && event.end) {
+            this.startDate = event.start;
+            this.endDate = event.end;
+        }
     }
 
-    removeFile(id: string): void {
-        //  this.uploadInput.emit({ type: 'remove', id: id });
-    }
-
-    removeAllFiles(): void {
-        //  this.uploadInput.emit({ type: 'removeAll' });
+    generateData(technology) {
+        let date1 = formatDate(this.startDate, 'yyyy-MM-dd', 'en-US', '+0530');
+        let date2 = formatDate(this.endDate, 'yyyy-MM-dd', 'en-US', '+0530');
+        this.httpClient.post('http://80.106.151.108:8000/generateData', {
+            id: technology,
+            systemLoss: this.systemLoss,
+            capacity: this.capacity,
+            lat: this.coordinates[0],
+            lon: this.coordinates[1],
+            startDate: date1,
+            endDate: date2,
+        })
+            .subscribe(
+                data => {
+                    // console.log('POST Request is successful ', data);
+                },
+                error => {
+                    console.log('Error', error);
+                },
+            );
     }
 
     getFileName(id) {

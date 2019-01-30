@@ -106,6 +106,9 @@ app.post("/login_with_token", api.login_with_token);
 app.post("/logout", api.logout);
 app.post("/get_user_list", api.get_user_list);
 app.post("/remove_user", api.remove_user);
+app.post("/generateData", (req, res) => {
+  shell.exec("/home/sitewhere/generateData.sh " + req.body.id + " " + req.body.systemLoss + " "  + req.body.capacity + " "  + req.body.lat + " "  + req.body.lon + " "  + req.body.startDate + " "  + req.body.endDate);
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
