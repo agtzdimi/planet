@@ -1,4 +1,3 @@
-<mgl-map *ngIf="load" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[4]" [center]="[7.6825, 45.0678]" (click)="handleClick($event)">
-    <mgl-marker [lngLat]="lngLat" [draggable]="true" (dragEnd)="onDragEnd($event)"></mgl-marker>
-    <mgl-control mglGeocoder (result)="handleResult($event)"></mgl-control>
+<mgl-map *ngIf="load" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[4]" [center]="[7.6825, 45.0678]">
+    <mgl-marker [lngLat]="lngLat" [draggable]="false" (dragEnd)="onDragEnd($event)"></mgl-marker>
 </mgl-map>

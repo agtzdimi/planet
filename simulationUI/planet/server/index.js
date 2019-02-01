@@ -107,7 +107,7 @@ app.post("/logout", api.logout);
 app.post("/get_user_list", api.get_user_list);
 app.post("/remove_user", api.remove_user);
 app.post("/generateData", (req, res) => {
-  shell.exec("/home/sitewhere/generateData.sh " + req.body.id + " " + req.body.systemLoss + " "  + req.body.capacity + " "  + req.body.lat + " "  + req.body.lon + " "  + req.body.startDate + " "  + req.body.endDate);
+  shell.exec("/home/sitewhere/generateData.sh -id " + req.body.id + " -systemLoss " + req.body.systemLoss + " -capacity "  + req.body.capacity + " -lat "  + req.body.lat + " -lon "  + req.body.lon + " -startDate "  + req.body.startDate + " -endDate "  + req.body.endDate);
 })
 
 // catch 404 and forward to error handler

@@ -33,28 +33,34 @@ export class UploadSimulationFilesComponent {
     }
 
     paramInit = {
-        'file.name': '',
+        'file.name': 'Parameters_initialization',
         'payload': {
 
             'simulation': {
-                'time.step': '',
-                'simulation.time': '',
+                'time.step': 1,
+                'simulation.time': 8760,
+            },
+            'technologies': {
             },
         },
     };
     controlSystem = {
         'payload': {
-            control: '',
+            control: 5,
         },
     };
 
     econEnv = {
+        'file.name': 'Economy_environment_initialization',
         'payload': {
-            'NG.cost': '',
-            'SNG.cost': '',
-            'heat.cost': '',
-            'carbon.tax': '',
-            'NG.emission.factor': '',
+            'NG.cost': 50,
+            'SNG.cost': 50,
+            'heat.cost': 45,
+            'carbon.tax': 15,
+            'NG.emission.factor': 0.2012,
+        },
+        'technologies.cost': {
+
         },
     };
     revealed = false;
@@ -72,26 +78,6 @@ export class UploadSimulationFilesComponent {
     }
 
     updateFilename(id, output) {
-
-        if (!output.file.name.includes('.xlsx')) {
-            const fileReader = new FileReader();
-            fileReader.onload = () => {
-                const text = fileReader.result as string;
-                this.text = JSON.parse(text);
-                switch (this.text['file.name']) {
-                    case 'Parameters_initialization':
-                        this.paramInit = this.text;
-                        break;
-                    case 'Control_initialization':
-                        this.controlSystem = this.text;
-                        break;
-                    case 'Economy_environment_initialization':
-                        this.econEnv = this.text;
-                        break;
-                }
-            };
-            fileReader.readAsText(output.file.nativeFile);
-        }
         this.fileName[id] = output.file.name;
     }
 
@@ -111,26 +97,14 @@ export class UploadSimulationFilesComponent {
                     this.updateFilename(id, output);
                 }
                 break;
-            case 'uploading':
-                break;
-            case 'removed':
-                // remove file from array when removed
-                break;
-            case 'dragOver':
-                this.dragOver = true;
-                break;
-            case 'dragOut':
-            case 'drop':
-                this.dragOver = false;
-                break;
-            case 'done':
-                // The file is downloaded
-                break;
         }
     }
 
     revealMap() {
-        this.showMap = true;
+        this.showMap = false;
+        setTimeout(() => {
+            this.showMap = !this.showMap;
+        }, 500);
     }
 
     startUpload(): void {
