@@ -8,9 +8,9 @@
           <div id='map'> </div>
           <div class="row">
             <div class="col-md-2">
-              <nb-select class="m-2" placeholder="Select grid area" (selectedChange)="animateImage(transitionName1,$event)">
-                <nb-option value="1">Turin</nb-option>
-                <nb-option value="2" disabled>Athens</nb-option>
+              <nb-select class="m-2" placeholder="Select grid area" (selectedChange)="animateImage('transitionName1',$event)">
+                <nb-option value="Turin">Turin</nb-option>
+                <nb-option value="Athens" disabled>Athens</nb-option>
               </nb-select>
               <div *ngIf="areaPicked">
                 <hr>

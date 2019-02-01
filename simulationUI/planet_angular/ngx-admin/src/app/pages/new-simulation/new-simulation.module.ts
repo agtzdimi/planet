@@ -16,6 +16,9 @@ import { TechParamComponent } from './simulation-files/tech-param/tech-param.com
 import { TechCostComponent } from './simulation-files/tech-cost/tech-cost.component';
 import { TechInputFieldComponent } from './simulation-files/tech-param/tech-input-field.component';
 import { LeafletMapComponent } from './simulation-files/map/map.component';
+import { DialogNamePromptComponent } from './simulation-files/dialog-prompt/dialog-prompt.component';
+import { NbDialogModule } from '@nebular/theme';
+
 
 const COMPONENTS = [
   NewSimulationComponent,
@@ -25,10 +28,12 @@ const COMPONENTS = [
   TechInputFieldComponent,
   TechCostComponent,
   LeafletMapComponent,
+  DialogNamePromptComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   NewSimulationFilesComponent,
+  DialogNamePromptComponent,
 ];
 
 
@@ -37,6 +42,7 @@ const ENTRY_COMPONENTS = [
     ThemeModule,
     NewSimulationRoutingModule,
     NbButtonModule,
+    NbDialogModule.forRoot(),
     NgxUploaderModule,
     FormsModule,
     MatSlideToggleModule,

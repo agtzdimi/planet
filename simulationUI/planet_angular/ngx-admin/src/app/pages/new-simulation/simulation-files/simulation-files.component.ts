@@ -3,6 +3,8 @@ import { UploadOutput, UploadInput, humanizeBytes, UploaderOptions } from 'ngx-u
 import { HttpClient } from '@angular/common/http';
 import { formatDate } from '@angular/common';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
+import { NbDialogService } from '@nebular/theme';
+import { DialogNamePromptComponent } from './dialog-prompt/dialog-prompt.component';
 
 @Component({
     selector: 'ngx-simulation-files',
@@ -37,11 +39,14 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     transitionController3 = new TransitionController();
     transitionController4 = new TransitionController();
     transitionController5 = new TransitionController();
+    area: string = '';
 
     public animateImage(transitionName: string = 'scale', event) {
-        this.areaPicked = event;
+        this.areaPicked = true;
+        this.area = event;
         this.transitionController1.animate(
             new Transition(transitionName, 2000, TransitionDirection.In));
+        this.open();
     }
 
     public animateInfo(controller, transitionName: string = 'slide down', id) {
@@ -98,7 +103,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     };
     revealed = false;
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
         for (let i = 0; i < 7; i++) {
             this.fileName.push('Upload File');
         }
@@ -195,4 +200,10 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     getFileName(id) {
         return this.fileName[id];
     }
+
+    open() {
+        this.dialogService.open(DialogNamePromptComponent)
+            .onClose.subscribe(name => name);
+    }
+
 }
