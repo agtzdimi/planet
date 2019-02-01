@@ -6,9 +6,9 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { ThemeModule } from '../../@theme/theme.module';
 import { FormsModule } from '@angular/forms';
 
-import { UploadFilesRoutingModule } from './upload-files-routing.module';
-import { UploadFilesComponent } from './upload-files.component';
-import { UploadSimulationFilesComponent } from './simulation-files/simulation-files.component';
+import { NewSimulationRoutingModule } from './new-simulation-routing.module';
+import { NewSimulationComponent } from './new-simulation.component';
+import { NewSimulationFilesComponent } from './simulation-files/simulation-files.component';
 import { ParamHeaderComponent } from './simulation-files/param-header/param-header.component';
 import { MatSlideToggleModule } from '@angular/material';
 import { TechParamComponent } from './simulation-files/tech-param/tech-param.component';
@@ -17,8 +17,8 @@ import { TechInputFieldComponent } from './simulation-files/tech-param/tech-inpu
 import { LeafletMapComponent } from './simulation-files/map/map.component';
 
 const COMPONENTS = [
-  UploadFilesComponent,
-  UploadSimulationFilesComponent,
+  NewSimulationComponent,
+  NewSimulationFilesComponent,
   ParamHeaderComponent,
   TechParamComponent,
   TechInputFieldComponent,
@@ -27,14 +27,14 @@ const COMPONENTS = [
 ];
 
 const ENTRY_COMPONENTS = [
-  UploadSimulationFilesComponent,
+  NewSimulationFilesComponent,
 ];
 
 
 @NgModule({
   imports: [
     ThemeModule,
-    UploadFilesRoutingModule,
+    NewSimulationRoutingModule,
     NbButtonModule,
     NgxUploaderModule,
     FormsModule,
@@ -52,4 +52,4 @@ const ENTRY_COMPONENTS = [
     ...ENTRY_COMPONENTS,
   ],
 })
-export class UploadFilesModule { }
+export class NewSimulationModule { }

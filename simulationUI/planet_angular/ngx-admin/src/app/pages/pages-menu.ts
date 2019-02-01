@@ -2,14 +2,9 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Upload-Files',
+    title: 'New Simulation',
     icon: 'nb-compose',
-    children: [
-      {
-        title: 'Simulation Files',
-        link: '/pages/upload-files/simulation',
-      },
-    ],
+    link: '/pages/new-simulation',
   },
   {
     title: 'Simulations',

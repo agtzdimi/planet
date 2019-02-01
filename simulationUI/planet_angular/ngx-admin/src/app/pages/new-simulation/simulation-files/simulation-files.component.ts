@@ -8,7 +8,7 @@ import { formatDate } from '@angular/common';
     styleUrls: ['./simulation-files.component.scss'],
     templateUrl: './simulation-files.component.html',
 })
-export class UploadSimulationFilesComponent {
+export class NewSimulationFilesComponent {
 
     options: UploaderOptions;
     formData: FormData;
