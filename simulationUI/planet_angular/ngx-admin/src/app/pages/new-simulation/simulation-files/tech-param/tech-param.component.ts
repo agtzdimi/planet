@@ -10,6 +10,7 @@ export class TechParamComponent implements OnChanges {
     checkVal: Object = {};
     @Input() data: Object;
     @Output() dataChange: EventEmitter<Object>;
+    @Output() phase3: EventEmitter<Boolean>;
     nodeData: any;
     displayingNode: string;
     nodes = [];
@@ -35,6 +36,7 @@ export class TechParamComponent implements OnChanges {
         }
         this.data = {};
         this.dataChange = new EventEmitter<Object>();
+        this.phase3 = new EventEmitter<Boolean>();
         this.nodeData = {
             'node.1': {
 
@@ -593,6 +595,10 @@ export class TechParamComponent implements OnChanges {
 
     changeCheckBoxVal(id) {
         this.checkVal[this.displayingNode][id] = !this.checkVal[this.displayingNode][id];
+    }
+
+    nextPhase() {
+        this.phase3.emit(true);
     }
 
 }

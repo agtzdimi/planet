@@ -2,149 +2,128 @@
   <div class="col-xxl-12">
 
     <nb-card size="medium">
+      <nb-card-header>New Simulation</nb-card-header>
       <nb-card-body>
         <div class="col-md-12">
           <div id='map'> </div>
-          <nb-tabset fullWidth (changeTab)="revealMap()">
-            <nb-tab tabTitle="PV Input">
-              <div class="row">
-                <div class="col-md-2">
-                  <hr>
-                  <nb-select class="m-2" placeholder="Select grid area">
-                    <nb-option value="1">Turin</nb-option>
-                    <nb-option value="2" disabled>Athens</nb-option>
-                  </nb-select>
+          <div class="row">
+            <div class="col-md-2">
+              <nb-select class="m-2" placeholder="Select grid area" (selectedChange)="animateImage(transitionName1,$event)">
+                <nb-option value="1">Turin</nb-option>
+                <nb-option value="2" disabled>Athens</nb-option>
+              </nb-select>
+              <div *ngIf="areaPicked">
+                <hr>
+                <div class="form-group row">
+                  <label for="dt" class="col-sm-6 col-form-label">Time Step</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="dt" [(ngModel)]="paramInit.payload.simulation['time.step']">
+                  </div>
                 </div>
-                <div class="col-md-10">
-                  <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)"></ngx-leaflet-map>
+                <div class="form-group row">
+                  <label for="simulation-time" class="col-sm-6 col-form-label">Simulation Horizon</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="simulation-time" [(ngModel)]="paramInit.payload.simulation['simulation.time']">
+                  </div>
                 </div>
-              </div>
-            </nb-tab>
-            <nb-tab tabTitle="Wind Input">
-              <div class="row">
-                <div class="col-md-2">
-                  <hr>
-                  <nb-select class="m-2" placeholder="Select grid area">
-                    <nb-option value="1">Turin</nb-option>
-                    <nb-option value="2" disabled>Athens</nb-option>
-                  </nb-select>
-                </div>
-                <div class="col-md-10">
-                  <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)"></ngx-leaflet-map>
+                <div class="row"><br><br><br><br><br><br></div>
+                <div class="row">
+                  <button nbButton hero status="info" shape="round" (click)="animateInfo(transitionController2,transitionName2,2)">Continue</button>
                 </div>
               </div>
-            </nb-tab>
-            <nb-tab tabTitle="Electricity Input">
-              <div class="row">
-                <div class="col-md-2">
-                  <label class="upload-button m-2">
-                    <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,2)"
-                      [uploadInput]="uploadInput" multiple class="btn btn-primary">
-                    <span class="btn btn-primary m-2">{{getFileName(2)}}</span>
-                  </label>
-                </div>
-                <div class="col-md-10">
-                  <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)"></ngx-leaflet-map>
-                </div>
+            </div>
+            <div *ngIf="areaPicked" class="col-md-2">
+              <div>
+                <img [suiTransition]="transitionController1" src="assets/images/grid.png">
               </div>
-            </nb-tab>
-            <nb-tab tabTitle="Heat Input">
-              <div class="row">
-                <div class="col-md-2">
-                  <label class="upload-button m-2">
-                    <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,3)"
-                      [uploadInput]="uploadInput" multiple class="btn btn-primary">
-                    <span class="btn btn-primary m-2">{{getFileName(3)}}</span>
-                  </label>
-                </div>
-              </div>
-              <div class="col-md-10">
-                <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)"></ngx-leaflet-map>
-              </div>
-            </nb-tab>
-          </nb-tabset>
+            </div>
+            <div *ngIf="areaPicked" class="col-md-8">
+              <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)"></ngx-leaflet-map>
+            </div>
+          </div>
         </div>
       </nb-card-body>
     </nb-card>
 
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
+        <div class="ui content">
+          <ngx-tech-param [suiTransition]="transitionController2" *ngIf="phase2" [(data)]="paramInit" (dataChange)="paramInit"
+            (phase3)="animateInfo(transitionController3,transitionName3,3)"></ngx-tech-param>
+        </div>
 
-        <nb-card>
-          <nb-card-header>Simulation Parameters</nb-card-header>
-          <nb-card-body>
-            <div class="form-group row">
-              <label for="dt" class="col-sm-8 col-form-label">DT</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="dt" [(ngModel)]="paramInit.payload.simulation['time.step']">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="simulation-time" class="col-sm-8 col-form-label">Simulation Time</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="simulation-time" [(ngModel)]="paramInit.payload.simulation['simulation.time']">
-              </div>
-            </div>
-          </nb-card-body>
-        </nb-card>
-
-        <nb-card>
-          <nb-card-header>Control System</nb-card-header>
-          <nb-card-body>
-            <div class="form-group row">
-              <label for="control-system" class="col-sm-8 col-form-label">Option</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="control-system" [(ngModel)]="controlSystem.payload.control">
-              </div>
-            </div>
-          </nb-card-body>
-        </nb-card>
-
-        <nb-card>
-          <nb-card-header>Economy Parameters</nb-card-header>
-          <nb-card-body>
-            <div class="form-group row">
-              <label for="ec_ng.cost" class="col-sm-8 col-form-label">NG cost</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="ec_ng.cost" [(ngModel)]="econEnv.payload['NG.cost']">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="ec_sng.cost" class="col-sm-8 col-form-label">SNG cost</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="ec_sng.cost" [(ngModel)]="econEnv.payload['SNG.cost']">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="ec_heat.cost" class="col-sm-8 col-form-label">Heat cost</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="ec_heat.cost" [(ngModel)]="econEnv.payload['heat.cost']">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="ec_carbon" class="col-sm-8 col-form-label">Carbon tax</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="ec_carbon" [(ngModel)]="econEnv.payload['carbon.tax']">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="ec_ng.emission" class="col-sm-8 col-form-label">NG emission factor</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="ec_ng.emission" [(ngModel)]="econEnv.payload['NG.emission.factor']">
-              </div>
-            </div>
-          </nb-card-body>
-        </nb-card>
-
+        <ngx-tech-cost [suiTransition]="transitionController4" *ngIf="phase4" [(data)]="econEnv" (dataChange)="econEnv"></ngx-tech-cost>
       </div>
 
-      <div class="col-md-8">
-        <ngx-tech-param [(data)]="paramInit" (dataChange)="paramInit"></ngx-tech-param>
-        <ngx-tech-cost [(data)]="econEnv" (dataChange)="econEnv"></ngx-tech-cost>
+      <div class="col-md-6">
+
+        <div [suiTransition]="transitionController3">
+          <nb-card *ngIf="phase3">
+            <nb-card-header>Control System</nb-card-header>
+            <nb-card-body>
+              <div class="form-group row">
+                <label for="control-system" class="col-sm-8 col-form-label">Option</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="control-system" [(ngModel)]="controlSystem.payload.control">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-9"></div>
+                <div class="col-md-3">
+                  <button nbButton hero status="info" shape="round" (click)="animateInfo(transitionController4,transitionName4,4);animateInfo(transitionController5,transitionName5,4)">Continue</button>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+
+        <div [suiTransition]="transitionController5">
+          <nb-card *ngIf="phase4">
+            <nb-card-header>Economy Parameters</nb-card-header>
+            <nb-card-body>
+              <div class="form-group row">
+                <label for="ec_ng.cost" class="col-sm-8 col-form-label">NG cost</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="ec_ng.cost" [(ngModel)]="econEnv.payload['NG.cost']">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ec_sng.cost" class="col-sm-8 col-form-label">SNG cost</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="ec_sng.cost" [(ngModel)]="econEnv.payload['SNG.cost']">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ec_heat.cost" class="col-sm-8 col-form-label">Heat cost</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="ec_heat.cost" [(ngModel)]="econEnv.payload['heat.cost']">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ec_carbon" class="col-sm-8 col-form-label">Carbon tax</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="ec_carbon" [(ngModel)]="econEnv.payload['carbon.tax']">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ec_ng.emission" class="col-sm-8 col-form-label">NG emission factor</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="ec_ng.emission" [(ngModel)]="econEnv.payload['NG.emission.factor']">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-9"></div>
+                <div class="col-md-3">
+                  <button nbButton hero status="info" shape="round" (click)="phase5=true">Continue</button>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="phase5">
       <div class="col-md-4"></div>
       <div class="col-md-2">
         <button nbButton type="button" class="start-upload-btn" size="large" (click)="startUpload()">

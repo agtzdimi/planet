@@ -1,14 +1,15 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, AfterViewInit } from '@angular/core';
 import { UploadOutput, UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { formatDate } from '@angular/common';
+import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 
 @Component({
     selector: 'ngx-simulation-files',
     styleUrls: ['./simulation-files.component.scss'],
     templateUrl: './simulation-files.component.html',
 })
-export class NewSimulationFilesComponent {
+export class NewSimulationFilesComponent implements AfterViewInit {
 
     options: UploaderOptions;
     formData: FormData;
@@ -26,6 +27,38 @@ export class NewSimulationFilesComponent {
     startDate: Date;
     endDate: Date;
     maxDate: Date;
+    areaPicked: boolean = false;
+    phase2: boolean = false;
+    phase3: boolean = false;
+    phase4: boolean = false;
+    phase5: boolean = false;
+    transitionController1 = new TransitionController();
+    transitionController2 = new TransitionController();
+    transitionController3 = new TransitionController();
+    transitionController4 = new TransitionController();
+    transitionController5 = new TransitionController();
+
+    public animateImage(transitionName: string = 'scale', event) {
+        this.areaPicked = event;
+        this.transitionController1.animate(
+            new Transition(transitionName, 2000, TransitionDirection.In));
+    }
+
+    public animateInfo(controller, transitionName: string = 'slide down', id) {
+        switch (id) {
+            case 2:
+                this.phase2 = true;
+                break;
+            case 3:
+                this.phase3 = true;
+                break;
+            case 4:
+                this.phase4 = true;
+                break;
+        }
+        controller.animate(
+            new Transition(transitionName, 2000, TransitionDirection.In));
+    }
 
     setCoord(event) {
         this.coordinates[0] = event[0];
@@ -100,8 +133,7 @@ export class NewSimulationFilesComponent {
         }
     }
 
-    revealMap() {
-        this.showMap = false;
+    ngAfterViewInit() {
         setTimeout(() => {
             this.showMap = !this.showMap;
         }, 500);

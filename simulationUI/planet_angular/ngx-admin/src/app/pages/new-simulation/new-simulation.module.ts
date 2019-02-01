@@ -5,6 +5,7 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { FormsModule } from '@angular/forms';
+import { SuiModule } from 'ng2-semantic-ui';
 
 import { NewSimulationRoutingModule } from './new-simulation-routing.module';
 import { NewSimulationComponent } from './new-simulation.component';
@@ -39,6 +40,7 @@ const ENTRY_COMPONENTS = [
     NgxUploaderModule,
     FormsModule,
     MatSlideToggleModule,
+    SuiModule,
     NgxMapboxGLModule.withConfig({
       accessToken: 'pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw',
       geocoderAccessToken:
