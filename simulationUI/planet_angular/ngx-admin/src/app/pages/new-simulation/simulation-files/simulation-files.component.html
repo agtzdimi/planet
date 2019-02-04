@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-xxl-12">
 
-    <nb-card size="medium">
+    <nb-card>
       <nb-card-header>New Simulation</nb-card-header>
       <nb-card-body>
         <div class="col-md-12">
@@ -49,7 +49,8 @@
       <div class="col-md-6">
         <div class="ui content">
           <ngx-tech-param [suiTransition]="transitionController2" *ngIf="phase2" [(data)]="paramInit" (dataChange)="paramInit"
-            (phase3)="animateInfo(transitionController3,transitionName3,3)"></ngx-tech-param>
+            [(pvParam)]="pvParam" [(windParam)]="windParam" (phase3)="animateInfo(transitionController3,transitionName3,3)"
+            (pvChange)="pvParam" (windChange)="windParam"></ngx-tech-param>
         </div>
 
         <ngx-tech-cost [suiTransition]="transitionController4" *ngIf="phase4" [(data)]="econEnv" (dataChange)="econEnv"></ngx-tech-cost>
@@ -114,16 +115,52 @@
               <div class="row">
                 <div class="col-md-9"></div>
                 <div class="col-md-3">
-                  <button nbButton hero status="info" shape="round" (click)="phase5=true">Continue</button>
+                  <button nbButton hero status="info" shape="round" (click)="animateInfo(transitionController6,transitionName6,5)">Continue</button>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+
+        <div [suiTransition]="transitionController6">
+          <nb-card *ngIf="phase5">
+            <nb-card-header>File Uploading</nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Upload Electricity FIle</h6>
+                  <div class="row">
+                    <label class="upload-button m-2">
+                      <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,0)"
+                        [uploadInput]="uploadInput" multiple class="btn btn-primary">
+                      <span class="btn btn-primary m-2">{{getFileName(0)}}</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <h6>Upload Heat File</h6>
+                  <div class="row">
+                    <label class="upload-button m-2">
+                      <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,1)"
+                        [uploadInput]="uploadInput" multiple class="btn btn-primary">
+                      <span class="btn btn-primary m-2">{{getFileName(1)}}</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="row m-4">
+                    <button nbButton hero status="info" class="m-3" shape="round" (click)="phase6=true">Continue</button>
+                  </div>
                 </div>
               </div>
             </nb-card-body>
           </nb-card>
         </div>
       </div>
+
     </div>
 
-    <div class="row" *ngIf="phase5">
+    <div class="row" *ngIf="phase6">
       <div class="col-md-4"></div>
       <div class="col-md-2">
         <button nbButton type="button" class="start-upload-btn" size="large" (click)="startUpload()">

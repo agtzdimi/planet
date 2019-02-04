@@ -15,6 +15,9 @@ import { MatSlideToggleModule } from '@angular/material';
 import { TechParamComponent } from './simulation-files/tech-param/tech-param.component';
 import { TechCostComponent } from './simulation-files/tech-cost/tech-cost.component';
 import { TechInputFieldComponent } from './simulation-files/tech-param/tech-input-field.component';
+import { DialogTechParamPromptComponent } from './simulation-files/dialog-prompt/tech-param-dialog.component';
+import { DialogControlSystemPromptComponent } from './simulation-files/dialog-prompt/control-system-dialog.component';
+import { DialogEconomyPromptComponent } from './simulation-files/dialog-prompt/economy-dialog.component';
 import { LeafletMapComponent } from './simulation-files/map/map.component';
 import { DialogNamePromptComponent } from './simulation-files/dialog-prompt/dialog-prompt.component';
 import { NbDialogModule } from '@nebular/theme';
@@ -29,11 +32,17 @@ const COMPONENTS = [
   TechCostComponent,
   LeafletMapComponent,
   DialogNamePromptComponent,
+  DialogTechParamPromptComponent,
+  DialogControlSystemPromptComponent,
+  DialogEconomyPromptComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   NewSimulationFilesComponent,
   DialogNamePromptComponent,
+  DialogTechParamPromptComponent,
+  DialogControlSystemPromptComponent,
+  DialogEconomyPromptComponent,
 ];
 
 

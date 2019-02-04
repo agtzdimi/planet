@@ -7,8 +7,16 @@ import { NbDialogRef } from '@nebular/theme';
     <nb-card>
       <nb-card-header>Do you want to initialize with the default values</nb-card-header>
       <nb-card-footer>
-        <button nbButton hero status="danget" (click)="cancel()">No</button>
-        <button nbButton hero status="success" (click)="submit(true)">OK</button>
+      <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4">
+          <button nbButton hero status="danget" (click)="cancel()">No</button>
+        </div>
+        <div class="col-md-4">
+          <button nbButton hero status="success" (click)="submit()">OK</button>
+        </div>
+      </div>
       </nb-card-footer>
     </nb-card>
   `,
@@ -26,7 +34,7 @@ export class DialogNamePromptComponent {
     this.dialogRef.close();
   }
 
-  submit(name) {
-    this.dialogRef.close(name);
+  submit() {
+    this.dialogRef.close();
   }
 }

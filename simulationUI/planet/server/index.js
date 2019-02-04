@@ -67,20 +67,14 @@ app.post("/upload", (req, res, next) => {
         if (err) {
             return res.status(500).send(err);
         }
-        if(fileName === "Parameters_initialization.txt") {
-           shell.echo(req.body.param1).to(`${__dirname}/../public/files/${fileName}`);
-        }
-        else if(fileName === "Control_initialization.txt") {
-           shell.echo(req.body.param2).to(`${__dirname}/../public/files/${fileName}`);
-        }
-        else if(fileName === "Economy_environment_initialization.txt") {
-           shell.echo(req.body.param3).to(`${__dirname}/../public/files/${fileName}`);
-        }
-
     });}
     res.json({
             file: `public/${req.files.file.name}`
         });
+    shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
+    shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
+    shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
+   // shell.exec("/home/sitewhere/generateData.sh " + req.body.windParam + " " + req.body.pvParam);
 });
 
 app.post("/transfer", (req, res) => {
@@ -107,7 +101,9 @@ app.post("/logout", api.logout);
 app.post("/get_user_list", api.get_user_list);
 app.post("/remove_user", api.remove_user);
 app.post("/generateData", (req, res) => {
-  shell.exec("/home/sitewhere/generateData.sh -id " + req.body.id + " -systemLoss " + req.body.systemLoss + " -capacity "  + req.body.capacity + " -lat "  + req.body.lat + " -lon "  + req.body.lon + " -startDate "  + req.body.startDate + " -endDate "  + req.body.endDate);
+  //shell.exec("/home/sitewhere/generateData.sh " + req.body.windPayload.payload + " " + req.body.pvPayload.payload);
+  console.log("EDW1",req.body.windPayload);
+  console.log("EDW2",req.body.pvPayload);
 })
 
 // catch 404 and forward to error handler

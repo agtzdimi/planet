@@ -1,10 +1,12 @@
 import { Component, EventEmitter, AfterViewInit } from '@angular/core';
 import { UploadOutput, UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
-import { formatDate } from '@angular/common';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService } from '@nebular/theme';
 import { DialogNamePromptComponent } from './dialog-prompt/dialog-prompt.component';
+import { DialogTechParamPromptComponent } from './dialog-prompt/tech-param-dialog.component';
+import { DialogControlSystemPromptComponent } from './dialog-prompt/control-system-dialog.component';
+import { DialogEconomyPromptComponent } from './dialog-prompt/economy-dialog.component';
 
 @Component({
     selector: 'ngx-simulation-files',
@@ -39,6 +41,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     transitionController3 = new TransitionController();
     transitionController4 = new TransitionController();
     transitionController5 = new TransitionController();
+    transitionController6 = new TransitionController();
     area: string = '';
 
     public animateImage(transitionName: string = 'scale', event) {
@@ -46,19 +49,27 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         this.area = event;
         this.transitionController1.animate(
             new Transition(transitionName, 2000, TransitionDirection.In));
-        this.open();
+        this.openDialogBox(DialogNamePromptComponent);
     }
 
     public animateInfo(controller, transitionName: string = 'slide down', id) {
         switch (id) {
             case 2:
                 this.phase2 = true;
+                this.openDialogBox(DialogTechParamPromptComponent);
                 break;
             case 3:
                 this.phase3 = true;
+                this.openDialogBox(DialogControlSystemPromptComponent);
                 break;
             case 4:
                 this.phase4 = true;
+                if (controller === this.transitionController4) {
+                    this.openDialogBox(DialogEconomyPromptComponent);
+                }
+                break;
+            case 5:
+                this.phase5 = true;
                 break;
         }
         controller.animate(
@@ -83,6 +94,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         },
     };
     controlSystem = {
+        'file.name': 'Control_initialization',
         'payload': {
             control: 5,
         },
@@ -101,6 +113,19 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
         },
     };
+
+    windParam = {
+        'file.name': 'Wind.xlsx',
+        'payload': {
+        },
+    };
+
+    pvParam = {
+        'file.name': 'PV.xlsx',
+        'payload': {
+        },
+    };
+
     revealed = false;
 
     constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
@@ -160,32 +185,16 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         )
             .subscribe(
                 data => {
-                    // console.log('POST Request is successful ', data);
+                    //  console.log('POST Request is successful ', data);
                 },
                 error => {
-                    // console.log('Error', error);
+                    //   console.log('Error', error);
                 },
             );
-    }
 
-    datepicked(event) {
-        if (event.start && event.end) {
-            this.startDate = event.start;
-            this.endDate = event.end;
-        }
-    }
-
-    generateData(technology) {
-        const date1 = formatDate(this.startDate, 'yyyy-MM-dd', 'en-US', '+0530');
-        const date2 = formatDate(this.endDate, 'yyyy-MM-dd', 'en-US', '+0530');
         this.httpClient.post('http://80.106.151.108:8000/generateData', {
-            id: technology,
-            systemLoss: this.systemLoss,
-            capacity: this.capacity,
-            lat: this.coordinates[0],
-            lon: this.coordinates[1],
-            startDate: date1,
-            endDate: date2,
+            windPayload: JSON.stringify(this.windParam),
+            pvPayload: JSON.stringify(this.pvParam),
         })
             .subscribe(
                 data => {
@@ -201,9 +210,8 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         return this.fileName[id];
     }
 
-    open() {
-        this.dialogService.open(DialogNamePromptComponent)
-            .onClose.subscribe(name => name);
+    openDialogBox(component) {
+        this.dialogService.open(component)
+            .onClose.subscribe();
     }
-
 }
