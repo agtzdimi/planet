@@ -61,20 +61,24 @@ app.use("/public", express.static(__dirname + "../public"));
 
 app.post("/upload", (req, res, next) => {
     for (const fil of Object.keys(req.files.file)) {
-    let uploadFile = req.files.file[fil];
-    const fileName = req.files.file[fil].name;
-    uploadFile.mv(`${__dirname}/../public/files/${fileName}`, function (err) {
-        if (err) {
-            return res.status(500).send(err);
-        }
-    });}
-    res.json({
-            file: `public/${req.files.file.name}`
+        let uploadFile = req.files.file[fil];
+        const fileName = req.files.file[fil].name;
+        uploadFile.mv(`${__dirname}/../public/files/${fileName}`, function (err) {
+            if (err) {
+                return res.status(500).send(err);
+            }
         });
+    }
+    res.json({
+        file: `public/${req.files.file.name}`
+    });
     shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
     shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
     shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
-   // shell.exec("/home/sitewhere/generateData.sh " + req.body.windParam + " " + req.body.pvParam);
+});
+
+app.post("/save_data", (req, res, next) => {
+   shell.exec("/home/sitewhere/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
 });
 
 app.post("/transfer", (req, res) => {
@@ -100,10 +104,6 @@ app.post("/login_with_token", api.login_with_token);
 app.post("/logout", api.logout);
 app.post("/get_user_list", api.get_user_list);
 app.post("/remove_user", api.remove_user);
-app.post("/generateData", (req, res) => {
-  console.log(req.body.pvPayload)
-  shell.exec("/home/sitewhere/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
-})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

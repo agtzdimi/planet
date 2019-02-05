@@ -186,6 +186,7 @@ input[type=text] {
 
 label {
   line-height: 31px;
+  margin-left: 30px;
 }
 
 @include nb-install-component() {

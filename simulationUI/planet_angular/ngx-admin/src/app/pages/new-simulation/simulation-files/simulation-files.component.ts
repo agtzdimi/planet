@@ -7,6 +7,7 @@ import { DialogNamePromptComponent } from './dialog-prompt/dialog-prompt.compone
 import { DialogTechParamPromptComponent } from './dialog-prompt/tech-param-dialog.component';
 import { DialogControlSystemPromptComponent } from './dialog-prompt/control-system-dialog.component';
 import { DialogEconomyPromptComponent } from './dialog-prompt/economy-dialog.component';
+import { DialogSaveParamPromptComponent } from './dialog-prompt/save-param-dialog.component';
 
 @Component({
     selector: 'ngx-simulation-files',
@@ -16,6 +17,7 @@ import { DialogEconomyPromptComponent } from './dialog-prompt/economy-dialog.com
 export class NewSimulationFilesComponent implements AfterViewInit {
 
     options: UploaderOptions;
+    formName: String;
     formData: FormData;
     files: File[];
     uploadInput: EventEmitter<UploadInput>;
@@ -170,39 +172,49 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
     startUpload(): void {
 
-        const formData: FormData = new FormData();
+        this.dialogService.open(DialogSaveParamPromptComponent)
+            .onClose.subscribe(name => {
+                this.formName = name;
+                const formData: FormData = new FormData();
 
-        for (let i = 0; i < this.files.length; i++) {
-            const file: File = this.files[i];
-            formData.append('file', file, file.name);
-        }
-        formData.append('method', 'POST');
-        formData.append('param1', JSON.stringify(this.paramInit));
-        formData.append('param2', JSON.stringify(this.controlSystem));
-        formData.append('param3', JSON.stringify(this.econEnv));
-        this.httpClient.post('http://80.106.151.108:8000/upload', formData,
-        )
-            .subscribe(
-                data => {
-                    //  console.log('POST Request is successful ', data);
-                },
-                error => {
-                    //   console.log('Error', error);
-                },
-            );
+                for (let i = 0; i < this.files.length; i++) {
+                    const file: File = this.files[i];
+                    formData.append('file', file, file.name);
+                }
+                formData.append('method', 'POST');
+                this.paramInit['payload']['formName'] = this.formName;
+                this.controlSystem['payload']['formName'] = this.formName;
+                this.econEnv['payload']['formName'] = this.formName;
+                formData.append('param1', JSON.stringify(this.paramInit));
+                formData.append('param2', JSON.stringify(this.controlSystem));
+                formData.append('param3', JSON.stringify(this.econEnv));
+                this.httpClient.post('http://80.106.151.108:8000/upload', formData,
+                )
+                    .subscribe(
+                        data => {
+                            //  console.log('POST Request is successful ', data);
+                        },
+                        error => {
+                            // console.log('Error', error);
+                        },
+                    );
 
-        this.httpClient.post('http://80.106.151.108:8000/generateData', {
-            windPayload: JSON.stringify(this.windParam),
-            pvPayload: JSON.stringify(this.pvParam),
-        })
-            .subscribe(
-                data => {
-                    // console.log('POST Request is successful ', data);
+                this.windParam['payload']['formName'] = this.formName;
+                this.pvParam['payload']['formName'] = this.formName;
+                this.httpClient.post('http://80.106.151.108:8000/save_data', {
+                    'windPayload': JSON.stringify(this.windParam),
+                    'pvPayload': JSON.stringify(this.pvParam),
                 },
-                error => {
-                    // console.log('Error', error);
-                },
-            );
+                )
+                    .subscribe(
+                        data => {
+                            //  console.log('POST Request is successful ', data);
+                        },
+                        error => {
+                            // console.log('Error', error);
+                        },
+                    );
+            });
     }
 
     getFileName(id) {
