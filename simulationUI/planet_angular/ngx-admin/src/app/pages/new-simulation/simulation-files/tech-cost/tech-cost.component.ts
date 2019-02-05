@@ -1,11 +1,11 @@
-import { Component, Input, Output, SimpleChanges, OnChanges, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnChanges, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'ngx-tech-cost',
     styleUrls: ['./tech-cost.component.scss'],
     templateUrl: './tech-cost.component.html',
 })
-export class TechCostComponent implements OnInit, OnChanges {
+export class TechCostComponent implements OnChanges {
 
     checkVal: boolean[] = [];
     @Input() data: Object;
@@ -19,58 +19,60 @@ export class TechCostComponent implements OnInit, OnChanges {
         }
         this.data = {};
         this.dataChange = new EventEmitter<Object>();
-    }
-
-    ngOnInit() {
         this.nodeData = {
             'payload': {
+                'NG.cost': 50,
+                'SNG.cost': 50,
+                'heat.cost': 45,
+                'carbon.tax': 15,
+                'NG.emission.factor': 0.2012,
+
                 'technologies.cost': {
                     'WT': {
-                        'CAPEX': '',
-                        'OPEX': '',
-                        'life.time': '',
+                        'CAPEX': '1100',
+                        'OPEX': '3.5',
+                        'life.time': '25',
                     },
                     'PV': {
-                        'CAPEX': '',
-                        'OPEX': '',
-                        'life.time': '',
+                        'CAPEX': '800',
+                        'OPEX': '1.5',
+                        'life.time': '30',
                     },
                     'CHP': {
-                        'CAPEX': '',
-                        'OPEX': '',
-                        'life.time': '',
+                        'CAPEX': '900',
+                        'OPEX': '3',
+                        'life.time': '20',
                     },
                     'HP': {
-                        'CAPEX': '',
-                        'OPEX': '',
-                        'life.time': '',
+                        'CAPEX': '2900',
+                        'OPEX': '2',
+                        'life.time': '20',
                     },
                     'EH': {
-                        'CAPEX': '',
-                        'OPEX': '',
-                        'life.time': '',
+                        'CAPEX': '100',
+                        'OPEX': '1',
+                        'life.time': '20',
                     },
                     'EB': {
-                        'CAPEX': '',
-                        'OPEX': '',
-                        'life.time': '',
+                        'CAPEX': '250',
+                        'OPEX': '1',
+                        'life.time': '15',
                     },
                     'P2G': {
-                        'CAPEX': '',
-                        'OPEX': '',
-                        'life.time': '',
+                        'CAPEX': '750',
+                        'OPEX': '2',
+                        'life.time': '20',
                     },
                 },
             },
         };
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        this.afterDataRecieved(changes.data.currentValue);
+    ngOnChanges() {
+        this.afterDataRecieved();
     }
 
-    afterDataRecieved(data: Object) {
-        this.nodeData = data;
+    afterDataRecieved() {
         this.dataChange.emit(this.nodeData);
     }
 

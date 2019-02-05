@@ -101,9 +101,8 @@ app.post("/logout", api.logout);
 app.post("/get_user_list", api.get_user_list);
 app.post("/remove_user", api.remove_user);
 app.post("/generateData", (req, res) => {
-  //shell.exec("/home/sitewhere/generateData.sh " + req.body.windPayload.payload + " " + req.body.pvPayload.payload);
-  console.log("EDW1",req.body.windPayload);
-  console.log("EDW2",req.body.pvPayload);
+  console.log(req.body.pvPayload)
+  shell.exec("/home/sitewhere/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
 })
 
 // catch 404 and forward to error handler

@@ -36,6 +36,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     phase3: boolean = false;
     phase4: boolean = false;
     phase5: boolean = false;
+    phase6: boolean = false;
     transitionController1 = new TransitionController();
     transitionController2 = new TransitionController();
     transitionController3 = new TransitionController();
@@ -103,26 +104,24 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     econEnv = {
         'file.name': 'Economy_environment_initialization',
         'payload': {
-            'NG.cost': 50,
-            'SNG.cost': 50,
-            'heat.cost': 45,
-            'carbon.tax': 15,
-            'NG.emission.factor': 0.2012,
-        },
-        'technologies.cost': {
-
+            'technologies.cost': {
+            },
         },
     };
 
     windParam = {
         'file.name': 'Wind.xlsx',
         'payload': {
+            'lat': this.coordinates[1],
+            'lon': this.coordinates[0],
         },
     };
 
     pvParam = {
         'file.name': 'PV.xlsx',
         'payload': {
+            'lat': this.coordinates[1],
+            'lon': this.coordinates[0],
         },
     };
 

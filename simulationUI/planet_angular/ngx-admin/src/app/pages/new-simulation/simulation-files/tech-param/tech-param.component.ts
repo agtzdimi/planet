@@ -15,7 +15,7 @@ export class TechParamComponent implements OnChanges {
     @Output() pvChange: EventEmitter<Object>;
     @Output() windChange: EventEmitter<Object>;
     @Output() phase3: EventEmitter<Boolean>;
-    nodeData: any;
+    nodeData: Object = {};
     nodeWindParam: Object = {};
     nodePvParam: Object = {};
     displayingNode: string;
@@ -86,542 +86,58 @@ export class TechParamComponent implements OnChanges {
         this.pvChange = new EventEmitter<Object>();
         this.windChange = new EventEmitter<Object>();
         this.phase3 = new EventEmitter<Boolean>();
-        this.nodeData = {
-            'node.1': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 150,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-
-
-            'node.2': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 130,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-
-
-            'node.3': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 120,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-
-
-            'node.4': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 180,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-
-
-            'node.5': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 150,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-
-
-            'node.6': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 150,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-
-
-            'node.7': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 150,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-
-
-            'node.8': {
-
-                'PV': {
-                    'nominal.electric.power': 100,
-                },
-
-                'WT': {
-                    'nominal.electric.power': 150,
-                },
-
-                'CHP': {
-                    'nominal.electric.power': 80,
-                    'efficiency.electric': 40,
-                    'efficiency.thermal': 45,
-                },
-
-                'P2H': {
-                    'DH': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                    'LHD': {
-                        'HP': {
-                            'nominal.heat.power': 15,
-                            'cop': 3,
-                        },
-                        'EH': {
-                            'nominal.heat.power': 10,
-                            'efficiency.thermal': 98,
-                        },
-                    },
-                },
-
-                'P2G': {
-                    'nominal.electric.power': 25,
-                    'efficiency.electrolysis': 75,
-                    'efficiency.methanation': 80,
-                    'efficiency.thermal': 24,
-                },
-
-                'EB': {
-                    'storage.electric.capacity': 100,
-                    'efficiency.charge': 92.1,
-                    'efficiency.discharge': 92.1,
-                    'c.rate': 0.25,
-                },
-
-                'G2H': {
-                    'DH': {
-                        'nomial.heat.power': 180,
-                        'efficiency.thermal': 90,
-                    },
-
-                    'LHD': {
-                        'nomial.heat.power': 100,
-                        'efficiency.thermal': 90,
-                    },
-                },
-            },
-        };
+        for (let i = 0; i < this.NODES_COUNT; i++) {
+            this.nodeData['node.' + (i + 1)] = {};
+            this.nodeData['node.' + (i + 1)]['PV'] = {
+                'nominal.electric.power': 100,
+            };
+            this.nodeData['node.' + (i + 1)]['WT'] = {
+                'nominal.electric.power': 150,
+            };
+            this.nodeData['node.' + (i + 1)]['CHP'] = {
+                'nominal.electric.power': 80,
+                'efficiency.electric': 40,
+                'efficiency.thermal': 45,
+            };
+            this.nodeData['node.' + (i + 1)]['P2H'] = { 'DH': {}, 'LHD': {} };
+            this.nodeData['node.' + (i + 1)]['P2H']['DH']['HP'] = {
+                'nominal.heat.power': 15,
+                'cop': 3,
+            };
+            this.nodeData['node.' + (i + 1)]['P2H']['DH']['EH'] = {
+                'nominal.heat.power': 10,
+                'efficiency.thermal': 98,
+            };
+            this.nodeData['node.' + (i + 1)]['P2H']['LHD']['HP'] = {
+                'nominal.heat.power': 15,
+                'cop': 3,
+            };
+            this.nodeData['node.' + (i + 1)]['P2H']['LHD']['EH'] = {
+                'nominal.heat.power': 10,
+                'efficiency.thermal': 98,
+            };
+            this.nodeData['node.' + (i + 1)]['P2G'] = {
+                'nominal.electric.power': 25,
+                'efficiency.electrolysis': 75,
+                'efficiency.methanation': 80,
+                'efficiency.thermal': 24,
+            };
+            this.nodeData['node.' + (i + 1)]['EB'] = {
+                'storage.electric.capacity': 100,
+                'efficiency.charge': 92.1,
+                'efficiency.discharge': 92.1,
+                'c.rate': 0.25,
+            };
+            this.nodeData['node.' + (i + 1)]['G2H'] = { 'DH': {}, 'LHD': {} };
+            this.nodeData['node.' + (i + 1)]['G2H']['DH'] = {
+                'nomial.heat.power': 180,
+                'efficiency.thermal': 90,
+            };
+            this.nodeData['node.' + (i + 1)]['G2H']['LHD'] = {
+                'nomial.heat.power': 100,
+                'efficiency.thermal': 90,
+            };
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -631,22 +147,24 @@ export class TechParamComponent implements OnChanges {
     }
 
     afterWindDataRecieved(data) {
+        this.nodeWindParam['lat'] = data.payload['lat'];
+        this.nodeWindParam['lon'] = data.payload['lon'];
         data.payload = this.nodeWindParam;
-
         this.pvChange.emit(this.nodeWindParam);
     }
 
     afterPvDataRecieved(data) {
+        this.nodePvParam['lat'] = data.payload['lat'];
+        this.nodePvParam['lon'] = data.payload['lon'];
         data.payload = this.nodePvParam;
-
         this.pvChange.emit(this.nodePvParam);
     }
 
     afterNodeDataRecieved(data) {
         data.payload['technologies'] = this.nodeData;
         this.nodeData = data;
-        if (this.nodeData.payload.technologies) {
-            this.nodes = Object.getOwnPropertyNames(this.nodeData.payload.technologies);
+        if (this.nodeData['payload'].technologies) {
+            this.nodes = Object.getOwnPropertyNames(this.nodeData['payload'].technologies);
             this.displayingNode = this.nodes[0];
         }
         this.dataChange.emit(this.nodeData);
