@@ -20,6 +20,7 @@ export class TechCostComponent implements OnChanges {
         this.data = {};
         this.dataChange = new EventEmitter<Object>();
         this.nodeData = {
+            'file.name': 'Economy_environment_initialization',
             'payload': {
                 'NG.cost': 50,
                 'SNG.cost': 50,
@@ -73,6 +74,7 @@ export class TechCostComponent implements OnChanges {
     }
 
     afterDataRecieved() {
+
         this.dataChange.emit(this.nodeData);
     }
 

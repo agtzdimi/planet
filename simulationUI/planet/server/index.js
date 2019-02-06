@@ -60,6 +60,9 @@ app.use(fileUpload());
 app.use("/public", express.static(__dirname + "../public"));
 
 app.post("/upload", (req, res, next) => {
+    shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
+    shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
+    shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
     for (const fil of Object.keys(req.files.file)) {
         let uploadFile = req.files.file[fil];
         const fileName = req.files.file[fil].name;
@@ -72,9 +75,6 @@ app.post("/upload", (req, res, next) => {
     res.json({
         file: `public/${req.files.file.name}`
     });
-    shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
-    shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
-    shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
 });
 
 app.post("/save_data", (req, res, next) => {

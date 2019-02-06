@@ -104,7 +104,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     };
 
     econEnv = {
-        'file.name': 'Economy_environment_initialization',
+        'file.name': '',
         'payload': {
             'technologies.cost': {
             },
@@ -191,24 +191,22 @@ export class NewSimulationFilesComponent implements AfterViewInit {
                 this.httpClient.post('http://80.106.151.108:8000/upload', formData,
                 )
                     .subscribe(
-                        data => {
-                            //  console.log('POST Request is successful ', data);
-                        },
-                        error => {
-                            // console.log('Error', error);
-                        },
-                    );
-
-                this.windParam['payload']['formName'] = this.formName;
-                this.pvParam['payload']['formName'] = this.formName;
-                this.httpClient.post('http://80.106.151.108:8000/save_data', {
-                    'windPayload': JSON.stringify(this.windParam),
-                    'pvPayload': JSON.stringify(this.pvParam),
-                },
-                )
-                    .subscribe(
-                        data => {
-                            //  console.log('POST Request is successful ', data);
+                        () => {
+                            this.windParam['payload']['formName'] = this.formName;
+                            this.pvParam['payload']['formName'] = this.formName;
+                            this.httpClient.post('http://80.106.151.108:8000/save_data', {
+                                'windPayload': JSON.stringify(this.windParam),
+                                'pvPayload': JSON.stringify(this.pvParam),
+                            },
+                            )
+                                .subscribe(
+                                    data => {
+                                        //  console.log('POST Request is successful ', data);
+                                    },
+                                    error => {
+                                        // console.log('Error', error);
+                                    },
+                                );
                         },
                         error => {
                             // console.log('Error', error);
