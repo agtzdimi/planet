@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-simulation-start',
@@ -17,8 +19,9 @@ export class SimulationsFilesComponent {
 
   options: any = {};
   themeSubscription: any;
+  formName: string = 'Select Saved Form';
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
     for (let i = 0; i < this.CHARTS_TOTAL; i++) {
       this.areaChart[i] = {
         data: [],
@@ -37,7 +40,7 @@ export class SimulationsFilesComponent {
     this.toggleLoadingAnimation();
     this.httpClient.post('http://80.106.151.108:8000/transfer',
       {
-        'name': 'transfering',
+        'formName': this.formName,
       })
       .subscribe(
         data => {
@@ -226,6 +229,13 @@ export class SimulationsFilesComponent {
     },
     );
     return result;
+  }
+
+  openDialogBox() {
+    this.dialogService.open(DialogSelectFormPromptComponent)
+      .onClose.subscribe(name => {
+        this.formName = name;
+      });
   }
 
 }

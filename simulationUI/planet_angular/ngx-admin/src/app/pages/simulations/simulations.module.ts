@@ -12,12 +12,17 @@ import { SimulationsComponent } from './simulations.component';
 import { SimulationsFilesComponent } from './simulation-start/simulation-start.component';
 import { SimulationsAreaStackComponent } from './simulation-start/simulation-area-stack.component';
 import { SimulationsBarComponent } from './simulation-start/simulation-bar-component';
+import { DialogSelectFormPromptComponent } from './simulation-start/dialog-prompt/select-form.component';
+import { NbDialogModule } from '@nebular/theme';
+import { HighlightDirective } from './simulation-start/dialog-prompt/highlight.directive';
 
 const COMPONENTS = [
   SimulationsComponent,
   SimulationsFilesComponent,
   SimulationsAreaStackComponent,
   SimulationsBarComponent,
+  DialogSelectFormPromptComponent,
+  HighlightDirective,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -25,6 +30,7 @@ const ENTRY_COMPONENTS = [
   SimulationsFilesComponent,
   SimulationsAreaStackComponent,
   SimulationsBarComponent,
+  DialogSelectFormPromptComponent,
 ];
 
 
@@ -33,6 +39,7 @@ const ENTRY_COMPONENTS = [
     ThemeModule,
     SimulationsRoutingModule,
     NbButtonModule,
+    NbDialogModule.forRoot(),
     HttpClientModule,
     NgxChartsModule,
     ChartModule,

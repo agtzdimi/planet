@@ -81,9 +81,15 @@ app.post("/save_data", (req, res, next) => {
    shell.exec("/home/sitewhere/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
 });
 
+app.get("/get_form_names", (req, res) => {
+    shell.exec("mongoexport --db planet --collection files --out /home/sitewhere/allDocuments.txt");
+    results = shell.exec("egrep -o 'formName.*' /home/sitewhere/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
+    res.send(results);
+    shell.exec("rm -f /home/sitewhere/allDocuments.txt");
+});
+
 app.post("/transfer", (req, res) => {
-    console.log(req.body);
-    shell.exec("/home/sitewhere/simulate.sh");
+    shell.exec("/home/sitewhere/simulate.sh " + req.body.formName);
     return res.send("Transfer Completed");
 });
 

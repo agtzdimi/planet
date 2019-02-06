@@ -5,6 +5,8 @@
       <nb-card-header>Upload Simulation Input Files</nb-card-header>
       <nb-card-body>
 
+        <button nbButton hero status="info" (click)="openDialogBox()">{{formName}}</button>
+
         <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
           nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startSimulation()">
           Start Simulation
