@@ -48,5 +48,14 @@
       </nb-card>
     </div>
 
+    <div *ngIf="showLine">
+      <nb-card *ngFor="let lineCh of lineChart">
+        <nb-card-header>{{lineCh.title}}</nb-card-header>
+        <nb-card-body>
+          <ngx-simulation-line [data]="lineCh.data"></ngx-simulation-line>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
   </div>
 </div>

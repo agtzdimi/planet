@@ -14,9 +14,12 @@ export class SimulationsFilesComponent {
   CHARTS_TOTAL = 3;
   areaChart = [];
   barChart = [];
+  lineChart = [];
   showBar: boolean = false;
   showArea: boolean = false;
+  showLine: boolean = false;
   loading = false;
+  count = 0;
 
   options: any = {};
   themeSubscription: any;
@@ -31,6 +34,9 @@ export class SimulationsFilesComponent {
         data: [],
       };
       this.barChart[i] = {
+        data: [],
+      };
+      this.lineChart[i] = {
         data: [],
       };
     }
@@ -60,34 +66,92 @@ export class SimulationsFilesComponent {
         },
       );
 
-    const interval = setInterval(() => {
-      this.httpClient.get('http://80.106.151.108:8000/simulation')
-        .subscribe(
-          data => {
-            // console.log('GET Request is successful ');
-            if (typeof data === 'string' && data !== '') {
-              this.spreadValuesToCharts(data);
-            }
-          },
-          error => {
-            // console.log('Error', error);
-          },
-        );
+    if (this.selectedItem === 'single') {
+      const interval = setInterval(() => {
+        this.httpClient.get('http://80.106.151.108:8000/simulation')
+          .subscribe(
+            data => {
+              // console.log('GET Request is successful ');
+              if (typeof data === 'string' && data !== '') {
+                this.spreadValuesToCharts(data);
+              }
+            },
+            error => {
+              // console.log('Error', error);
+            },
+          );
 
-      this.httpClient.get('http://80.106.151.108:8000/simulation2')
-        .subscribe(
-          data => {
-            // console.log('GET Request is successful ');
-            if (typeof data === 'string' && data !== '') {
-              clearInterval(interval);
-              this.spreadValuesToCharts2(data);
-            }
-          },
-          error => {
-            // console.log('Error', error);
-          },
-        );
-    }, 10000);
+        this.httpClient.get('http://80.106.151.108:8000/simulation2')
+          .subscribe(
+            data => {
+              // console.log('GET Request is successful ');
+              if (typeof data === 'string' && data !== '') {
+                clearInterval(interval);
+                this.spreadValuesToCharts2(data);
+              }
+            },
+            error => {
+              // console.log('Error', error);
+            },
+          );
+      }, 10000);
+    } else {
+      const interval = setInterval(() => {
+        this.httpClient.get('http://80.106.151.108:8000/multi_simulation')
+          .subscribe(
+            data => {
+              // console.log('GET Request is successful ');
+              if (typeof data === 'string' && data !== '') {
+                this.getCurtailment(data, 1);
+              }
+            },
+            error => {
+              // console.log('Error', error);
+            },
+          );
+
+        this.httpClient.get('http://80.106.151.108:8000/multi_simulation2')
+          .subscribe(
+            data => {
+              // console.log('GET Request is successful ');
+              if (typeof data === 'string' && data !== '') {
+                clearInterval(interval);
+                this.getCurtailment(data, 2);
+              }
+            },
+            error => {
+              // console.log('Error', error);
+            },
+          );
+      }, 10000);
+    }
+  }
+
+  getCurtailment(data, id) {
+    const lines = data.split('\n');
+    const headers = lines[0].split(',');
+    for (let index = 0; index < headers.length; index++) {
+      switch (headers[index]) {
+        case 'Time':
+          this.lineChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'RES_Curtailment':
+          this.count++;
+          this.lineChart[0].data.push(this.getColumnData(lines, index));
+          if (this.count === 2) {
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment2';
+          } else {
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment1';
+          }
+          break;
+      }
+    }
+    if (this.count === 2) {
+      this.lineChart[0].title = 'Electric demand, RES producibility, dispatch of the electric surplus';
+      this.showLine = true;
+      this.loading = false;
+      this.count = 0;
+    }
 
   }
 
