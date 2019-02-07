@@ -6,11 +6,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'nb-compose',
     children: [
       {
-        title: 'Create New Form',
+        title: 'Create New Simulation',
         link: '/pages/new-simulation',
       },
       {
-        title: 'Load Form',
+        title: 'Load Simulation',
         link: '',
       },
     ],

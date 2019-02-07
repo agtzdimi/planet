@@ -7,7 +7,6 @@ import { DialogNamePromptComponent } from './dialog-prompt/dialog-prompt.compone
 import { DialogTechParamPromptComponent } from './dialog-prompt/tech-param-dialog.component';
 import { DialogControlSystemPromptComponent } from './dialog-prompt/control-system-dialog.component';
 import { DialogEconomyPromptComponent } from './dialog-prompt/economy-dialog.component';
-import { DialogSaveParamPromptComponent } from './dialog-prompt/save-param-dialog.component';
 
 @Component({
     selector: 'ngx-simulation-files',
@@ -18,6 +17,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
     options: UploaderOptions;
     formName: String;
+    formDescription: String;
     formData: FormData;
     files: File[];
     uploadInput: EventEmitter<UploadInput>;
@@ -29,16 +29,13 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     coordinates: number[] = [7.6825, 45.0678];
     capacity = 1;
     systemLoss = 10;
-    minDate: Date;
-    startDate: Date;
-    endDate: Date;
-    maxDate: Date;
     areaPicked: boolean = false;
     phase2: boolean = false;
     phase3: boolean = false;
     phase4: boolean = false;
     phase5: boolean = false;
     phase6: boolean = false;
+    loading: boolean = false;
     transitionController1 = new TransitionController();
     transitionController2 = new TransitionController();
     transitionController3 = new TransitionController();
@@ -137,8 +134,8 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         this.files = []; // local uploading files array
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
-        this.minDate = new Date('2010-01-01');
-        this.maxDate = new Date('2016-12-31');
+        this.formName = '';
+        this.formDescription = '';
     }
 
     updateFilename(id, output) {
@@ -171,48 +168,51 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     }
 
     startUpload(): void {
+        this.loading = true;
+        const formData: FormData = new FormData();
 
-        this.dialogService.open(DialogSaveParamPromptComponent)
-            .onClose.subscribe(name => {
-                this.formName = name;
-                const formData: FormData = new FormData();
-
-                for (let i = 0; i < this.files.length; i++) {
-                    const file: File = this.files[i];
-                    formData.append('file', file, file.name);
-                }
-                formData.append('method', 'POST');
-                this.paramInit['payload']['formName'] = this.formName;
-                this.controlSystem['payload']['formName'] = this.formName;
-                this.econEnv['payload']['formName'] = this.formName;
-                formData.append('param1', JSON.stringify(this.paramInit));
-                formData.append('param2', JSON.stringify(this.controlSystem));
-                formData.append('param3', JSON.stringify(this.econEnv));
-                this.httpClient.post('http://80.106.151.108:8000/upload', formData,
-                )
-                    .subscribe(
-                        () => {
-                            this.windParam['payload']['formName'] = this.formName;
-                            this.pvParam['payload']['formName'] = this.formName;
-                            this.httpClient.post('http://80.106.151.108:8000/save_data', {
-                                'windPayload': JSON.stringify(this.windParam),
-                                'pvPayload': JSON.stringify(this.pvParam),
+        for (let i = 0; i < this.files.length; i++) {
+            const file: File = this.files[i];
+            formData.append('file', file, file.name);
+        }
+        formData.append('method', 'POST');
+        this.paramInit['payload']['formName'] = this.formName;
+        this.paramInit['payload']['formDescription'] = this.formDescription;
+        this.controlSystem['payload']['formName'] = this.formName;
+        this.controlSystem['payload']['formDescription'] = this.formDescription;
+        this.econEnv['payload']['formName'] = this.formName;
+        this.econEnv['payload']['formDescription'] = this.formDescription;
+        formData.append('param1', JSON.stringify(this.paramInit));
+        formData.append('param2', JSON.stringify(this.controlSystem));
+        formData.append('param3', JSON.stringify(this.econEnv));
+        this.httpClient.post('http://80.106.151.108:8000/upload', formData,
+        )
+            .subscribe(
+                () => {
+                    this.windParam['payload']['formName'] = this.formName;
+                    this.windParam['payload']['formDescription'] = this.formDescription;
+                    this.pvParam['payload']['formName'] = this.formName;
+                    this.pvParam['payload']['formDescription'] = this.formDescription;
+                    this.httpClient.post('http://80.106.151.108:8000/save_data', {
+                        'windPayload': JSON.stringify(this.windParam),
+                        'pvPayload': JSON.stringify(this.pvParam),
+                    },
+                    )
+                        .subscribe(
+                            data => {
+                                this.loading = false;
                             },
-                            )
-                                .subscribe(
-                                    data => {
-                                        //  console.log('POST Request is successful ', data);
-                                    },
-                                    error => {
-                                        // console.log('Error', error);
-                                    },
-                                );
-                        },
-                        error => {
-                            // console.log('Error', error);
-                        },
-                    );
-            });
+                            error => {
+                                // console.log('Error', error);
+                                this.loading = false;
+                            },
+                        );
+                },
+                error => {
+                    // console.log('Error', error);
+                    this.loading = false;
+                },
+            );
     }
 
     getFileName(id) {
@@ -222,5 +222,9 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     openDialogBox(component) {
         this.dialogService.open(component)
             .onClose.subscribe();
+    }
+
+    handleDescriptionChange(event) {
+        this.formDescription = event.target.value;
     }
 }

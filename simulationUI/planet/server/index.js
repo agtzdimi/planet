@@ -79,6 +79,7 @@ app.post("/upload", (req, res, next) => {
 
 app.post("/save_data", (req, res, next) => {
    shell.exec("/home/sitewhere/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
+   return res.send("Success");
 });
 
 app.get("/get_form_names", (req, res) => {
@@ -89,7 +90,7 @@ app.get("/get_form_names", (req, res) => {
 });
 
 app.post("/transfer", (req, res) => {
-    shell.exec("/home/sitewhere/simulate.sh " + req.body.formName);
+    shell.exec("/home/sitewhere/simulate.sh " + "\"" + req.body.formName +"\"");
     return res.send("Transfer Completed");
 });
 

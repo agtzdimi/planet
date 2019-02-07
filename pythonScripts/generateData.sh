@@ -57,6 +57,9 @@ for file in $(ls /home/sitewhere/upload/*.csv); do
    mongoimport --db planet --collection files --type csv --headerline --file $file
 done
 
+echo "$windData" > /home/sitewhere/upload/windData.txt
+echo "$pvData" > /home/sitewhere/upload/pvData.txt
+
 for file in $(ls /home/sitewhere/upload/*.txt); do
    mongoimport --db planet --collection files --file $file
 done

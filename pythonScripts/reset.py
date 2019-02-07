@@ -1,53 +1,61 @@
-""" Script that uses the Python API of OpalRT to reset a model
+# -----------------------------------------------------------------------------
+# This example shows how to use the Python API to make a connection
+# to a new model. It also shows how to load and then execute this model
+# When the execution is completed the model is resetted and disconnect
+#
+# WARNING: Before runinng this script, verify that the model is compiled, assigned 
+# and not loaded.
+# -----------------------------------------------------------------------------
 
-The script will make a connection to a current project and reset the model.
 
-Notes:
-   Before runinng this script, verify that the model is compiled
-"""
-
-# Import RtlabApi module for Python
+# -----------------------------------------------------------------------------
+#  Import modules
+# -----------------------------------------------------------------------------
+## Import OpalApi module for Python
 import RtlabApi
 import glob
+import sys
 import os
+from time import sleep
 
+
+# -----------------------------------------------------------------------------
+#  Script core
+# -----------------------------------------------------------------------------
+## if the script is executed (not imported)
 if __name__ == "__main__":
 
-   # Connect to a running model using its name. The system
-   # control is release
-   projectName = os.path.abspath(str(glob.glob('.\\..\\*.llp')[0]))
-   RtlabApi.OpenProject(projectName)
+    ## Create a new connection with the project
+    projectName = os.path.abspath(str(glob.glob('.\\..\\*.llp')[0]))
+    RtlabApi.OpenProject(projectName)
+    
+    print "The connection with '%s' is completed." % projectName
+    
+    try:
+        ## Load the current model
+        realTimeMode = RtlabApi.HARD_SYNC_MODE  # Also possible to use SIM_MODE, SOFT_SIM_MODE, SIM_W_NO_DATA_LOSS_MODE or SIM_W_LOW_PRIO_MODE
+        timeFactor   = 1
+        RtlabApi.Load(realTimeMode, timeFactor)
+        print "- The model is loaded."
 
-   print "The connection with '%s' is completed." % projectName
+        try:
+            ## Execute the model
+            RtlabApi.Execute(1)
 
-   try:
-   # Get the model state and the real time mode
-      modelState, realTimeMode = RtlabApi.GetModelState()
+            ## The model is executed 5 seconds
+            sleepTime = 5
+            sleep(sleepTime)
+            print "- The model is executed during %f seconds." % sleepTime
 
-      # Print the model state
-      print "- The model state is %s." % RtlabApi.OP_MODEL_STATE(modelState)
+        except:
+            pass
 
-      # Get the system control before changing the state of the model
-      systemControl = 1
-      RtlabApi.GetSystemControl(systemControl)
-      print "- The system control is acquired."
+        ## If the load is completed, reset the model
+        RtlabApi.Reset()
+        print "- The model is reseted."
 
-      RtlabApi.Reset()
-      print "- The model is reseted."
-
-      # Get the model state and the real time mode
-      modelState, realTimeMode = RtlabApi.GetModelState()
-
-      # Print the model state
-      print "- The model state is now %s." % RtlabApi.OP_MODEL_STATE(modelState)
-
-      # Release the system control after changing the state of the model
-      systemControl = 0
-      RtlabApi.GetSystemControl(systemControl)
-      print "- The system control is released."
-
-   finally:
-      # Always disconnect from the model when the connection
-      # is completed
-      RtlabApi.Disconnect()
-      print "The connection is closed."
+    finally:
+        ## Always disconnect from the model when the connection
+        ## is completed
+        RtlabApi.Disconnect()
+        print "The connection is closed."

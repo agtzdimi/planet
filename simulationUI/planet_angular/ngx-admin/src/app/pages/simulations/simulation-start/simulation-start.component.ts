@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
+import { DialogSelectMultipleFormPromptComponent } from './dialog-prompt/select-multiple-form.component';
 import { NbDialogService } from '@nebular/theme';
 
 @Component({
@@ -19,7 +20,10 @@ export class SimulationsFilesComponent {
 
   options: any = {};
   themeSubscription: any;
-  formName: string = 'Select Saved Form';
+  selectedItem = '';
+  selectedForms = 'Select Saved Simulations';
+  formName = 'Select Saved Simulation';
+  finalFormName = '';
 
   constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
     for (let i = 0; i < this.CHARTS_TOTAL; i++) {
@@ -37,10 +41,15 @@ export class SimulationsFilesComponent {
   }
 
   startSimulation(): void {
+    if (this.selectedItem === 'single') {
+      this.finalFormName = this.formName;
+    } else {
+      this.finalFormName = this.selectedForms;
+    }
     this.toggleLoadingAnimation();
     this.httpClient.post('http://80.106.151.108:8000/transfer',
       {
-        'formName': this.formName,
+        'formName': this.finalFormName,
       })
       .subscribe(
         data => {
@@ -232,10 +241,22 @@ export class SimulationsFilesComponent {
   }
 
   openDialogBox() {
-    this.dialogService.open(DialogSelectFormPromptComponent)
-      .onClose.subscribe(name => {
-        this.formName = name;
-      });
+    if (this.selectedItem === 'single') {
+      this.dialogService.open(DialogSelectFormPromptComponent)
+        .onClose.subscribe(name => {
+          if (name) {
+            this.formName = name;
+          }
+        });
+    } else {
+      this.dialogService.open(DialogSelectMultipleFormPromptComponent)
+        .onClose.subscribe(name => {
+          if (name) {
+            this.selectedForms = name;
+          }
+        });
+    }
+
   }
 
 }

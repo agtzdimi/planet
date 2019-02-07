@@ -22,32 +22,35 @@ Notes: In order for this script to run you have to install mosquitto MQTT and re
 """
 import subprocess
 import glob, os
+import time
+import shutil
 
-def load(flName):
+def load():
    """ Function to be called when a user wants to load a simulink model
        This function will run the corresponding python script for load process of the simulink model
    """
-   subprocess.Popen(['python','load.py',flName])
+   subprocess.Popen(['python','load.py'])
 
-def execute(flName):
+def execute(typ):
    """ Function to be called when a user wants to execute a simulink model
        This function will run the corresponding python script for executing a simulink model
    """
-   subprocess.Popen(['python','execute.py',flName])
+   p1 = subprocess.Popen(['python','execute.py','--type',typ])
+   p1.wait()
 
-def reset(flName):
+def reset():
    """ Function to be called when a user wants to reset a simulink model
        This function will run the corresponding python script for reseting a simulink model
    """
-   subprocess.Popen(['python','reset.py',flName])
+   subprocess.Popen(['python','reset.py'])
 
-def edit(flName):
+def edit():
    """ Function to be called when a user wants to build a simulink model
        This function will run the corresponding python script for building a simulink model
    """
-   subprocess.Popen(['python','edit.py',flName])
+   subprocess.Popen(['python','edit.py'])
 
-def executeMode(mode,path):
+def executeMode(mode,path,info,type):
    """ Function to be called when the user sends a message to execute a specific mode
        This function will initiate the process given in the recieved message
    """
@@ -59,21 +62,31 @@ def executeMode(mode,path):
    }
    # Get the function from switcher dictionary
    func = switcher.get(mode.rstrip(), lambda: "Invalid Mode")
+   timeStamp = time.time()
+   os.makedirs("Simulation_" + str(timeStamp))
+   destPath = "Simulation_" + str(timeStamp)
+   p1 = subprocess.Popen(['pscp','-pw','7156471564',logInInfo,destPath])
+   p1.wait()
+   files = [f for f in os.listdir('.') if os.path.isfile(f)]
+   for file in files:
+      path_file = os.path.join("C:\\Users\\Owner\\Documents\\paiko",file)
+      shutil.copy2(path_file,destPath)
+   filesDest = [f for f in os.listdir(destPath)]
+   while len(filesDest) != 15:
+      len(filesDest)
+      time.sleep(1)
    # Execute the function
-   os.chdir('C:\\Users\\Owner\\Documents\\paiko')
-   res = [f for f in glob.glob("*") if ".slx" in f or ".mdl" in f]
-   for f in res:
-      path = str(f)
-
-   fileNameNoExt = os.path.splitext(path)[0]
-   func(fileNameNoExt)
+   print ("Executing:", func)
+   os.chdir("Simulation_" + str(timeStamp))
+   func(type)
+   os.chdir("..")
+   time.sleep(5)
+   shutil.rmtree(destPath)
 
 if __name__ == "__main__":
-   proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','test'],stdout=subprocess.PIPE)
+   proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
-      msg, path, logInInfo = msg.decode("utf-8").split(",")
-      destPath='C:\\Users\\Owner\\Documents\\paiko'
+      msg, path, logInInfo, simType = msg.decode("utf-8").split(",")
+      simType = simType.rstrip()
       logInInfo = logInInfo.rstrip() + path
-      p1 = subprocess.Popen(['pscp','-pw','7156471564',logInInfo,destPath])
-      p1.wait()
-      executeMode(msg,path)
+      executeMode(msg,path,logInInfo,simType)

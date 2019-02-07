@@ -18,7 +18,6 @@ import { TechInputFieldComponent } from './simulation-files/tech-param/tech-inpu
 import { DialogTechParamPromptComponent } from './simulation-files/dialog-prompt/tech-param-dialog.component';
 import { DialogControlSystemPromptComponent } from './simulation-files/dialog-prompt/control-system-dialog.component';
 import { DialogEconomyPromptComponent } from './simulation-files/dialog-prompt/economy-dialog.component';
-import { DialogSaveParamPromptComponent } from './simulation-files/dialog-prompt/save-param-dialog.component';
 import { LeafletMapComponent } from './simulation-files/map/map.component';
 import { DialogNamePromptComponent } from './simulation-files/dialog-prompt/dialog-prompt.component';
 import { NbDialogModule } from '@nebular/theme';
@@ -36,7 +35,6 @@ const COMPONENTS = [
   DialogTechParamPromptComponent,
   DialogControlSystemPromptComponent,
   DialogEconomyPromptComponent,
-  DialogSaveParamPromptComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -45,7 +43,6 @@ const ENTRY_COMPONENTS = [
   DialogTechParamPromptComponent,
   DialogControlSystemPromptComponent,
   DialogEconomyPromptComponent,
-  DialogSaveParamPromptComponent,
 ];
 
 
