@@ -3,9 +3,10 @@
 NODES_NUMBER=8
 windData="$1"
 pvData="$2"
+formName=$(echo "$pvData" | python /home/sitewhere/getAttribute.py --formName true)
 
-lat="$(echo $pvData | python /home/sitewhere/getAttribute.py --lat true)"
-lon="$(echo $pvData | python /home/sitewhere/getAttribute.py --lon true)"
+lat=$(echo "$pvData" | python /home/sitewhere/getAttribute.py --lat true)
+lon=$(echo "$pvData" | python /home/sitewhere/getAttribute.py --lon true)
 mkdir nodeFiles
 
 for node in {1..8}; do
@@ -44,6 +45,20 @@ wait
 
 paste -d "," nodeFiles/wind* > /home/sitewhere/upload/Wind.csv
 paste -d "," nodeFiles/pv* > /home/sitewhere/upload/PV.csv
-python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/Wind.csv --dest /home/sitewhere/upload/Wind.xlsx
-python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/PV.csv --dest /home/sitewhere/upload/PV.xlsx
-rm /home/sitewhere/upload/Wind.csv /home/sitewhere/upload/PV.csv
+
+python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/Electricity.xlsx --dest /home/sitewhere/upload/Electricity.csv --type csv
+python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/Heat.xlsx --dest /home/sitewhere/upload/Heat.csv --type csv
+rm /home/sitewhere/upload/Heat.xlsx /home/sitewhere/upload/Electricity.xlsx
+rm -rf nodeFiles
+
+for file in $(ls /home/sitewhere/upload/*.csv); do
+   awk -v formName=$formName 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="formName"} else {$(NF+1)=formName} print $0}' $file > tempFile
+   mv tempFile $file
+   mongoimport --db planet --collection files --type csv --headerline --file $file
+done
+
+for file in $(ls /home/sitewhere/upload/*.txt); do
+   mongoimport --db planet --collection files --file $file
+done
+
+rm /home/sitewhere/upload/*

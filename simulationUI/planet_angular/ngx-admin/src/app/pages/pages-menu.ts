@@ -2,16 +2,25 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'New Simulation',
+    title: 'Simulation',
     icon: 'nb-compose',
-    link: '/pages/new-simulation',
+    children: [
+      {
+        title: 'Create New Form',
+        link: '/pages/new-simulation',
+      },
+      {
+        title: 'Load Form',
+        link: '',
+      },
+    ],
   },
   {
-    title: 'Simulations',
+    title: 'Start Simulation',
     icon: 'nb-bar-chart',
     children: [
       {
-        title: 'Start Simulations',
+        title: 'Single Simulation',
         link: '/pages/simulations/simulations',
       },
     ],

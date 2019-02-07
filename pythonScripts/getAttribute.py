@@ -13,6 +13,7 @@ parser.add_argument('--azimuth', help='Current Azimuth')
 parser.add_argument('--system.loss', help='Current System Loss')
 parser.add_argument('--lat', help='Current Lat')
 parser.add_argument('--lon', help='Current Lon')
+parser.add_argument('--formName', help='Current Form Name')
 
 args = parser.parse_args()
 for arg in vars(args):
@@ -21,7 +22,7 @@ for arg in vars(args):
       break;
 
 data = json.load(sys.stdin)
-if attribute == "lat" or attribute == "lon":
+if attribute == "lat" or attribute == "lon" or attribute == "formName":
    print(data['payload'][attribute])
 else:
    print(data['payload'][args.node][attribute])
