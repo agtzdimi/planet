@@ -1,0 +1,3 @@
+<mgl-map *ngIf="load" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[4]" [center]="[7.6825, 45.0678]">
+    <mgl-marker [lngLat]="lngLat" [draggable]="false" (dragEnd)="onDragEnd($event)"></mgl-marker>
+</mgl-map>

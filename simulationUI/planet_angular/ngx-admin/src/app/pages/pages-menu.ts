@@ -7,11 +7,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Create New Simulation',
-        link: '/pages/new-simulation',
+        link: '/pages/simulation/new-simulation',
       },
       {
         title: 'Load Simulation',
-        link: '',
+        link: '/pages/simulation/load-simulation',
       },
     ],
   },

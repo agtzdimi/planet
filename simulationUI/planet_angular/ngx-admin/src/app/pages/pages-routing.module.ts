@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
-import { NewSimulationComponent } from './new-simulation/new-simulation.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
 const routes: Routes = [{
@@ -47,8 +46,8 @@ const routes: Routes = [{
     path: 'miscellaneous',
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
   }, {
-    path: 'new-simulation',
-    component: NewSimulationComponent,
+    path: 'simulation',
+    loadChildren: './simulation/simulation.module#SimulationModule',
   }, {
     path: 'simulations',
     loadChildren: './simulations/simulations.module#SimulationsModule',

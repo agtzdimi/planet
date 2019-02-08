@@ -19,9 +19,9 @@
             <button nbButton hero status="info" (click)="openDialogBox()">{{selectedForms}}</button>
           </div>
           <div class="col-md-2">
-            <button *ngIf="selectedItem === 'single' || selectedItem === 'comparison'" nbButton type="button"
-              [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success"
-              size="medium" class="start-upload-btn" (click)="startSimulation()">
+            <button *ngIf="(selectedItem === 'single' || selectedItem === 'comparison') && (selectedForms !== 'Select Saved Simulations' || formName !== 'Select Saved Simulation')"
+              nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+              nbSpinnerMessage="" status="success" size="medium" class="start-upload-btn" (click)="startSimulation()">
               Start Simulation
             </button>
           </div>

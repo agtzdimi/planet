@@ -9,9 +9,9 @@ import { DialogControlSystemPromptComponent } from './dialog-prompt/control-syst
 import { DialogEconomyPromptComponent } from './dialog-prompt/economy-dialog.component';
 
 @Component({
-    selector: 'ngx-simulation-files',
-    styleUrls: ['./simulation-files.component.scss'],
-    templateUrl: './simulation-files.component.html',
+    selector: 'ngx-new-simulation',
+    styleUrls: ['./new-simulation.component.scss'],
+    templateUrl: './new-simulation.component.html',
 })
 export class NewSimulationFilesComponent implements AfterViewInit {
 

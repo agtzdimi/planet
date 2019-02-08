@@ -135,19 +135,19 @@ export class SimulationsFilesComponent {
         case 'Time':
           this.lineChart[0].data.push(this.getColumnData(lines, index));
           break;
-        case 'RES_Curtailment':
+        case 'RES_direct_utilization':
           this.count++;
           this.lineChart[0].data.push(this.getColumnData(lines, index));
           if (this.count === 2) {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment2';
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_direct_utilization2';
           } else {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment1';
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_direct_utilization1';
           }
           break;
       }
     }
     if (this.count === 2) {
-      this.lineChart[0].title = 'RES Curtailment Difference';
+      this.lineChart[0].title = 'RES Direct Utilization Difference';
       this.showLine = true;
       this.loading = false;
       this.count = 0;
