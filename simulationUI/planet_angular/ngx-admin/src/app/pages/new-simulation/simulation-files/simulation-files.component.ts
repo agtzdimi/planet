@@ -18,6 +18,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     options: UploaderOptions;
     formName: String;
     formDescription: String;
+    errorMessage: String = '';
     formData: FormData;
     files: File[];
     uploadInput: EventEmitter<UploadInput>;
@@ -29,12 +30,12 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     coordinates: number[] = [7.6825, 45.0678];
     capacity = 1;
     systemLoss = 10;
+    isDefault: boolean = false;
     areaPicked: boolean = false;
     phase2: boolean = false;
     phase3: boolean = false;
     phase4: boolean = false;
     phase5: boolean = false;
-    phase6: boolean = false;
     loading: boolean = false;
     transitionController1 = new TransitionController();
     transitionController2 = new TransitionController();
@@ -49,7 +50,13 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         this.area = event;
         this.transitionController1.animate(
             new Transition(transitionName, 2000, TransitionDirection.In));
-        this.openDialogBox(DialogNamePromptComponent);
+        this.dialogService.open(DialogNamePromptComponent)
+            .onClose.subscribe(status => {
+                this.isDefault = status;
+                if (this.isDefault) {
+                    this.paramInit['payload']['simulation']['simulation.time'] = 8760;
+                }
+            });
     }
 
     public animateInfo(controller, transitionName: string = 'slide down', id) {
@@ -87,7 +94,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
             'simulation': {
                 'time.step': 1,
-                'simulation.time': 8760,
+                'simulation.time': 0,
             },
             'technologies': {
             },
@@ -226,5 +233,27 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
     handleDescriptionChange(event) {
         this.formDescription = event.target.value;
+    }
+
+    checkDefaultData() {
+        if (this.formDescription === '' || this.formName === '') {
+            this.errorMessage = 'Please fill in the Simulation Name and Description';
+            return false;
+        } else if (this.getFileName(0) !== 'Electricity.xlsx') {
+            this.errorMessage = 'Please upload Electricity.xlsx';
+            return false;
+        } else if (this.getFileName(1) !== 'Heat.xlsx') {
+            this.errorMessage = 'Please upload Heat.xlsx';
+            return false;
+        } else if (!Number(+this.paramInit['payload']['simulation']['time.step'])) {
+            this.errorMessage = 'Please give a number for time.step';
+            return false;
+        } else if (!Number(+this.paramInit['payload']['simulation']['simulation.time'])) {
+            this.errorMessage = 'Please give a number for time.step';
+            return false;
+        } else {
+            return true;
+        }
+
     }
 }

@@ -9,6 +9,7 @@ export class TechParamComponent implements OnChanges {
 
     checkVal: Object = {};
     @Input() data: Object;
+    @Input() defaultValues: boolean;
     @Input() pvParam: Object;
     @Input() windParam: Object;
     @Output() dataChange: EventEmitter<Object>;
@@ -20,7 +21,7 @@ export class TechParamComponent implements OnChanges {
     nodePvParam: Object = {};
     displayingNode: string;
     nodes = [];
-    CHECKBOX_COUNT = 6;
+    CHECKBOX_COUNT = 7;
     NODES_COUNT = 8;
     trackingOptions = ['None', '1-axis (azimuth)', '2-axis (tilt & azimuth)'];
     pvCapacity = 1;
@@ -144,6 +145,16 @@ export class TechParamComponent implements OnChanges {
         this.afterNodeDataRecieved(changes.data.currentValue);
         this.afterWindDataRecieved(changes.windParam.currentValue);
         this.afterPvDataRecieved(changes.pvParam.currentValue);
+        if (this.defaultValues) {
+            for (let i = 0; i < this.NODES_COUNT; i++) {
+                this.displayingNode = 'node.' + (i + 1);
+                for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
+                    this.checkVal['node.' + (i + 1)][j] = true;
+                    this.updateDefaultValues(j, true);
+                }
+            }
+            this.displayingNode = 'node.1';
+        }
     }
 
     afterWindDataRecieved(data) {
@@ -176,7 +187,7 @@ export class TechParamComponent implements OnChanges {
 
     changeCheckBoxVal(id) {
         this.checkVal[this.displayingNode][id] = !this.checkVal[this.displayingNode][id];
-        if (this.checkVal[this.displayingNode][id]) {
+        if (this.checkVal[this.displayingNode][id] && this.defaultValues) {
             this.updateDefaultValues(id, true);
         } else {
             this.updateDefaultValues(id, false);

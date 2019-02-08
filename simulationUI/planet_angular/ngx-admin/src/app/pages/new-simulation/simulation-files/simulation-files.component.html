@@ -9,10 +9,24 @@
           <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-5">
-              <input class="m-2" type="text" nbInput fullWidth fieldSize="small" placeholder="Simulation Name"
-                [(ngModel)]="formName">
-              <textarea class="m-2" nbInput fullWidth shape="round" (change)="handleDescriptionChange($event)"
-                placeholder="Simulation Description">{{formDescription}}</textarea>
+              <div class="row">
+                <div class="col-md-6">
+                  <input class="m-2" type="text" nbInput fullWidth fieldSize="small" placeholder="Simulation Name"
+                    [(ngModel)]="formName">
+                </div>
+                <div class="col-md-6">
+                  <div *ngIf="formName === ''" class="requiredField"> Simulation Name is required</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <textarea class="m-2" nbInput fullWidth shape="round" (change)="handleDescriptionChange($event)"
+                    placeholder="Simulation Description">{{formDescription}}</textarea>
+                </div>
+                <div class="col-md-6">
+                  <div *ngIf="formDescription === ''" class="requiredTextarea"> Simulation Description is required</div>
+                </div>
+              </div>
             </div>
             <div class="col-md-4"></div>
           </div>
@@ -36,9 +50,29 @@
                     <input type="text" class="form-control" id="simulation-time" [(ngModel)]="paramInit.payload.simulation['simulation.time']">
                   </div>
                 </div>
-                <div class="row"><br><br><br><br><br><br></div>
                 <div class="row">
-                  <button nbButton hero status="info" shape="round" (click)="animateInfo(transitionController2,transitionName2,2)">Continue</button>
+                  <h6>Upload Electricity Timeseries</h6>
+                </div>
+                <div class="row">
+                  <label class="upload-button m-2">
+                    <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,0)"
+                      [uploadInput]="uploadInput" multiple class="btn btn-primary">
+                    <span class="btn btn-primary m-2">{{getFileName(0)}}</span>
+                  </label>
+                </div>
+                <div class="row">
+                  <h6>Upload Heat Timeseries </h6>
+                </div>
+                <div class="row">
+                  <label class="upload-button m-2">
+                    <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,1)"
+                      [uploadInput]="uploadInput" multiple class="btn btn-primary">
+                    <span class="btn btn-primary m-2">{{getFileName(1)}}</span>
+                  </label>
+                </div>
+                <div class="row">
+                  <button *ngIf="checkDefaultData()" nbButton hero class="m-3" status="info" shape="round" (click)="animateInfo(transitionController2,transitionName2,2)">Continue</button>
+                  <div *ngIf="!checkDefaultData()" class="requiredField"> {{errorMessage}}</div>
                 </div>
               </div>
             </div>
@@ -59,7 +93,7 @@
       <div class="col-md-12">
         <div class="ui content">
           <ngx-tech-param [suiTransition]="transitionController2" *ngIf="phase2" [(data)]="paramInit" (dataChange)="paramInit"
-            [(pvParam)]="pvParam" [(windParam)]="windParam" (phase3)="animateInfo(transitionController3,transitionName3,3)"
+            [(pvParam)]="pvParam" [(windParam)]="windParam" [defaultValues]="isDefault" (phase3)="animateInfo(transitionController3,transitionName3,3)"
             (pvChange)="pvParam" (windChange)="windParam"></ngx-tech-param>
         </div>
       </div>
@@ -136,46 +170,9 @@
         </div>
       </div>
 
-      <div class="col-md-12">
-        <div [suiTransition]="transitionController6">
-          <nb-card *ngIf="phase5">
-            <nb-card-header>File Uploading</nb-card-header>
-            <nb-card-body>
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Upload Electricity FIle</h6>
-                  <div class="row">
-                    <label class="upload-button m-2">
-                      <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,0)"
-                        [uploadInput]="uploadInput" multiple class="btn btn-primary">
-                      <span class="btn btn-primary m-2">{{getFileName(0)}}</span>
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <h6>Upload Heat File</h6>
-                  <div class="row">
-                    <label class="upload-button m-2">
-                      <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,1)"
-                        [uploadInput]="uploadInput" multiple class="btn btn-primary">
-                      <span class="btn btn-primary m-2">{{getFileName(1)}}</span>
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="row m-4">
-                    <button nbButton hero status="info" class="m-3" shape="round" (click)="phase6=true">Continue</button>
-                  </div>
-                </div>
-              </div>
-            </nb-card-body>
-          </nb-card>
-        </div>
-      </div>
-
     </div>
 
-    <div class="row" *ngIf="phase6">
+    <div class="row" *ngIf="phase5">
       <div class="col-md-4"></div>
       <div class="col-md-2">
         <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"

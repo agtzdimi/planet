@@ -60,8 +60,6 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                         tempData = {
                             name: headers[index],
                             type: 'line',
-                            stack: 'Total amount',
-                            smooth: true,
                             data: csvData[index],
                         };
                         series.push(tempData);

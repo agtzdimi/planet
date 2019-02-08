@@ -78,8 +78,8 @@ app.post("/upload", (req, res, next) => {
 });
 
 app.post("/save_data", (req, res, next) => {
-   shell.exec("/home/sitewhere/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
-   return res.send("Success");
+    shell.exec("/home/sitewhere/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
+    return res.send("Success");
 });
 
 app.get("/get_form_names", (req, res) => {
@@ -90,28 +90,32 @@ app.get("/get_form_names", (req, res) => {
 });
 
 app.post("/transfer", (req, res) => {
-    shell.exec("/home/sitewhere/simulate.sh " + "\"" + req.body.formName +"\"");
+    shell.exec("/home/sitewhere/simulate.sh " + "\"" + req.body.formName + "\"");
     return res.send("Transfer Completed");
 });
 
 app.get("/simulation", (req, res) => {
     results = shell.exec("cat /home/sitewhere/Results1.csv");
     res.send(results);
+    shell.exec("rm /home/sitewhere/Results1.csv");
 });
 
 app.get("/simulation2", (req, res) => {
     results = shell.exec("cat /home/sitewhere/Results2.csv");
     res.send(results);
+    shell.exec("rm /home/sitewhere/Results2.csv");
 });
 
 app.get("/multi_simulation", (req, res) => {
     results = shell.exec("cat /home/sitewhere/multi1Results1.csv");
     res.send(results);
+    shell.exec("rm /home/sitewhere/multi1Results1.csv");
 });
 
 app.get("/multi_simulation2", (req, res) => {
     results = shell.exec("cat /home/sitewhere/multi2Results1.csv");
     res.send(results);
+    shell.exec("rm /home/sitewhere/multi2Results1.csv");
 });
 
 

@@ -5,7 +5,7 @@ import { NbDialogRef } from '@nebular/theme';
   selector: 'nb-name-prompt',
   template: `
     <nb-card>
-      <nb-card-header>Do you want to initialize with the default values</nb-card-header>
+      <nb-card-header>Initialize with default simulation values?</nb-card-header>
       <nb-card-footer>
       <div class="row">
         <div class="col-md-2">
@@ -14,7 +14,7 @@ import { NbDialogRef } from '@nebular/theme';
           <button nbButton hero status="danget" (click)="cancel()">No</button>
         </div>
         <div class="col-md-4">
-          <button nbButton hero status="success" (click)="submit()">OK</button>
+          <button nbButton hero status="success" (click)="submit()">Yes</button>
         </div>
       </div>
       </nb-card-footer>
@@ -31,10 +31,10 @@ export class DialogNamePromptComponent {
   }
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   submit() {
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 }

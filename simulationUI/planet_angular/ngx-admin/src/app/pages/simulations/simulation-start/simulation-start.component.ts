@@ -36,10 +36,10 @@ export class SimulationsFilesComponent {
       this.barChart[i] = {
         data: [],
       };
-      this.lineChart[i] = {
-        data: [],
-      };
     }
+    this.lineChart[0] = {
+      data: [],
+    };
   }
 
   toggleLoadingAnimation() {
@@ -101,8 +101,8 @@ export class SimulationsFilesComponent {
           .subscribe(
             data => {
               // console.log('GET Request is successful ');
-              if (typeof data === 'string' && data !== '') {
-                this.getCurtailment(data, 1);
+              if (typeof data === 'string' && data !== '' && this.count !== 1) {
+                this.getCurtailment(data);
               }
             },
             error => {
@@ -116,7 +116,7 @@ export class SimulationsFilesComponent {
               // console.log('GET Request is successful ');
               if (typeof data === 'string' && data !== '') {
                 clearInterval(interval);
-                this.getCurtailment(data, 2);
+                this.getCurtailment(data);
               }
             },
             error => {
@@ -127,7 +127,7 @@ export class SimulationsFilesComponent {
     }
   }
 
-  getCurtailment(data, id) {
+  getCurtailment(data) {
     const lines = data.split('\n');
     const headers = lines[0].split(',');
     for (let index = 0; index < headers.length; index++) {
@@ -147,7 +147,7 @@ export class SimulationsFilesComponent {
       }
     }
     if (this.count === 2) {
-      this.lineChart[0].title = 'Electric demand, RES producibility, dispatch of the electric surplus';
+      this.lineChart[0].title = 'RES Curtailment Difference';
       this.showLine = true;
       this.loading = false;
       this.count = 0;
