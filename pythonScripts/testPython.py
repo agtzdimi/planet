@@ -31,11 +31,11 @@ def load():
    """
    subprocess.Popen(['python','load.py'])
 
-def execute(typ):
+def execute(typ,name):
    """ Function to be called when a user wants to execute a simulink model
        This function will run the corresponding python script for executing a simulink model
    """
-   p1 = subprocess.Popen(['python','execute.py','--type',typ])
+   p1 = subprocess.Popen(['python','execute.py','--type',typ,'--name',name])
    p1.wait()
 
 def reset():
@@ -50,7 +50,7 @@ def edit():
    """
    subprocess.Popen(['python','edit.py'])
 
-def executeMode(mode,path,info,type):
+def executeMode(mode,path,info,type,formNam):
    """ Function to be called when the user sends a message to execute a specific mode
        This function will initiate the process given in the recieved message
    """
@@ -78,15 +78,16 @@ def executeMode(mode,path,info,type):
    # Execute the function
    print ("Executing:", func)
    os.chdir("Simulation_" + str(timeStamp))
-   func(type)
+   func(type, formNam)
    os.chdir("..")
-   time.sleep(5)
+   time.sleep(7)
    shutil.rmtree(destPath)
 
 if __name__ == "__main__":
    proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
-      msg, path, logInInfo, simType = msg.decode("utf-8").split(",")
+      msg, path, logInInfo, simType, formName = msg.decode("utf-8").split(",")
       simType = simType.rstrip()
+      formName = formName.rstrip()
       logInInfo = logInInfo.rstrip() + path
-      executeMode(msg,path,logInInfo,simType)
+      executeMode(msg,path,logInInfo,simType,formName)

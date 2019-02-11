@@ -84,8 +84,9 @@ app.post("/save_data", (req, res, next) => {
 
 app.get("/get_form_names", (req, res) => {
     shell.exec("mongoexport --db planet --collection files --out /home/sitewhere/allDocuments.txt");
-    results = shell.exec("egrep -o 'formName.*' /home/sitewhere/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
-    res.send(results);
+    formName = shell.exec("egrep -o 'formName.*' /home/sitewhere/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
+    formDescr = shell.exec("egrep -o 'formDescription.*' /home/sitewhere/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
+    res.send({"formName": formName, "formDescription": formDescr});
     shell.exec("rm -f /home/sitewhere/allDocuments.txt");
 });
 
@@ -94,28 +95,44 @@ app.post("/transfer", (req, res) => {
     return res.send("Transfer Completed");
 });
 
+app.get("/load_data", (req, res) => {
+    shell.exec("/home/sitewhere/load_data.sh " + "\"" + req.body.formName + "\"");
+    paramInitParam = shell.exec("cat /home/sitewhere/upload/loadData/Parameters_initialization.txt");
+    econEnvParam = shell.exec("cat /home/sitewhere/upload/loadData/Economy_environment_initialization.txt");
+    controlParam = shell.exec("cat /home/sitewhere/upload/loadData/Control_initialization.txt");
+    electrParam = shell.exec("cat /home/sitewhere/upload/loadData/Electricity.xlsx");
+    heatParam = shell.exec("cat /home/sitewhere/upload/loadData/Heat.xlsx");
+    res.send(Parameters);
+});
+
 app.get("/simulation", (req, res) => {
+    shell.exec("/home/sitewhere/save_results.sh " + "Results1 " + "\"" + req.query.formName + "\"");
     results = shell.exec("cat /home/sitewhere/Results1.csv");
     res.send(results);
     shell.exec("rm /home/sitewhere/Results1.csv");
 });
 
 app.get("/simulation2", (req, res) => {
+    shell.exec("/home/sitewhere/save_results.sh " + "Results2 " + "\"" + req.query.formName + "\"");
     results = shell.exec("cat /home/sitewhere/Results2.csv");
     res.send(results);
     shell.exec("rm /home/sitewhere/Results2.csv");
 });
 
 app.get("/multi_simulation", (req, res) => {
+    shell.exec("/home/sitewhere/save_results.sh " + "multi1Results1 " + "\"" + req.query.formName + "\"");
     results = shell.exec("cat /home/sitewhere/multi1Results1.csv");
+    shell.exec("/home/sitewhere/save_results.sh " + "multi1Results2 " + "\"" + req.query.formName + "\"");
     res.send(results);
-    shell.exec("rm /home/sitewhere/multi1Results1.csv");
+    shell.exec("rm /home/sitewhere/multi1Results*.csv");
 });
 
 app.get("/multi_simulation2", (req, res) => {
+    shell.exec("/home/sitewhere/save_results.sh " + "multi2Results1 " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/sitewhere/save_results.sh " + "multi2Results2 " + "\"" + req.query.formName + "\"");
     results = shell.exec("cat /home/sitewhere/multi2Results1.csv");
     res.send(results);
-    shell.exec("rm /home/sitewhere/multi2Results1.csv");
+    shell.exec("rm /home/sitewhere/multi2Results*.csv");
 });
 
 

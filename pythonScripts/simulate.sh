@@ -4,33 +4,44 @@ function sendFiles {
 
 formName="$1"
 simulationType="$2"
+echo "$formName #######################"
 
-mongoexport --db planet --collection files --out /home/sitewhere/upload/allDocuments.txt
-grep '"formName":"'"$formName"'"' /home/sitewhere/upload/allDocuments.txt | grep 'Parameters_initialization' > /home/sitewhere/upload/Parameters_initialization.txt
-grep '"formName":"'"$formName"'"' /home/sitewhere/upload/allDocuments.txt | grep 'Economy_environment_initialization' > /home/sitewhere/upload/Economy_environment_initialization.txt
-grep '"formName":"'"$formName"'"' /home/sitewhere/upload/allDocuments.txt | grep 'Control_initialization' > /home/sitewhere/upload/Control_initialization.txt
-mongoexport --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName" --out /home/sitewhere/upload/Heat.csv
-egrep ','"$formName"'$|DH_demand|LH_demand' /home/sitewhere/upload/Heat.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
-mv tempFile$simulationType /home/sitewhere/upload/Heat.csv
-python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/Heat.csv --dest /home/sitewhere/upload/Heat.xlsx --type xlsx
-mongoexport --db planet --collection files --type=csv --fields Active_node1,Reactive_node1,Active_node2,Reactive_node2,Active_node3,Reactive_node3,Active_node4,Reactive_node4,Active_node5,Reactive_node5,Active_node6,Reactive_node6,Active_node7,Reactive_node7,Active_node8,Reactive_node8,"formName" --out /home/sitewhere/upload/Electricity.csv
-egrep ','"$formName"'$|Active_node|Reactive_node' /home/sitewhere/upload/Electricity.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
-mv tempFile$simulationType /home/sitewhere/upload/Electricity.csv
-python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/Electricity.csv --dest /home/sitewhere/upload/Electricity.xlsx --type xlsx
+mkdir -p $simulationType
+mongoexport --db planet --collection files --out /home/sitewhere/upload/$simulationType/allDocuments.txt
+grep '"formName":"'"$formName"'"' /home/sitewhere/upload/$simulationType/allDocuments.txt | grep 'Parameters_initialization' > /home/sitewhere/upload/$simulationType/Parameters_initialization.txt
+grep '"formName":"'"$formName"'"' /home/sitewhere/upload/$simulationType/allDocuments.txt | grep 'Economy_environment_initialization' > /home/sitewhere/upload/$simulationType/Economy_environment_initialization.txt
+grep '"formName":"'"$formName"'"' /home/sitewhere/upload/$simulationType/allDocuments.txt | grep 'Control_initialization' > /home/sitewhere/upload/$simulationType/Control_initialization.txt
+mongoexport --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName" --out /home/sitewhere/upload/$simulationType/Heat.csv
+egrep ','"$formName"'$|DH_demand|LH_demand' /home/sitewhere/upload/$simulationType/Heat.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
+mv tempFile$simulationType /home/sitewhere/upload/$simulationType/Heat.csv
+python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/$simulationType/Heat.csv --dest /home/sitewhere/upload/$simulationType/Heat.xlsx --type xlsx
+mongoexport --db planet --collection files --type=csv --fields Active_node1,Reactive_node1,Active_node2,Reactive_node2,Active_node3,Reactive_node3,Active_node4,Reactive_node4,Active_node5,Reactive_node5,Active_node6,Reactive_node6,Active_node7,Reactive_node7,Active_node8,Reactive_node8,"formName" --out /home/sitewhere/upload/$simulationType/Electricity.csv
+egrep ','"$formName"'$|Active_node|Reactive_node' /home/sitewhere/upload/$simulationType/Electricity.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
+mv tempFile$simulationType /home/sitewhere/upload/$simulationType/Electricity.csv
+python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/$simulationType/Electricity.csv --dest /home/sitewhere/upload/$simulationType/Electricity.xlsx --type xlsx
 
-rm /home/sitewhere/upload/Heat.csv /home/sitewhere/upload/allDocuments.txt /home/sitewhere/upload/Electricity.csv
+rm /home/sitewhere/upload/$simulationType/Heat.csv /home/sitewhere/upload/$simulationType/allDocuments.txt /home/sitewhere/upload/$simulationType/Electricity.csv
 
-mosquitto_pub -m "execute,/home/sitewhere/upload/*,sitewhere@192.168.42.128:,$simulationType" -h 192.168.42.1 -t simulations
+mosquitto_pub -m "execute,/home/sitewhere/upload/$simulationType/*,sitewhere@192.168.42.128:,$simulationType,$formName" -h 192.168.42.1 -t simulations
 }
 
 form="$1"
 echo "$form" | egrep ' ,  '
 if (( $? == 0 )); then
-   form1=$(echo "$form" | sed 's/^ //' | awk 'BEGIN {FS=OFS=" ,  "}{print $1}')
-   form2=$(echo "$form" | sed 's/^ //' | awk 'BEGIN {FS=OFS=" ,  "}{print $2}')
-   sendFiles "$form1" "multi1"
-   sendFiles "$form2" "multi2"
+   form1="$(echo "$form" | sed 's/^ //' | awk 'BEGIN {FS=OFS=" ,  "}{print $1}')"
+   form2="$(echo "$form" | sed 's/^ //' | sed 's/ $//' | awk 'BEGIN {FS=OFS=" ,  "}{print $2}')"
+   lines1=$(mongoexport --db planet -q '{"formName": "'"$form1"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName | wc -l)
+   lines2=$(mongoexport --db planet -q '{"formName": "'"$form2"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName | wc -l)
+   if (( lines1 == 1 )); then
+      sendFiles "$form1" "multi1"
+   fi
+   if (( lines2 == 1 )); then
+      sendFiles "$form2" "multi2"
+   fi
 else
    echo "Starting export of $form"
-   sendFiles "$form" "single"
+   lines=$(mongoexport --db planet -q '{"formName": "'"$form"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName | wc -l)
+   if (( lines == 1 )); then
+      sendFiles "$(echo $form | sed 's/ $//')" "single"
+   fi
 fi

@@ -5,6 +5,7 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { SimulationResultsComponent } from './simulation-results/simulation-results.component';
 
 const routes: Routes = [{
   path: '',
@@ -47,17 +48,17 @@ const routes: Routes = [{
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
   }, {
     path: 'simulation',
-    loadChildren: './simulation/simulation.module#SimulationModule',
+    loadChildren: './scenario-creator/scenario-creator.module#ScenarioCreatorModule',
   }, {
     path: 'simulations',
-    loadChildren: './simulations/simulations.module#SimulationsModule',
+    component: SimulationResultsComponent,
   }, {
     path: 'manage-accounts',
     loadChildren: './manage-accounts/manage-accounts.module#ManageAccountsModule',
   },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'simulation',
     pathMatch: 'full',
   }, {
     path: '**',

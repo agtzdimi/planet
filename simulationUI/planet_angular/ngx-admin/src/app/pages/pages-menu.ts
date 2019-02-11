@@ -2,7 +2,7 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Simulation',
+    title: 'Scenario Creator',
     icon: 'nb-compose',
     children: [
       {
@@ -16,13 +16,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Start Simulation',
+    title: 'Simulation Results',
     icon: 'nb-bar-chart',
-    children: [
-      {
-        title: 'Single Simulation',
-        link: '/pages/simulations/simulations',
-      },
-    ],
+    link: '/pages/simulations',
   },
 ];
