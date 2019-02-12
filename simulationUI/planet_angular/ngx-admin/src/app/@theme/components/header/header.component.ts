@@ -14,15 +14,17 @@ export class HeaderComponent implements OnInit {
 
   @Input() position = 'normal';
 
+  myImage = new Image(100, 200);
   user: any;
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
 
   constructor(private sidebarService: NbSidebarService,
-              private menuService: NbMenuService,
-              private userService: UserService,
-              private analyticsService: AnalyticsService,
-              private layoutService: LayoutService) {
+    private menuService: NbMenuService,
+    private userService: UserService,
+    private analyticsService: AnalyticsService,
+    private layoutService: LayoutService) {
+    this.myImage.src = 'assets/images/DAg.jpg';
   }
 
   ngOnInit() {

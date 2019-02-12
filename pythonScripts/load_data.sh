@@ -6,7 +6,7 @@ formName="$1"
 echo "$formName #######################"
 
 mkdir -p /home/sitewhere/upload/loadData
-mongoexport --db planet --collection files -q '{"formName": "'"$formName"'"}' --out /home/sitewhere/upload/loadData/allDocuments.txt
+mongoexport --db planet --collection files --out /home/sitewhere/upload/loadData/allDocuments.txt
 grep '"formName":"'"$formName"'"' /home/sitewhere/upload/loadData/allDocuments.txt | grep 'Parameters_initialization' > /home/sitewhere/upload/loadData/Parameters_initialization.txt
 grep '"formName":"'"$formName"'"' /home/sitewhere/upload/loadData/allDocuments.txt | grep 'Economy_environment_initialization' > /home/sitewhere/upload/loadData/Economy_environment_initialization.txt
 grep '"formName":"'"$formName"'"' /home/sitewhere/upload/loadData/allDocuments.txt | grep 'Control_initialization' > /home/sitewhere/upload/loadData/Control_initialization.txt
@@ -24,4 +24,4 @@ rm /home/sitewhere/upload/loadData/Heat.csv /home/sitewhere/upload/loadData/allD
 
 form="$1"
 echo "Starting export of $form"
-sendFiles "$(echo $form | sed 's/ $//')"
+loadData "$(echo $form | sed 's/^ //' | sed 's/ $//')"

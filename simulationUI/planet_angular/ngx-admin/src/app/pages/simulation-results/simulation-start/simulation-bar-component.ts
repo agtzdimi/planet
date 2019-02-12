@@ -54,14 +54,16 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
             let yIndex: number;
             let barGap: string;
             let type: string;
+            let stack = null;
+            const checkGraph = headers.find(val => val === 'RES producibility');
+            if (checkGraph) {
+                barGap = '-100%';
+                yIndex = 0;
+                type = 'bar';
+                stack = 'chart3';
+            }
             for (let index = 0; index < headers.length; index++) {
                 switch (headers[index]) {
-                    // RES producibility is the first option so it will enable stack option for all the Items
-                    case 'RES producibility':
-                        type = 'bar';
-                        yIndex = 0;
-                        barGap = '-100%';
-                        break;
                     case 'Total CO2 emissions':
                         type = 'scatter';
                         yIndex = 0;
@@ -85,6 +87,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                     },
                     name: headers[index],
                     type: type,
+                    stack: stack,
                     barGap: barGap,
                     yAxisIndex: yIndex,
                     symbolSize: [40, 40],

@@ -38,9 +38,31 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             .onClose.subscribe(name => {
                 if (name) {
                     this.formName = name['formName'];
+                    let finalFormName = '';
+                    finalFormName = this.formName.toString();
                     this.formDescription = name['formDescription'];
+                    this.httpClient.get('http://2.85.194.101:8000/load_data', {
+                        params: {
+                            'formName': finalFormName,
+                        },
+                    })
+                        .subscribe(
+                            data => {
+                                let temp = JSON.parse(data['paramInit']);
+                                this.paramInit['payload']['simulation'] = temp['payload']['simulation'];
+                                this.paramInit['payload']['technologies'] = temp['payload']['technologies'];
+                                temp = JSON.parse(data['econEnv']);
+                                this.econEnv['payload'] = temp['payload'];
+                                temp = JSON.parse(data['controlSystem']);
+                                this.controlSystem['payload']['control'] = temp['payload']['control'];
+                            },
+                            error => {
+                                // console.log('Error', error);
+                            },
+                        );
                 }
-            });
+            },
+            );
     }
 
     public animateImage(transitionName: string = 'scale', event) {
