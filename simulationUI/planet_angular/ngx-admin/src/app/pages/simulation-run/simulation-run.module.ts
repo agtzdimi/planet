@@ -7,9 +7,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { ThemeModule } from '../../@theme/theme.module';
 
-import { SimulationResultsRoutingModule } from './simulation-results-routing.module';
-import { SimulationResultsComponent } from './simulation-results.component';
-import { SimulationsFilesComponent } from './simulation-start/simulation-start.component';
+import { SimulationRunRoutingModule } from './simulation-run-routing.module';
+import { SimulationRunComponent } from './simulation-run.component';
+import { SimulationStartComponent } from './simulation-start/simulation-start.component';
 import { SimulationsAreaStackComponent } from './simulation-start/simulation-area-stack.component';
 import { SimulationsBarComponent } from './simulation-start/simulation-bar-component';
 import { DialogSelectFormPromptComponent } from './simulation-start/dialog-prompt/select-form.component';
@@ -19,8 +19,8 @@ import { DialogSelectMultipleFormPromptComponent } from './simulation-start/dial
 import { SimulationsLineComponent } from './simulation-start/simulation-line.component';
 
 const COMPONENTS = [
-  SimulationResultsComponent,
-  SimulationsFilesComponent,
+  SimulationRunComponent,
+  SimulationStartComponent,
   SimulationsAreaStackComponent,
   SimulationsBarComponent,
   DialogSelectFormPromptComponent,
@@ -30,8 +30,8 @@ const COMPONENTS = [
 ];
 
 const ENTRY_COMPONENTS = [
-  SimulationResultsComponent,
-  SimulationsFilesComponent,
+  SimulationRunComponent,
+  SimulationStartComponent,
   SimulationsAreaStackComponent,
   SimulationsBarComponent,
   DialogSelectFormPromptComponent,
@@ -43,7 +43,7 @@ const ENTRY_COMPONENTS = [
 @NgModule({
   imports: [
     ThemeModule,
-    SimulationResultsRoutingModule,
+    SimulationRunRoutingModule,
     NbButtonModule,
     NbDialogModule.forRoot(),
     HttpClientModule,
@@ -58,4 +58,4 @@ const ENTRY_COMPONENTS = [
     ...ENTRY_COMPONENTS,
   ],
 })
-export class SimulationResultsModule { }
+export class SimulationRunModule { }

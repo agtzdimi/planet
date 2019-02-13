@@ -16,8 +16,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Simulation Results',
+    title: 'Simulation Run',
     icon: 'nb-bar-chart',
-    link: '/pages/simulations',
+    link: '/pages/simulation-run',
+  },
+  {
+    title: 'Simulation Comparison',
+    icon: 'nb-bar-chart',
+    link: '/pages/simulation-comparison',
   },
 ];

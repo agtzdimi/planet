@@ -5,11 +5,11 @@ import { DialogSelectMultipleFormPromptComponent } from './dialog-prompt/select-
 import { NbDialogService } from '@nebular/theme';
 
 @Component({
-  selector: 'ngx-simulation-start',
-  styleUrls: ['./simulation-start.component.scss'],
-  templateUrl: './simulation-start.component.html',
+  selector: 'ngx-comparison-start',
+  styleUrls: ['./comparison-start.component.scss'],
+  templateUrl: './comparison-start.component.html',
 })
-export class SimulationsFilesComponent {
+export class ComparisonStartComponent {
 
   CHARTS_TOTAL = 3;
   areaChart = [];

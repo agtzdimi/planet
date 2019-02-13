@@ -5,7 +5,8 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
-import { SimulationResultsComponent } from './simulation-results/simulation-results.component';
+import { SimulationRunComponent } from './simulation-run/simulation-run.component';
+import { SimulationComparisonComponent } from './simulation-comparison/simulation-comparison.component';
 
 const routes: Routes = [{
   path: '',
@@ -50,8 +51,11 @@ const routes: Routes = [{
     path: 'simulation',
     loadChildren: './scenario-creator/scenario-creator.module#ScenarioCreatorModule',
   }, {
-    path: 'simulations',
-    component: SimulationResultsComponent,
+    path: 'simulation-run',
+    component: SimulationRunComponent,
+  }, {
+    path: 'simulation-comparison',
+    component: SimulationComparisonComponent,
   }, {
     path: 'manage-accounts',
     loadChildren: './manage-accounts/manage-accounts.module#ManageAccountsModule',

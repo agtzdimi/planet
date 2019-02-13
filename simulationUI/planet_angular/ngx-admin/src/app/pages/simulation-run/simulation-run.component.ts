@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-simulations',
+  selector: 'ngx-simulation-run',
   template: `
     <ngx-simulation-start></ngx-simulation-start>
   `,
 })
-export class SimulationResultsComponent {
+export class SimulationRunComponent {
 }

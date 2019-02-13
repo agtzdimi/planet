@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { SimulationsFilesComponent } from './simulation-start/simulation-start.component';
+import { SimulationStartComponent } from './simulation-start/simulation-start.component';
 
 
 const routes: Routes = [{
   path: '',
-  component: SimulationsFilesComponent,
+  component: SimulationStartComponent,
 }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SimulationResultsRoutingModule { }
+export class SimulationRunRoutingModule { }

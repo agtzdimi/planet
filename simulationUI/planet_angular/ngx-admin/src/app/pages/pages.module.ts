@@ -6,7 +6,8 @@ import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-import { SimulationResultsModule } from './simulation-results/simulation-results.module';
+import { SimulationRunModule } from './simulation-run/simulation-run.module';
+import { SimulationComparisonModule } from './simulation-comparison/simulation-comparison.module';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -19,7 +20,8 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
-    SimulationResultsModule,
+    SimulationRunModule,
+    SimulationComparisonModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,
