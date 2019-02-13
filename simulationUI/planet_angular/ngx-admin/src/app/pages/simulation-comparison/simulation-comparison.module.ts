@@ -10,21 +10,15 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { SimulationComparisonRoutingModule } from './simulation-comparison-routing.module';
 import { SimulationComparisonComponent } from './simulation-comparison.component';
 import { ComparisonStartComponent } from './comparison-start/comparison-start.component';
-import { SimulationsAreaStackComponent } from './comparison-start/simulation-area-stack.component';
-import { SimulationsBarComponent } from './comparison-start/simulation-bar-component';
-import { DialogSelectFormPromptComponent } from './comparison-start/dialog-prompt/select-form.component';
 import { NbDialogModule } from '@nebular/theme';
-import { HighlightDirective } from './comparison-start/dialog-prompt/highlight.directive';
+import { ComparisonHighlightDirective } from './comparison-start/dialog-prompt/comparison-highlight.directive';
 import { DialogSelectMultipleFormPromptComponent } from './comparison-start/dialog-prompt/select-multiple-form.component';
 import { SimulationsLineComponent } from './comparison-start/simulation-line.component';
 
 const COMPONENTS = [
   SimulationComparisonComponent,
   ComparisonStartComponent,
-  SimulationsAreaStackComponent,
-  SimulationsBarComponent,
-  DialogSelectFormPromptComponent,
-  HighlightDirective,
+  ComparisonHighlightDirective,
   DialogSelectMultipleFormPromptComponent,
   SimulationsLineComponent,
 ];
@@ -32,9 +26,6 @@ const COMPONENTS = [
 const ENTRY_COMPONENTS = [
   SimulationComparisonComponent,
   ComparisonStartComponent,
-  SimulationsAreaStackComponent,
-  SimulationsBarComponent,
-  DialogSelectFormPromptComponent,
   DialogSelectMultipleFormPromptComponent,
   SimulationsLineComponent,
 ];

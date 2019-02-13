@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
-import { DialogSelectMultipleFormPromptComponent } from './dialog-prompt/select-multiple-form.component';
 import { NbDialogService } from '@nebular/theme';
 
 @Component({
@@ -14,20 +13,14 @@ export class SimulationStartComponent {
   CHARTS_TOTAL = 3;
   areaChart = [];
   barChart = [];
-  lineChart = [];
   showBar: boolean = false;
   showArea: boolean = false;
-  showLine: boolean = false;
   loading = false;
   count = 0;
   results1Data: any;
-
   options: any = {};
   themeSubscription: any;
-  selectedItem = '';
-  selectedForms = 'Select Saved Simulations';
   formName = 'Select Saved Simulation';
-  finalFormName = '';
 
   constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
     for (let i = 0; i < this.CHARTS_TOTAL; i++) {
@@ -38,9 +31,6 @@ export class SimulationStartComponent {
         data: [],
       };
     }
-    this.lineChart[0] = {
-      data: [],
-    };
   }
 
   toggleLoadingAnimation() {
@@ -48,15 +38,10 @@ export class SimulationStartComponent {
   }
 
   startSimulation(): void {
-    if (this.selectedItem === 'single') {
-      this.finalFormName = this.formName;
-    } else {
-      this.finalFormName = this.selectedForms;
-    }
     this.toggleLoadingAnimation();
     this.httpClient.post('http://2.85.194.101:8000/transfer',
       {
-        'formName': this.finalFormName,
+        'formName': this.formName,
       })
       .subscribe(
         data => {
@@ -66,112 +51,43 @@ export class SimulationStartComponent {
           // console.log('Error', error);
         },
       );
-
-    if (this.selectedItem === 'single') {
-      const interval = setInterval(() => {
-        this.httpClient.get('http://2.85.194.101:8000/simulation', {
-          params: {
-            'formName': this.finalFormName,
+    const interval = setInterval(() => {
+      this.httpClient.get('http://2.85.194.101:8000/simulation', {
+        params: {
+          'formName': this.formName,
+        },
+      })
+        .subscribe(
+          data => {
+            // console.log('GET Request is successful ');
+            if (typeof data === 'string' && data !== '') {
+              this.results1Data = data;
+            }
           },
-        })
-          .subscribe(
-            data => {
-              // console.log('GET Request is successful ');
-              if (typeof data === 'string' && data !== '') {
-                this.results1Data = data;
-              }
-            },
-            error => {
-              // console.log('Error', error);
-            },
-          );
-
-        this.httpClient.get('http://2.85.194.101:8000/simulation2', {
-          params: {
-            'formName': this.finalFormName,
+          error => {
+            // console.log('Error', error);
           },
-        })
-          .subscribe(
-            data => {
-              // console.log('GET Request is successful ');
-              if (typeof data === 'string' && data !== '' && this.results1Data !== '' && this.results1Data) {
-                clearInterval(interval);
-                this.spreadValuesToCharts(this.results1Data);
-                this.spreadValuesToCharts2(data);
-              }
-            },
-            error => {
-              // console.log('Error', error);
-            },
-          );
-      }, 5000);
-    } else {
-      const interval = setInterval(() => {
-        const forms = this.finalFormName.split(', ');
-        this.httpClient.get('http://2.85.194.101:8000/multi_simulation', {
-          params: {
-            'formName': forms[0],
+        );
+
+      this.httpClient.get('http://2.85.194.101:8000/simulation2', {
+        params: {
+          'formName': this.formName,
+        },
+      })
+        .subscribe(
+          data => {
+            // console.log('GET Request is successful ');
+            if (typeof data === 'string' && data !== '' && this.results1Data !== '' && this.results1Data) {
+              clearInterval(interval);
+              this.spreadValuesToCharts(this.results1Data);
+              this.spreadValuesToCharts2(data);
+            }
           },
-        })
-          .subscribe(
-            data => {
-              // console.log('GET Request is successful ');
-              if (typeof data === 'string' && data !== '' && this.count !== 1) {
-                this.getCurtailment(data);
-              }
-            },
-            error => {
-              // console.log('Error', error);
-            },
-          );
-
-        this.httpClient.get('http://2.85.194.101:8000/multi_simulation2', {
-          params: {
-            'formName': forms[1],
+          error => {
+            // console.log('Error', error);
           },
-        })
-          .subscribe(
-            data => {
-              // console.log('GET Request is successful ');
-              if (typeof data === 'string' && data !== '') {
-                clearInterval(interval);
-                this.getCurtailment(data);
-              }
-            },
-            error => {
-              // console.log('Error', error);
-            },
-          );
-      }, 10000);
-    }
-  }
-
-  getCurtailment(data) {
-    const lines = data.split('\n');
-    const headers = lines[0].split(',');
-    for (let index = 0; index < headers.length; index++) {
-      switch (headers[index]) {
-        case 'Time':
-          this.lineChart[0].data.push(this.getColumnData(lines, index));
-          break;
-        case 'RES_direct_utilization':
-          this.count++;
-          this.lineChart[0].data.push(this.getColumnData(lines, index));
-          if (this.count === 2) {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_direct_utilization2';
-          } else {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_direct_utilization1';
-          }
-          break;
-      }
-    }
-    if (this.count === 2) {
-      this.lineChart[0].title = 'RES Direct Utilization Difference';
-      this.showLine = true;
-      this.loading = false;
-      this.count = 0;
-    }
-
+        );
+    }, 5000);
   }
 
   spreadValuesToCharts(data) {
@@ -324,22 +240,12 @@ export class SimulationStartComponent {
   }
 
   openDialogBox() {
-    if (this.selectedItem === 'single') {
-      this.dialogService.open(DialogSelectFormPromptComponent)
-        .onClose.subscribe(name => {
-          if (name) {
-            this.formName = name['formName'];
-          }
-        });
-    } else {
-      this.dialogService.open(DialogSelectMultipleFormPromptComponent)
-        .onClose.subscribe(name => {
-          if (name) {
-            this.selectedForms = name;
-          }
-        });
-    }
-
+    this.dialogService.open(DialogSelectFormPromptComponent)
+      .onClose.subscribe(name => {
+        if (name) {
+          this.formName = name['formName'];
+        }
+      });
   }
 
 }

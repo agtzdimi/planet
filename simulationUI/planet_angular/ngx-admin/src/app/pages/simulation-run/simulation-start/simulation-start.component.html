@@ -6,26 +6,18 @@
       <nb-card-body>
 
         <div class="row">
-          <div class="col-md-3">
-            <nb-select placeholder="Select Simulation Type" [(selected)]="selectedItem">
-              <nb-option value="single">Single Simulation</nb-option>
-              <nb-option value="comparison">Comparison Simulation</nb-option>
-            </nb-select>
-          </div>
-          <div class="col-md-2" *ngIf="selectedItem === 'single'">
+          <div class="col-md-2">
             <button nbButton hero status="info" (click)="openDialogBox()">{{formName}}</button>
           </div>
-          <div class="col-md-2" *ngIf="selectedItem === 'comparison'">
-            <button nbButton hero status="info" (click)="openDialogBox()">{{selectedForms}}</button>
-          </div>
-          <div class="col-md-2">
-            <button *ngIf="(selectedItem === 'single' || selectedItem === 'comparison') && (selectedForms !== 'Select Saved Simulations' || formName !== 'Select Saved Simulation')"
-              nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
-              nbSpinnerMessage="" status="success" size="medium" class="start-upload-btn" (click)="startSimulation()">
+          <div class="col-md-3">
+            <button *ngIf="formName !== 'Select Saved Simulation'" nbButton type="button" [nbSpinner]="loading"
+              nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium" class="start-upload-btn"
+              (click)="startSimulation()">
               Start Simulation
             </button>
           </div>
         </div>
+
       </nb-card-body>
     </nb-card>
 
@@ -44,15 +36,6 @@
         <nb-card-header>{{barCh.title}}</nb-card-header>
         <nb-card-body>
           <ngx-simulation-bar [yAxisLabel]="barCh.yAxisLabel" [yRightAxisLabel]="barCh.yRightAxisLabel" [data]="barCh.data"></ngx-simulation-bar>
-        </nb-card-body>
-      </nb-card>
-    </div>
-
-    <div *ngIf="showLine">
-      <nb-card *ngFor="let lineCh of lineChart">
-        <nb-card-header>{{lineCh.title}}</nb-card-header>
-        <nb-card-body>
-          <ngx-simulation-line [data]="lineCh.data"></ngx-simulation-line>
         </nb-card-body>
       </nb-card>
     </div>

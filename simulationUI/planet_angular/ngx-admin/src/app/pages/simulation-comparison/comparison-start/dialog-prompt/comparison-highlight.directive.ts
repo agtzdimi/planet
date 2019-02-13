@@ -1,13 +1,13 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
-    selector: '[appHighlight]',
+    selector: '[appCompHighlight]',
 })
-export class HighlightDirective {
+export class ComparisonHighlightDirective {
 
     constructor(private el: ElementRef) { }
 
-    @Input('appHighlight') highlightColor: string;
+    @Input('appCompHighlight') highlightColor: string;
 
     @HostListener('click') onMouseClick() {
         this.highlight(this.highlightColor || 'red');

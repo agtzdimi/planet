@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
       <nb-card-header>Select one of the following simulations</nb-card-header>
       <nb-card-body>
       <nb-list>
-        <nb-list-item [appHighlight]="'lightblue'" *ngFor="let form of forms" (click)="handleClick($event)">
+        <nb-list-item [appCompHighlight]="'lightblue'" *ngFor="let form of forms" (click)="handleClick($event)">
           {{ form }}
         </nb-list-item>
       </nb-list>
