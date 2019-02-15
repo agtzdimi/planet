@@ -6,6 +6,7 @@ import { ChartModule } from 'angular2-chartjs';
 import { HttpClientModule } from '@angular/common/http';
 
 import { ThemeModule } from '../../@theme/theme.module';
+import { SuiModule } from 'ng2-semantic-ui';
 
 import { SimulationComparisonRoutingModule } from './simulation-comparison-routing.module';
 import { SimulationComparisonComponent } from './simulation-comparison.component';
@@ -41,6 +42,7 @@ const ENTRY_COMPONENTS = [
     NgxChartsModule,
     ChartModule,
     NgxEchartsModule,
+    SuiModule,
   ],
   declarations: [
     ...COMPONENTS,
