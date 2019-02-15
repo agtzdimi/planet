@@ -55,7 +55,7 @@ export class DialogSelectMultipleFormPromptComponent {
     this.httpClient.get('http://192.168.11.128:8000/get_form_names', {
       params: {
         'executed': 'true',
-      }
+      },
     })
       .subscribe(
         data => {
@@ -78,7 +78,6 @@ export class DialogSelectMultipleFormPromptComponent {
   }
 
   setOptions(event) {
-    console.log(this.selectedOptions)
     if (event.length >= 3) {
       this.disabled = true;
     } else {

@@ -37,6 +37,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     phase4: boolean = false;
     phase5: boolean = false;
     loading: boolean = false;
+    saveMessage: String = '';
     transitionController1 = new TransitionController();
     transitionController2 = new TransitionController();
     transitionController3 = new TransitionController();
@@ -54,7 +55,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             .onClose.subscribe(status => {
                 this.isDefault = status;
                 if (this.isDefault) {
-                    this.paramInit['payload']['simulation']['simulation.time'] = 8760;
+                    this.paramInit['payload']['simulation']['simulation.time'] = 96;
                 }
             });
     }
@@ -103,7 +104,8 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     controlSystem = {
         'file.name': 'Control_initialization',
         'payload': {
-            control: 5,
+            'control': 5,
+            'RES.curtailment': 0,
         },
     };
 
@@ -208,16 +210,23 @@ export class NewSimulationFilesComponent implements AfterViewInit {
                         .subscribe(
                             data => {
                                 this.loading = false;
+                                this.saveMessage = '';
                             },
                             error => {
-                                // console.log('Error', error);
                                 this.loading = false;
+                                if (error.error.text === 'Error: Simulation Name Already Exists!') {
+                                    this.saveMessage = error.error.text;
+                                } else {
+                                    this.saveMessage = '';
+                                }
+                                // console.log("2", error.error);
                             },
                         );
                 },
                 error => {
-                    // console.log('Error', error);
                     this.loading = false;
+                    this.saveMessage = '';
+                    // console.log("3", error);
                 },
             );
     }
@@ -228,7 +237,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
     openDialogBox(component) {
         this.dialogService.open(component)
-            .onClose.subscribe(value => {});
+            .onClose.subscribe(value => { });
     }
 
     handleDescriptionChange(event) {

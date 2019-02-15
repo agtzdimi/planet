@@ -32,7 +32,8 @@
           </div>
           <div class="row">
             <div class="col-md-2">
-              <nb-select class="m-2" placeholder="Select grid area" (selectedChange)="animateImage('transitionName1',$event)">
+              <nb-select class="m-2" placeholder="Select grid area"
+                (selectedChange)="animateImage('transitionName1',$event)">
                 <nb-option value="Turin">Turin</nb-option>
                 <nb-option value="Athens" disabled>Athens</nb-option>
               </nb-select>
@@ -41,13 +42,15 @@
                 <div class="form-group row">
                   <label for="dt" class="col-sm-6 col-form-label">Time Step</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="dt" [(ngModel)]="paramInit.payload.simulation['time.step']">
+                    <input type="text" class="form-control" id="dt"
+                      [(ngModel)]="paramInit.payload.simulation['time.step']">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="simulation-time" class="col-sm-6 col-form-label">Simulation Horizon</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="simulation-time" [(ngModel)]="paramInit.payload.simulation['simulation.time']">
+                    <input type="text" class="form-control" id="simulation-time"
+                      [(ngModel)]="paramInit.payload.simulation['simulation.time']">
                   </div>
                 </div>
                 <div class="row">
@@ -71,7 +74,8 @@
                   </label>
                 </div>
                 <div class="row">
-                  <button *ngIf="checkDefaultData()" nbButton hero class="m-3" status="info" shape="round" (click)="animateInfo(transitionController2,transitionName2,2)">Continue</button>
+                  <button *ngIf="checkDefaultData()" nbButton hero class="m-3" status="info" shape="round"
+                    (click)="animateInfo(transitionController2,transitionName2,2)">Continue</button>
                   <div *ngIf="!checkDefaultData()" class="requiredField"> {{errorMessage}}</div>
                 </div>
               </div>
@@ -82,7 +86,8 @@
               </div>
             </div>
             <div *ngIf="areaPicked" class="col-md-8">
-              <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)"></ngx-leaflet-map>
+              <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)">
+              </ngx-leaflet-map>
             </div>
           </div>
         </div>
@@ -92,9 +97,10 @@
     <div class="row">
       <div class="col-md-12">
         <div class="ui content">
-          <ngx-tech-param [suiTransition]="transitionController2" *ngIf="phase2" [(data)]="paramInit" (dataChange)="paramInit"
-            [(pvParam)]="pvParam" [(windParam)]="windParam" [defaultValues]="isDefault" (phase3)="animateInfo(transitionController3,transitionName3,3)"
-            (pvChange)="pvParam" (windChange)="windParam"></ngx-tech-param>
+          <ngx-tech-param [suiTransition]="transitionController2" *ngIf="phase2" [(data)]="paramInit"
+            (dataChange)="paramInit" [(pvParam)]="pvParam" [(windParam)]="windParam" [defaultValues]="isDefault"
+            (phase3)="animateInfo(transitionController3,transitionName3,3)" (pvChange)="pvParam"
+            (windChange)="windParam"></ngx-tech-param>
         </div>
       </div>
 
@@ -104,15 +110,24 @@
             <nb-card-header>Control System</nb-card-header>
             <nb-card-body>
               <div class="form-group row">
-                <label for="control-system" class="col-sm-6 col-form-label">Option</label>
+                <label for="control-system" class="col-sm-6 col-form-label">Control</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="control-system" [(ngModel)]="controlSystem.payload.control">
+                  <input type="text" class="form-control" id="control-system"
+                    [(ngModel)]="controlSystem.payload.control">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="control-Curtailment" class="col-sm-6 col-form-label">RES Curtailment</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="control-Curtailment"
+                    [(ngModel)]="controlSystem.payload['RES.curtailment']">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-9"></div>
                 <div class="col-md-3">
-                  <button nbButton hero status="info" shape="round" (click)="animateInfo(transitionController4,transitionName4,4);animateInfo(transitionController5,transitionName5,4)">Continue</button>
+                  <button nbButton hero status="info" shape="round"
+                    (click)="animateInfo(transitionController4,transitionName4,4);animateInfo(transitionController5,transitionName5,4)">Continue</button>
                 </div>
               </div>
             </nb-card-body>
@@ -121,7 +136,8 @@
       </div>
 
       <div class="col-md-12">
-        <ngx-tech-cost [suiTransition]="transitionController4" *ngIf="phase4" [(data)]="econEnv" (dataChange)="econEnv"></ngx-tech-cost>
+        <ngx-tech-cost [suiTransition]="transitionController4" *ngIf="phase4" [(data)]="econEnv" (dataChange)="econEnv">
+        </ngx-tech-cost>
       </div>
 
       <div class="col-md-12">
@@ -156,13 +172,15 @@
               <div class="form-group row">
                 <label for="ec_ng.emission" class="col-sm-6 col-form-label">NG emission factor</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="ec_ng.emission" [(ngModel)]="econEnv.payload['NG.emission.factor']">
+                  <input type="text" class="form-control" id="ec_ng.emission"
+                    [(ngModel)]="econEnv.payload['NG.emission.factor']">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-9"></div>
                 <div class="col-md-3">
-                  <button nbButton hero status="info" shape="round" (click)="animateInfo(transitionController6,transitionName6,5)">Continue</button>
+                  <button nbButton hero status="info" shape="round"
+                    (click)="animateInfo(transitionController6,transitionName6,5)">Continue</button>
                 </div>
               </div>
             </nb-card-body>
@@ -180,6 +198,9 @@
           Save Parameters
         </button>
       </div>
+      <div class="col-md-2">
+        <div *ngIf="saveMessage!==''" class=" requiredTextarea"> {{saveMessage}}
+        </div>
+      </div>
     </div>
   </div>
-</div>

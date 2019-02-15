@@ -106,16 +106,15 @@ app.get("/load_data", (req, res) => {
     paramInitParam = shell.exec("cat /home/planet/upload/loadData/Parameters_initialization.txt");
     econEnvParam = shell.exec("cat /home/planet/upload/loadData/Economy_environment_initialization.txt");
     controlParam = shell.exec("cat /home/planet/upload/loadData/Control_initialization.txt");
-    electrParam = shell.exec("cat /home/planet/upload/loadData/Electricity.xlsx");
-    heatParam = shell.exec("cat /home/planet/upload/loadData/Heat.xlsx");
     Parameters = {
     "paramInit": paramInitParam,
     "econEnv": econEnvParam,
-    "controlSystem": controlParam,
-    "electricity": electrParam,
-    "heat": heatParam
+    "controlSystem": controlParam
     }
+    res.download('/home/planet/upload/loadData/Electricity.xlsx');
+    res.download('/home/planet/upload/loadData/Heat.xlsx');
     res.send(Parameters);
+    res.end();
     shell.exec("rm -rf /home/planet/upload/loadData");
 });
 
