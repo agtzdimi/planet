@@ -7,22 +7,22 @@ simulationType="$2"
 echo "$formName #######################"
 
 mkdir -p $simulationType
-mongoexport --db planet --collection files --out /home/sitewhere/upload/$simulationType/allDocuments.txt
-grep '"formName":"'"$formName"'"' /home/sitewhere/upload/$simulationType/allDocuments.txt | grep 'Parameters_initialization' > /home/sitewhere/upload/$simulationType/Parameters_initialization.txt
-grep '"formName":"'"$formName"'"' /home/sitewhere/upload/$simulationType/allDocuments.txt | grep 'Economy_environment_initialization' > /home/sitewhere/upload/$simulationType/Economy_environment_initialization.txt
-grep '"formName":"'"$formName"'"' /home/sitewhere/upload/$simulationType/allDocuments.txt | grep 'Control_initialization' > /home/sitewhere/upload/$simulationType/Control_initialization.txt
-mongoexport --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName" --out /home/sitewhere/upload/$simulationType/Heat.csv
-egrep ','"$formName"'$|DH_demand|LH_demand' /home/sitewhere/upload/$simulationType/Heat.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
-mv tempFile$simulationType /home/sitewhere/upload/$simulationType/Heat.csv
-python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/$simulationType/Heat.csv --dest /home/sitewhere/upload/$simulationType/Heat.xlsx --type xlsx
-mongoexport --db planet --collection files --type=csv --fields Active_node1,Reactive_node1,Active_node2,Reactive_node2,Active_node3,Reactive_node3,Active_node4,Reactive_node4,Active_node5,Reactive_node5,Active_node6,Reactive_node6,Active_node7,Reactive_node7,Active_node8,Reactive_node8,"formName" --out /home/sitewhere/upload/$simulationType/Electricity.csv
-egrep ','"$formName"'$|Active_node|Reactive_node' /home/sitewhere/upload/$simulationType/Electricity.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
-mv tempFile$simulationType /home/sitewhere/upload/$simulationType/Electricity.csv
-python /home/sitewhere/csvToExcel.py --source /home/sitewhere/upload/$simulationType/Electricity.csv --dest /home/sitewhere/upload/$simulationType/Electricity.xlsx --type xlsx
+mongoexport --db planet --collection files --out /home/planet/upload/$simulationType/allDocuments.txt
+grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Parameters_initialization' > /home/planet/upload/$simulationType/Parameters_initialization.txt
+grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Economy_environment_initialization' > /home/planet/upload/$simulationType/Economy_environment_initialization.txt
+grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Control_initialization' > /home/planet/upload/$simulationType/Control_initialization.txt
+mongoexport --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName" --out /home/planet/upload/$simulationType/Heat.csv
+egrep ','"$formName"'$|DH_demand|LH_demand' /home/planet/upload/$simulationType/Heat.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
+mv tempFile$simulationType /home/planet/upload/$simulationType/Heat.csv
+python /home/planet/csvToExcel.py --source /home/planet/upload/$simulationType/Heat.csv --dest /home/planet/upload/$simulationType/Heat.xlsx --type xlsx
+mongoexport --db planet --collection files --type=csv --fields Active_node1,Reactive_node1,Active_node2,Reactive_node2,Active_node3,Reactive_node3,Active_node4,Reactive_node4,Active_node5,Reactive_node5,Active_node6,Reactive_node6,Active_node7,Reactive_node7,Active_node8,Reactive_node8,"formName" --out /home/planet/upload/$simulationType/Electricity.csv
+egrep ','"$formName"'$|Active_node|Reactive_node' /home/planet/upload/$simulationType/Electricity.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
+mv tempFile$simulationType /home/planet/upload/$simulationType/Electricity.csv
+python /home/planet/csvToExcel.py --source /home/planet/upload/$simulationType/Electricity.csv --dest /home/planet/upload/$simulationType/Electricity.xlsx --type xlsx
 
-rm /home/sitewhere/upload/$simulationType/Heat.csv /home/sitewhere/upload/$simulationType/allDocuments.txt /home/sitewhere/upload/$simulationType/Electricity.csv
+rm /home/planet/upload/$simulationType/Heat.csv /home/planet/upload/$simulationType/allDocuments.txt /home/planet/upload/$simulationType/Electricity.csv
 
-mosquitto_pub -m "execute,/home/sitewhere/upload/$simulationType/*,sitewhere@192.168.42.128:,$simulationType,$formName" -h 192.168.42.1 -t simulations
+mosquitto_pub -m "execute,/home/planet/upload/$simulationType/*,planet@192.168.11.128:,$simulationType,$formName" -h 160.40.49.244 -t simulations
 }
 
 form="$1"

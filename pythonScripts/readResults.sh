@@ -1,8 +1,8 @@
 #!/bin/bash
 
 while true; do
-   if [[ -s /home/sitewhere/results.csv ]]; then
-      cat /home/sitewhere/results.csv
+   if [[ -s /home/planet/results.csv ]]; then
+      cat /home/planet/results.csv
       break
    fi
 done

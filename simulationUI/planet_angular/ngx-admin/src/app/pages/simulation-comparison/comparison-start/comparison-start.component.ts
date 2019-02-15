@@ -37,7 +37,7 @@ export class ComparisonStartComponent {
 
   startSimulation(): void {
     this.toggleLoadingAnimation();
-    this.httpClient.post('http://2.85.194.101:8000/transfer',
+    this.httpClient.post('http://192.168.11.128:8000/transfer',
       {
         'formName': this.selectedForms,
       })
@@ -51,7 +51,7 @@ export class ComparisonStartComponent {
       );
     const interval = setInterval(() => {
       const forms = this.selectedForms.split(', ');
-      this.httpClient.get('http://2.85.194.101:8000/multi_simulation', {
+      this.httpClient.get('http://192.168.11.128:8000/multi_simulation', {
         params: {
           'formName': forms[0],
         },
@@ -68,7 +68,7 @@ export class ComparisonStartComponent {
           },
         );
 
-      this.httpClient.get('http://2.85.194.101:8000/multi_simulation2', {
+      this.httpClient.get('http://192.168.11.128:8000/multi_simulation2', {
         params: {
           'formName': forms[1],
         },

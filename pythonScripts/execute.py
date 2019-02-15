@@ -54,5 +54,5 @@ if __name__ == "__main__":
       os.rename("Results1.csv", args["type"] + "Results1.csv")
       os.rename("Results2.csv", args["type"] + "Results2.csv")
 
-   p1 = subprocess.Popen(['pscp','-pw','7156471564','*.csv','sitewhere@192.168.42.128:/home/sitewhere'])
+   p1 = subprocess.Popen(['pscp','-pw','7156471564','*.csv','planet@192.168.42.128:/home/planet'])
    p1.wait()

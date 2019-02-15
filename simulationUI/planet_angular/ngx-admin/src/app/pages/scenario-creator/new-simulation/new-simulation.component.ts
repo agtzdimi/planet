@@ -192,7 +192,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
-        this.httpClient.post('http://2.85.194.101:8000/upload', formData,
+        this.httpClient.post('http://192.168.11.128:8000/upload', formData,
         )
             .subscribe(
                 () => {
@@ -200,7 +200,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
                     this.windParam['payload']['formDescription'] = this.formDescription;
                     this.pvParam['payload']['formName'] = this.formName;
                     this.pvParam['payload']['formDescription'] = this.formDescription;
-                    this.httpClient.post('http://2.85.194.101:8000/save_data', {
+                    this.httpClient.post('http://192.168.11.128:8000/save_data', {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),
                     },

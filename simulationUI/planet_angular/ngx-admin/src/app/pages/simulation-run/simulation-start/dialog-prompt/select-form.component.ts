@@ -34,7 +34,7 @@ export class DialogSelectFormPromptComponent {
     finalForm: Object = {};
 
     constructor(protected dialogRef: NbDialogRef<DialogSelectFormPromptComponent>, private httpClient: HttpClient) {
-        this.httpClient.get('http://2.85.194.101:8000/get_form_names')
+        this.httpClient.get('http://192.168.11.128:8000/get_form_names')
             .subscribe(
                 data => {
                     this.forms = data['formName'].toString().split('\n');

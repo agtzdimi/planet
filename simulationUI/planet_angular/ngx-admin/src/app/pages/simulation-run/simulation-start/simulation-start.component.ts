@@ -39,7 +39,7 @@ export class SimulationStartComponent {
 
   startSimulation(): void {
     this.toggleLoadingAnimation();
-    this.httpClient.post('http://2.85.194.101:8000/transfer',
+    this.httpClient.post('http://192.168.11.128:8000/transfer',
       {
         'formName': this.formName,
       })
@@ -52,7 +52,7 @@ export class SimulationStartComponent {
         },
       );
     const interval = setInterval(() => {
-      this.httpClient.get('http://2.85.194.101:8000/simulation', {
+      this.httpClient.get('http://192.168.11.128:8000/simulation', {
         params: {
           'formName': this.formName,
         },
@@ -69,7 +69,7 @@ export class SimulationStartComponent {
           },
         );
 
-      this.httpClient.get('http://2.85.194.101:8000/simulation2', {
+      this.httpClient.get('http://192.168.11.128:8000/simulation2', {
         params: {
           'formName': this.formName,
         },
