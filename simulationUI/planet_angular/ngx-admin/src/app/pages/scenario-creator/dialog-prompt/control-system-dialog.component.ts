@@ -7,7 +7,7 @@ import { NbDialogRef } from '@nebular/theme';
     <nb-card>
       <nb-card-header>Enter the control node</nb-card-header>
       <nb-card-footer>
-        <div class="row">
+      <div class="row">
             <div class="col-md-3">
             </div>
             <div class="col-md-1">
@@ -17,7 +17,10 @@ import { NbDialogRef } from '@nebular/theme';
       </nb-card-footer>
     </nb-card>
   `,
-    styles: [``],
+    styles: [`
+    button {
+      margin: 1rem;
+    }`],
 })
 export class DialogControlSystemPromptComponent {
     constructor(protected dialogRef: NbDialogRef<DialogControlSystemPromptComponent>) {

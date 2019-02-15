@@ -35,7 +35,10 @@ export class DialogSelectMultipleFormPromptComponent {
 
     constructor(protected dialogRef: NbDialogRef<DialogSelectMultipleFormPromptComponent>,
         private httpClient: HttpClient) {
-        this.httpClient.get('http://192.168.11.128:8000/get_form_names')
+        this.httpClient.get('http://192.168.11.128:8000/get_form_names', {
+          params: {
+            'executed': 'true',
+          }})
             .subscribe(
                 data => {
                     // console.log('GET Request is successful ');

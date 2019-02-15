@@ -83,7 +83,13 @@ app.post("/save_data", (req, res, next) => {
 });
 
 app.get("/get_form_names", (req, res) => {
-    shell.exec("mongoexport --db planet --collection files --out /home/planet/allDocuments.txt");
+   let collection = ""
+   if ( req.query.executed === "true" ) {
+      collection = "results"
+   } else {
+      collection = "files"
+   }
+    shell.exec("mongoexport --db planet --collection " + collection + " --out /home/planet/allDocuments.txt");
     formName = shell.exec("egrep -o 'formName.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
     formDescr = shell.exec("egrep -o 'formDescription.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
     res.send({"formName": formName, "formDescription": formDescr});

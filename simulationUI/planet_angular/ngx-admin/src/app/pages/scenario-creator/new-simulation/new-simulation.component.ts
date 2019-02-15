@@ -228,7 +228,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
     openDialogBox(component) {
         this.dialogService.open(component)
-            .onClose.subscribe();
+            .onClose.subscribe(value => {});
     }
 
     handleDescriptionChange(event) {
