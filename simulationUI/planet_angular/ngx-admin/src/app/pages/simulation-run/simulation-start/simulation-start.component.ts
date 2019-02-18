@@ -77,7 +77,7 @@ export class SimulationStartComponent {
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
-            if (typeof data === 'string' && data !== '' && this.results1Data !== '' && this.results1Data) {
+            if (typeof data === 'string' && data !== '' && data.length !== 32 && this.results1Data !== '' && this.results1Data) {
               clearInterval(interval);
               this.spreadValuesToCharts(this.results1Data);
               this.spreadValuesToCharts2(data);

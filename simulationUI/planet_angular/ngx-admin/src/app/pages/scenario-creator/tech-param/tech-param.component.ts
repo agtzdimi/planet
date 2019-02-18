@@ -210,7 +210,7 @@ export class TechParamComponent implements OnChanges {
             case 1:
                 if (flag) {
                     this.nodeData['payload']['technologies'][this.displayingNode]['WT'] = {
-                        'nominal.electric.power': 100,
+                        'nominal.electric.power': 0,
                     };
                 } else {
                     this.nodeData['payload']['technologies'][this.displayingNode]['WT'] = {
@@ -221,7 +221,7 @@ export class TechParamComponent implements OnChanges {
             case 2:
                 if (flag) {
                     this.nodeData['payload']['technologies'][this.displayingNode]['CHP'] = {
-                        'nominal.electric.power': 80,
+                        'nominal.electric.power': 0,
                         'efficiency.electric': 40,
                         'efficiency.thermal': 45,
                     };
@@ -236,19 +236,19 @@ export class TechParamComponent implements OnChanges {
             case 3:
                 if (flag) {
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['DH']['HP'] = {
-                        'nominal.heat.power': 15,
+                        'nominal.heat.power': 0,
                         'cop': 3,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['DH']['EH'] = {
-                        'nominal.heat.power': 10,
+                        'nominal.heat.power': 0,
                         'efficiency.thermal': 98,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['LHD']['HP'] = {
-                        'nominal.heat.power': 15,
+                        'nominal.heat.power': 0,
                         'cop': 3,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['LHD']['EH'] = {
-                        'nominal.heat.power': 10,
+                        'nominal.heat.power': 0,
                         'efficiency.thermal': 98,
                     };
                 } else {
@@ -273,7 +273,7 @@ export class TechParamComponent implements OnChanges {
             case 4:
                 if (flag) {
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2G'] = {
-                        'nominal.electric.power': 25,
+                        'nominal.electric.power': 0,
                         'efficiency.electrolysis': 75,
                         'efficiency.methanation': 80,
                         'efficiency.thermal': 24,
@@ -290,7 +290,7 @@ export class TechParamComponent implements OnChanges {
             case 5:
                 if (flag) {
                     this.nodeData['payload']['technologies'][this.displayingNode]['EB'] = {
-                        'storage.electric.capacity': 100,
+                        'storage.electric.capacity': 0,
                         'efficiency.charge': 92.1,
                         'efficiency.discharge': 92.1,
                         'c.rate': 0.25,
@@ -307,11 +307,11 @@ export class TechParamComponent implements OnChanges {
             case 6:
                 if (flag) {
                     this.nodeData['payload']['technologies'][this.displayingNode]['G2H']['DH'] = {
-                        'nomial.heat.power': 180,
+                        'nomial.heat.power': 0,
                         'efficiency.thermal': 90,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['G2H']['LHD'] = {
-                        'nomial.heat.power': 100,
+                        'nomial.heat.power': 0,
                         'efficiency.thermal': 90,
                     };
                 } else {

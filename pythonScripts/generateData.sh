@@ -48,7 +48,6 @@ paste -d "," nodeFiles/pv* > /home/planet/upload/PV.csv
 
 python /home/planet/csvToExcel.py --source /home/planet/upload/Electricity.xlsx --dest /home/planet/upload/Electricity.csv --type csv
 python /home/planet/csvToExcel.py --source /home/planet/upload/Heat.xlsx --dest /home/planet/upload/Heat.csv --type csv
-rm /home/planet/upload/Heat.xlsx /home/planet/upload/Electricity.xlsx
 rm -rf nodeFiles
 
 for file in $(ls /home/planet/upload/*.csv); do

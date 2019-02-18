@@ -94,7 +94,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         'payload': {
 
             'simulation': {
-                'time.step': 1,
+                'time.step': 0.25,
                 'simulation.time': 0,
             },
             'technologies': {
@@ -163,7 +163,11 @@ export class NewSimulationFilesComponent implements AfterViewInit {
                 break;
             case 'addedToQueue':
                 if (typeof output.file !== 'undefined') {
-                    this.files.push(output.file.nativeFile);
+                    if (output.file.name === this.fileName[id]) {
+                        this.files[id] = output.file.nativeFile;
+                    } else {
+                        this.files[id] = output.file.nativeFile;
+                    }
                     this.updateFilename(id, output);
                 }
                 break;

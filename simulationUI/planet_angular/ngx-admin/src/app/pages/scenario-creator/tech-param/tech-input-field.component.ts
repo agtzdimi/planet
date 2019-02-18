@@ -10,16 +10,16 @@ export class TechInputFieldComponent {
     @Input() isChecked;
     @Input() label1;
     @Input() label2;
-    @Input() val;
-    @Output() valChange: EventEmitter<String>;
+    @Input() val: Number;
+    @Output() valChange: EventEmitter<Number>;
 
     constructor() {
         this.val = 0;
-        this.valChange = new EventEmitter<String>();
+        this.valChange = new EventEmitter<Number>();
     }
 
     onChange(event) {
-        this.val = event.target.value;
+        this.val = +event.target.value;
         this.valChange.emit(this.val);
     }
 
