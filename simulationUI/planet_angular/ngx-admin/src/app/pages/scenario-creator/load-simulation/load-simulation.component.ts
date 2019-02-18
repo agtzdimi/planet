@@ -55,7 +55,6 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                                 this.econEnv['payload'] = temp['payload'];
                                 temp = JSON.parse(data['controlSystem']);
                                 this.controlSystem['payload']['control'] = temp['payload']['control'];
-                                console.log(data)
                             },
                             error => {
                                 // console.log('Error', error);
