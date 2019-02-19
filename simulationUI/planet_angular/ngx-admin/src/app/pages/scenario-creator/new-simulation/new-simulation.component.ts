@@ -152,7 +152,6 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     }
 
     onUploadOutput(output: UploadOutput, id): void {
-
         switch (output.type) {
             case 'rejected':
                 if (typeof output.file !== 'undefined') {

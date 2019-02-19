@@ -7,6 +7,7 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const shell = require("shelljs");
 const app = express();
+var fs = require('fs');
 const session = require("express-session");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -57,20 +58,25 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use(fileUpload({
-    useTempFiles : true,
-    tempFileDir : '/home/planet/temp/'
-}));
+app.use(fileUpload({}));
 
 app.use("/public", express.static(__dirname + "../public"));
 
 app.post("/upload", (req, res, next) => {
-    shell.echo(req.body.param1).to(`/home/planet/upload/Parameters_initialization.txt`);
-    shell.echo(req.body.param2).to(`/home/planet/upload/Control_initialization.txt`);
-    shell.echo(req.body.param3).to(`/home/planet/upload/Economy_environment_initialization.txt`);
+    shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
+    shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
+    shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
     for (const fil of Object.keys(req.files.file)) {
         let uploadFile = req.files.file[fil];
+        console.log(req.files)
         const fileName = req.files.file[fil].name;
+        console.log(uploadFile.data)
+        uploadFile.mv(`${__dirname}/../public/files/${fileName}`, function (err) {
+            if (err) {
+                console.log(err)
+                return res.status(500).send(err);
+            }
+        });
         uploadFile.mv(`/home/planet/upload/${fileName}`, function (err) {
             if (err) {
                 console.log(err)
@@ -89,16 +95,16 @@ app.post("/save_data", (req, res, next) => {
 });
 
 app.get("/get_form_names", (req, res) => {
-   let collection = ""
-   if ( req.query.executed === "true" ) {
-      collection = "results"
-   } else {
-      collection = "files"
-   }
+    let collection = ""
+    if (req.query.executed === "true") {
+        collection = "results"
+    } else {
+        collection = "files"
+    }
     shell.exec("mongoexport --db planet --collection " + collection + " --out /home/planet/allDocuments.txt");
     formName = shell.exec("egrep -o 'formName.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
     formDescr = shell.exec("egrep -o 'formDescription.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
-    res.send({"formName": formName, "formDescription": formDescr});
+    res.send({ "formName": formName, "formDescription": formDescr });
     shell.exec("rm -f /home/planet/allDocuments.txt");
 });
 
@@ -115,11 +121,11 @@ app.get("/load_data", (req, res) => {
     elecParam = shell.exec("cat /home/planet/upload/loadData/Electricity.csv");
     heatParam = shell.exec("cat /home/planet/upload/loadData/Heat.csv");
     Parameters = {
-    "paramInit": paramInitParam,
-    "econEnv": econEnvParam,
-    "controlSystem": controlParam,
-    "elecParam": elecParam,
-    "heatParam": heatParam,
+        "paramInit": paramInitParam,
+        "econEnv": econEnvParam,
+        "controlSystem": controlParam,
+        "elecParam": elecParam,
+        "heatParam": heatParam,
     }
     res.send(Parameters);
     shell.exec("rm -rf /home/planet/upload/loadData");
