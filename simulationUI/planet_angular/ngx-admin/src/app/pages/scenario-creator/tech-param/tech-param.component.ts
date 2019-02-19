@@ -1,17 +1,18 @@
-import { Component, Input, EventEmitter, Output, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, EventEmitter, Output, SimpleChanges, OnChanges, AfterViewChecked } from '@angular/core';
 
 @Component({
     selector: 'ngx-tech-param',
     styleUrls: ['./tech-param.component.scss'],
     templateUrl: './tech-param.component.html',
 })
-export class TechParamComponent implements OnChanges {
+export class TechParamComponent implements OnChanges, AfterViewChecked {
 
     checkVal: Object = {};
     @Input() data: Object;
     @Input() defaultValues: boolean;
     @Input() pvParam: Object;
     @Input() windParam: Object;
+    @Input() isLoadModule: Boolean;
     @Output() dataChange: EventEmitter<Object>;
     @Output() pvChange: EventEmitter<Object>;
     @Output() windChange: EventEmitter<Object>;
@@ -62,7 +63,6 @@ export class TechParamComponent implements OnChanges {
         for (let i = 0; i < this.NODES_COUNT; i++) {
             this.checkVal['node.' + (i + 1)] = {};
             for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-                this.checkVal['node.' + (i + 1)][j] = false;
             }
         }
 
@@ -181,7 +181,70 @@ export class TechParamComponent implements OnChanges {
         this.dataChange.emit(this.nodeData);
     }
 
-    setPeriodAngGetData(value: string): void {
+    ngAfterViewChecked() {
+        for (let i = 0; i < this.NODES_COUNT; i++) {
+            this.checkVal['node.' + (i + 1)] = {};
+            for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
+                switch (j) {
+                    case 0:
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['PV']['nominal.electric.power'] === 0) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                    case 1:
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['WT']['nominal.electric.power'] === 0) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                    case 2:
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['CHP']['nominal.electric.power'] === 0) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                    case 3:
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['DH']['HP']['nominal.heat.power'] === 0 &&
+                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['DH']['EH']['nominal.heat.power'] === 0 &&
+                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['LHD']['HP']['nominal.heat.power'] === 0 &&
+                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['LHD']['EH']['nominal.heat.power'] === 0) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                    case 4:
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2G']['nominal.electric.power'] === 0) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                    case 5:
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['EB']['storage.electric.capacity'] === 0) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                    case 6:
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['G2H']['DH']['nomial.heat.power'] === 0 &&
+                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['G2H']['LHD']['nomial.heat.power'] === 0) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    setPeriodAndGetData(value: string): void {
         this.displayingNode = value;
     }
 
@@ -228,8 +291,8 @@ export class TechParamComponent implements OnChanges {
                 } else {
                     this.nodeData['payload']['technologies'][this.displayingNode]['CHP'] = {
                         'nominal.electric.power': 0,
-                        'efficiency.electric': 0,
-                        'efficiency.thermal': 0,
+                        'efficiency.electric': 40,
+                        'efficiency.thermal': 45,
                     };
                 }
                 break;
@@ -254,19 +317,19 @@ export class TechParamComponent implements OnChanges {
                 } else {
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['DH']['HP'] = {
                         'nominal.heat.power': 0,
-                        'cop': 0,
+                        'cop': 3,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['DH']['EH'] = {
                         'nominal.heat.power': 0,
-                        'efficiency.thermal': 0,
+                        'efficiency.thermal': 98,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['LHD']['HP'] = {
                         'nominal.heat.power': 0,
-                        'cop': 0,
+                        'cop': 3,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2H']['LHD']['EH'] = {
                         'nominal.heat.power': 0,
-                        'efficiency.thermal': 0,
+                        'efficiency.thermal': 98,
                     };
                 }
                 break;
@@ -281,9 +344,9 @@ export class TechParamComponent implements OnChanges {
                 } else {
                     this.nodeData['payload']['technologies'][this.displayingNode]['P2G'] = {
                         'nominal.electric.power': 0,
-                        'efficiency.electrolysis': 0,
-                        'efficiency.methanation': 0,
-                        'efficiency.thermal': 0,
+                        'efficiency.electrolysis': 75,
+                        'efficiency.methanation': 80,
+                        'efficiency.thermal': 24,
                     };
                 }
                 break;
@@ -298,9 +361,9 @@ export class TechParamComponent implements OnChanges {
                 } else {
                     this.nodeData['payload']['technologies'][this.displayingNode]['EB'] = {
                         'storage.electric.capacity': 0,
-                        'efficiency.charge': 0,
-                        'efficiency.discharge': 0,
-                        'c.rate': 0,
+                        'efficiency.charge': 92.1,
+                        'efficiency.discharge': 92.1,
+                        'c.rate': 0.25,
                     };
                 }
                 break;
@@ -317,11 +380,11 @@ export class TechParamComponent implements OnChanges {
                 } else {
                     this.nodeData['payload']['technologies'][this.displayingNode]['G2H']['DH'] = {
                         'nomial.heat.power': 0,
-                        'efficiency.thermal': 0,
+                        'efficiency.thermal': 90,
                     };
                     this.nodeData['payload']['technologies'][this.displayingNode]['G2H']['LHD'] = {
                         'nomial.heat.power': 0,
-                        'efficiency.thermal': 0,
+                        'efficiency.thermal': 90,
                     };
                 }
                 break;

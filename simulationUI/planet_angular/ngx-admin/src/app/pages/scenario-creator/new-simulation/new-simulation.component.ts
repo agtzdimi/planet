@@ -187,7 +187,6 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             const file: File = this.files[i];
             formData.append('file', file, file.name);
         }
-        formData.append('method', 'POST');
         this.paramInit['payload']['formName'] = this.formName;
         this.paramInit['payload']['formDescription'] = this.formDescription;
         this.controlSystem['payload']['formName'] = this.formName;
@@ -197,6 +196,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
+        formData.append('method', 'NEW');
         this.httpClient.post('http://192.168.11.128:8000/upload', formData,
         )
             .subscribe(

@@ -16,11 +16,14 @@
         </div>
 
         <div *ngIf="nodeData.payload['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].WT['CAPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'CAPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].WT['CAPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].WT['CAPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].WT['OPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'OPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].WT['OPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].WT['OPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].WT['life.time']=$event"
+            <ngx-input-field [isChecked]="techCostCheck1.checked" [label1]="'life.time'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].WT['life.time']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].WT['life.time']"></ngx-input-field>
         </div>
 
@@ -38,11 +41,14 @@
         </div>
 
         <div *ngIf="nodeData.payload['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].PV['CAPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'CAPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].PV['CAPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].PV['CAPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].PV['OPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'OPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].PV['OPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].PV['OPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].PV['life.time']=$event"
+            <ngx-input-field [isChecked]="techCostCheck2.checked" [label1]="'life.time'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].PV['life.time']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].PV['life.time']"></ngx-input-field>
         </div>
 
@@ -60,11 +66,14 @@
         </div>
 
         <div *ngIf="nodeData.payload['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].CHP['CAPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'CAPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].CHP['CAPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].CHP['CAPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].CHP['OPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'OPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].CHP['OPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].CHP['OPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].CHP['life.time']=$event"
+            <ngx-input-field [isChecked]="techCostCheck3.checked" [label1]="'life.time'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].CHP['life.time']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].CHP['life.time']"></ngx-input-field>
         </div>
 
@@ -82,11 +91,14 @@
         </div>
 
         <div *ngIf="nodeData.payload['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].HP['CAPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'CAPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].HP['CAPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].HP['CAPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].HP['OPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'OPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].HP['OPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].HP['OPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].HP['life.time']=$event"
+            <ngx-input-field [isChecked]="techCostCheck4.checked" [label1]="'life.time'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].HP['life.time']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].HP['life.time']"></ngx-input-field>
         </div>
 
@@ -104,11 +116,14 @@
         </div>
 
         <div *ngIf="nodeData.payload['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EH['CAPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'CAPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].EH['CAPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].EH['CAPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EH['OPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'OPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].EH['OPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].EH['OPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EH['life.time']=$event"
+            <ngx-input-field [isChecked]="techCostCheck5.checked" [label1]="'life.time'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].EH['life.time']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].EH['life.time']"></ngx-input-field>
         </div>
 
@@ -126,11 +141,14 @@
         </div>
 
         <div *ngIf="nodeData.payload['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EB['CAPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'CAPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].EB['CAPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].EB['CAPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EB['OPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'OPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].EB['OPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].EB['OPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].EB['life.time']=$event"
+            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'life.time'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].EB['life.time']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].EB['life.time']"></ngx-input-field>
         </div>
 
@@ -148,11 +166,14 @@
         </div>
 
         <div *ngIf="nodeData.payload['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'CAPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].P2G['CAPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'CAPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].P2G['CAPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].P2G['CAPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'OPEX'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].P2G['OPEX']=$event"
+            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'OPEX'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].P2G['OPEX']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].P2G['OPEX']"></ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'life.time'" [label2]="'MW'" (valChange)="nodeData.payload['technologies.cost'].P2G['life.time']=$event"
+            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'life.time'" [label2]="'MW'"
+                (valChange)="nodeData.payload['technologies.cost'].P2G['life.time']=+$event"
                 [(val)]="nodeData.payload['technologies.cost'].P2G['life.time']"></ngx-input-field>
         </div>
 

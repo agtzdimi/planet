@@ -96,20 +96,20 @@ export class ComparisonStartComponent {
         case 'Time':
           this.lineChart[0].data.push(this.getColumnData(lines, index));
           break;
-        case 'RES_direct_utilization':
+        case 'RES_Curtailment':
           this.count++;
           this.lineChart[0].data.push(this.getColumnData(lines, index));
           if (id === 2) {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_direct_utilization2';
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment2';
           } else {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_direct_utilization1';
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment1';
           }
           break;
       }
     }
 
     if (this.count === 2) {
-      this.lineChart[0].title = 'RES Direct Utilization Difference';
+      this.lineChart[0].title = 'RES Curtailment Difference';
       this.showLine = true;
       this.loading = false;
       this.count = 0;

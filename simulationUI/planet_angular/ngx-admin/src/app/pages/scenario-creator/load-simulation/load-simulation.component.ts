@@ -14,6 +14,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
 
     options: UploaderOptions;
     formName: String;
+    loadPage: boolean = false;
     formDescription: String;
     errorMessage: String = '';
     formData: FormData;
@@ -26,8 +27,9 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     showMap = false;
     coordinates: number[] = [7.6825, 45.0678];
     capacity = 1;
+    elecParam: any;
+    heatParam: any;
     systemLoss = 10;
-    isDefault: boolean = false;
     areaPicked: boolean = true;
     transitionController1 = new TransitionController();
     area: string = 'Turin';
@@ -55,12 +57,15 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                                 this.econEnv['payload'] = temp['payload'];
                                 temp = JSON.parse(data['controlSystem']);
                                 this.controlSystem['payload']['control'] = temp['payload']['control'];
+                                this.elecParam = data['elecParam'];
+                                this.heatParam = data['heatParam'];
                             },
                             error => {
                                 // console.log('Error', error);
                             },
                         );
                 }
+                this.loadPage = true;
             },
             );
     }
@@ -92,7 +97,8 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     controlSystem = {
         'file.name': 'Control_initialization',
         'payload': {
-            control: 5,
+            'control': 5,
+            'RES.curtailment': 0,
         },
     };
 
@@ -171,7 +177,6 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             const file: File = this.files[i];
             formData.append('file', file, file.name);
         }
-        formData.append('method', 'POST');
         this.paramInit['payload']['formName'] = this.formName;
         this.paramInit['payload']['formDescription'] = this.formDescription;
         this.controlSystem['payload']['formName'] = this.formName;
@@ -181,6 +186,9 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
+        formData.append('param4', JSON.stringify(this.elecParam));
+        formData.append('param5', JSON.stringify(this.heatParam));
+        formData.append('method', 'LOAD');
         this.httpClient.post('http://192.168.11.128:8000/upload', formData,
         )
             .subscribe(
@@ -192,6 +200,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                     this.httpClient.post('http://192.168.11.128:8000/save_data', {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),
+                        'method': 'LOAD',
                     },
                     )
                         .subscribe(
@@ -227,12 +236,6 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     checkDefaultData() {
         if (this.formDescription === '' || this.formName === '') {
             this.errorMessage = 'Please fill in the Simulation Name and Description';
-            return false;
-        } else if (this.getFileName(0) !== 'Electricity.xlsx') {
-            this.errorMessage = 'Please upload Electricity.xlsx';
-            return false;
-        } else if (this.getFileName(1) !== 'Heat.xlsx') {
-            this.errorMessage = 'Please upload Heat.xlsx';
             return false;
         } else if (!Number(+this.paramInit['payload']['simulation']['time.step'])) {
             this.errorMessage = 'Please give a number for time.step';

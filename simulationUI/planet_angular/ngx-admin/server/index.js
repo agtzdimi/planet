@@ -66,32 +66,52 @@ app.post("/upload", (req, res, next) => {
     shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
     shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
     shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
-    for (const fil of Object.keys(req.files.file)) {
-        let uploadFile = req.files.file[fil];
-        console.log(req.files)
-        const fileName = req.files.file[fil].name;
-        console.log(uploadFile.data)
-        uploadFile.mv(`${__dirname}/../public/files/${fileName}`, function (err) {
-            if (err) {
-                console.log(err)
-                return res.status(500).send(err);
-            }
-        });
-        uploadFile.mv(`/home/planet/upload/${fileName}`, function (err) {
-            if (err) {
-                console.log(err)
-                return res.status(500).send(err);
-            }
-        });
-    }
     res.json({
-        file: `public/${req.files.file.name}`
+        file: `$(req.files.file)`
     });
+    if ((req.body.method === 'LOAD' || req.body.method === 'NEW') && req.files) {
+        console.log("Start File uploading...")
+        for (const fil of Object.keys(req.files.file)) {
+            let uploadFile = req.files.file[fil];
+            const fileName = req.files.file[fil].name;
+            uploadFile.mv(`/home/planet/upload/${fileName}`, function (err) {
+                if (err) {
+                    console.log(err)
+                    return res.status(500).send(err);
+                }
+            });
+        }
+    }
+    else {
+        console.log("Generate Timeseries...")
+        shell.exec("echo -e " + req.body.param4).to("/home/planet/upload/Electricity.csv");
+        shell.exec("sed -i '$ d' /home/planet/upload/Electricity.csv");
+        shell.exec("echo -e " + req.body.param5).to("/home/planet/upload/Heat.csv");
+        shell.exec("sed -i '$ d' /home/planet/upload/Heat.csv");
+    }
 });
 
 app.post("/save_data", (req, res, next) => {
-    shell.exec("/home/planet/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
-    return res.send("Success");
+    shell.exec("mongoexport --db planet --collection files --out /home/planet/allDocuments.txt");
+    formName = shell.exec("egrep -o 'formName.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
+    formName = formName.toString().split('\n');
+    inputFormName = JSON.parse(req.body.pvPayload)
+    inputFormName.payload.formName = inputFormName.payload.formName.replace(/^\s/, '');
+    inputFormName.payload.formName = inputFormName.payload.formName.replace(/\s$/, '');
+    if (formName.includes(inputFormName.payload.formName)) {
+        if (req.body.method === 'LOAD') {
+            shell.exec("mongo planet --eval \"db.files.remove({'payload.formName': '" + inputFormName.payload.formName + "'})\"");
+            shell.exec("mongo planet --eval \"db.files.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
+            shell.exec("mongo planet --eval \"db.results.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
+            shell.exec("/home/planet/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
+        }
+        return res.send("Error: Simulation Name Already Exists!");
+    }
+    else {
+        shell.exec("/home/planet/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
+        return res.send("Success");
+    }
+
 });
 
 app.get("/get_form_names", (req, res) => {
@@ -118,6 +138,8 @@ app.get("/load_data", (req, res) => {
     paramInitParam = shell.exec("cat /home/planet/upload/loadData/Parameters_initialization.txt");
     econEnvParam = shell.exec("cat /home/planet/upload/loadData/Economy_environment_initialization.txt");
     controlParam = shell.exec("cat /home/planet/upload/loadData/Control_initialization.txt");
+    shell.exec("sed -i '/^,,.*/d' /home/planet/upload/loadData/Electricity.csv");
+    shell.exec("sed -i '/^,,.*/d' /home/planet/upload/loadData/Heat.csv");
     elecParam = shell.exec("cat /home/planet/upload/loadData/Electricity.csv");
     heatParam = shell.exec("cat /home/planet/upload/loadData/Heat.csv");
     Parameters = {
