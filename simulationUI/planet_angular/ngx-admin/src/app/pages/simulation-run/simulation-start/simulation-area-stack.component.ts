@@ -96,6 +96,19 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                         color: echarts.textColor,
                     },
                 },
+                toolbox: {
+                    feature: {
+                        dataView: {
+                            show: true,
+                            title: 'Data View',
+                            lang: ['Data View', 'Close', 'Refresh'],
+                        },
+                        saveAsImage: {
+                            show: true,
+                            title: 'Save',
+                        },
+                    },
+                },
                 grid: {
                     left: '3%',
                     right: '4%',

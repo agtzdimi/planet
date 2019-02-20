@@ -116,6 +116,11 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                 },
                 toolbox: {
                     feature: {
+                        dataView: {
+                            show: true,
+                            title: 'Data View',
+                            lang: ['Data View', 'Close', 'Refresh'],
+                        },
                         saveAsImage: {
                             show: true,
                             title: 'Save',

@@ -52,7 +52,7 @@ export class DialogSelectMultipleFormPromptComponent {
 
   constructor(protected dialogRef: NbDialogRef<DialogSelectMultipleFormPromptComponent>,
     private httpClient: HttpClient) {
-    this.httpClient.get('http://192.168.11.128:8000/get_form_names', {
+    this.httpClient.get('http://160.40.49.244:8000/get_form_names', {
       params: {
         'executed': 'true',
       },

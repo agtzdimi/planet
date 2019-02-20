@@ -41,14 +41,14 @@
                 <div class="form-group row">
                   <label for="dt" class="col-sm-6 col-form-label">Time Step</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="dt"
+                    <input type="number" class="form-control" id="dt"
                       [(ngModel)]="paramInit.payload.simulation['time.step']">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="simulation-time" class="col-sm-6 col-form-label">Simulation Horizon</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="simulation-time"
+                    <input type="number" class="form-control" id="simulation-time"
                       [(ngModel)]="paramInit.payload.simulation['simulation.time']">
                   </div>
                 </div>

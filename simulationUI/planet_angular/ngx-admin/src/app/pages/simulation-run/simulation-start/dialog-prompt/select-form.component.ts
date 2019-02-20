@@ -3,8 +3,8 @@ import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-    selector: 'nb-select-form-prompt',
-    template: `
+  selector: 'nb-select-form-prompt',
+  template: `
     <nb-card *ngIf="formReady">
       <nb-card-header>Select one of the following simulations</nb-card-header>
       <nb-card-body>
@@ -16,7 +16,7 @@ import { HttpClient } from '@angular/common/http';
       </nb-card-body>
     </nb-card>
   `,
-    styles: [`
+  styles: [`
     button {
       margin: 1rem;
     }
@@ -27,44 +27,45 @@ import { HttpClient } from '@angular/common/http';
   `],
 })
 export class DialogSelectFormPromptComponent {
-    forms: String[];
-    formsDescr: String[];
-    formReady: Boolean = false;
-    selectedForm: String;
-    finalForm: Object = {};
+  forms: String[];
+  formsDescr: String[];
+  formReady: Boolean = false;
+  selectedForm: String;
+  finalForm: Object = {};
 
-    constructor(protected dialogRef: NbDialogRef<DialogSelectFormPromptComponent>, private httpClient: HttpClient) {
-        this.httpClient.get('http://192.168.11.128:8000/get_form_names', {
-          params: {
-            'executed': 'false',
-          }})
-            .subscribe(
-                data => {
-                    this.forms = data['formName'].toString().split('\n');
-                    this.formsDescr = data['formDescription'].toString().split('\n');
-                    this.forms.splice(-1, 1);
-                    this.formsDescr.splice(-1, 1);
-                    this.formReady = true;
-                },
-                error => {
-                    // console.log('Error', error);
-                },
-            );
-    }
+  constructor(protected dialogRef: NbDialogRef<DialogSelectFormPromptComponent>, private httpClient: HttpClient) {
+    this.httpClient.get('http://160.40.49.244:8000/get_form_names', {
+      params: {
+        'executed': 'false',
+      },
+    })
+      .subscribe(
+        data => {
+          this.forms = data['formName'].toString().split('\n');
+          this.formsDescr = data['formDescription'].toString().split('\n');
+          this.forms.splice(-1, 1);
+          this.formsDescr.splice(-1, 1);
+          this.formReady = true;
+        },
+        error => {
+          // console.log('Error', error);
+        },
+      );
+  }
 
-    handleClick(event) {
-        this.selectedForm = event.target.textContent;
-        this.selectedForm = this.selectedForm.replace(/^\s/, '');
-        this.selectedForm = this.selectedForm.replace(/\s$/, '');
-        const index = this.forms.findIndex(val => val === this.selectedForm);
-        this.finalForm = {
-            'formName': this.selectedForm,
-            'formDescription': this.formsDescr[index],
-        };
-        this.submit(this.finalForm);
-    }
+  handleClick(event) {
+    this.selectedForm = event.target.textContent;
+    this.selectedForm = this.selectedForm.replace(/^\s/, '');
+    this.selectedForm = this.selectedForm.replace(/\s$/, '');
+    const index = this.forms.findIndex(val => val === this.selectedForm);
+    this.finalForm = {
+      'formName': this.selectedForm,
+      'formDescription': this.formsDescr[index],
+    };
+    this.submit(this.finalForm);
+  }
 
-    submit(form) {
-        this.dialogRef.close(form);
-    }
+  submit(form) {
+    this.dialogRef.close(form);
+  }
 }

@@ -52,9 +52,10 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                 switch (headers[index]) {
                     case 'Time':
                         time = csvData[index];
+                        time.splice(-1, 1);
                         break;
                     default:
-                        headers[index] = headers[index];
+                        csvData[index].splice(-1, 1);
                         tempData = {
                             name: headers[index],
                             type: 'line',
@@ -82,6 +83,19 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                     data: headers,
                     textStyle: {
                         color: echarts.textColor,
+                    },
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {
+                            show: true,
+                            title: 'Data View',
+                            lang: ['Data View', 'Close', 'Refresh'],
+                        },
+                        saveAsImage: {
+                            show: true,
+                            title: 'Save',
+                        },
                     },
                 },
                 grid: {

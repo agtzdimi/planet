@@ -62,8 +62,6 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
 
         for (let i = 0; i < this.NODES_COUNT; i++) {
             this.checkVal['node.' + (i + 1)] = {};
-            for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-            }
         }
 
         for (let i = 0; i < this.NODES_COUNT; i++) {
@@ -145,11 +143,13 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         this.afterNodeDataRecieved(changes.data.currentValue);
         this.afterWindDataRecieved(changes.windParam.currentValue);
         this.afterPvDataRecieved(changes.pvParam.currentValue);
+        if (this.isLoadModule) {
+            this.defaultValues = true;
+        }
         if (this.defaultValues) {
             for (let i = 0; i < this.NODES_COUNT; i++) {
                 this.displayingNode = 'node.' + (i + 1);
                 for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-                    this.checkVal['node.' + (i + 1)][j] = true;
                     this.updateDefaultValues(j, true);
                 }
             }
@@ -183,25 +183,27 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
 
     ngAfterViewChecked() {
         for (let i = 0; i < this.NODES_COUNT; i++) {
-            this.checkVal['node.' + (i + 1)] = {};
             for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
                 switch (j) {
                     case 0:
-                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['PV']['nominal.electric.power'] === 0) {
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['PV']['nominal.electric.power'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
                         }
                         break;
                     case 1:
-                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['WT']['nominal.electric.power'] === 0) {
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['WT']['nominal.electric.power'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
                         }
                         break;
                     case 2:
-                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['CHP']['nominal.electric.power'] === 0) {
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['CHP']['nominal.electric.power'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
@@ -211,21 +213,24 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
                         if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['DH']['HP']['nominal.heat.power'] === 0 &&
                             this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['DH']['EH']['nominal.heat.power'] === 0 &&
                             this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['LHD']['HP']['nominal.heat.power'] === 0 &&
-                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['LHD']['EH']['nominal.heat.power'] === 0) {
+                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2H']['LHD']['EH']['nominal.heat.power'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
                         }
                         break;
                     case 4:
-                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2G']['nominal.electric.power'] === 0) {
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['P2G']['nominal.electric.power'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
                         }
                         break;
                     case 5:
-                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['EB']['storage.electric.capacity'] === 0) {
+                        if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['EB']['storage.electric.capacity'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
@@ -233,7 +238,8 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
                         break;
                     case 6:
                         if (this.nodeData['payload']['technologies']['node.' + (i + 1)]['G2H']['DH']['nomial.heat.power'] === 0 &&
-                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['G2H']['LHD']['nomial.heat.power'] === 0) {
+                            this.nodeData['payload']['technologies']['node.' + (i + 1)]['G2H']['LHD']['nomial.heat.power'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
