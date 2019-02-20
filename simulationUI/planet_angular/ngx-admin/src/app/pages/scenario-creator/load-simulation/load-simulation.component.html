@@ -110,14 +110,14 @@
               <div class="form-group row">
                 <label for="control-system" class="col-sm-6 col-form-label">Control</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="control-system"
+                  <input type="number" class="form-control" id="control-system"
                     [(ngModel)]="+controlSystem.payload.control">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="control-Curtailment" class="col-sm-6 col-form-label">RES Curtailment</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="control-Curtailment"
+                  <input type="number" class="form-control" id="control-Curtailment"
                     [(ngModel)]="+controlSystem.payload['RES.curtailment']">
                 </div>
               </div>
@@ -144,31 +144,32 @@
               <div class="form-group row">
                 <label for="ec_ng.cost" class="col-sm-6 col-form-label">NG cost</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="ec_ng.cost" [(ngModel)]="+econEnv.payload['NG.cost']">
+                  <input type="number" class="form-control" id="ec_ng.cost" [(ngModel)]="+econEnv.payload['NG.cost']">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="ec_sng.cost" class="col-sm-6 col-form-label">SNG cost</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="ec_sng.cost" [(ngModel)]="+econEnv.payload['SNG.cost']">
+                  <input type="number" class="form-control" id="ec_sng.cost" [(ngModel)]="+econEnv.payload['SNG.cost']">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="ec_heat.cost" class="col-sm-6 col-form-label">Heat cost</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="ec_heat.cost" [(ngModel)]="+econEnv.payload['heat.cost']">
+                  <input type="number" class="form-control" id="ec_heat.cost"
+                    [(ngModel)]="+econEnv.payload['heat.cost']">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="ec_carbon" class="col-sm-6 col-form-label">Carbon tax</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="ec_carbon" [(ngModel)]="+econEnv.payload['carbon.tax']">
+                  <input type="number" class="form-control" id="ec_carbon" [(ngModel)]="+econEnv.payload['carbon.tax']">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="ec_ng.emission" class="col-sm-6 col-form-label">NG emission factor</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="ec_ng.emission"
+                  <input type="number" class="form-control" id="ec_ng.emission"
                     [(ngModel)]="+econEnv.payload['NG.emission.factor']">
                 </div>
               </div>

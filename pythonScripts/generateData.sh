@@ -3,6 +3,7 @@
 NODES_NUMBER=8
 windData="$1"
 pvData="$2"
+isLoad="$3"
 formName="$(echo $pvData | python /home/planet/getAttribute.py --formName true)"
 
 lat=$(echo "$pvData" | python /home/planet/getAttribute.py --lat true)
@@ -46,8 +47,10 @@ wait
 paste -d "," nodeFiles/wind* > /home/planet/upload/Wind.csv
 paste -d "," nodeFiles/pv* > /home/planet/upload/PV.csv
 
-python /home/planet/csvToExcel.py --source /home/planet/upload/Electricity.xlsx --dest /home/planet/upload/Electricity.csv --type csv
-python /home/planet/csvToExcel.py --source /home/planet/upload/Heat.xlsx --dest /home/planet/upload/Heat.csv --type csv
+if [[ -s /home/planet/upload/Electricity.xlsx || -s /home/planet/upload/Heat.xlsx ]]; then
+   python /home/planet/csvToExcel.py --source /home/planet/upload/Electricity.xlsx --dest /home/planet/upload/Electricity.csv --type csv
+   python /home/planet/csvToExcel.py --source /home/planet/upload/Heat.xlsx --dest /home/planet/upload/Heat.csv --type csv
+fi
 rm -rf nodeFiles
 
 for file in $(ls /home/planet/upload/*.csv); do

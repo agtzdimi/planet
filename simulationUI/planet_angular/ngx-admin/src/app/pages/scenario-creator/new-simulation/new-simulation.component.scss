@@ -184,6 +184,18 @@ input[type=text] {
   text-align: center;
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+input[type=number] {
+  text-align: center;
+}
+
 label {
   line-height: 31px;
   margin-left: 30px;

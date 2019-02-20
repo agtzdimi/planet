@@ -162,7 +162,7 @@ app.get("/simulation", (req, res) => {
 });
 
 app.get("/simulation2", (req, res) => {
-    shell.exec("/home/planet/save_results.sh " + "Results2 " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'Results2' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/Results2.csv");
     results = shell.exec("cat /home/planet/Results2.csv");
     res.send(results);
