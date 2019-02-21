@@ -55,7 +55,7 @@ rm -rf nodeFiles
 
 for file in $(ls /home/planet/upload/*.csv); do
    awk -v formName="$formName" 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="formName"} else {$(NF+1)=formName} print $0}' $file > tempFile
-   mv tempFile $file
+   awk 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="Time"} else {$(NF+1)=(NR-2)} print $0}' tempFile > $file
    mongoimport --db planet --collection files --type csv --headerline --file $file
 done
 

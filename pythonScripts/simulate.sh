@@ -11,13 +11,16 @@ mongoexport --db planet --collection files --out /home/planet/upload/$simulation
 grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Parameters_initialization' > /home/planet/upload/$simulationType/Parameters_initialization.txt
 grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Economy_environment_initialization' > /home/planet/upload/$simulationType/Economy_environment_initialization.txt
 grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Control_initialization' > /home/planet/upload/$simulationType/Control_initialization.txt
-mongoexport --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName" --out /home/planet/upload/$simulationType/Heat.csv
-egrep ','"$formName"'$|DH_demand|LH_demand' /home/planet/upload/$simulationType/Heat.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
-mv tempFile$simulationType /home/planet/upload/$simulationType/Heat.csv
+mongoexport --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName",Time --out /home/planet/upload/$simulationType/Heat.csv
+egrep ','"$formName"',|DH_demand|LH_demand' /home/planet/upload/$simulationType/Heat.csv | sed 's/,'"$formName"'//' | sed 's/,formName//' | sed '/^,,.*/d' > tempFile$simulationType
+sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' tempFile$simulationType | head -n1)
+(head -n 1 tempFile$simulationType && tail -n +2 tempFile$simulationType | sort -n -k$sortField,$sortField -t,) > /home/planet/upload/$simulationType/Heat.csv
+
 python /home/planet/csvToExcel.py --source /home/planet/upload/$simulationType/Heat.csv --dest /home/planet/upload/$simulationType/Heat.xlsx --type xlsx
-mongoexport --db planet --collection files --type=csv --fields Active_node1,Reactive_node1,Active_node2,Reactive_node2,Active_node3,Reactive_node3,Active_node4,Reactive_node4,Active_node5,Reactive_node5,Active_node6,Reactive_node6,Active_node7,Reactive_node7,Active_node8,Reactive_node8,"formName" --out /home/planet/upload/$simulationType/Electricity.csv
-egrep ','"$formName"'$|Active_node|Reactive_node' /home/planet/upload/$simulationType/Electricity.csv | sed 's/,'"$formName"'$//'| sed 's/^,$//' | awk 'BEGIN {FS=OFS=","} /^\s*$/ {next;}{print $0}' | sed 's/,formName//' > tempFile$simulationType
-mv tempFile$simulationType /home/planet/upload/$simulationType/Electricity.csv
+mongoexport --db planet --collection files --type=csv --fields Active_node1,Reactive_node1,Active_node2,Reactive_node2,Active_node3,Reactive_node3,Active_node4,Reactive_node4,Active_node5,Reactive_node5,Active_node6,Reactive_node6,Active_node7,Reactive_node7,Active_node8,Reactive_node8,"formName",Time --out /home/planet/upload/$simulationType/Electricity.csv
+egrep ','"$formName"',|Active_node|Reactive_node' /home/planet/upload/$simulationType/Electricity.csv | sed 's/,'"$formName"'//' | sed 's/,formName//' | sed '/^,,.*/d' > tempFile$simulationType
+sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' tempFile$simulationType | head -n1)
+(head -n 1 tempFile$simulationType && tail -n +2 tempFile$simulationType | sort -n -k$sortField,$sortField -t,) > /home/planet/upload/$simulationType/Electricity.csv
 python /home/planet/csvToExcel.py --source /home/planet/upload/$simulationType/Electricity.csv --dest /home/planet/upload/$simulationType/Electricity.xlsx --type xlsx
 
 rm /home/planet/upload/$simulationType/Heat.csv /home/planet/upload/$simulationType/allDocuments.txt /home/planet/upload/$simulationType/Electricity.csv
