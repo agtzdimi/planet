@@ -119,7 +119,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                     type: 'slider',
                     show: true,
                     start: 0,
-                    end: 4,
+                    end: 50,
                 },
                 xAxis: [
                     {

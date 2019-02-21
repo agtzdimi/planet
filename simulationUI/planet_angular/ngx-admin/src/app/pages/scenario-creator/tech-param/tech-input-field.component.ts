@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { compileDirective } from '@angular/core/src/render3/jit/directive';
 
 @Component({
     selector: 'ngx-input-field',
@@ -10,6 +11,7 @@ export class TechInputFieldComponent {
     @Input() isChecked;
     @Input() label1;
     @Input() label2;
+    @Input() compId;
     @Input() val: Number;
     @Output() valChange: EventEmitter<Number>;
 

@@ -6,7 +6,6 @@ formName="$1"
 simulationType="$2"
 echo "$formName #######################"
 
-mkdir -p $simulationType
 mongoexport --db planet --collection files --out /home/planet/upload/$simulationType/allDocuments.txt
 grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Parameters_initialization' > /home/planet/upload/$simulationType/Parameters_initialization.txt
 grep '"formName":"'"$formName"'"' /home/planet/upload/$simulationType/allDocuments.txt | grep 'Economy_environment_initialization' > /home/planet/upload/$simulationType/Economy_environment_initialization.txt
@@ -23,7 +22,7 @@ sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' tempFile$simulationType | head -
 (head -n 1 tempFile$simulationType && tail -n +2 tempFile$simulationType | sort -n -k$sortField,$sortField -t,) > /home/planet/upload/$simulationType/Electricity.csv
 python /home/planet/csvToExcel.py --source /home/planet/upload/$simulationType/Electricity.csv --dest /home/planet/upload/$simulationType/Electricity.xlsx --type xlsx
 
-rm /home/planet/upload/$simulationType/Heat.csv /home/planet/upload/$simulationType/allDocuments.txt /home/planet/upload/$simulationType/Electricity.csv
+rm /home/planet/upload/$simulationType/Heat.csv /home/planet/upload/$simulationType/allDocuments.txt /home/planet/upload/$simulationType/Electricity.csv tempFile$simulationType
 
 mosquitto_pub -m "execute,/home/planet/upload/$simulationType/*,planet@192.168.11.128:,$simulationType,$formName" -h 160.40.49.244 -t simulations
 }

@@ -2,11 +2,11 @@
     <ul>
         <li>
             <div class="form-group row">
-                <label for="input1" class="col-sm-2 col-form-label">{{label1}}</label>
+                <label [for]="compId" class="col-sm-2 col-form-label">{{label1}}</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="input1" (change)="onChange($event)" [value]="val">
+                    <input type="text" class="form-control" [id]="compId" (change)="onChange($event)" [value]="val">
                 </div>
-                <label for="input1" class="col-sm-1 col-form-label">{{label2}}</label>
+                <label [for]="compId" class="col-sm-1 col-form-label">{{label2}}</label>
             </div>
         </li>
     </ul>

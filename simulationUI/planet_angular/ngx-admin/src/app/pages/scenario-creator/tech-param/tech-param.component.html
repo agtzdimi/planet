@@ -49,12 +49,10 @@
                     </nb-select>
                 </div>
             </div>
-            <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'Capacity'" [label2]="'kW'"
-                (valChange)="nodePvParam[displayingNode]['capacity']=+$event"
-                [(val)]="nodePvParam[displayingNode]['capacity']"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'System Loss'" [label2]="'%'"
                 (valChange)="nodePvParam[displayingNode]['system.loss']=+$event"
-                [(val)]="nodePvParam[displayingNode]['system.loss']"></ngx-input-field>
+                [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
+            </ngx-input-field>
             <div class="row" *ngIf="techParamCheck1.checked">
                 <div class="col-md-2">
                     <ul class="listItem">
@@ -75,14 +73,16 @@
                 </div>
             </div>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'Tilt'" [label2]="'°'"
-                (valChange)="nodePvParam[displayingNode]['tilt']=+$event" [(val)]="nodePvParam[displayingNode]['tilt']">
+                (valChange)="nodePvParam[displayingNode]['tilt']=+$event" [(val)]="nodePvParam[displayingNode]['tilt']"
+                [compId]="'techParamCheckInput1.2'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'Azimuth'" [label2]="'°'"
                 (valChange)="nodePvParam[displayingNode]['azimuth']=+$event"
-                [(val)]="nodePvParam[displayingNode]['azimuth']"></ngx-input-field>
+                [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'Nominal Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].PV['nominal.electric.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].PV['nominal.electric.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].PV['nominal.electric.power']"
+                [compId]="'techParamCheckInput1.4'">
             </ngx-input-field>
         </div>
 
@@ -133,10 +133,9 @@
                 </div>
             </div>
 
-            <ngx-input-field [isChecked]="techParamCheck2.checked" [label1]="'Capacity'" [label2]="'kW'"
-                (valChange)="windCapacity=+$event" [(val)]="windCapacity"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck2.checked" [label1]="'Hub Height'" [label2]="'m'"
-                (valChange)="hubHeight=+$event" [(val)]="hubHeight"></ngx-input-field>
+                (valChange)="hubHeight=+$event" [(val)]="hubHeight" [compId]="'techParamCheckInput2.1'">
+            </ngx-input-field>
             <div class="row" *ngIf="techParamCheck2.checked">
                 <div class="col-md-2">
                     <ul class="listItem">
@@ -276,7 +275,8 @@
             </div>
             <ngx-input-field [isChecked]="techParamCheck2.checked" [label1]="'Nominal Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].WT['nominal.electric.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].WT['nominal.electric.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].WT['nominal.electric.power']"
+                [compId]="'techParamCheckInput2.2'">
             </ngx-input-field>
         </div>
 
@@ -296,14 +296,17 @@
         <div *ngIf="nodeData['payload'].technologies[displayingNode]">
             <ngx-input-field [isChecked]="techParamCheck3.checked" [label1]="'Nominal Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].CHP['nominal.electric.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].CHP['nominal.electric.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].CHP['nominal.electric.power']"
+                [compId]="'techParamCheckInput3.1'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck3.checked" [label1]="'Effieciency Electric'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].CHP['efficiency.electric']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].CHP['efficiency.electric']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].CHP['efficiency.electric']"
+                [compId]="'techParamCheckInput3.2'"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck3.checked" [label1]="'Effieciency Thermal'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].CHP['efficiency.thermal']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].CHP['efficiency.thermal']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].CHP['efficiency.thermal']"
+                [compId]="'techParamCheckInput3.3'"></ngx-input-field>
         </div>
 
         <div class="row p-2">
@@ -322,36 +325,44 @@
         <div *ngIf="nodeData['payload'].technologies[displayingNode]">
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.HP.Nominal Heat Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.DH.HP['nominal.heat.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.HP['nominal.heat.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.HP['nominal.heat.power']"
+                [compId]="'techParamCheckInput4.1'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.HP.Cop'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.DH.HP['cop']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.HP['cop']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.HP['cop']"
+                [compId]="'techParamCheckInput4.2'"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.EH.Nominal Heat Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.DH.EH['nominal.heat.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.EH['nominal.heat.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.EH['nominal.heat.power']"
+                [compId]="'techParamCheckInput4.3'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.EH.Efficiency Thermal'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.DH.EH['efficiency.thermal']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.EH['efficiency.thermal']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.DH.EH['efficiency.thermal']"
+                [compId]="'techParamCheckInput4.4'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.HP.Nominal Heat Power'"
                 [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.LHD.HP['nominal.heat.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.HP['nominal.heat.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.HP['nominal.heat.power']"
+                [compId]="'techParamCheckInput4.5'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.HP.Cop'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.LHD.HP['cop']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.HP['cop']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.HP['cop']"
+                [compId]="'techParamCheckInput4.6'"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.EH.Nominal Heat Power'"
                 [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.LHD.EH['nominal.heat.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.EH['nominal.heat.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.EH['nominal.heat.power']"
+                [compId]="'techParamCheckInput4.7'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.EH.Efficiency Thermal'"
                 [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2H.LHD.EH['efficiency.thermal']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.EH['efficiency.thermal']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2H.LHD.EH['efficiency.thermal']"
+                [compId]="'techParamCheckInput4.8'">
             </ngx-input-field>
         </div>
 
@@ -371,19 +382,23 @@
         <div *ngIf="nodeData['payload'].technologies[displayingNode]">
             <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Nominal Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2G['nominal.electric.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['nominal.electric.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['nominal.electric.power']"
+                [compId]="'techParamCheckInput5.1'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Electrolysis'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2G['efficiency.electrolysis']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['efficiency.electrolysis']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['efficiency.electrolysis']"
+                [compId]="'techParamCheckInput5.2'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Methanation'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2G['efficiency.methanation']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['efficiency.methanation']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['efficiency.methanation']"
+                [compId]="'techParamCheckInput5.3'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Thermal'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].P2G['efficiency.thermal']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['efficiency.thermal']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].P2G['efficiency.thermal']"
+                [compId]="'techParamCheckInput5.4'"></ngx-input-field>
         </div>
 
         <div class="row p-2">
@@ -403,17 +418,21 @@
             <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'Storage Electric Capacity'"
                 [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].EB['storage.electric.capacity']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].EB['storage.electric.capacity']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].EB['storage.electric.capacity']"
+                [compId]="'techParamCheckInput6.1'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'Efficiency Charge'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].EB['efficiency.charge']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].EB['efficiency.charge']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].EB['efficiency.charge']"
+                [compId]="'techParamCheckInput6.2'"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'Efficiency Discharge'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].EB['efficiency.discharge']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].EB['efficiency.discharge']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].EB['efficiency.discharge']"
+                [compId]="'techParamCheckInput6.3'"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'C Rate'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].EB['c.rate']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].EB['c.rate']"></ngx-input-field>
+                [(val)]="nodeData['payload'].technologies[displayingNode].EB['c.rate']"
+                [compId]="'techParamCheckInput6.4'"></ngx-input-field>
         </div>
 
         <div class="row p-2">
@@ -432,19 +451,23 @@
         <div *ngIf="nodeData['payload'].technologies[displayingNode]">
             <ngx-input-field [isChecked]="techParamCheck7.checked" [label1]="'DH.Nomial Heat Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].G2H.DH['nomial.heat.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.DH['nomial.heat.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.DH['nomial.heat.power']"
+                [compId]="'techParamCheckInput7.1'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck7.checked" [label1]="'DH.Efficiency Thermal'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].G2H.DH['efficiency.thermal']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.DH['efficiency.thermal']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.DH['efficiency.thermal']"
+                [compId]="'techParamCheckInput7.2'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck7.checked" [label1]="'LHD.Nomial Heat Power'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].G2H.LHD['nomial.heat.power']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.LHD['nomial.heat.power']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.LHD['nomial.heat.power']"
+                [compId]="'techParamCheckInput7.3'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck7.checked" [label1]="'LHD.Efficiency Thermal'" [label2]="'MW'"
                 (valChange)="nodeData['payload'].technologies[displayingNode].G2H.LHD['efficiency.thermal']=+$event"
-                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.LHD['efficiency.thermal']">
+                [(val)]="nodeData['payload'].technologies[displayingNode].G2H.LHD['efficiency.thermal']"
+                [compId]="'techParamCheckInput7.4'">
             </ngx-input-field>
         </div>
 

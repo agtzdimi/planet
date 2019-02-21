@@ -59,6 +59,7 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                         tempData = {
                             name: headers[index],
                             type: 'line',
+                            smooth: true,
                             data: csvData[index],
                         };
                         series.push(tempData);
@@ -108,7 +109,7 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                     type: 'slider',
                     show: true,
                     start: 0,
-                    end: 4,
+                    end: 50,
                 },
                 xAxis: [
                     {

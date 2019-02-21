@@ -19,6 +19,7 @@ export class ComparisonStartComponent {
   showLine: boolean = false;
   loading = false;
   count = 0;
+  forms: string[] = [];
   results1Data: any;
 
   options: any = {};
@@ -50,10 +51,10 @@ export class ComparisonStartComponent {
         },
       );
     const interval = setInterval(() => {
-      const forms = this.selectedForms.split(', ');
+      this.forms = this.selectedForms.split(', ');
       this.httpClient.get('http://160.40.49.244:8000/multi_simulation', {
         params: {
-          'formName': forms[0],
+          'formName': this.forms[0],
         },
       })
         .subscribe(
@@ -70,7 +71,7 @@ export class ComparisonStartComponent {
 
       this.httpClient.get('http://160.40.49.244:8000/multi_simulation2', {
         params: {
-          'formName': forms[1],
+          'formName': this.forms[1],
         },
       })
         .subscribe(
@@ -96,20 +97,20 @@ export class ComparisonStartComponent {
         case 'Time':
           this.lineChart[0].data.push(this.getColumnData(lines, index));
           break;
-        case 'RES_Curtailment':
+        case 'Electric_grid_power_flow':
           this.count++;
           this.lineChart[0].data.push(this.getColumnData(lines, index));
           if (id === 2) {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment2';
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = this.forms[1];
           } else {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = 'RES_Curtailment1';
+            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = this.forms[0];
           }
           break;
       }
     }
 
     if (this.count === 2) {
-      this.lineChart[0].title = 'RES Curtailment Difference';
+      this.lineChart[0].title = 'Electric grid power flow';
       this.showLine = true;
       this.loading = false;
       this.count = 0;

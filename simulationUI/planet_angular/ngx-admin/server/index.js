@@ -122,8 +122,8 @@ app.get("/get_form_names", (req, res) => {
         collection = "files"
     }
     shell.exec("mongoexport --db planet --collection " + collection + " --out /home/planet/allDocuments.txt");
-    formName = shell.exec("egrep -o 'formName.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
-    formDescr = shell.exec("egrep -o 'formDescription.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
+    formName = shell.exec("egrep -o 'formName.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | uniq");
+    formDescr = shell.exec("egrep -o 'formDescription.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | uniq");
     res.send({ "formName": formName, "formDescription": formDescr });
     shell.exec("rm -f /home/planet/allDocuments.txt");
 });
@@ -154,7 +154,7 @@ app.get("/load_data", (req, res) => {
 });
 
 app.get("/simulation", (req, res) => {
-    shell.exec("/home/planet/save_results.sh " + "Results1 " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'Results1' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/Results1.csv");
     results = shell.exec("cat /home/planet/Results1.csv");
     res.send(results);
@@ -170,8 +170,8 @@ app.get("/simulation2", (req, res) => {
 });
 
 app.get("/multi_simulation", (req, res) => {
-    shell.exec("/home/planet/save_results.sh " + "multi1Results1 " + "\"" + req.query.formName + "\"");
-    shell.exec("/home/planet/save_results.sh " + "multi1Results2 " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'multi1Results1' " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'multi1Results2' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi1Results1.csv");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi1Results2.csv");
     results = shell.exec("cat /home/planet/multi1Results1.csv");
@@ -180,8 +180,8 @@ app.get("/multi_simulation", (req, res) => {
 });
 
 app.get("/multi_simulation2", (req, res) => {
-    shell.exec("/home/planet/save_results.sh " + "multi2Results1 " + "\"" + req.query.formName + "\"");
-    shell.exec("/home/planet/save_results.sh " + "multi2Results2 " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'multi2Results1' " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'multi2Results2' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi2Results1.csv");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi2Results2.csv");
     results = shell.exec("cat /home/planet/multi2Results1.csv");

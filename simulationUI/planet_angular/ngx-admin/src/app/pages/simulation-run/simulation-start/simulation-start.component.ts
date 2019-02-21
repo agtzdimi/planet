@@ -133,9 +133,6 @@ export class SimulationStartComponent {
         case 'P2G_input':
           this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
-        case 'G2H_heat':
-          this.areaChart[1].data.push(this.getColumnData(lines, index));
-          break;
         case 'Total_heat_demand':
           this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
