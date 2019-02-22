@@ -17,6 +17,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     loadPage: boolean = false;
     formDescription: String;
     errorMessage: String = '';
+    saveMessage: String = '';
     formData: FormData;
     files: File[];
     uploadInput: EventEmitter<UploadInput>;
@@ -210,6 +211,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                             error => {
                                 // console.log('Error', error);
                                 this.loading = false;
+                                this.saveMessage = error.error.text;
                             },
                         );
                 },

@@ -10,12 +10,7 @@ import { NbDialogService } from '@nebular/theme';
 })
 export class ComparisonStartComponent {
 
-  CHARTS_TOTAL = 3;
-  areaChart = [];
-  barChart = [];
   lineChart = [];
-  showBar: boolean = false;
-  showArea: boolean = false;
   showLine: boolean = false;
   loading = false;
   count = 0;
@@ -27,17 +22,17 @@ export class ComparisonStartComponent {
   selectedForms = 'Select Saved Simulations';
 
   constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
-    this.lineChart[0] = {
-      data: [],
-    };
+    this.initializeCharts();
   }
 
   toggleLoadingAnimation() {
     this.loading = true;
   }
 
-  startSimulation(): void {
+  startComparison(): void {
     this.toggleLoadingAnimation();
+    this.showLine = false;
+    this.initializeCharts();
     this.httpClient.post('http://160.40.49.244:8000/transfer',
       {
         'formName': this.selectedForms,
@@ -119,6 +114,12 @@ export class ComparisonStartComponent {
           this.selectedForms = name;
         }
       });
+  }
+
+  initializeCharts() {
+    this.lineChart[0] = {
+      data: [],
+    };
   }
 
 }

@@ -2,7 +2,7 @@
   <div class="col">
 
     <nb-card>
-      <nb-card-header>Start Simulation</nb-card-header>
+      <nb-card-header>Simulation Comparison</nb-card-header>
       <nb-card-body>
 
         <div class="row">
@@ -11,9 +11,9 @@
           </div>
           <div class="col-md-2">
             <button *ngIf="selectedForms !== 'Select Saved Simulations'" nbButton type="button" [nbSpinner]="loading"
-              nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium" class="start-upload-btn"
-              (click)="startSimulation()">
-              Start Simulation
+              nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
+              class="start-upload-btn" (click)="startComparison()">
+              Comparison Start
             </button>
           </div>
         </div>

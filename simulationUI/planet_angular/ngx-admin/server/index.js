@@ -92,7 +92,7 @@ app.post("/upload", (req, res, next) => {
 });
 
 app.post("/save_data", (req, res, next) => {
-    formName = JSON.parse(shell.exec("mongo planet --quiet --eval 'db.results.distinct(\"formName\");'"));
+    formName = JSON.parse(shell.exec("mongo planet --quiet --eval 'db.files.distinct(\"formName\");'"));
     inputFormName = JSON.parse(req.body.pvPayload)
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/^\s/, '');
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/\s$/, '');
@@ -101,13 +101,25 @@ app.post("/save_data", (req, res, next) => {
             shell.exec("mongo planet --eval \"db.files.remove({'payload.formName': '" + inputFormName.payload.formName + "'})\"");
             shell.exec("mongo planet --eval \"db.files.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
             shell.exec("mongo planet --eval \"db.results.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
-            shell.exec("/home/planet/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
+            shell.exec("/home/planet/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'", function (code, stdout, stderr) {
+                if (code === 1) {
+                    return res.send("Error: Not all data are loaded to the DB!");
+                } else {
+                    return res.send("Successfully Loaded Data");
+                }
+            });
+        } else {
+            return res.send("Error: Simulation Name Already Exists!");
         }
-        return res.send("Error: Simulation Name Already Exists!");
     }
     else {
-        shell.exec("/home/planet/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'");
-        return res.send("Success");
+        shell.exec("/home/planet/generateData.sh '" + req.body.windPayload + "' '" + req.body.pvPayload + "'", function (code, stdout, stderr) {
+            if (code === 1) {
+                return res.send("Error: Not all data are loaded to the DB!");
+            } else {
+                return res.send("Successfully Loaded Data");
+            }
+        });
     }
 
 });

@@ -217,11 +217,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
                             },
                             error => {
                                 this.loading = false;
-                                if (error.error.text === 'Error: Simulation Name Already Exists!') {
-                                    this.saveMessage = error.error.text;
-                                } else {
-                                    this.saveMessage = '';
-                                }
+                                this.saveMessage = error.error.text;
                                 // console.log("2", error.error);
                             },
                         );

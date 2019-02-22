@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
   selector: 'nb-select-multiple-form-prompt',
   template: `
     <nb-card size="medium" *ngIf="formReady">
-      <nb-card-header>Select one of the following simulations</nb-card-header>
+      <nb-card-header>Select two of the following simulations</nb-card-header>
       <nb-card-body>
       <div class="row">
       <sui-multi-select *ngIf="formReady" class="selection"
@@ -24,6 +24,9 @@ import { HttpClient } from '@angular/common/http';
           <div class="row">
           <button nbButton hero status="success" (click)="handleClick()">OK</button>
           </div>
+          <div *ngIf="errorMessage !== ''" class="row">
+            <label>{{errorMessage}}</label>
+          </div>
           </nb-card-footer>
     </nb-card>
   `,
@@ -39,6 +42,12 @@ import { HttpClient } from '@angular/common/http';
       margin-left: auto;
       margin-right: auto;
     }
+    label {
+      color: red;
+      margin: 1rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
   `],
 })
 export class DialogSelectMultipleFormPromptComponent {
@@ -49,6 +58,7 @@ export class DialogSelectMultipleFormPromptComponent {
   formReady: Boolean = false;
   firstForm: String;
   secondForm: String;
+  errorMessage: String = '';
 
   constructor(protected dialogRef: NbDialogRef<DialogSelectMultipleFormPromptComponent>,
     private httpClient: HttpClient) {
@@ -73,16 +83,15 @@ export class DialogSelectMultipleFormPromptComponent {
   handleClick() {
     this.firstForm = this.selectedOptions[0];
     this.secondForm = this.selectedOptions[1];
-    this.submit(this.firstForm + ', ' + this.secondForm);
+    if (this.firstForm && this.secondForm && this.selectedOptions.length === 2) {
+      this.submit(this.firstForm + ', ' + this.secondForm);
+    } else {
+      this.errorMessage = 'Please Select 2 Scenarios';
+    }
   }
 
   setOptions(event) {
-    if (event.length >= 3) {
-      this.disabled = true;
-    } else {
-      this.selectedOptions = event;
-    }
-
+    this.selectedOptions = event;
   }
 
   submit(form) {

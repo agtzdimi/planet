@@ -196,8 +196,16 @@
       <div class="col-md-2">
         <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"
           nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startUpload()">
-          Save Parameters
+          Save Scenario
         </button>
+      </div>
+      <div class="col-md-2">
+        <div *ngIf="saveMessage!==''" [ngClass]="{
+          'errorTextarea': saveMessage.includes('Error'),
+          'successTextarea': !saveMessage.includes('Error')
+        }">
+          {{saveMessage}}
+        </div>
       </div>
     </div>
   </div>

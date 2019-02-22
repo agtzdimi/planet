@@ -69,7 +69,7 @@ export class SimulationStartComponent {
             // console.log('Error', error);
           },
         );
-    }, 5000);
+    }, 2000);
   }
 
   spreadValuesToCharts(data) {
