@@ -66,4 +66,4 @@ for file in $(ls /home/planet/upload/*.txt); do
    mongoimport --db planet --collection files --file $file
 done
 
-rm -rf /home/planet/upload/*
+rm -rf /home/planet/upload/* tempFile

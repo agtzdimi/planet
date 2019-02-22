@@ -55,12 +55,14 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
             let barGap: string;
             let type: string;
             let stack = null;
+            let barWidth = null;
             const checkGraph = headers.find(val => val === 'RES producibility');
             if (checkGraph) {
                 barGap = '-100%';
                 yIndex = 0;
                 type = 'bar';
                 stack = 'chart3';
+                barWidth = '90';
             }
             for (let index = 0; index < headers.length; index++) {
                 switch (headers[index]) {
@@ -88,6 +90,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                     name: headers[index],
                     type: type,
                     stack: stack,
+                    barWidth: barWidth,
                     barGap: barGap,
                     yAxisIndex: yIndex,
                     symbolSize: [40, 40],

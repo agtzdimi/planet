@@ -18,19 +18,13 @@ export class SimulationStartComponent {
   loading = false;
   count = 0;
   results1Data: any;
+  results2Data: any;
   options: any = {};
   themeSubscription: any;
   formName = 'Select Saved Simulation';
 
   constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
-    for (let i = 0; i < this.CHARTS_TOTAL; i++) {
-      this.areaChart[i] = {
-        data: [],
-      };
-      this.barChart[i] = {
-        data: [],
-      };
-    }
+    this.initializeCharts();
   }
 
   toggleLoadingAnimation() {
@@ -39,6 +33,9 @@ export class SimulationStartComponent {
 
   startSimulation(): void {
     this.toggleLoadingAnimation();
+    this.showArea = false;
+    this.showBar = false;
+    this.initializeCharts();
     this.httpClient.post('http://160.40.49.244:8000/transfer',
       {
         'formName': this.formName,
@@ -60,28 +57,12 @@ export class SimulationStartComponent {
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
-            if (typeof data === 'string' && data !== '') {
-              this.results1Data = data;
-            }
-          },
-          error => {
-            // console.log('Error', error);
-          },
-        );
-
-      this.httpClient.get('http://160.40.49.244:8000/simulation2', {
-        params: {
-          'formName': this.formName,
-        },
-      })
-        .subscribe(
-          data => {
-            // console.log('GET Request is successful ');
-            if (typeof data === 'string' && data !== '' && data.length !== 32
-              && this.results1Data !== '' && this.results1Data) {
+            if (data['results1'] && data['results2']) {
+              this.results1Data = data['results1'];
+              this.results2Data = data['results2'];
               clearInterval(interval);
               this.spreadValuesToCharts(this.results1Data);
-              this.spreadValuesToCharts2(data);
+              this.spreadValuesToCharts2(this.results2Data);
             }
           },
           error => {
@@ -102,13 +83,19 @@ export class SimulationStartComponent {
           this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'P2H_heat':
-          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'P2G_heat':
-          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'G2H_heat':
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'CHP_heat':
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'EB_output':
-          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_Curtailment':
           this.areaChart[0].data.push(this.getColumnData(lines, index));
@@ -118,32 +105,28 @@ export class SimulationStartComponent {
           break;
         case 'Electric_demand':
           this.areaChart[0].data.push(this.getColumnData(lines, index));
-          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_direct_utilization':
-          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'P2H_input':
-          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'CHP_el_production':
           this.areaChart[1].data.push(this.getColumnData(lines, index));
-          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'P2G_input':
-          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'Total_heat_demand':
-          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_power':
-          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'EB_input':
-          this.areaChart[2].data.push(this.getColumnData(lines, index));
-          break;
-        case '':
-          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         default:
           break;
@@ -244,6 +227,17 @@ export class SimulationStartComponent {
           this.formName = name['formName'];
         }
       });
+  }
+
+  initializeCharts() {
+    for (let i = 0; i < this.CHARTS_TOTAL; i++) {
+      this.areaChart[i] = {
+        data: [],
+      };
+      this.barChart[i] = {
+        data: [],
+      };
+    }
   }
 
 }

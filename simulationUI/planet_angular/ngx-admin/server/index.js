@@ -152,39 +152,42 @@ app.get("/load_data", (req, res) => {
 app.get("/simulation", (req, res) => {
     shell.exec("/home/planet/save_results.sh " + "'Results1' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/Results1.csv");
-    results = shell.exec("cat /home/planet/Results1.csv");
-    res.send(results);
-    shell.exec("rm /home/planet/Results1.csv");
-});
-
-app.get("/simulation2", (req, res) => {
+    results1 = shell.exec("cat /home/planet/Results1.csv");
     shell.exec("/home/planet/save_results.sh " + "'Results2' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/Results2.csv");
-    results = shell.exec("cat /home/planet/Results2.csv");
-    res.send(results);
-    shell.exec("rm /home/planet/Results2.csv");
+    results2 = shell.exec("cat /home/planet/Results2.csv");
+    finalResults = {
+        'results1': results1,
+        'results2': results2
+    }
+    res.send(finalResults);
+    if (results1 && results2) {
+        shell.exec("rm /home/planet/Results1.csv");
+        shell.exec("rm /home/planet/Results2.csv");
+    }
 });
 
 app.get("/multi_simulation", (req, res) => {
-    shell.exec("/home/planet/save_results.sh " + "'multi1Results1' " + "\"" + req.query.formName + "\"");
-    shell.exec("/home/planet/save_results.sh " + "'multi1Results2' " + "\"" + req.query.formName + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'multi1Results1' " + "\"" + req.query.formName1 + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'multi1Results2' " + "\"" + req.query.formName1 + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi1Results1.csv");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi1Results2.csv");
-    results = shell.exec("cat /home/planet/multi1Results1.csv");
-    res.send(results);
-    shell.exec("rm /home/planet/multi1Results*.csv");
-});
-
-app.get("/multi_simulation2", (req, res) => {
-    shell.exec("/home/planet/save_results.sh " + "'multi2Results1' " + "\"" + req.query.formName + "\"");
-    shell.exec("/home/planet/save_results.sh " + "'multi2Results2' " + "\"" + req.query.formName + "\"");
+    results1 = shell.exec("cat /home/planet/multi1Results1.csv");
+    shell.exec("/home/planet/save_results.sh " + "'multi2Results1' " + "\"" + req.query.formName2 + "\"");
+    shell.exec("/home/planet/save_results.sh " + "'multi2Results2' " + "\"" + req.query.formName2 + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi2Results1.csv");
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi2Results2.csv");
-    results = shell.exec("cat /home/planet/multi2Results1.csv");
-    res.send(results);
-    shell.exec("rm /home/planet/multi2Results*.csv");
+    results2 = shell.exec("cat /home/planet/multi2Results1.csv");
+    finalResults = {
+        'results1': results1,
+        'results2': results2
+    }
+    res.send(finalResults);
+    if (results1 && results2) {
+        shell.exec("rm /home/planet/multi1Results*.csv");
+        shell.exec("rm /home/planet/multi2Results*.csv");
+    }
 });
-
 
 app.post("/create_user", api.create_user);
 app.post("/update_user", api.update_user);

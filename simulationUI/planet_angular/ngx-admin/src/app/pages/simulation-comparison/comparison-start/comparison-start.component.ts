@@ -54,39 +54,24 @@ export class ComparisonStartComponent {
       this.forms = this.selectedForms.split(', ');
       this.httpClient.get('http://160.40.49.244:8000/multi_simulation', {
         params: {
-          'formName': this.forms[0],
+          'formName1': this.forms[0],
+          'formName2': this.forms[1],
         },
       })
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
-            if (typeof data === 'string' && data !== '') {
-              this.getCurtailment(data, 1);
-            }
-          },
-          error => {
-            // console.log('Error', error);
-          },
-        );
-
-      this.httpClient.get('http://160.40.49.244:8000/multi_simulation2', {
-        params: {
-          'formName': this.forms[1],
-        },
-      })
-        .subscribe(
-          data => {
-            // console.log('GET Request is successful ');
-            if (typeof data === 'string' && data !== '') {
+            if (data['results1'] && data['results2']) {
+              this.getCurtailment(data['results1'], 1);
+              this.getCurtailment(data['results2'], 2);
               clearInterval(interval);
-              this.getCurtailment(data, 2);
             }
           },
           error => {
             // console.log('Error', error);
           },
         );
-    }, 10000);
+    }, 2000);
   }
 
   getCurtailment(data, id) {
