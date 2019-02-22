@@ -92,9 +92,7 @@ app.post("/upload", (req, res, next) => {
 });
 
 app.post("/save_data", (req, res, next) => {
-    shell.exec("mongoexport --db planet --collection files --out /home/planet/allDocuments.txt");
-    formName = shell.exec("egrep -o 'formName.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | sort -u");
-    formName = formName.toString().split('\n');
+    formName = JSON.parse(shell.exec("mongo planet --quiet --eval 'db.results.distinct(\"formName\");'"));
     inputFormName = JSON.parse(req.body.pvPayload)
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/^\s/, '');
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/\s$/, '');
@@ -121,11 +119,9 @@ app.get("/get_form_names", (req, res) => {
     } else {
         collection = "files"
     }
-    shell.exec("mongoexport --db planet --collection " + collection + " --out /home/planet/allDocuments.txt");
-    formName = shell.exec("egrep -o 'formName.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | uniq");
-    formDescr = shell.exec("egrep -o 'formDescription.*' /home/planet/allDocuments.txt | sed 's/\"//g' | sed 's/{//g' | sed 's/}//g' | sed 's/,.*//' | cut -d : -f2 | uniq");
+    formName = JSON.parse(shell.exec("mongo --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'"));
+    formDescr = JSON.parse(shell.exec("mongo --quiet planet --eval 'db.files.distinct(\"payload.formDescription\");'"));
     res.send({ "formName": formName, "formDescription": formDescr });
-    shell.exec("rm -f /home/planet/allDocuments.txt");
 });
 
 app.post("/transfer", (req, res) => {

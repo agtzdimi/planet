@@ -143,9 +143,6 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         this.afterNodeDataRecieved(changes.data.currentValue);
         this.afterWindDataRecieved(changes.windParam.currentValue);
         this.afterPvDataRecieved(changes.pvParam.currentValue);
-        if (this.isLoadModule) {
-            this.defaultValues = true;
-        }
         if (this.defaultValues) {
             for (let i = 0; i < this.NODES_COUNT; i++) {
                 this.displayingNode = 'node.' + (i + 1);

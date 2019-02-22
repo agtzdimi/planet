@@ -41,9 +41,8 @@ export class DialogSelectFormPromptComponent {
     })
       .subscribe(
         data => {
-          this.forms = data['formName'].toString().split('\n');
-          this.formsDescr = data['formDescription'].toString().split('\n');
-          this.forms.splice(-1, 1);
+          this.forms = data['formName'];
+          this.formsDescr = data['formDescription'];
           this.formsDescr.splice(-1, 1);
           this.formReady = true;
         },

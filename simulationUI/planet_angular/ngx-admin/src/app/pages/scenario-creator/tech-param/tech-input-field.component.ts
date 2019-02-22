@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { compileDirective } from '@angular/core/src/render3/jit/directive';
 
 @Component({
     selector: 'ngx-input-field',
