@@ -11,10 +11,19 @@
           </div>
           <div class="col-md-3">
             <button *ngIf="formName !== 'Select Saved Simulation'" nbButton type="button" [nbSpinner]="loading"
-              nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium" class="start-upload-btn"
-              (click)="startSimulation()">
+              nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
+              class="start-upload-btn" (click)="startSimulation()">
               Start Simulation
             </button>
+          </div>
+          <div class="col-md-3">
+            <div *ngIf="status">
+              <div [ngClass]="{
+            'errorTextarea': !status.includes('Simulation finished successfully'),
+            'successTextarea': status.includes('Simulation finished successfully')}">
+                {{status}}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -35,7 +44,8 @@
       <nb-card *ngFor="let barCh of barChart">
         <nb-card-header>{{barCh.title}}</nb-card-header>
         <nb-card-body>
-          <ngx-simulation-bar [yAxisLabel]="barCh.yAxisLabel" [yRightAxisLabel]="barCh.yRightAxisLabel" [data]="barCh.data"></ngx-simulation-bar>
+          <ngx-simulation-bar [yAxisLabel]="barCh.yAxisLabel" [yRightAxisLabel]="barCh.yRightAxisLabel"
+            [data]="barCh.data"></ngx-simulation-bar>
         </nb-card-body>
       </nb-card>
     </div>

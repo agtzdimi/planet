@@ -204,6 +204,11 @@ label {
   margin-left: 30px;
 }
 
+.startingLabels {
+  line-height: 31px;
+  margin-left: 15px;
+}
+
 @include nb-install-component() {
 
   /deep/ nb-tabset {

@@ -5,6 +5,7 @@ windData="$1"
 pvData="$2"
 isLoad="$3"
 formName="$(echo $pvData | python /home/planet/getAttribute.py --formName true)"
+dbError=false
 
 lat=$(echo "$pvData" | python /home/planet/getAttribute.py --lat true)
 lon=$(echo "$pvData" | python /home/planet/getAttribute.py --lon true)
@@ -53,17 +54,32 @@ if [[ -s /home/planet/upload/Electricity.xlsx || -s /home/planet/upload/Heat.xls
 fi
 rm -rf nodeFiles
 
-for file in $(ls /home/planet/upload/*.csv); do
-   awk -v formName="$formName" 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="formName"} else {$(NF+1)=formName} print $0}' $file > tempFile
-   awk 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="Time"} else {$(NF+1)=(NR-2)} print $0}' tempFile > $file
-   mongoimport --db planet --collection files --type csv --headerline --file $file
+for file in /home/planet/upload/Electricity.csv /home/planet/upload/Heat.csv; do
+   if [[ -s $file ]]; then
+      awk -v formName="$formName" 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="formName"} else {$(NF+1)=formName} print $0}' $file > tempFile
+      awk 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="Time"} else {$(NF+1)=(NR-2)} print $0}' tempFile > $file
+      mongoimport --db planet --collection files --type csv --headerline --file $file
+      if (( $? != 0 )); then
+         dbError=true
+      fi
+   fi
 done
 
 echo "$windData" > /home/planet/upload/windData.txt
 echo "$pvData" > /home/planet/upload/pvData.txt
 
 for file in $(ls /home/planet/upload/*.txt); do
-   mongoimport --db planet --collection files --file $file
+   if [[ -s $file ]]; then
+      mongoimport --db planet --collection files --file $file
+      if (( $? != 0 )); then
+         dbError=true
+      fi
+   fi
 done
 
 rm -rf /home/planet/upload/* tempFile
+if [[ $dbError == false ]]; then
+   exit 0
+else
+   exit 1
+fi

@@ -168,14 +168,17 @@ app.get("/simulation", (req, res) => {
     shell.exec("/home/planet/save_results.sh " + "'Results2' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' /home/planet/Results2.csv");
     results2 = shell.exec("cat /home/planet/Results2.csv");
+    status = shell.exec("cat /home/planet/simulationStatus.txt");
     finalResults = {
         'results1': results1,
-        'results2': results2
+        'results2': results2,
+        'status': status
     }
     res.send(finalResults);
     if (results1 && results2) {
         shell.exec("rm /home/planet/Results1.csv");
         shell.exec("rm /home/planet/Results2.csv");
+        shell.exec("rm -f /home/planet/simulationStatus.txt");
     }
 });
 
