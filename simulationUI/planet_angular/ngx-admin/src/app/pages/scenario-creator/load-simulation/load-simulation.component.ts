@@ -25,6 +25,8 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     dragOver: boolean;
     fileName: string[] = [];
     text: any;
+    timeStep: Object;
+    simulationTime: Object;
     showMap = false;
     coordinates: number[] = [7.6825, 45.0678];
     capacity = 1;
@@ -139,6 +141,14 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         this.humanizeBytes = humanizeBytes;
         this.formName = '';
         this.formDescription = '';
+        this.timeStep = {
+            'mins': false,
+            'hours': true,
+        };
+        this.simulationTime = {
+            'days': false,
+            'hours': true,
+        };
     }
 
     updateFilename(id, output) {
@@ -178,6 +188,17 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             const file: File = this.files[i];
             formData.append('file', file, file.name);
         }
+        if (this.timeStep['mins']) {
+            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
+        }
+        if (this.simulationTime['days']) {
+            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
+                * 24 / this.paramInit['payload']['simulation']['time.step'];
+        }
+        this.simulationTime['days'] = false;
+        this.simulationTime['hours'] = true;
+        this.timeStep['mins'] = false;
+        this.timeStep['hours'] = true;
         this.paramInit['payload']['formName'] = this.formName;
         this.paramInit['payload']['formDescription'] = this.formDescription;
         this.controlSystem['payload']['formName'] = this.formName;
@@ -249,5 +270,25 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             return true;
         }
 
+    }
+
+    handleTimeStep(event, type) {
+        if (type === 'mins') {
+            this.timeStep['mins'] = event.target.checked;
+            this.timeStep['hours'] = false;
+        } else {
+            this.timeStep['hours'] = event.target.checked;
+            this.timeStep['mins'] = false;
+        }
+    }
+
+    handleSimulationTime(event, type) {
+        if (type === 'days') {
+            this.simulationTime['days'] = event.target.checked;
+            this.simulationTime['hours'] = false;
+        } else {
+            this.simulationTime['hours'] = event.target.checked;
+            this.simulationTime['days'] = false;
+        }
     }
 }

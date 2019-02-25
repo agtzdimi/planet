@@ -60,14 +60,13 @@ export class SimulationStartComponent {
             // console.log('GET Request is successful ');
             if (data['results1'] && data['results2']) {
               this.status = data['status'];
-              console.log(data);
               this.results1Data = data['results1'];
               this.results2Data = data['results2'];
               clearInterval(interval);
               this.spreadValuesToCharts(this.results1Data);
               this.spreadValuesToCharts2(this.results2Data);
             } else if (data['status'] && !data['status'].includes('Simulation finished successfully')) {
-              const tempStatus = data['status'].split("\n");
+              const tempStatus = data['status'].split('\n');
               this.status = tempStatus[2] + '\n' + tempStatus[3];
               if (!this.status.includes('Error')) {
                 this.status = 'Error: ' + this.status;

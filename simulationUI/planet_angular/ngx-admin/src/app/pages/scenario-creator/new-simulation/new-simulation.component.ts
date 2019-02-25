@@ -38,6 +38,8 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     phase5: boolean = false;
     loading: boolean = false;
     saveMessage: String = '';
+    timeStep: Object;
+    simulationTime: Object;
     transitionController1 = new TransitionController();
     transitionController2 = new TransitionController();
     transitionController3 = new TransitionController();
@@ -55,7 +57,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             .onClose.subscribe(status => {
                 this.isDefault = status;
                 if (this.isDefault) {
-                    this.paramInit['payload']['simulation']['simulation.time'] = 96;
+                    this.paramInit['payload']['simulation']['simulation.time'] = 1;
                 }
             });
     }
@@ -94,7 +96,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         'payload': {
 
             'simulation': {
-                'time.step': 0.25,
+                'time.step': 15,
                 'simulation.time': 0,
             },
             'technologies': {
@@ -145,6 +147,14 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         this.humanizeBytes = humanizeBytes;
         this.formName = '';
         this.formDescription = '';
+        this.timeStep = {
+            'mins': true,
+            'hours': false,
+        };
+        this.simulationTime = {
+            'days': true,
+            'hours': false,
+        };
     }
 
     updateFilename(id, output) {
@@ -187,6 +197,17 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             const file: File = this.files[i];
             formData.append('file', file, file.name);
         }
+        if (this.timeStep['mins']) {
+            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
+        }
+        if (this.simulationTime['days']) {
+            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
+                * 24 / this.paramInit['payload']['simulation']['time.step'];
+        }
+        this.simulationTime['days'] = false;
+        this.simulationTime['hours'] = true;
+        this.timeStep['mins'] = false;
+        this.timeStep['hours'] = true;
         this.paramInit['payload']['formName'] = this.formName;
         this.paramInit['payload']['formDescription'] = this.formDescription;
         this.controlSystem['payload']['formName'] = this.formName;
@@ -257,11 +278,37 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             this.errorMessage = 'Please give a number for time.step';
             return false;
         } else if (!Number(+this.paramInit['payload']['simulation']['simulation.time'])) {
-            this.errorMessage = 'Please give a number for time.step';
+            this.errorMessage = 'Please give a number for simulation.time';
+            return false;
+        } else if (!this.timeStep['days'] && this.timeStep['hours']) {
+            this.errorMessage = 'Please Specify if time step is given on Days or Hours';
+            return false;
+        } else if (!this.simulationTime['days'] && !this.simulationTime['hours']) {
+            this.errorMessage = 'Please Specify if Simulation Horizon is given on Days or Hours';
             return false;
         } else {
             return true;
         }
 
+    }
+
+    handleTimeStep(event, type) {
+        if (type === 'mins') {
+            this.timeStep['mins'] = event.target.checked;
+            this.timeStep['hours'] = false;
+        } else {
+            this.timeStep['hours'] = event.target.checked;
+            this.timeStep['mins'] = false;
+        }
+    }
+
+    handleSimulationTime(event, type) {
+        if (type === 'days') {
+            this.simulationTime['days'] = event.target.checked;
+            this.simulationTime['hours'] = false;
+        } else {
+            this.simulationTime['hours'] = event.target.checked;
+            this.simulationTime['days'] = false;
+        }
     }
 }
