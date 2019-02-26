@@ -141,15 +141,31 @@
               <div class="form-group row">
                 <label for="control-system" class="col-sm-2 col-form-label">Control</label>
                 <div class="col-sm-3">
-                  <input type="number" class="form-control" id="control-system"
-                    [(ngModel)]="+controlSystem.payload.control">
+                  <div class="ui icon input">
+                    <ng-template #popContent> Dispatch priority order: <br>
+                      <ol type="1">
+                        <li> P2H - EB - P2G </li>
+                        <li> P2H - P2G - EB </li>
+                        <li> EB - P2H - P2G </li>
+                        <li> EB - P2G - P2H </li>
+                        <li> P2G - P2H - EB </li>
+                        <li> P2G - EB - P2H </li>
+                      </ol>
+                    </ng-template>
+                    <input type="number" class="form-control" id="control-system"
+                      [(ngModel)]="+controlSystem.payload.control" [nbPopover]="popContent" nbPopoverMode="hover"
+                      nbPopoverPlacement="right">
+                    <i class="info circle icon"></i>
+                  </div>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="control-Curtailment" class="col-sm-2 col-form-label">RES Curtailment</label>
                 <div class="col-sm-3">
-                  <input type="number" class="form-control" id="control-Curtailment"
-                    [(ngModel)]="+controlSystem.payload['RES.curtailment']">
+                  <div class="ui input">
+                    <input type="number" class="form-control" id="control-Curtailment"
+                      [(ngModel)]="+controlSystem.payload['RES.curtailment']">
+                  </div>
                 </div>
               </div>
               <div class="row">

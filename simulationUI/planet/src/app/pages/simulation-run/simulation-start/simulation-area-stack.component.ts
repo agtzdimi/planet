@@ -161,6 +161,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                         dataView: {
                             show: true,
                             title: 'Data View',
+                            readOnly: 'true',
                             lang: ['Data View', 'Close', 'Refresh'],
                         },
                         saveAsImage: {
