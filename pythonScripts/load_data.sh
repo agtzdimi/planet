@@ -10,6 +10,7 @@ mongoexport --db planet --collection files --out /home/planet/upload/loadData/al
 grep '"formName":"'"$formName"'"' /home/planet/upload/loadData/allDocuments.txt | grep 'Parameters_initialization' > /home/planet/upload/loadData/Parameters_initialization.txt
 grep '"formName":"'"$formName"'"' /home/planet/upload/loadData/allDocuments.txt | grep 'Economy_environment_initialization' > /home/planet/upload/loadData/Economy_environment_initialization.txt
 grep '"formName":"'"$formName"'"' /home/planet/upload/loadData/allDocuments.txt | grep 'Control_initialization' > /home/planet/upload/loadData/Control_initialization.txt
+grep '"formName":"'"$formName"'"' /home/planet/upload/loadData/allDocuments.txt | grep 'Wind.xlsx' > /home/planet/upload/loadData/WindData.txt
 mongoexport --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName",Time --out /home/planet/upload/loadData/Heat.csv
 egrep ','"$formName"',|DH_demand|LH_demand' /home/planet/upload/loadData/Heat.csv | sed 's/,'"$formName"'//' | sed 's/,formName//' | sed '/^,,.*/d' > tempFileloadData
 sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' tempFileloadData | head -n1)
