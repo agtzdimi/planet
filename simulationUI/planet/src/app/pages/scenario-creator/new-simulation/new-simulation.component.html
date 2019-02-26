@@ -63,8 +63,17 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="simulation-time" class="startingLabels col-sm-6 col-form-label">Simulation
+                  <label for="simulation-time" class="startingLabels col-sm-6 col-form-label m-1">Simulation
                     Horizon</label>
+                  <div class="row">
+                    <div class="ui icon input datePickerButton">
+                      <input nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
+                        (click)="dateRangeClicked=!dateRangeClicked">
+                      <i class="calendar alternate outline icon"></i>
+                    </div>
+                    <nb-rangepicker (rangeChange)="handleDateChange($event)" #formpicker>
+                    </nb-rangepicker>
+                  </div>
                   <div class="col-sm-12">
                     <div class="row">
                       <div class="col-md-6">
@@ -129,7 +138,8 @@
           <ngx-tech-param [suiTransition]="transitionController2" *ngIf="phase2" [(data)]="paramInit"
             (dataChange)="paramInit" [(pvParam)]="pvParam" [(windParam)]="windParam" [defaultValues]="isDefault"
             (phase3)="animateInfo(transitionController3,transitionName3,3)" (pvChange)="pvParam"
-            (windChange)="windParam" [isLoadModule]="false"></ngx-tech-param>
+            (windChange)="windParam" [isLoadModule]="false" [startDate]="startingDate" [endDate]="endingDate">
+          </ngx-tech-param>
         </div>
       </div>
 

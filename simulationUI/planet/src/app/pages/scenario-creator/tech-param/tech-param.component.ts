@@ -9,6 +9,8 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
 
     checkVal: Object = {};
     @Input() data: Object;
+    @Input() startDate: Date;
+    @Input() endDate: Date;
     @Input() defaultValues: boolean;
     @Input() pvParam: Object;
     @Input() windParam: Object;
@@ -66,13 +68,15 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
 
         for (let i = 0; i < this.NODES_COUNT; i++) {
             this.nodeWindParam['node.' + (i + 1)] = {
-                'year': 2016,
+                'startDate': this.startDate,
+                'endDate': this.endDate,
                 'capacity': 1,
                 'hub.height': 80,
                 'turbine.model': 'Vestas+V80+2000',
             };
             this.nodePvParam['node.' + (i + 1)] = {
-                'year': 2016,
+                'startDate': this.startDate,
+                'endDate': this.endDate,
                 'capacity': 1,
                 'system.loss': 10,
                 'tracking': 0,
@@ -140,30 +144,36 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.afterNodeDataRecieved(changes.data.currentValue);
-        this.afterWindDataRecieved(changes.windParam.currentValue);
-        this.afterPvDataRecieved(changes.pvParam.currentValue);
-        if (this.defaultValues) {
-            for (let i = 0; i < this.NODES_COUNT; i++) {
-                this.displayingNode = 'node.' + (i + 1);
-                for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-                    this.updateDefaultValues(j, true);
+        if (changes.data) {
+            this.afterNodeDataRecieved(changes.data.currentValue);
+            this.afterWindDataRecieved(changes.windParam.currentValue, changes.startDate.currentValue, changes.endDate.currentValue);
+            this.afterPvDataRecieved(changes.pvParam.currentValue, changes.startDate.currentValue, changes.endDate.currentValue);
+            if (this.defaultValues) {
+                for (let i = 0; i < this.NODES_COUNT; i++) {
+                    this.displayingNode = 'node.' + (i + 1);
+                    for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
+                        this.updateDefaultValues(j, true);
+                    }
                 }
+                this.displayingNode = 'node.1';
             }
-            this.displayingNode = 'node.1';
         }
     }
 
-    afterWindDataRecieved(data) {
+    afterWindDataRecieved(data, date1, date2) {
         this.nodeWindParam['lat'] = data.payload['lat'];
         this.nodeWindParam['lon'] = data.payload['lon'];
+        this.nodeWindParam['startDate'] = date1;
+        this.nodeWindParam['endDate'] = date2;
         data.payload = this.nodeWindParam;
         this.pvChange.emit(this.nodeWindParam);
     }
 
-    afterPvDataRecieved(data) {
+    afterPvDataRecieved(data, date1, date2) {
         this.nodePvParam['lat'] = data.payload['lat'];
         this.nodePvParam['lon'] = data.payload['lon'];
+        this.nodePvParam['startDate'] = date1;
+        this.nodePvParam['endDate'] = date2;
         data.payload = this.nodePvParam;
         this.pvChange.emit(this.nodePvParam);
     }

@@ -37,6 +37,8 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     phase4: boolean = false;
     phase5: boolean = false;
     loading: boolean = false;
+    startingDate: Date;
+    endingDate: Date;
     saveMessage: String = '';
     timeStep: Object;
     simulationTime: Object;
@@ -47,6 +49,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     transitionController5 = new TransitionController();
     transitionController6 = new TransitionController();
     area: string = '';
+    dateRangeClicked: boolean = false;
 
     public animateImage(transitionName: string = 'scale', event) {
         this.areaPicked = true;
@@ -155,6 +158,8 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             'days': true,
             'hours': false,
         };
+        this.startingDate = new Date(2016, 1, 1);
+        this.endingDate = new Date(2016, 12, 31);
     }
 
     updateFilename(id, output) {
@@ -296,19 +301,47 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         if (type === 'mins') {
             this.timeStep['mins'] = event.target.checked;
             this.timeStep['hours'] = false;
+            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] * 60;
         } else {
             this.timeStep['hours'] = event.target.checked;
             this.timeStep['mins'] = false;
+            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
     }
 
     handleSimulationTime(event, type) {
+        let timeStep: number;
+        if (this.timeStep['mins']) {
+            timeStep = this.paramInit['payload']['simulation']['time.step'] / 60;
+        } else {
+            timeStep = this.paramInit['payload']['simulation']['time.step'];
+        }
         if (type === 'days') {
             this.simulationTime['days'] = event.target.checked;
             this.simulationTime['hours'] = false;
+            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
+                * timeStep / 24;
         } else {
             this.simulationTime['hours'] = event.target.checked;
             this.simulationTime['days'] = false;
+            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
+                * 24 / timeStep;
         }
+    }
+
+    handleDateChange(event) {
+        if (event.end) {
+            this.startingDate = event.start;
+            this.endingDate = event.end;
+            const daysTotal = Math.round(Math.abs((event.start.getTime() - event.end.getTime()) / (24 * 60 * 60 * 1000))) + 1;
+            if (this.simulationTime['days']) {
+                this.paramInit['payload']['simulation']['simulation.time'] = daysTotal;
+            } else {
+                this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
+                    this.paramInit['payload']['simulation']['time.step'];
+            }
+
+        }
+
     }
 }

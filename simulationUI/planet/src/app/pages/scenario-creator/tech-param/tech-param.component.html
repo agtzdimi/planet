@@ -17,38 +17,6 @@
         </div>
 
         <div *ngIf="nodeData['payload'].technologies[displayingNode]">
-            <div class="row" *ngIf="techParamCheck1.checked">
-                <div class="col-md-2">
-                    <ul class="listItem">
-                        <li>
-                            <div class="form-group row">
-                                <label for="input1" class="col-sm-2 col-form-label">Year</label>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <nb-select class="m-2" placeholder="Year" [(ngModel)]="nodePvParam[displayingNode]['year']">
-                        <nb-option value="2000">2000</nb-option>
-                        <nb-option value="2001">2001</nb-option>
-                        <nb-option value="2002">2002</nb-option>
-                        <nb-option value="2003">2003</nb-option>
-                        <nb-option value="2004">2004</nb-option>
-                        <nb-option value="2005">2005</nb-option>
-                        <nb-option value="2006">2006</nb-option>
-                        <nb-option value="2007">2007</nb-option>
-                        <nb-option value="2008">2008</nb-option>
-                        <nb-option value="2009">2009</nb-option>
-                        <nb-option value="2010">2010</nb-option>
-                        <nb-option value="2011">2011</nb-option>
-                        <nb-option value="2012">2012</nb-option>
-                        <nb-option value="2013">2013</nb-option>
-                        <nb-option value="2014">2014</nb-option>
-                        <nb-option value="2015">2015</nb-option>
-                        <nb-option value="2016">2016</nb-option>
-                    </nb-select>
-                </div>
-            </div>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'System Loss'" [label2]="'%'"
                 (valChange)="nodePvParam[displayingNode]['system.loss']=+$event"
                 [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
@@ -100,38 +68,6 @@
         </div>
 
         <div *ngIf="nodeData['payload'].technologies[displayingNode]">
-            <div class="row" *ngIf="techParamCheck2.checked">
-                <div class="col-md-2">
-                    <ul class="listItem">
-                        <li>
-                            <div class="form-group row">
-                                <label for="input1" class="col-sm-2 col-form-label">Year</label>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <nb-select class="m-2" placeholder="Year" [(ngModel)]="nodeWindParam[displayingNode]['year']">
-                        <nb-option value="2000">2000</nb-option>
-                        <nb-option value="2001">2001</nb-option>
-                        <nb-option value="2002">2002</nb-option>
-                        <nb-option value="2003">2003</nb-option>
-                        <nb-option value="2004">2004</nb-option>
-                        <nb-option value="2005">2005</nb-option>
-                        <nb-option value="2006">2006</nb-option>
-                        <nb-option value="2007">2007</nb-option>
-                        <nb-option value="2008">2008</nb-option>
-                        <nb-option value="2009">2009</nb-option>
-                        <nb-option value="2010">2010</nb-option>
-                        <nb-option value="2011">2011</nb-option>
-                        <nb-option value="2012">2012</nb-option>
-                        <nb-option value="2013">2013</nb-option>
-                        <nb-option value="2014">2014</nb-option>
-                        <nb-option value="2015">2015</nb-option>
-                        <nb-option value="2016">2016</nb-option>
-                    </nb-select>
-                </div>
-            </div>
 
             <ngx-input-field [isChecked]="techParamCheck2.checked" [label1]="'Hub Height'" [label2]="'m'"
                 (valChange)="hubHeight=+$event" [(val)]="hubHeight" [compId]="'techParamCheckInput2.1'">

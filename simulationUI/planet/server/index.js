@@ -146,6 +146,7 @@ app.get("/load_data", (req, res) => {
     paramInitParam = shell.exec("cat /home/planet/upload/loadData/Parameters_initialization.txt");
     econEnvParam = shell.exec("cat /home/planet/upload/loadData/Economy_environment_initialization.txt");
     controlParam = shell.exec("cat /home/planet/upload/loadData/Control_initialization.txt");
+    date = shell.exec("cat /home/planet/upload/loadData/WindData.txt")
     shell.exec("sed -i '/^,,.*/d' /home/planet/upload/loadData/Electricity.csv");
     shell.exec("sed -i '/^,,.*/d' /home/planet/upload/loadData/Heat.csv");
     elecParam = shell.exec("cat /home/planet/upload/loadData/Electricity.csv");
@@ -156,6 +157,7 @@ app.get("/load_data", (req, res) => {
         "controlSystem": controlParam,
         "elecParam": elecParam,
         "heatParam": heatParam,
+        "date": date,
     }
     res.send(Parameters);
     shell.exec("rm -rf /home/planet/upload/loadData");

@@ -2,7 +2,7 @@ import { Component, EventEmitter, AfterViewInit, OnInit } from '@angular/core';
 import { UploadOutput, UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbCalendarRange, NbDateService } from '@nebular/theme';
 import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
 
 @Component({
@@ -37,6 +37,10 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     transitionController1 = new TransitionController();
     area: string = 'Turin';
     loading: boolean = false;
+    dateRangeClicked: boolean = false;
+    range: NbCalendarRange<Date>;
+    startingDate: Date;
+    endingDate: Date;
 
     ngOnInit() {
         this.dialogService.open(DialogSelFormPromptComponent)
@@ -62,6 +66,13 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                                 this.controlSystem['payload']['control'] = temp['payload']['control'];
                                 this.elecParam = data['elecParam'];
                                 this.heatParam = data['heatParam'];
+                                temp = JSON.parse(data['date']);
+                                this.startingDate = temp['payload']['startDate'];
+                                this.endingDate = temp['payload']['endDate'];
+                                this.range = {
+                                    start: this.dateService.addDay(this.monthStart, 0),
+                                    end: this.dateService.addDay(this.monthEnd, 0),
+                                };
                             },
                             error => {
                                 // console.log('Error', error);
@@ -131,7 +142,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
 
     revealed = false;
 
-    constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
+    constructor(private httpClient: HttpClient, private dialogService: NbDialogService, protected dateService: NbDateService<Date>) {
         for (let i = 0; i < 7; i++) {
             this.fileName.push('Upload File');
         }
@@ -276,19 +287,69 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         if (type === 'mins') {
             this.timeStep['mins'] = event.target.checked;
             this.timeStep['hours'] = false;
+            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] * 60;
         } else {
             this.timeStep['hours'] = event.target.checked;
             this.timeStep['mins'] = false;
+            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
     }
 
     handleSimulationTime(event, type) {
+        let timeStep: number;
+        if (this.timeStep['mins']) {
+            timeStep = this.paramInit['payload']['simulation']['time.step'] / 60;
+        } else {
+            timeStep = this.paramInit['payload']['simulation']['time.step'];
+        }
         if (type === 'days') {
             this.simulationTime['days'] = event.target.checked;
             this.simulationTime['hours'] = false;
+            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
+                * timeStep / 24;
         } else {
             this.simulationTime['hours'] = event.target.checked;
             this.simulationTime['days'] = false;
+            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
+                * 24 / timeStep;
         }
+    }
+
+    handleDateChange(event) {
+        if (event.end) {
+            this.startingDate = event.start;
+            this.endingDate = event.end;
+            const daysTotal = Math.round(Math.abs((event.start.getTime() - event.end.getTime()) / (24 * 60 * 60 * 1000))) + 1;
+            if (this.simulationTime['days']) {
+                this.paramInit['payload']['simulation']['simulation.time'] = daysTotal;
+            } else {
+                this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
+                    this.paramInit['payload']['simulation']['time.step'];
+            }
+
+        }
+    }
+
+    get monthStart(): Date {
+        return new Date(this.startingDate);
+    }
+
+    get monthEnd(): Date {
+        return new Date(this.endingDate);
+    }
+
+    getDateFormat() {
+        let temp: string = '';
+        if (this.range) {
+            if (this.range.start && this.range.end) {
+                temp = ('0' + this.range.start.getUTCDate()).slice(-2) + '/' +
+                    ('0' + (this.range.start.getUTCMonth() + 1)).slice(-2) + '/' +
+                    this.range.start.getUTCFullYear() + ' - ' + ('0' + this.range.end.getUTCDate()).slice(-2) + '/' +
+                    ('0' + (this.range.end.getUTCMonth() + 1)).slice(-2) + '/' +
+                    this.range.end.getUTCFullYear();
+            }
+        }
+
+        return temp;
     }
 }
