@@ -299,11 +299,11 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
     handleTimeStep(event, type) {
         if (type === 'mins') {
-            this.timeStep['mins'] = event.target.checked;
+            this.timeStep['mins'] = event;
             this.timeStep['hours'] = false;
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] * 60;
         } else {
-            this.timeStep['hours'] = event.target.checked;
+            this.timeStep['hours'] = event;
             this.timeStep['mins'] = false;
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
@@ -317,12 +317,12 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             timeStep = this.paramInit['payload']['simulation']['time.step'];
         }
         if (type === 'days') {
-            this.simulationTime['days'] = event.target.checked;
+            this.simulationTime['days'] = event;
             this.simulationTime['hours'] = false;
             this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
                 * timeStep / 24;
         } else {
-            this.simulationTime['hours'] = event.target.checked;
+            this.simulationTime['hours'] = event;
             this.simulationTime['days'] = false;
             this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
                 * 24 / timeStep;
@@ -337,8 +337,14 @@ export class NewSimulationFilesComponent implements AfterViewInit {
             if (this.simulationTime['days']) {
                 this.paramInit['payload']['simulation']['simulation.time'] = daysTotal;
             } else {
-                this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
-                    this.paramInit['payload']['simulation']['time.step'];
+                if (this.timeStep['mins']) {
+                    const timeStepHour = this.paramInit['payload']['simulation']['time.step'] / 60;
+                    this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
+                        timeStepHour;
+                } else {
+                    this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
+                        this.paramInit['payload']['simulation']['time.step'];
+                }
             }
 
         }

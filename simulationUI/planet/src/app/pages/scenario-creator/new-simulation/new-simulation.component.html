@@ -48,16 +48,27 @@
                           [(ngModel)]="paramInit.payload.simulation['time.step']">
                       </div>
                       <div class="col-md-3 checkBoxMove">
-                        <nb-checkbox status="success" [value]="timeStep['mins']"
-                          (change)="handleTimeStep($event,'mins')">
-                          Mins
-                        </nb-checkbox>
+                        <div class="ui form">
+                          <div class="grouped fields">
+                            <div class="field">
+                              <sui-checkbox [ngModel]="timeStep['mins']" [isReadonly]="timeStep['mins']"
+                                (ngModelChange)="handleTimeStep($event,'mins')">
+                                Mins
+                              </sui-checkbox>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div class="col-md-3 checkBoxMove">
-                        <nb-checkbox status="success" [value]="timeStep['hours']"
-                          (change)="handleTimeStep($event,'hours')">
-                          Hours
-                        </nb-checkbox>
+                        <div class="ui form">
+                          <div class="grouped fields">
+                            <div class="field">
+                              <sui-checkbox [ngModel]="timeStep['hours']" [isReadonly]="timeStep['hours']"
+                                (ngModelChange)="handleTimeStep($event,'hours')">
+                                Hours</sui-checkbox>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -81,12 +92,26 @@
                           [(ngModel)]="paramInit.payload.simulation['simulation.time']">
                       </div>
                       <div class="col-md-3 checkBoxMove">
-                        <nb-checkbox status="success" [value]="simulationTime.days"
-                          (change)="handleSimulationTime($event,'days')">Days</nb-checkbox>
+                        <div class="ui form">
+                          <div class="grouped fields">
+                            <div class="field">
+                              <sui-checkbox [ngModel]="simulationTime.days" [isReadonly]="simulationTime.days"
+                                (ngModelChange)="handleSimulationTime($event,'days')">
+                                Days</sui-checkbox>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div class="col-md-3 checkBoxMove">
-                        <nb-checkbox status="success" [value]="simulationTime.hours"
-                          (change)="handleSimulationTime($event,'hours')">Hours</nb-checkbox>
+                        <div class="ui form">
+                          <div class="grouped fields">
+                            <div class="field">
+                              <sui-checkbox [ngModel]="simulationTime.hours" [isReadonly]="simulationTime.hours"
+                                (ngModelChange)="handleSimulationTime($event,'hours')">
+                                Hours</sui-checkbox>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

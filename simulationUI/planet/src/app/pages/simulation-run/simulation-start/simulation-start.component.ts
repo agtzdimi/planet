@@ -37,6 +37,7 @@ export class SimulationStartComponent {
     this.showArea = false;
     this.showBar = false;
     this.initializeCharts();
+    this.status = '';
     this.httpClient.post('http://160.40.49.244:8000/transfer',
       {
         'formName': this.formName,

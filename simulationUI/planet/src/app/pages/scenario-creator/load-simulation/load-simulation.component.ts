@@ -70,8 +70,8 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                                 this.startingDate = temp['payload']['startDate'];
                                 this.endingDate = temp['payload']['endDate'];
                                 this.range = {
-                                    start: this.dateService.addDay(this.monthStart, 0),
-                                    end: this.dateService.addDay(this.monthEnd, 0),
+                                    start: this.dateService.addDay(this.dateStart, 0),
+                                    end: this.dateService.addDay(this.dateEnd, 0),
                                 };
                             },
                             error => {
@@ -285,11 +285,11 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
 
     handleTimeStep(event, type) {
         if (type === 'mins') {
-            this.timeStep['mins'] = event.target.checked;
+            this.timeStep['mins'] = event;
             this.timeStep['hours'] = false;
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] * 60;
         } else {
-            this.timeStep['hours'] = event.target.checked;
+            this.timeStep['hours'] = event;
             this.timeStep['mins'] = false;
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
@@ -303,12 +303,12 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             timeStep = this.paramInit['payload']['simulation']['time.step'];
         }
         if (type === 'days') {
-            this.simulationTime['days'] = event.target.checked;
+            this.simulationTime['days'] = event;
             this.simulationTime['hours'] = false;
             this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
                 * timeStep / 24;
         } else {
-            this.simulationTime['hours'] = event.target.checked;
+            this.simulationTime['hours'] = event;
             this.simulationTime['days'] = false;
             this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
                 * 24 / timeStep;
@@ -323,18 +323,30 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             if (this.simulationTime['days']) {
                 this.paramInit['payload']['simulation']['simulation.time'] = daysTotal;
             } else {
-                this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
-                    this.paramInit['payload']['simulation']['time.step'];
+                if (this.timeStep['mins']) {
+                    const timeStepHour = this.paramInit['payload']['simulation']['time.step'] / 60;
+                    this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
+                        timeStepHour;
+                } else {
+                    this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
+                        this.paramInit['payload']['simulation']['time.step'];
+                }
             }
 
         }
     }
 
-    get monthStart(): Date {
+    get dateStart(): Date {
+        if (!this.startingDate) {
+            this.startingDate = new Date(2016, 1, 1);
+        }
         return new Date(this.startingDate);
     }
 
-    get monthEnd(): Date {
+    get dateEnd(): Date {
+        if (!this.endingDate) {
+            this.endingDate = new Date(2016, 12, 31);
+        }
         return new Date(this.endingDate);
     }
 
@@ -342,9 +354,9 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         let temp: string = '';
         if (this.range) {
             if (this.range.start && this.range.end) {
-                temp = ('0' + this.range.start.getUTCDate()).slice(-2) + '/' +
+                temp = ('0' + this.range.start.getDate()).slice(-2) + '/' +
                     ('0' + (this.range.start.getUTCMonth() + 1)).slice(-2) + '/' +
-                    this.range.start.getUTCFullYear() + ' - ' + ('0' + this.range.end.getUTCDate()).slice(-2) + '/' +
+                    this.range.start.getUTCFullYear() + ' - ' + ('0' + this.range.end.getDate()).slice(-2) + '/' +
                     ('0' + (this.range.end.getUTCMonth() + 1)).slice(-2) + '/' +
                     this.range.end.getUTCFullYear();
             }

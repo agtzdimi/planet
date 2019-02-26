@@ -172,12 +172,12 @@ app.get("/simulation", (req, res) => {
     results2 = shell.exec("cat /home/planet/Results2.csv");
     status = shell.exec("cat /home/planet/simulationStatus.txt");
     finalResults = {
-        'results1': results1,
-        'results2': results2,
-        'status': status
+        'results1': results1.stdout,
+        'results2': results2.stdout,
+        'status': status.stdout
     }
     res.send(finalResults);
-    if (results1 && results2) {
+    if (results1.stderr === '' && results2.stderr === '') {
         shell.exec("rm /home/planet/Results1.csv");
         shell.exec("rm /home/planet/Results2.csv");
         shell.exec("rm -f /home/planet/simulationStatus.txt");
