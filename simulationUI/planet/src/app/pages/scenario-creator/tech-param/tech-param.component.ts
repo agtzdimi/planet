@@ -146,8 +146,9 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.data) {
             this.afterNodeDataRecieved(changes.data.currentValue);
-            this.afterWindDataRecieved(changes.windParam.currentValue, changes.startDate.currentValue, changes.endDate.currentValue);
-            this.afterPvDataRecieved(changes.pvParam.currentValue, changes.startDate.currentValue, changes.endDate.currentValue);
+            this.afterWindDataRecieved(changes.windParam.currentValue);
+            this.afterPvDataRecieved(changes.pvParam.currentValue);
+            this.changeDates(changes.startDate.currentValue, changes.endDate.currentValue);
             if (this.defaultValues) {
                 for (let i = 0; i < this.NODES_COUNT; i++) {
                     this.displayingNode = 'node.' + (i + 1);
@@ -157,23 +158,30 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
                 }
                 this.displayingNode = 'node.1';
             }
+        } else if (changes.startDate) {
+            this.changeDates(changes.startDate.currentValue, changes.endDate.currentValue);
         }
     }
 
-    afterWindDataRecieved(data, date1, date2) {
+    afterWindDataRecieved(data) {
         this.nodeWindParam['lat'] = data.payload['lat'];
         this.nodeWindParam['lon'] = data.payload['lon'];
-        this.nodeWindParam['startDate'] = date1;
-        this.nodeWindParam['endDate'] = date2;
         data.payload = this.nodeWindParam;
         this.pvChange.emit(this.nodeWindParam);
     }
 
-    afterPvDataRecieved(data, date1, date2) {
-        this.nodePvParam['lat'] = data.payload['lat'];
-        this.nodePvParam['lon'] = data.payload['lon'];
+    changeDates(date1, date2) {
+        this.nodeWindParam['startDate'] = date1;
+        this.nodeWindParam['endDate'] = date2;
         this.nodePvParam['startDate'] = date1;
         this.nodePvParam['endDate'] = date2;
+        this.pvChange.emit(this.nodeWindParam);
+        this.pvChange.emit(this.nodePvParam);
+    }
+
+    afterPvDataRecieved(data) {
+        this.nodePvParam['lat'] = data.payload['lat'];
+        this.nodePvParam['lon'] = data.payload['lon'];
         data.payload = this.nodePvParam;
         this.pvChange.emit(this.nodePvParam);
     }
