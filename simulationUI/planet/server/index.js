@@ -152,12 +152,12 @@ app.get("/load_data", (req, res) => {
     elecParam = shell.exec("cat /home/planet/upload/loadData/Electricity.csv");
     heatParam = shell.exec("cat /home/planet/upload/loadData/Heat.csv");
     Parameters = {
-        "paramInit": paramInitParam,
-        "econEnv": econEnvParam,
-        "controlSystem": controlParam,
-        "elecParam": elecParam,
-        "heatParam": heatParam,
-        "date": date,
+        "paramInit": paramInitParam.stdout,
+        "econEnv": econEnvParam.stdout,
+        "controlSystem": controlParam.stdout,
+        "elecParam": elecParam.stdout,
+        "heatParam": heatParam.stdout,
+        "date": date.stdout,
     }
     res.send(Parameters);
     shell.exec("rm -rf /home/planet/upload/loadData");
@@ -196,11 +196,11 @@ app.get("/multi_simulation", (req, res) => {
     shell.exec("sed -i '/^,,.*/d' /home/planet/multi2Results2.csv");
     results2 = shell.exec("cat /home/planet/multi2Results1.csv");
     finalResults = {
-        'results1': results1,
-        'results2': results2
+        'results1': results1.stdout,
+        'results2': results2.stdout
     }
     res.send(finalResults);
-    if (results1 && results2) {
+    if (results1.stderr === '' && results2.stderr === '') {
         shell.exec("rm /home/planet/multi1Results*.csv");
         shell.exec("rm /home/planet/multi2Results*.csv");
     }
