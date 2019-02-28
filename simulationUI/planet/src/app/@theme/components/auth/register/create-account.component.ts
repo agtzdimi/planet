@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -9,18 +9,16 @@ import { HttpClient } from '@angular/common/http';
 export class NgxCreateAccountComponent implements OnChanges {
     @Input() params;
     @Input() isAdmin;
+    @Output() message: EventEmitter<Object>;
 
     finalParameters = [{ isAdmin: false }];
 
-    API_KEY = '__api_key__';
-
     headers = {
         Accept: 'application/json',
-        Authorization: this.API_KEY,
     };
 
     constructor(private httpClient: HttpClient) {
-
+        this.message = new EventEmitter<Object>();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -29,24 +27,23 @@ export class NgxCreateAccountComponent implements OnChanges {
 
     registerUser() {
         // console.log('HERE', this.isAdmin)
-        this.finalParameters = { ...this.params, 'isAdmin': this.isAdmin };
+        this.finalParameters = { ...this.params, isAdmin: this.isAdmin };
         // this.finalParameters.push({ isAdmin: this.isAdmin })
-        // console.log('HERE', this.finalParameters)
-        this.httpClient.post('http://80.106.151.108:8000/create_user',
+        this.httpClient.post('http://160.40.49.244:8000/create_user',
             {
                 method: 'POST',
                 headers: {
                     ...this.headers,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(this.finalParameters),
+                parameters: this.finalParameters,
             })
             .subscribe(
                 data => {
-                    // console.log('Post Request is successful ');
+                    this.message.emit(data);
                 },
                 error => {
-                    // console.log('Error', error);
+                    this.message.emit(error);
                 },
             );
     }

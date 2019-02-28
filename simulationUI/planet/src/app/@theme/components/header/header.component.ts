@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
-import { UserService } from '../../../@core/data/users.service';
 import { AnalyticsService } from '../../../@core/utils';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { LayoutService } from '../../../@core/utils';
 
 @Component({
@@ -15,21 +15,27 @@ export class HeaderComponent implements OnInit {
   @Input() position = 'normal';
 
   myImage = new Image(100, 200);
-  user: any;
+  user = {};
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
-    private userService: UserService,
     private analyticsService: AnalyticsService,
-    private layoutService: LayoutService) {
+    private layoutService: LayoutService,
+    private authService: NbAuthService) {
     this.myImage.src = 'assets/images/DAg.jpg';
+    this.authService.onTokenChange()
+      .subscribe((token: NbAuthJWTToken) => {
+
+        if (token.isValid()) {
+          this.user = token.getPayload(); // here we receive a payload from the token and assigne it to our `user` variable
+        }
+
+      });
   }
 
   ngOnInit() {
-    this.userService.getUsers()
-      .subscribe((users: any) => this.user = users.nick);
   }
 
   toggleSidebar(): boolean {

@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
@@ -20,6 +20,13 @@ export class NbSimpleRoleProvider extends NbRoleProvider {
   }
 }
 
+const formSetting: any = {
+  redirectDelay: 0,
+  showMessages: {
+    success: true,
+  },
+};
+
 export const NB_CORE_PROVIDERS = [
   ...DataModule.forRoot().providers,
   ...NbAuthModule.forRoot({
@@ -27,13 +34,12 @@ export const NB_CORE_PROVIDERS = [
     strategies: [
       NbPasswordAuthStrategy.setup({
         name: 'email',
-        baseEndpoint: 'http://80.106.151.108:8000',
-        login: {
-          endpoint: '/auth/sign-in',
-          method: 'post',
+        token: {
+          class: NbAuthJWTToken,
         },
-        register: {
-          endpoint: '/auth/sign-up',
+        baseEndpoint: 'http://160.40.49.244:8000',
+        login: {
+          endpoint: '/login_with_email_password',
           method: 'post',
         },
         logout: {
@@ -50,7 +56,15 @@ export const NB_CORE_PROVIDERS = [
         },
       }),
     ],
-    forms: {},
+    forms: {
+      login: formSetting,
+      register: formSetting,
+      requestPassword: formSetting,
+      resetPassword: formSetting,
+      logout: {
+        redirectDelay: 0,
+      },
+    },
   }).providers,
 
   NbSecurityModule.forRoot({

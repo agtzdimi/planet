@@ -11,8 +11,6 @@ const MongoDbHelper = require("./MongoDbHelper");
 let url = "mongodb://localhost:27017/" + db_name;
 let mongoDbHelper = new MongoDbHelper(url);
 
-const API_KEY = "__api_key__";
-
 // start connection
 mongoDbHelper.start(() => {
     console.log("mongodb ready");
@@ -46,18 +44,12 @@ exports.echo = (req, res) => {
 
 // create user
 exports.create_user = (req, res) => {
-    let password = req.body.password;
-    let email = req.body.email;
-    let isAdmin = req.body.isAdmin;
-    let name = req.body.name;
-    let surname = req.body.surname;
-    let api_key = req.headers.authorization;
+    let password = req.body.parameters.password;
+    let email = req.body.parameters.email;
+    let isAdmin = req.body.parameters.isAdmin;
+    let fullName = req.body.parameters.fullName;
 
-    if (api_key !== API_KEY) {
-        res.json({ status: "error", detail: "api key is invalid" });
-        return;
-    }
-
+    console.log(email, password, email, isAdmin)
     let user_info = {};
     let login_token;
 
@@ -71,7 +63,7 @@ exports.create_user = (req, res) => {
             return new Promise((resolve, reject) => {
 
                 if (results !== 0) {
-                    reject("user already exist");
+                    reject("user already exist!");
                 }
                 resolve();
             });
@@ -121,8 +113,7 @@ exports.create_user = (req, res) => {
                     }
                 ],
                 isAdmin: isAdmin,
-                name: name,
-                surname: surname,
+                fullName: fullName,
                 profile: {}
             };
 
@@ -155,14 +146,8 @@ exports.create_user = (req, res) => {
 
 // login with email and password
 exports.login_with_email_password = (req, res) => {
-    let password = req.body.password;
-    let email = req.body.email;
-    let api_key = req.headers.authorization;
-
-    if (api_key !== API_KEY) {
-        res.json({ status: "error", detail: "api key is invalid 2" });
-        return;
-    }
+    let password = req.body.parameters.password;
+    let email = req.body.parameters.email;
 
     let find_param = {
         "emails.address": email
@@ -194,8 +179,7 @@ exports.login_with_email_password = (req, res) => {
                 user_info._id = results._id;
                 user_info.profile = results.profile;
                 user_info.isAdmin = results.isAdmin;
-                user_info.name = results.name;
-                user_info.surname = results.surname;
+                user_info.fullName = results.fullName;
 
                 let password2 = sha256(password);
 
@@ -261,17 +245,10 @@ exports.login_with_email_password = (req, res) => {
 
 // logout
 exports.logout = (req, res) => {
-    let login_token = req.body.login_token;
+    let login_token = req.body.parameters.login_token;
     if (!login_token) {
         // user is not login
         res.json({ status: "success" });
-        return;
-    }
-
-    let api_key = req.headers.authorization;
-
-    if (api_key !== API_KEY) {
-        res.json({ status: "error", detail: "api key is invalid" });
         return;
     }
 
@@ -343,13 +320,7 @@ exports.logout = (req, res) => {
 
 // login_with_token
 exports.login_with_token = (req, res) => {
-    let login_token = req.body.login_token;
-    let api_key = req.headers.authorization;
-
-    if (api_key !== API_KEY) {
-        res.json({ status: "error", detail: "api key is invalid" });
-        return;
-    }
+    let login_token = req.body.parameters.login_token;
 
     let user_info = {};
 
@@ -380,8 +351,7 @@ exports.login_with_token = (req, res) => {
             user_info._id = results._id;
             user_info.profile = results.profile;
             user_info.isAdmin = results.isAdmin;
-            user_info.name = results.name;
-            user_info.surname = results.surname;
+            user_info.fullName = results.fullName;
 
             // set session
             req.session.login_token;
@@ -401,13 +371,7 @@ exports.login_with_token = (req, res) => {
 
 exports.get_user_list = (req, res) => {
 
-    let api_key = req.headers.authorization;
     let userList = {}
-
-    if (api_key !== API_KEY) {
-        res.json({ status: "error", detail: "api key is invalid" });
-        return;
-    }
 
     // find user
     mongoDbHelper
@@ -421,8 +385,7 @@ exports.get_user_list = (req, res) => {
             userList = results.map((user, index) => {
                 return ({
                     key: user._id,
-                    name: user.name,
-                    surname: user.surname,
+                    fullName: user.fullName,
                     isAdmin: user.isAdmin,
                     email: user.emails[0].address
                 })
@@ -438,14 +401,8 @@ exports.get_user_list = (req, res) => {
 
 exports.remove_user = (req, res) => {
 
-    let api_key = req.headers.authorization;
-    let user = req.body.userId
+    let user = req.body.parameters.userId
     let userList = {}
-
-    if (api_key !== API_KEY) {
-        res.json({ status: "error", detail: "api key is invalid" });
-        return;
-    }
 
     // find user
     mongoDbHelper
@@ -463,8 +420,7 @@ exports.remove_user = (req, res) => {
                     userList = results.map((user, index) => {
                         return ({
                             key: user._id,
-                            name: user.name,
-                            surname: user.surname,
+                            fullName: user.fullName,
                             isAdmin: user.isAdmin,
                             email: user.emails[0].address
                         })
@@ -484,18 +440,11 @@ exports.remove_user = (req, res) => {
 
 // update user
 exports.update_user = (req, res) => {
-    let password = req.body.password;
-    let email = req.body.email;
-    let isAdmin = req.body.isAdmin;
-    let name = req.body.name;
-    let surname = req.body.surname;
-    let userId = req.body.id;
-    let api_key = req.headers.authorization;
-
-    if (api_key !== API_KEY) {
-        res.json({ status: "error", detail: "api key is invalid" });
-        return;
-    }
+    let password = req.body.parameters.password;
+    let email = req.body.parameters.email;
+    let isAdmin = req.body.parameters.isAdmin;
+    let fullName = req.body.parameters.fullName;
+    let userId = req.body.parameters.id;
 
     // find user
     mongoDbHelper
@@ -512,8 +461,7 @@ exports.update_user = (req, res) => {
             };
 
             const token_object = {
-                name: name,
-                surname: surname,
+                fullName: fullName,
                 isAdmin: isAdmin,
                 email: email
             };
@@ -522,8 +470,7 @@ exports.update_user = (req, res) => {
                 $set: {
                     ["emails." + index + ".address"]: token_object.email,
                     ["isAdmin"]: token_object.isAdmin,
-                    ["name"]: token_object.name,
-                    ["surname"]: token_object.surname,
+                    ["fullName"]: token_object.fullName,
                 }
             };
 

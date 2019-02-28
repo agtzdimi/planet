@@ -10,6 +10,7 @@ export class NgxRegisterComponent extends NbRegisterComponent {
 
   doRegister: boolean = false;
   checkBoxVal: boolean = false;
+  showMessage: Object = {};
 
   registerUser() {
     this.doRegister = !this.doRegister;
