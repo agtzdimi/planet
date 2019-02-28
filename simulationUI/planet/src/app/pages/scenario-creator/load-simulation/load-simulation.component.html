@@ -15,7 +15,10 @@
                     [(ngModel)]="formName">
                 </div>
                 <div class="col-md-6">
-                  <div *ngIf="formName === ''" class="requiredField"> Simulation Name is required</div>
+                  <div *ngIf="formName === ''" class="requiredField"> Simulation Name is
+                    required</div>
+                  <div *ngIf="formName.includes('  -  ')" class="requiredField"> '[space][space]-[space][space]' is a
+                    reserved word!</div>
                 </div>
               </div>
               <div class="row">
@@ -274,12 +277,15 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-2">
-        <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"
-          nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startUpload()">
+        <button *ngIf="!formName.includes('  -  ')" nbButton type="button" [nbSpinner]="loading"
+          nbSpinnerStatus="primary" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="large"
+          class="start-upload-btn m-2" (click)="startUpload()">
           Save Scenario
         </button>
       </div>
       <div class="col-md-2">
+        <div *ngIf="formName.includes('  -  ')" class="errorTextarea"> '[space][space]-[space][space]' is a
+          reserved word!</div>
         <div *ngIf="saveMessage!==''" [ngClass]="{
           'errorTextarea': saveMessage.includes('Error'),
           'successTextarea': !saveMessage.includes('Error')

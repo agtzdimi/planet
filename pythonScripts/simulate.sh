@@ -31,7 +31,7 @@ form="$1"
 echo "$form" | egrep ', '
 if (( $? == 0 )); then
    echo "Starting Multi Simulation..."
-   form1="$(echo "$form" | sed 's/^ //' | awk 'BEGIN {FS=OFS=", "}{print $1}')"
+   form1="$(echo "$form" | sed 's/^ //' | awk 'BEGIN {FS=OFS="  -  "}{print $1}')"
    form2="$(echo "$form" | sed 's/^ //' | sed 's/ $//' | awk 'BEGIN {FS=OFS=", "}{print $2}')"
    lines1=$(mongoexport --db planet -q '{"formName": "'"$form1"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName | wc -l)
    lines2=$(mongoexport --db planet -q '{"formName": "'"$form2"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName | wc -l)

@@ -84,7 +84,7 @@ export class DialogSelectMultipleFormPromptComponent {
     this.firstForm = this.selectedOptions[0];
     this.secondForm = this.selectedOptions[1];
     if (this.firstForm && this.secondForm && this.selectedOptions.length === 2) {
-      this.submit(this.firstForm + ', ' + this.secondForm);
+      this.submit(this.firstForm + '  -  ' + this.secondForm);
     } else {
       this.errorMessage = 'Please Select 2 Scenarios';
     }

@@ -46,7 +46,7 @@ export class ComparisonStartComponent {
         },
       );
     const interval = setInterval(() => {
-      this.forms = this.selectedForms.split(', ');
+      this.forms = this.selectedForms.split('  -  ');
       this.httpClient.get('http://160.40.49.244:8000/multi_simulation', {
         params: {
           'formName1': this.forms[0],

@@ -270,8 +270,8 @@ export class NewSimulationFilesComponent implements AfterViewInit {
     }
 
     checkDefaultData() {
-        if (this.formDescription === '' || this.formName === '') {
-            this.errorMessage = 'Please fill in the Simulation Name and Description';
+        if (this.formDescription === '' || this.formName === '' || this.formName.includes('  -  ')) {
+            this.errorMessage = 'Please fill in/correct the Simulation Name and Description';
             return false;
         } else if (this.getFileName(0) !== 'Electricity.xlsx') {
             this.errorMessage = 'Please upload Electricity.xlsx';

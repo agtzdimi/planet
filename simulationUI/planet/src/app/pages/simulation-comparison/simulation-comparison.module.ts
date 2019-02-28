@@ -12,14 +12,12 @@ import { SimulationComparisonRoutingModule } from './simulation-comparison-routi
 import { SimulationComparisonComponent } from './simulation-comparison.component';
 import { ComparisonStartComponent } from './comparison-start/comparison-start.component';
 import { NbDialogModule } from '@nebular/theme';
-import { ComparisonHighlightDirective } from './comparison-start/dialog-prompt/comparison-highlight.directive';
 import { DialogSelectMultipleFormPromptComponent } from './comparison-start/dialog-prompt/select-multiple-form.component';
 import { SimulationsLineComponent } from './comparison-start/simulation-line.component';
 
 const COMPONENTS = [
   SimulationComparisonComponent,
   ComparisonStartComponent,
-  ComparisonHighlightDirective,
   DialogSelectMultipleFormPromptComponent,
   SimulationsLineComponent,
 ];
