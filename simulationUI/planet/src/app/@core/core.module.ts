@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
+import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
@@ -35,16 +35,18 @@ export const NB_CORE_PROVIDERS = [
       NbPasswordAuthStrategy.setup({
         name: 'email',
         token: {
-          class: NbAuthJWTToken,
+          key: 'login_token',
         },
         baseEndpoint: 'http://160.40.49.244:8000',
         login: {
           endpoint: '/login_with_email_password',
           method: 'post',
-        },
-        logout: {
-          endpoint: '/auth/sign-out',
-          method: 'post',
+          redirect: {
+            success: 'pages/simulation',
+            failure: null,
+          },
+          defaultErrors: ['Login/Email combination is not correct, please try again.'],
+          defaultMessages: ['You have been successfully logged in. Redirecting...'],
         },
         requestPass: {
           endpoint: '/auth/request-pass',

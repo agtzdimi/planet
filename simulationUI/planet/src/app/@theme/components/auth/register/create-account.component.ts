@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'ngx-create-acc',
@@ -17,7 +18,7 @@ export class NgxCreateAccountComponent implements OnChanges {
         Accept: 'application/json',
     };
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, protected router: Router) {
         this.message = new EventEmitter<Object>();
     }
 
@@ -41,6 +42,9 @@ export class NgxCreateAccountComponent implements OnChanges {
             .subscribe(
                 data => {
                     this.message.emit(data);
+                    setTimeout(() => {
+                        return this.router.navigateByUrl('/auth/login');
+                    }, 1500);
                 },
                 error => {
                     this.message.emit(error);

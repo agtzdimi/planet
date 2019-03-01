@@ -146,8 +146,8 @@ exports.create_user = (req, res) => {
 
 // login with email and password
 exports.login_with_email_password = (req, res) => {
-    let password = req.body.parameters.password;
-    let email = req.body.parameters.email;
+    let password = req.body.password;
+    let email = req.body.email;
 
     let find_param = {
         "emails.address": email
@@ -165,7 +165,7 @@ exports.login_with_email_password = (req, res) => {
 
             return new Promise((resolve, reject) => {
                 if (!results) {
-                    reject("no such user");
+                    reject("The email provided is not registered!");
                 }
                 if (
                     !results.services ||
@@ -231,21 +231,30 @@ exports.login_with_email_password = (req, res) => {
         .then(results => {
             // set session
             req.session.login_token;
-
             res.json({
+
                 status: "success",
-                user: user_info,
-                login_token: login_token
+                login_token: {
+                    login_token,
+                    payload: {
+                        name: user_info['fullName']
+                    }
+                }
             });
         })
         .catch(err => {
-            res.json({ status: "error", detail: err });
+            res.status(500);
+            res.json({
+                status: "error", data: {
+                    errors: err
+                }
+            });
         });
 };
 
 // logout
 exports.logout = (req, res) => {
-    let login_token = req.body.parameters.login_token;
+    let login_token = req.body.login_token;
     if (!login_token) {
         // user is not login
         res.json({ status: "success" });

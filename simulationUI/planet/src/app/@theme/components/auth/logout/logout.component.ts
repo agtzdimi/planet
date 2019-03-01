@@ -3,13 +3,13 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NB_AUTH_OPTIONS } from '@nebular/auth/auth.options';
 import { getDeepFromObject } from '@nebular/auth/helpers';
 import { NbAuthService } from '@nebular/auth/services/auth.service';
-import { NbAuthResult } from '@nebular/auth/services/auth-result';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'nb-logout',
@@ -17,32 +17,39 @@ import { NbAuthResult } from '@nebular/auth/services/auth-result';
     <div>Logging out, please wait...</div>
   `,
 })
-export class NbLogoutComponent implements OnInit {
+export class NbLogoutComponent implements OnChanges {
+  @Input() token;
 
   redirectDelay: number = 0;
   strategy: string = '';
 
   constructor(protected service: NbAuthService,
+    private httpClient: HttpClient,
     @Inject(NB_AUTH_OPTIONS) protected options = {},
     protected router: Router) {
     this.redirectDelay = this.getConfigValue('forms.logout.redirectDelay');
     this.strategy = this.getConfigValue('forms.logout.strategy');
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges) {
     this.logout(this.strategy);
   }
 
   logout(strategy: string): void {
-    this.service.logout(strategy).subscribe((result: NbAuthResult) => {
 
-      const redirect = result.getRedirect();
-      if (redirect) {
-        setTimeout(() => {
-          return this.router.navigateByUrl(redirect);
-        }, this.redirectDelay);
-      }
-    });
+    this.httpClient.post('http://160.40.49.244:8000/logout', {
+      login_token: this.token,
+    },
+    )
+      .subscribe(
+        data => {
+          setTimeout(() => {
+            return this.router.navigateByUrl('/auth/login');
+          }, this.redirectDelay);
+        },
+        error => {
+        },
+      );
   }
 
   getConfigValue(key: string): any {

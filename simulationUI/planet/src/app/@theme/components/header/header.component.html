@@ -8,7 +8,11 @@
 <div class="header-container">
   <nb-actions size="medium" [class.right]="position === 'normal'" [class.left]="position === 'inverse'">
     <nb-action *nbIsGranted="['view', 'user']">
-      <nb-user [nbContextMenu]="userMenu" [name]="user?.name" [picture]="myImage.src"></nb-user>
+      <nb-user [nbContextMenu]="userMenu" nbContextMenuTrigger="hover" nbContextMenuTag="userProfile"
+        [name]="user?.name" [picture]="user?.image">
+      </nb-user>
     </nb-action>
   </nb-actions>
 </div>
+
+<nb-logout *ngIf="logOut" [token]="login_token"></nb-logout>
