@@ -13,6 +13,8 @@ export class TechInputFieldComponent {
     @Input() compId;
     @Input() val: Number;
     @Output() valChange: EventEmitter<Number>;
+    @Input() inputHtmlLabel1: string;
+    @Input() inputHtmlLabel2: string;
 
     constructor() {
         this.val = 0;

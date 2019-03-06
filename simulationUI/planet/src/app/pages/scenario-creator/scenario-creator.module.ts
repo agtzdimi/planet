@@ -15,7 +15,6 @@ import { ParamHeaderComponent } from './param-header/param-header.component';
 import { MatSlideToggleModule } from '@angular/material';
 import { TechParamComponent } from './tech-param/tech-param.component';
 import { TechCostComponent } from './tech-cost/tech-cost.component';
-import { TechInputFieldComponent } from './tech-param/tech-input-field.component';
 import { DialogTechParamPromptComponent } from './dialog-prompt/tech-param-dialog.component';
 import { DialogControlSystemPromptComponent } from './dialog-prompt/control-system-dialog.component';
 import { DialogEconomyPromptComponent } from './dialog-prompt/economy-dialog.component';
@@ -32,7 +31,6 @@ const COMPONENTS = [
   LoadSimulationFilesComponent,
   ParamHeaderComponent,
   TechParamComponent,
-  TechInputFieldComponent,
   TechCostComponent,
   LeafletMapComponent,
   DialogNamePromptComponent,

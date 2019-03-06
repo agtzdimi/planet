@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GetJWTService } from '../services/get-jwt.service';
-import { CreateDeviceTypeService } from '../services/create-device-type.service';
+import { CreateDeviceService } from '../services/create-device.service';
 
 class ImageSnippet {
   pending: boolean = false;
@@ -12,7 +12,7 @@ class ImageSnippet {
 @Component({
   selector: 'ngx-unit-add',
   styleUrls: ['./unit-add.component.scss'],
-  providers: [GetJWTService, CreateDeviceTypeService],
+  providers: [GetJWTService, CreateDeviceService],
   templateUrl: './unit-add.component.html',
 })
 export class UnitAddComponent {
@@ -22,33 +22,32 @@ export class UnitAddComponent {
   selectedFile: ImageSnippet;
   checkImage = false;
   jwtToken: any;
+  p2gUnit: Object;
 
-  constructor(private getJWTService: GetJWTService, private createDeviceTypeService: CreateDeviceTypeService) {
+  constructor(private getJWTService: GetJWTService, private createDeviceService: CreateDeviceService) {
     this.data = {};
   }
 
   handleClick() {
+    let metadata = JSON.stringify(this.p2gUnit['payload']['parameters']['configuration']);
+    metadata = metadata.replace('}{', ',');
+    metadata = metadata.replace(/\./g, '_');
+    metadata = JSON.parse(metadata);
     this.getJWTService.getToken()
       .then((data: any) => {
         this.jwtToken = data;
         this.data = {
-          'containerPolicy': 'Standalone',
-          'description': this.unitDescr,
-          'deviceElementSchema': {
-            'deviceSlots': [
-            ],
-            'deviceUnits': [
-            ],
-          },
-          'imageUrl': this.selectedFile.src,
-          'metadata': {
-            'manufacturer': 'test',
-          },
-          'name': this.unitName,
-          'token': 'testToken',
+          'comments': this.unitDescr,
+          'deviceElementMappings': [
+          ],
+          'deviceTypeToken': 'p2gToken',
+          metadata,
+          'parentDeviceToken': 'p2gToken',
+          'removeParentHardwareId': true,
+          'status': '',
+          'token': this.unitName,
         };
-
-        this.createDeviceTypeService.createNewDeviceType(this.data, this.jwtToken);
+        this.createDeviceService.createNewDevice(this.data, this.jwtToken);
       });
   }
 

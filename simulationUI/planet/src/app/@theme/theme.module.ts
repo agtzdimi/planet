@@ -10,6 +10,7 @@ import { NgxRegisterComponent } from './components/auth/register/register.compon
 import { NgxCreateAccountComponent } from './components/auth/register/create-account.component';
 import { NbLogoutComponent } from './components/auth/logout/logout.component';
 import { NbAuthComponent } from './components/auth/auth.component';
+import { TechInputFieldComponent } from './components/planet/tech-input-field.component';
 import { RouterModule } from '@angular/router';
 
 import {
@@ -132,6 +133,7 @@ const COMPONENTS = [
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
   ToggleSettingsButtonComponent,
+  TechInputFieldComponent,
 ];
 
 const ENTRY_COMPONENTS = [

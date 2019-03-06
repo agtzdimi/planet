@@ -2,15 +2,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class CreateDeviceTypeService {
+export class CreateDeviceService {
 
     constructor(private httpClient: HttpClient) { }
 
 
-    public createNewDeviceType(data: Object, jwtToken: string) {
+    public createNewDevice(data: Object, jwtToken: string) {
 
         return new Promise(resolve => {
-            this.httpClient.post('http://130.192.180.234:8080/sitewhere/api/devicetypes', data, {
+            this.httpClient.post('http://130.192.180.234:8080/sitewhere/api/devices', data, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + jwtToken,
