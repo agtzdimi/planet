@@ -42,7 +42,7 @@ export const NB_CORE_PROVIDERS = [
           endpoint: '/login_with_email_password',
           method: 'post',
           redirect: {
-            success: 'pages/simulation',
+            success: 'pages/scenario-creator',
             failure: null,
           },
           defaultErrors: ['Login/Email combination is not correct, please try again.'],

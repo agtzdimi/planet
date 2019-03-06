@@ -7,11 +7,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Create New Simulation',
-        link: '/pages/simulation/new-simulation',
+        link: '/pages/scenario-creator/new-simulation',
       },
       {
         title: 'Load Simulation',
-        link: '/pages/simulation/load-simulation',
+        link: '/pages/scenario-creator/load-simulation',
       },
     ],
   },
@@ -24,5 +24,23 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Simulation Comparison',
     icon: 'nb-bar-chart',
     link: '/pages/simulation-comparison',
+  },
+  {
+    title: 'Unit Management',
+    icon: 'nb-grid-a-outline',
+    children: [
+      {
+        title: 'Add',
+        link: '/pages/unit-management/unit-add',
+      },
+      {
+        title: 'Edit',
+        link: '/pages/unit-management/unit-edit',
+      },
+      {
+        title: 'Delete',
+        link: '/pages/unit-management/unit-delete',
+      },
+    ],
   },
 ];

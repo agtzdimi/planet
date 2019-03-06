@@ -9,11 +9,11 @@ import { SimulationComparisonComponent } from './simulation-comparison/simulatio
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
-  children: [ {
+  children: [{
     path: 'miscellaneous',
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
   }, {
-    path: 'simulation',
+    path: 'scenario-creator',
     loadChildren: './scenario-creator/scenario-creator.module#ScenarioCreatorModule',
   }, {
     path: 'simulation-run',
@@ -24,10 +24,13 @@ const routes: Routes = [{
   }, {
     path: 'manage-accounts',
     loadChildren: './manage-accounts/manage-accounts.module#ManageAccountsModule',
+  }, {
+    path: 'unit-management',
+    loadChildren: './unit-management/unit-management.module#UnitManagementModule',
   },
   {
     path: '',
-    redirectTo: 'simulation',
+    redirectTo: 'scenario-creator',
     pathMatch: 'full',
   }, {
     path: '**',
