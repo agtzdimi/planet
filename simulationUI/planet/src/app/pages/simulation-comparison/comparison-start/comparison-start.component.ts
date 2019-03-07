@@ -33,18 +33,6 @@ export class ComparisonStartComponent {
     this.toggleLoadingAnimation();
     this.showLine = false;
     this.initializeCharts();
-    this.httpClient.post('http://160.40.49.244:8000/transfer',
-      {
-        'formName': this.selectedForms,
-      })
-      .subscribe(
-        data => {
-          // console.log('POST Request is successful ', data);
-        },
-        error => {
-          // console.log('Error', error);
-        },
-      );
     const interval = setInterval(() => {
       this.forms = this.selectedForms.split('  -  ');
       this.httpClient.get('http://160.40.49.244:8000/multi_simulation', {

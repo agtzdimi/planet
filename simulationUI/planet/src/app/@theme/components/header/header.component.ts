@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.login_token = token['token']['login_token'];
-          this.user['name'] = token['payload']['fullName']; // here we receive a payload from the token and assigne it to our `user` variable
+          this.user['name'] = token['payload']['fullName']; // here we receive a payload from the token and assign it to our user variable
         }
 
       });
