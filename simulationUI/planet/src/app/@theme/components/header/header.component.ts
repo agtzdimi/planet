@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { AnalyticsService } from '../../../@core/utils';
-import { NbAuthService, NbAuthSimpleToken } from '@nebular/auth';
+import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { LayoutService } from '../../../@core/utils';
 import { filter, map } from 'rxjs/operators';
 
@@ -29,10 +29,10 @@ export class HeaderComponent implements OnInit {
     private authService: NbAuthService) {
     this.myImage.src = 'assets/images/DAg.jpg';
     this.authService.onTokenChange()
-      .subscribe((token: NbAuthSimpleToken) => {
+      .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.login_token = token['token']['login_token'];
-          this.user = token['token']['payload']; // here we receive a payload from the token and assigne it to our `user` variable
+          this.user['name'] = token['payload']['fullName']; // here we receive a payload from the token and assigne it to our `user` variable
         }
 
       });

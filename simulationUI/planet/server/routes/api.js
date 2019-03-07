@@ -2,6 +2,12 @@ const uuid = require("uuid");
 const sha256 = require("sha256");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const fs = require('fs');
+const jwt = require('jsonwebtoken');
+
+// use 'utf8' to get string instead of byte array  (512 bit key)
+var privateKEY = fs.readFileSync('./src/assets/data/private.key', 'utf8');
+var publicKEY = fs.readFileSync('./src/assets/data/public.key', 'utf8');
 
 // change this
 const db_name = "planet";
@@ -10,6 +16,38 @@ const db_name = "planet";
 const MongoDbHelper = require("./MongoDbHelper");
 let url = "mongodb://localhost:27017/" + db_name;
 let mongoDbHelper = new MongoDbHelper(url);
+
+getJwtToken = (payload) => {
+
+    const signOptions = {
+        expiresIn: 30,    // 30 days validity
+        algorithm: "RS256"
+    };
+
+    try {
+        return jwt.sign(payload, privateKEY, signOptions);
+    } catch (err) {
+        console.log(err)
+        return err;
+    }
+}
+
+verifyJwtToken = (token) => {
+    const verifyOptions = {
+        expiresIn: "30d",
+        algorithm: ["RS256"]
+    };
+    try {
+        return jwt.verify(token, publicKEY, verifyOptions);
+    } catch (err) {
+        return false;
+    }
+}
+
+decodeJwtToken = (token) => {
+    return jwt.decode(token, { complete: true });
+    //returns null if token is invalid
+}
 
 // start connection
 mongoDbHelper.start(() => {
@@ -74,7 +112,7 @@ exports.create_user = (req, res) => {
             var bcrypt_hash = bcrypt.hashSync(password2, 10);
 
             // login token which to use login
-            login_token = makeid("4") + parseInt(new Date().getTime()).toString(36);
+            login_token = getJwtToken({ email: email, fullName: fullName });
             const hashed_token = crypto
                 .createHash("sha256")
                 .update(login_token)
@@ -134,8 +172,9 @@ exports.create_user = (req, res) => {
 
             res.json({
                 status: "success",
-                user: user_info,
-                login_token: login_token
+                data: {
+                    token: login_token,
+                },
             });
         })
         .catch(err => {
@@ -206,7 +245,7 @@ exports.login_with_email_password = (req, res) => {
             };
 
             // login token
-            login_token = makeid("4") + parseInt(new Date().getTime()).toString(36);
+            login_token = getJwtToken({ email: email, fullName: user_info.fullName });
             const hashed_token = crypto
                 .createHash("sha256")
                 .update(login_token)
@@ -232,14 +271,10 @@ exports.login_with_email_password = (req, res) => {
             // set session
             req.session.login_token;
             res.json({
-
                 status: "success",
-                login_token: {
-                    login_token,
-                    payload: {
-                        name: user_info['fullName']
-                    }
-                }
+                data: {
+                    token: login_token,
+                },
             });
         })
         .catch(err => {
