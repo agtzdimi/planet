@@ -219,6 +219,7 @@ exports.login_with_email_password = (req, res) => {
                 user_info.profile = results.profile;
                 user_info.isAdmin = results.isAdmin;
                 user_info.fullName = results.fullName;
+                user_info.image = results.profile.image;
 
                 let password2 = sha256(password);
 
@@ -245,7 +246,7 @@ exports.login_with_email_password = (req, res) => {
             };
 
             // login token
-            login_token = getJwtToken({ email: email, fullName: user_info.fullName });
+            login_token = getJwtToken({ email: email, fullName: user_info.fullName, image: user_info.image });
             const hashed_token = crypto
                 .createHash("sha256")
                 .update(login_token)
@@ -484,41 +485,25 @@ exports.remove_user = (req, res) => {
 
 // update user
 exports.update_user = (req, res) => {
-    let password = req.body.parameters.password;
-    let email = req.body.parameters.email;
-    let isAdmin = req.body.parameters.isAdmin;
-    let fullName = req.body.parameters.fullName;
-    let userId = req.body.parameters.id;
+    let email = req.body.email;
+    let image = req.body.image;
 
     // find user
     mongoDbHelper
         .collection("users")
-        .findById(userId)
+        .find({ "emails.address": email })
         .then(results => {
             if (results === null) {
                 return Promise.reject("no such user");
             }
-            let index = 0
-
-            let find_param = {
-                _id: userId
-            };
-
-            const token_object = {
-                fullName: fullName,
-                isAdmin: isAdmin,
-                email: email
-            };
 
             let upd_param = {
                 $set: {
-                    ["emails." + index + ".address"]: token_object.email,
-                    ["isAdmin"]: token_object.isAdmin,
-                    ["fullName"]: token_object.fullName,
+                    ["profile.image"]: image,
                 }
             };
 
-            return mongoDbHelper.collection("users").update(find_param, upd_param);
+            return mongoDbHelper.collection("users").update({ "emails.address": email }, upd_param);
         })
         .then(() => {
             res.json({ status: "success" });

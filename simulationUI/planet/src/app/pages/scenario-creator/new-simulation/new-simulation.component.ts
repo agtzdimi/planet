@@ -285,7 +285,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         } else if (!Number(+this.paramInit['payload']['simulation']['simulation.time'])) {
             this.errorMessage = 'Please give a number for simulation.time';
             return false;
-        } else if (!this.timeStep['days'] && this.timeStep['hours']) {
+        } else if (!this.timeStep['mins'] && !this.timeStep['hours']) {
             this.errorMessage = 'Please Specify if time step is given on Days or Hours';
             return false;
         } else if (!this.simulationTime['days'] && !this.simulationTime['hours']) {

@@ -5,6 +5,7 @@ import { PagesComponent } from './pages.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { SimulationRunComponent } from './simulation-run/simulation-run.component';
 import { SimulationComparisonComponent } from './simulation-comparison/simulation-comparison.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const routes: Routes = [{
   path: '',
@@ -27,6 +28,10 @@ const routes: Routes = [{
   }, {
     path: 'unit-management',
     loadChildren: './unit-management/unit-management.module#UnitManagementModule',
+  },
+  {
+    path: 'user-profile',
+    component: UserProfileComponent,
   },
   {
     path: '',
