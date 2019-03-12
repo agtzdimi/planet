@@ -49,12 +49,11 @@ export const NB_CORE_PROVIDERS = [
           defaultMessages: ['You have been successfully logged in. Redirecting...'],
         },
         requestPass: {
-          endpoint: '/auth/request-pass',
+          endpoint: '/forgot',
           method: 'post',
         },
         resetPass: {
-          endpoint: '/auth/reset-pass',
-          method: 'post',
+          endpoint: '/reset',
         },
       }),
     ],

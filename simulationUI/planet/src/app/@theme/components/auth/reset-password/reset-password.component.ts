@@ -7,4 +7,10 @@ import { NbResetPasswordComponent } from '@nebular/auth';
 })
 export class NgxResetPasswordComponent extends NbResetPasswordComponent {
 
+  sendRequest = false;
+
+  test() {
+    this.sendRequest = true;
+  }
+
 }

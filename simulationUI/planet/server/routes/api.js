@@ -2,12 +2,15 @@ const uuid = require("uuid");
 const sha256 = require("sha256");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const async = require('async');
 
 // use 'utf8' to get string instead of byte array  (512 bit key)
-var privateKEY = fs.readFileSync('./src/assets/data/private.key', 'utf8');
-var publicKEY = fs.readFileSync('./src/assets/data/public.key', 'utf8');
+const privateKEY = fs.readFileSync('./src/assets/data/private.key', 'utf8');
+const publicKEY = fs.readFileSync('./src/assets/data/public.key', 'utf8');
 
 // change this
 const db_name = "planet";
@@ -224,12 +227,11 @@ exports.login_with_email_password = (req, res) => {
                 let password2 = sha256(password);
 
                 const saved_hash = results.services.password.bcrypt;
-
                 bcrypt.compare(password2, saved_hash, (err, res) => {
                     if (err) {
                         reject(err);
                     }
-
+                    console.log(err, res)
                     if (res === true) {
                         resolve();
                     } else {
@@ -512,3 +514,99 @@ exports.update_user = (req, res) => {
             res.json({ status: "error", detail: err });
         });
 };
+
+exports.forgot = (req, res, next) => {
+    async.waterfall([
+        function (done) {
+            crypto.randomBytes(20, function (err, buf) {
+                const token = buf.toString('hex');
+                done(err, token);
+            });
+        },
+        function (token, done) {
+            mongoDbHelper
+                .collection("users")
+                .findOne({ "emails.address": req.body.email })
+                .then(user => {
+                    if (!user) {
+                        req.flash('error', 'No account with that email address exists.');
+                        return res.redirect('/forgot');
+                    }
+
+                    let upd_param = {
+                        $set: {
+                            ["resetPasswordToken"]: token,
+                            ["resetPasswordExpires"]: Date.now() + 3600000
+                        }
+                    };
+
+                    mongoDbHelper.collection("users").update({ "emails.address": req.body.email }, upd_param);
+                    try {
+                        done(null, token, user);
+                    } catch (error) {
+                        console.log(error)
+                    }
+                });
+        },
+        function (token, user, done) {
+            try {
+                var transporter = nodemailer.createTransport(smtpTransport({
+                    service: 'gmail',
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    secure: false, // true for 465, false for other ports
+                    auth: {
+                        user: 'planet.2019eu@gmail.com',
+                        pass: '2019CeRtH!'
+                    }
+                }));
+
+                var mailOptions = {
+                    to: user.emails[0]['address'],
+                    from: 'passwordreset@demo.com',
+                    subject: 'Password Reset',
+                    text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                        'http://' + '160.40.49.244:21569/#/auth/reset-password/' + token + '\n\n' +
+                        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                };
+                transporter.sendMail(mailOptions, function (err) {
+                    const message = 'An e-mail has been sent to ' + user.emails[0]['address'] + ' with further instructions.'
+                    console.log(err, message)
+                    // res.json({ message: message });
+                    done(err, 'done');
+                });
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+    ], function (err) {
+        if (err) return next(err);
+        res.json({ status: "success" });
+    });
+};
+
+exports.reset = (req, res) => {
+    let password = req.body.password;
+    mongoDbHelper
+        .collection("users")
+        .findOne({ "resetPasswordToken": req.body.token, resetPasswordExpires: { $gt: Date.now() } })
+        .then(user => {
+            if (!user) {
+                req.flash('error', 'Password reset token is invalid or has expired.');
+                return res.redirect('/forgot');
+            }
+            password = sha256(password);
+            const bcrypt_hash = bcrypt.hashSync(password, 10);
+
+            let upd_param = {
+                $set: {
+                    ["services.password.bcrypt"]: bcrypt_hash,
+                }
+            };
+
+            mongoDbHelper.collection("users").update({ "resetPasswordToken": req.body.token }, upd_param);
+            res.json({ status: "success" });
+        })
+};  

@@ -1,4 +1,4 @@
-import { ExtraOptions, RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes, UrlSegment, UrlMatchResult } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from './auth-guard.service';
 import {
@@ -42,7 +42,7 @@ const routes: Routes = [
         component: NgxRequestPasswordComponent,
       },
       {
-        path: 'reset-password',
+        matcher: ResetMatcher,
         component: NgxResetPasswordComponent,
       },
     ],
@@ -54,6 +54,24 @@ const routes: Routes = [
 const config: ExtraOptions = {
   useHash: true,
 };
+
+export function ResetMatcher(url: UrlSegment[]): UrlMatchResult {
+  if (url.length === 0) {
+    return null;
+  }
+  const reg = /^.*reset-password.*$/;
+  const param = url[0].toString();
+  if (param.match(reg)) {
+    return (
+      {
+        consumed: url,
+        posParams: {
+          id: url[0],
+        },
+      }
+    );
+  } return null;
+}
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, config)],

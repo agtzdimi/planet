@@ -7,6 +7,7 @@ import { NgxAuthBlockComponent } from './components/auth/auth-block/auth-block.c
 import { NgxResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { NgxRequestPasswordComponent } from './components/auth/request-password/request-password.component';
 import { NgxRegisterComponent } from './components/auth/register/register.component';
+import { NgxSendResetRequestComponent } from './components/auth/reset-password/send-reset-request';
 import { NgxCreateAccountComponent } from './components/auth/register/create-account.component';
 import { NbLogoutComponent } from './components/auth/logout/logout.component';
 import { NbAuthComponent } from './components/auth/auth.component';
@@ -171,7 +172,7 @@ const NB_THEME_PROVIDERS = [
   imports: [...BASE_MODULES, ...NB_MODULES, RouterModule],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES],
   declarations: [...COMPONENTS, ...PIPES, NgxAuthBlockComponent, NgxLoginComponent,
-    NbAuthComponent, NgxRegisterComponent, NgxResetPasswordComponent, NgxRequestPasswordComponent,
+    NbAuthComponent, NgxRegisterComponent, NgxSendResetRequestComponent, NgxResetPasswordComponent, NgxRequestPasswordComponent,
     NgxCreateAccountComponent, NbLogoutComponent],
   entryComponents: [...ENTRY_COMPONENTS],
 })
