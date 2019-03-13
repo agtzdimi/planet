@@ -215,6 +215,8 @@ app.post("/get_user_list", api.get_user_list);
 app.post("/remove_user", api.remove_user);
 app.post("/forgot", api.forgot);
 app.post("/reset", api.reset);
+app.post("/refresh", api.refresh);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

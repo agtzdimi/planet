@@ -489,6 +489,41 @@ exports.remove_user = (req, res) => {
 // update user
 exports.update_user = (req, res) => {
     let email = req.body.email;
+    let image = req.body.image;
+
+    // find user
+    mongoDbHelper
+        .collection("users")
+        .find({ "emails.address": email })
+        .then(results => {
+            if (results === null) {
+                return Promise.reject("no such user");
+            }
+
+            let upd_param = {
+                $set: {
+                    ["profile.image"]: image,
+                }
+            };
+
+            return mongoDbHelper.collection("users").update({ "emails.address": email }, upd_param);
+        })
+        .then(() => {
+            res.json({
+                status: "success",
+                data: {
+                    image: image,
+                },
+            });
+        })
+        .catch(err => {
+            console.log(err)
+            res.json({ status: "error", detail: err });
+        });
+};
+
+exports.refresh = (req, res) => {
+    let email = req.body.email;
     let fullName = req.body.name;
     let image = req.body.image;
 
@@ -516,7 +551,6 @@ exports.update_user = (req, res) => {
 
             let upd_param = {
                 $set: {
-                    ["profile.image"]: image,
                     "services.resume.loginTokens": token_object
                 }
             };
@@ -524,13 +558,18 @@ exports.update_user = (req, res) => {
             return mongoDbHelper.collection("users").update({ "emails.address": email }, upd_param);
         })
         .then(() => {
-            res.json({ status: "success" });
+            res.json({
+                status: "success",
+                data: {
+                    token: login_token,
+                },
+            });
         })
         .catch(err => {
             console.log(err)
             res.json({ status: "error", detail: err });
         });
-};
+}
 
 exports.forgot = (req, res, next) => {
     async.waterfall([

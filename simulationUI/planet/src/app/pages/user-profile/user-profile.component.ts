@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { UserProfileService } from './user-profile.service';
 
@@ -20,6 +20,11 @@ export class UserProfileComponent implements OnInit {
   user: Object;
   selectedFile: ImageSnippet;
   checkImage = false;
+
+  @HostListener('document:ImageEvent', ['$event.detail.image', '$event.detail.token'])
+  updateImage(event) {
+    this.user['image'] = event;
+  }
 
   constructor(private authService: NbAuthService, private userProfileService: UserProfileService) {
     this.user = {};

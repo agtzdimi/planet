@@ -37,6 +37,9 @@ export const NB_CORE_PROVIDERS = [
         token: {
           class: NbAuthJWTToken,
         },
+        refreshToken: {
+          endpoint: '/refresh',
+        },
         baseEndpoint: 'http://160.40.49.244:8000',
         login: {
           endpoint: '/login_with_email_password',

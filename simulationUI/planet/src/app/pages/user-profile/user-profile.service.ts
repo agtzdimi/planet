@@ -1,13 +1,12 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NbAuthService, NbAuthResult } from '@nebular/auth';
 
 @Injectable()
 export class UserProfileService {
     message: string = '';
 
-    constructor(private httpClient: HttpClient, private authService: NbAuthService) { }
-
+    constructor(private httpClient: HttpClient) {
+    }
 
     public uploadImage(image, email, name): Promise<any> {
         return new Promise(resolve => {
@@ -18,9 +17,10 @@ export class UserProfileService {
             })
                 .subscribe(
                     data => {
-                        this.authService.refreshToken('email').subscribe((result: NbAuthResult) => {
-                            // console.log(result)
-                        });
+                        const event = new CustomEvent(
+                            'ImageEvent',
+                            { detail: { 'image': data['data']['image'], 'token': data['data']['token'] } });
+                        document.dispatchEvent(event);
                     },
                     error => {
                         // console.log(error)

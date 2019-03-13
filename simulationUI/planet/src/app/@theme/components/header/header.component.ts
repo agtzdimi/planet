@@ -1,20 +1,30 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
 
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { AnalyticsService } from '../../../@core/utils';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { NbAuthService, NbAuthJWTToken, NbAuthResult } from '@nebular/auth';
 import { LayoutService } from '../../../@core/utils';
 import { filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { UserProfileService } from '../../../pages/user-profile/user-profile.service';
 
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
   templateUrl: './header.component.html',
+  providers: [UserProfileService],
 })
 export class HeaderComponent implements OnInit {
 
   @Input() position = 'normal';
+
+  @HostListener('document:ImageEvent', ['$event'])
+  updateImage(event) {
+    this.user['image'] = event['detail']['image'];
+    this.authService.refreshToken('email', this.user)
+      .subscribe((result: NbAuthResult) => {
+      });
+  }
 
   myImage = new Image(100, 200);
   user = {};
@@ -33,10 +43,10 @@ export class HeaderComponent implements OnInit {
     this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
-          // console.log(token)
           this.login_token = token['token']['login_token'];
           this.user['name'] = token['payload']['fullName']; // here we receive a payload from the token and assign it to our user variable
           this.user['image'] = token['payload']['image'];
+          this.user['email'] = token['payload']['email'];
         }
 
       });
