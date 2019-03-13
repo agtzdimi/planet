@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
     }
 
     canActivate() {
-        return this.authService.isAuthenticated()
+        return this.authService.isAuthenticatedOrRefresh()
             .pipe(
                 tap(authenticated => {
                     if (!authenticated) {

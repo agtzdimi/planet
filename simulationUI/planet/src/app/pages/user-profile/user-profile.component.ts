@@ -55,7 +55,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   updateUserInfo() {
-    this.userProfileService.uploadImage(this.selectedFile.src, this.user['email']);
+    this.userProfileService.uploadImage(this.selectedFile.src, this.user['email'], this.user['name']);
   }
 
 }

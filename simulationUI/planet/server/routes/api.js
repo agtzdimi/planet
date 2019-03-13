@@ -262,7 +262,7 @@ exports.login_with_email_password = (req, res) => {
             };
 
             let upd_param = {
-                $push: {
+                $set: {
                     "services.resume.loginTokens": token_object
                 }
             };
@@ -281,6 +281,7 @@ exports.login_with_email_password = (req, res) => {
             });
         })
         .catch(err => {
+            console.log(err)
             res.status(500);
             res.json({
                 status: "error", data: {
@@ -488,6 +489,7 @@ exports.remove_user = (req, res) => {
 // update user
 exports.update_user = (req, res) => {
     let email = req.body.email;
+    let fullName = req.body.name;
     let image = req.body.image;
 
     // find user
@@ -499,9 +501,23 @@ exports.update_user = (req, res) => {
                 return Promise.reject("no such user");
             }
 
+            login_token = getJwtToken({ email: email, fullName: fullName, image: image });
+            const hashed_token = crypto
+                .createHash("sha256")
+                .update(login_token)
+                .digest("base64");
+
+            const token_object = {
+                loggedIn: new Date(),
+                hashedToken: hashed_token,
+                loggedOut: "",
+                logStatus: "true"
+            };
+
             let upd_param = {
                 $set: {
                     ["profile.image"]: image,
+                    "services.resume.loginTokens": token_object
                 }
             };
 
@@ -511,6 +527,7 @@ exports.update_user = (req, res) => {
             res.json({ status: "success" });
         })
         .catch(err => {
+            console.log(err)
             res.json({ status: "error", detail: err });
         });
 };

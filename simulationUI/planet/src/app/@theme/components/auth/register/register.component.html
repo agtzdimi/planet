@@ -2,12 +2,12 @@
     <h2 class="title">Sign Up</h2>
     <form #form="ngForm">
 
-        <nb-alert *ngIf="showMessage.status === 'error'" outline="danger">
+        <nb-alert *ngIf="showMessage['status'] === 'error'" outline="danger">
             <div><strong>{{showMessage.detail}}</strong></div>
             <div *ngFor="let error of errors">{{ error }}</div>
         </nb-alert>
 
-        <nb-alert *ngIf="showMessage.status === 'success'" outline="success">
+        <nb-alert *ngIf="showMessage['status'] === 'success'" outline="success">
             <div><strong>User Successfully created!</strong></div>
             <div *ngFor="let message of messages">{{ message }}</div>
         </nb-alert>
@@ -85,7 +85,7 @@
             </small>
         </div>
 
-        <label for="input-admin">Is Admin</label>
+        <label for="input-admin">Admin</label>
         <br>
         <nb-checkbox id="input-admin" (click)="checkBoxValue()"></nb-checkbox>
 
