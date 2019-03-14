@@ -25,10 +25,10 @@ export class CreateDeviceService {
             })
                 .subscribe(
                     res => {
-                        resolve('POST Request is successful ' + res);
+                        resolve('Device was successfully created!');
                     },
                     error => {
-                        resolve('Error' + error);
+                        resolve('Error: ' + error['error']);
                     },
                 );
         });

@@ -30,8 +30,10 @@ export class GetJWTService {
             }))
                 .subscribe(
                     data => {
+                        resolve(data);
                     },
                     error => {
+                        resolve(error['error']);
                     },
                 );
         });

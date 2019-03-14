@@ -1,0 +1,15 @@
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'MW<sub>e</sub>'"
+    (valChange)="onChange(['nominal.electric.power'],+$event)"
+    [(val)]="wtParams['payload']['parameters']['configuration']['nominal.electric.power']"
+    [compId]="'wt_nominal.electric.power'" [inputHtmlLabel1]="'P<sub>Nominal</sub>'">
+</ngx-input-field>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'%'" (valChange)="onChange(['producibility.profile'],+$event)"
+    [(val)]="wtParams['payload']['parameters']['configuration']['producibility.profile']"
+    [compId]="'wt_producibility.profile'" [inputHtmlLabel1]="'Producibility'">
+</ngx-input-field>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="onChange(['cos_phi'],+$event)"
+    [(val)]="wtParams['payload']['parameters']['configuration']['cos_phi']" [compId]="'wt_cos_phi'"
+    [inputHtmlLabel1]="'cos(phi)'">
+</ngx-input-field>

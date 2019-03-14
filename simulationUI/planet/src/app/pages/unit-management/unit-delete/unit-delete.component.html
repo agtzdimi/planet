@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col">
+
+    <nb-card>
+      <nb-card-header>Sitewhere Device Type Registration</nb-card-header>
+      <nb-card-body>
+
+        <div class="row">
+          <div class="col-md-2">
+            <button nbButton hero status="info" (click)="handleClick()">Send Data to Sitewhere</button>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card>
+      <nb-card-header>Power 2 Gas Unit Parameters</nb-card-header>
+      <nb-card-body>
+
+        <div class="form-group row">
+
+          <div class="col-md-3"></div>
+          <label for="'unitName'" class="col-md-1 formLabel">Unit Name</label>
+          <div class="col-md-3">
+            <input type="text" fullWidth nbInput shape="semi-round" id="'unitName'" [(ngModel)]="unitName">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-3"></div>
+          <label for="'unitDescr'" class="col-md-1 formDescr">Unit Description</label>
+          <div class="col-md-3">
+            <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'" [(ngModel)]="unitDescr"></textarea>
+          </div>
+        </div>
+
+        <hr class="m-4">
+        <div class="row">
+          <div class="col-md-12">
+            <ngx-p2g-unit (p2g)="p2gUnit=$event"></ngx-p2g-unit>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+  </div>
+</div>

@@ -11,19 +11,39 @@ import { SuiModule } from 'ng2-semantic-ui';
 import { UnitManagementRoutingModule } from './unit-management-routing.module';
 import { UnitManagementComponent } from './unit-management.component';
 import { UnitAddComponent } from './unit-add/unit-add.component';
-import { P2GUnitComponent } from './unit-types/p2g-unit.component';
+import { UnitEditComponent } from './unit-edit/unit-edit.component';
+import { UnitDeleteComponent } from './unit-delete/unit-delete.component';
+import { P2GUnitComponent } from './unit-types/p2g-unit/p2g-unit.component';
+import { PVUnitComponent } from './unit-types/pv-unit/pv-unit.component';
+import { CHPUnitComponent } from './unit-types/chp-unit/chp-unit.component';
+import { GGUnitComponent } from './unit-types/gg-unit/gg-unit.component';
+import { EGUnitComponent } from './unit-types/eg-unit/eg-unit.component';
+import { WTUnitComponent } from './unit-types/wt-unit/wt-unit.component';
+import { DHGUnitComponent } from './unit-types/dhg-unit/dhg-unit.component';
+import { G2HUnitComponent } from './unit-types/g2h-unit/g2h-unit.component';
+import { P2HHeatPumpUnitComponent } from './unit-types/p2h-heat-pump-unit/p2h-heat-pump-unit.component';
+import { P2HElectricHeatUnitComponent } from './unit-types/p2h-electric-heat-unit/p2h-electric-heat-unit.component';
 
 
 const COMPONENTS = [
   UnitManagementComponent,
   UnitAddComponent,
+  UnitEditComponent,
+  UnitDeleteComponent,
   P2GUnitComponent,
+  PVUnitComponent,
+  G2HUnitComponent,
+  DHGUnitComponent,
+  WTUnitComponent,
+  EGUnitComponent,
+  GGUnitComponent,
+  CHPUnitComponent,
+  P2HHeatPumpUnitComponent,
+  P2HElectricHeatUnitComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   UnitManagementComponent,
-  UnitAddComponent,
-  P2GUnitComponent,
 ];
 
 

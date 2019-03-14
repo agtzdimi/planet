@@ -1,26 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { GetJWTService } from '../services/get-jwt.service';
 import { CreateDeviceService } from '../services/create-device.service';
-import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 
 @Component({
-  selector: 'ngx-unit-add',
-  styleUrls: ['./unit-add.component.scss'],
+  selector: 'ngx-unit-edit',
+  styleUrls: ['./unit-edit.component.scss'],
   providers: [GetJWTService, CreateDeviceService],
-  templateUrl: './unit-add.component.html',
+  templateUrl: './unit-edit.component.html',
 })
-export class UnitAddComponent implements OnInit {
+export class UnitEditComponent implements OnInit {
   data: Object;
   unitName: string;
   unitDescr: string;
-  jwtToken: any;
   message: string;
+  jwtToken: any;
   p2gUnit: Object;
-  hpUnit: Object;
   ehUnit: Object;
-  flexUnits = [{}];
+  hpUnit: Object;
+  flexUnits: Object;
   activeModel: string = '';
-  transitionController = new TransitionController();
 
   constructor(private getJWTService: GetJWTService, private createDeviceService: CreateDeviceService) {
     this.data = {};
@@ -40,12 +38,6 @@ export class UnitAddComponent implements OnInit {
       label: 'Electric Heater',
     },
     ];
-  }
-
-  public animateInfo(controller, transitionName: string = 'slide down', id) {
-    this.activeModel = id;
-    controller.animate(
-      new Transition(transitionName, 1500, TransitionDirection.In));
   }
 
   handleClick() {

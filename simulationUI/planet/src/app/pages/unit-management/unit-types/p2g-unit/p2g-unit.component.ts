@@ -37,7 +37,6 @@ export class P2GUnitComponent {
     };
 
     this.p2g = new EventEmitter<Object>();
-
   }
 
   onChange(attribute, event) {

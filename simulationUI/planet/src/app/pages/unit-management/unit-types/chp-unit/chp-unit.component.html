@@ -1,0 +1,20 @@
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'MW<sub>e</sub>'"
+    (valChange)="onChange(['nominal.electric.power'],+$event)"
+    [(val)]="chpParams['payload']['parameters']['configuration']['nominal.electric.power']"
+    [compId]="'chp_nominal.electric.power'" [inputHtmlLabel1]="'P<sub>Nominal</sub>'">
+</ngx-input-field>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'%'" (valChange)="onChange(['efficiency.electric'],+$event)"
+    [(val)]="chpParams['payload']['parameters']['configuration']['efficiency.electric']"
+    [compId]="'chp_efficiency.electric'" [inputHtmlLabel1]="'Eff<sub>elect</sub>'">
+</ngx-input-field>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'%'" (valChange)="onChange(['efficiency.thermal'],+$event)"
+    [(val)]="chpParams['payload']['parameters']['configuration']['efficiency.thermal']"
+    [compId]="'chp_efficiency.thermal'" [inputHtmlLabel1]="'Eff<sub>th</sub>'">
+</ngx-input-field>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="onChange(['cos_phi'],+$event)"
+    [(val)]="chpParams['payload']['parameters']['configuration']['cos_phi']" [compId]="'chp_cos_phi'"
+    [inputHtmlLabel1]="'cos(phi)'">
+</ngx-input-field>
