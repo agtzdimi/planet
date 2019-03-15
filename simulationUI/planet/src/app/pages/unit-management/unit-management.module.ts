@@ -23,6 +23,9 @@ import { DHGUnitComponent } from './unit-types/dhg-unit/dhg-unit.component';
 import { G2HUnitComponent } from './unit-types/g2h-unit/g2h-unit.component';
 import { P2HHeatPumpUnitComponent } from './unit-types/p2h-heat-pump-unit/p2h-heat-pump-unit.component';
 import { P2HElectricHeatUnitComponent } from './unit-types/p2h-electric-heat-unit/p2h-electric-heat-unit.component';
+import { UnitModelsComponent } from './unit-edit/unit-models.component';
+import { DialogDeleteComponent } from './unit-delete/dialog-delete.component';
+import { NbDialogModule } from '@nebular/theme';
 
 
 const COMPONENTS = [
@@ -40,10 +43,13 @@ const COMPONENTS = [
   CHPUnitComponent,
   P2HHeatPumpUnitComponent,
   P2HElectricHeatUnitComponent,
+  UnitModelsComponent,
+  DialogDeleteComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   UnitManagementComponent,
+  DialogDeleteComponent,
 ];
 
 
@@ -52,6 +58,7 @@ const ENTRY_COMPONENTS = [
     ThemeModule,
     UnitManagementRoutingModule,
     NbButtonModule,
+    NbDialogModule.forRoot(),
     HttpClientModule,
     NgxChartsModule,
     ChartModule,

@@ -1,47 +1,64 @@
-<div class="row">
+<div class="row" [ngSwitch]="phase">
   <div class="col">
 
-    <nb-card>
-      <nb-card-header>Sitewhere Device Type Registration</nb-card-header>
-      <nb-card-body>
+    <div *ngSwitchCase="'1'">
+      <h2>Remove an Existing Device</h2>
 
-        <div class="row">
-          <div class="col-md-2">
-            <button nbButton hero status="info" (click)="handleClick()">Send Data to Sitewhere</button>
+      <div class="row">
+        <div class="col-md-4" *ngFor="let unit of flexUnits">
+          <div class="imageCard">
+            <nb-card>
+              <nb-card-body (click)="handleModel(unit.id)">
+                <img class="component-icon" src="assets/images/{{unit.id}}.jpg"
+                  [ngStyle]="{'width': '120px', 'height': '100px'}">
+                <label class="component-name">{{unit.label}}</label>
+              </nb-card-body>
+            </nb-card>
           </div>
         </div>
-      </nb-card-body>
-    </nb-card>
+      </div>
+    </div>
 
-    <nb-card>
-      <nb-card-header>Power 2 Gas Unit Parameters</nb-card-header>
-      <nb-card-body>
+    <div *ngSwitchCase="'2'">
 
-        <div class="form-group row">
+      <div class="row">
+        <div class="col-md-1">
+          <nb-actions size="large">
+            <nb-action icon="nb-arrow-thin-left" (click)="phase=phase - 1; message=''"></nb-action>
+          </nb-actions>
+        </div>
+        <div class="col-md-10">
+          <h2>Select one of the {{activeModel}} Units</h2>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
 
-          <div class="col-md-3"></div>
-          <label for="'unitName'" class="col-md-1 formLabel">Unit Name</label>
-          <div class="col-md-3">
-            <input type="text" fullWidth nbInput shape="semi-round" id="'unitName'" [(ngModel)]="unitName">
-          </div>
+      <div class="row" [ngSwitch]="activeModel">
+
+        <div class="col-md-12" *ngSwitchCase="'P2G'">
+          <ngx-unit-models [loading]="loading" [models]="p2gUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event)"></ngx-unit-models>
         </div>
 
-        <div class="form-group row">
-          <div class="col-md-3"></div>
-          <label for="'unitDescr'" class="col-md-1 formDescr">Unit Description</label>
-          <div class="col-md-3">
-            <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'" [(ngModel)]="unitDescr"></textarea>
-          </div>
+        <div class="col-md-12" *ngSwitchCase="'HP'">
+          <ngx-unit-models [loading]="loading" [models]="hpUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event)"></ngx-unit-models>
         </div>
 
-        <hr class="m-4">
-        <div class="row">
-          <div class="col-md-12">
-            <ngx-p2g-unit (p2g)="p2gUnit=$event"></ngx-p2g-unit>
-          </div>
+        <div class="col-md-12" *ngSwitchCase="'EH'">
+          <ngx-unit-models [loading]="loading" [models]="ehUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event)"></ngx-unit-models>
         </div>
-      </nb-card-body>
-    </nb-card>
+
+      </div>
+    </div>
+
+    <div *ngIf="message" [ngClass]="{
+      'errorTextarea': message.includes('Error'),
+      'successTextarea': !message.includes('Error')
+    }">
+      {{message}}
+    </div>
 
   </div>
 </div>

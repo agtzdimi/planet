@@ -1,13 +1,16 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'ngx-p2g-unit',
   styleUrls: ['./p2g-unit.component.scss'],
   templateUrl: './p2g-unit.component.html',
 })
-export class P2GUnitComponent {
+export class P2GUnitComponent implements OnChanges {
 
   p2gParams: Object;
+  unitDescr: string;
+  @Input() p2gInput: Object;
+  @Input() mode: string;
   @Output() p2g: EventEmitter<Object>;
 
   constructor() {
@@ -34,9 +37,23 @@ export class P2GUnitComponent {
           },
         },
       },
+      'description': '',
     };
 
     this.p2g = new EventEmitter<Object>();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['p2gInput']['currentValue']) {
+      let metadata = JSON.stringify(changes['p2gInput']['currentValue']['metadata']);
+      if (metadata) {
+        metadata = metadata.replace(/_/g, '.');
+        metadata = metadata.replace(/cos\.phi/, 'cos_phi');
+        metadata = JSON.parse(metadata);
+        this.p2gParams['payload']['parameters']['configuration'] = metadata;
+        this.p2gParams['description'] = changes['p2gInput']['currentValue']['comments'];
+      }
+    }
   }
 
   onChange(attribute, event) {

@@ -1,8 +1,8 @@
-<div class="row">
+<div class="row" [ngSwitch]="phase">
   <div class="col">
 
     <nb-card>
-      <nb-card-header>Sitewhere Device Type Registration</nb-card-header>
+      <nb-card-header>Sitewhere Device Type Modification</nb-card-header>
       <nb-card-body>
 
         <div class="row">
@@ -22,58 +22,111 @@
       </nb-card-body>
     </nb-card>
 
-    <h2>Edit an Existing Device</h2>
+    <div *ngSwitchCase="'1'">
+      <h2>Edit an Existing Device</h2>
 
-    <div class="row">
-      <div class="col-md-4" *ngFor="let unit of flexUnits">
-        <div class="imageCard">
-          <nb-card>
-            <nb-card-body (click)="activeModel=unit.id">
-              <img class="component-icon" src="assets/images/{{unit.id}}.jpg"
-                [ngStyle]="{'width': '120px', 'height': '100px'}">
-              <label class="component-name">{{unit.label}}</label>
-            </nb-card-body>
-          </nb-card>
+      <div class="row">
+        <div class="col-md-4" *ngFor="let unit of flexUnits">
+          <div class="imageCard">
+            <nb-card>
+              <nb-card-body (click)="handleModel(unit.id)">
+                <img class="component-icon" src="assets/images/{{unit.id}}.jpg"
+                  [ngStyle]="{'width': '120px', 'height': '100px'}">
+                <label class="component-name">{{unit.label}}</label>
+              </nb-card-body>
+            </nb-card>
+          </div>
         </div>
       </div>
     </div>
 
-    <div *ngIf="activeModel">
-      <nb-card [ngSwitch]="activeModel">
-        <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit Parameters</nb-card-header>
-        <nb-card-header *ngSwitchCase="'EH'">Electric Heater Unit Parameters</nb-card-header>
-        <nb-card-header *ngSwitchCase="'HP'">Heat Pump Unit Parameters</nb-card-header>
-        <nb-card-body>
+    <div *ngSwitchCase="'2'">
 
-          <div class="form-group row">
+      <div class="row">
+        <div class="col-md-1">
+          <nb-actions size="large">
+            <nb-action icon="nb-arrow-thin-left" (click)="phase=phase - 1; message=''"></nb-action>
+          </nb-actions>
+        </div>
+        <div class="col-md-10">
+          <h2>Select one of the {{activeModel}} Units</h2>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
 
-            <div class="col-md-3"></div>
-            <label for="'unitName'" class="col-md-1 formLabel">Unit Name</label>
-            <div class="col-md-3">
-              <input type="text" fullWidth nbInput shape="semi-round" id="'unitName'" [(ngModel)]="unitName">
-            </div>
-          </div>
+      <div class="row" [ngSwitch]="activeModel">
 
-          <div class="form-group row">
-            <div class="col-md-3"></div>
-            <label for="'unitDescr'" class="col-md-1 formDescr">Unit Description</label>
-            <div class="col-md-3">
-              <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'" [(ngModel)]="unitDescr"></textarea>
-            </div>
-          </div>
+        <div class="col-md-12" *ngSwitchCase="'P2G'">
+          <ngx-unit-models [loading]="loading" [models]="p2gUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
 
-          <hr class="m-4">
-          <div class="row">
-            <div class="col-md-12">
-              <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="p2gUnit=$event"></ngx-p2g-unit>
-              <ngx-p2h-heat-pump-unit *ngSwitchCase="'HP'" (p2hHeatPump)="hpUnit=$event"></ngx-p2h-heat-pump-unit>
-              <ngx-p2h-electric-heat-unit *ngSwitchCase="'EH'" (p2hElectricHeat)="ehUnit=$event">
-              </ngx-p2h-electric-heat-unit>
-            </div>
-          </div>
-        </nb-card-body>
-        <div ng-switch-default></div>
-      </nb-card>
+        <div class="col-md-12" *ngSwitchCase="'HP'">
+          <ngx-unit-models [loading]="loading" [models]="hpUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
+
+        <div class="col-md-12" *ngSwitchCase="'EH'">
+          <ngx-unit-models [loading]="loading" [models]="ehUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
+
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'3'" [suiTransition]="transitionController">
+
+      <div class="row">
+        <div class="col-md-1">
+          <nb-actions size="large">
+            <nb-action icon="nb-arrow-thin-left" (click)="phase=phase - 1; message=''"></nb-action>
+          </nb-actions>
+        </div>
+        <div class="col-md-10">
+          <h2>Modify the values of the Unit</h2>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <nb-reveal-card [ngSwitch]="activeModel">
+            <nb-card-front>
+              <nb-card size="large" status="success" accent="primary">
+                <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit</nb-card-header>
+                <nb-card-header *ngSwitchCase="'EH'">Electric Heater Unit</nb-card-header>
+                <nb-card-header *ngSwitchCase="'HP'">Heat Pump Unit</nb-card-header>
+                <nb-card-body>
+                  <b>Unit Description: </b> <i> {{selectedModel['comments']}}</i>
+                  <br>
+                  <br>
+                  <b><strong>Click the bottom arrow to set the Unit</strong></b>
+                </nb-card-body>
+              </nb-card>
+            </nb-card-front>
+            <nb-card-back>
+              <nb-card size="large" status="success" accent="primary">
+                <nb-card-body>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="selectedModel=$event" [p2gInput]="selectedModel"
+                        [mode]="'edit'">
+                      </ngx-p2g-unit>
+                      <ngx-p2h-heat-pump-unit *ngSwitchCase="'HP'" (p2hHeatPump)="selectedModel=$event"
+                        [hpInput]="selectedModel" [mode]="'edit'">
+                      </ngx-p2h-heat-pump-unit>
+                      <ngx-p2h-electric-heat-unit *ngSwitchCase="'EH'" (p2hElectricHeat)="selectedModel=$event"
+                        [ehInput]="selectedModel" [mode]="'edit'">
+                      </ngx-p2h-electric-heat-unit>
+                    </div>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+            </nb-card-back>
+          </nb-reveal-card>
+        </div>
+      </div>
     </div>
 
   </div>
