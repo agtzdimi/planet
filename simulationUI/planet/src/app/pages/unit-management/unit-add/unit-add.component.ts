@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { GetJWTService } from '../services/get-jwt.service';
 import { CreateDeviceService } from '../services/create-device.service';
+import { GetAreaGridsService } from '../services/get-area-grids.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 
 @Component({
   selector: 'ngx-unit-add',
   styleUrls: ['./unit-add.component.scss'],
-  providers: [GetJWTService, CreateDeviceService],
+  providers: [GetJWTService, CreateDeviceService, GetAreaGridsService],
   templateUrl: './unit-add.component.html',
 })
 export class UnitAddComponent implements OnInit {
@@ -19,10 +20,16 @@ export class UnitAddComponent implements OnInit {
   hpUnit: Object;
   ehUnit: Object;
   flexUnits = [{}];
+  grids = [{}];
+  nodes = [{}];
   activeModel: string = '';
   transitionController = new TransitionController();
+  gridLabel = 'Available Grids';
+  areaSelected = false;
+  area = '';
 
-  constructor(private getJWTService: GetJWTService, private createDeviceService: CreateDeviceService) {
+  constructor(private getJWTService: GetJWTService, private createDeviceService: CreateDeviceService,
+    private getAreaGridsService: GetAreaGridsService) {
     this.data = {};
   }
 
@@ -46,6 +53,28 @@ export class UnitAddComponent implements OnInit {
     this.activeModel = id;
     controller.animate(
       new Transition(transitionName, 1500, TransitionDirection.In));
+    this.getJWTService.getToken()
+      .then((data: any) => {
+        this.jwtToken = data;
+        this.getAreaGridsService.getAreaGrids(this.jwtToken, 'true')
+          .then(results => {
+            this.grids = results['results'];
+            this.getAreaGridsService.getAreaGrids(this.jwtToken, 'false')
+              .then(nodes => {
+                this.nodes = nodes['results'];
+                this.nodes = this.nodes.filter(area => {
+                  return area['parentAreaId'] !== undefined;
+                });
+              });
+          });
+      },
+      );
+  }
+
+  gridSelected(event) {
+    // console.log(event)
+    this.areaSelected = true;
+    this.area = event;
   }
 
   handleClick() {

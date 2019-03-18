@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 
 @Component({
-    selector: 'ngx-dialog-delete',
-    template: `
+  selector: 'ngx-dialog-delete',
+  template: `
     <nb-card>
       <nb-card-header>Are you sure you Want to Delete {{unitName}} Unit?</nb-card-header>
       <nb-card-footer>
@@ -20,22 +20,22 @@ import { NbDialogRef } from '@nebular/theme';
       </nb-card-footer>
     </nb-card>
   `,
-    styles: [`
+  styles: [`
     button {
       margin: 1rem;
     }
   `],
 })
 export class DialogDeleteComponent {
-    @Input() unitName: string;
-    constructor(protected dialogRef: NbDialogRef<DialogNamePromptComponent>) {
-    }
+  @Input() unitName: string;
+  constructor(protected dialogRef: NbDialogRef<DialogDeleteComponent>) {
+  }
 
-    cancel() {
-        this.dialogRef.close(false);
-    }
+  cancel() {
+    this.dialogRef.close(false);
+  }
 
-    submit() {
-        this.dialogRef.close(true);
-    }
+  submit() {
+    this.dialogRef.close(true);
+  }
 }
