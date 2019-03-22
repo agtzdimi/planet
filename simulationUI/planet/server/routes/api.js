@@ -17,7 +17,7 @@ const db_name = "planet";
 
 // Connection URL
 const MongoDbHelper = require("./MongoDbHelper");
-let url = "mongodb://localhost:27017/" + db_name;
+let url = "mongodb://localhost:21569/" + db_name;
 let mongoDbHelper = new MongoDbHelper(url);
 
 getJwtToken = (payload) => {

@@ -58,7 +58,7 @@ for file in /home/planet/upload/Electricity.csv /home/planet/upload/Heat.csv; do
    if [[ -s $file ]]; then
       awk -v formName="$formName" 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="formName"} else {$(NF+1)=formName} print $0}' $file > tempFile
       awk 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="Time"} else {$(NF+1)=(NR-2)} print $0}' tempFile > $file
-      mongoimport --db planet --collection files --type csv --headerline --file $file
+      mongoimport --port 21569 --db planet --collection files --type csv --headerline --file $file
       if (( $? != 0 )); then
          dbError=true
       fi
@@ -70,7 +70,7 @@ echo "$pvData" > /home/planet/upload/pvData.txt
 
 for file in $(ls /home/planet/upload/*.txt); do
    if [[ -s $file ]]; then
-      mongoimport --db planet --collection files --file $file
+      mongoimport --port 21569 --db planet --collection files --file $file
       if (( $? != 0 )); then
          dbError=true
       fi
