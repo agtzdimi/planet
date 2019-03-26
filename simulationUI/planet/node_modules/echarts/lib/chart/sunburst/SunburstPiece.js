@@ -1,3 +1,23 @@
+
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 var zrUtil = require("zrender/lib/core/util");
 
 var graphic = require("../../util/graphic");
@@ -70,15 +90,14 @@ SunburstPieceProto.updateData = function (firstCreate, node, state, seriesModel,
   var sector = this.childAt(0);
   sector.dataIndex = node.dataIndex;
   var itemModel = node.getModel();
-  var layout = node.getLayout();
-
-  if (!layout) {
-    console.log(node.getLayout());
-  }
+  var layout = node.getLayout(); // if (!layout) {
+  //     console.log(node.getLayout());
+  // }
 
   var sectorShape = zrUtil.extend({}, layout);
   sectorShape.label = null;
   var visualColor = getNodeColor(node, seriesModel, ecModel);
+  fillDefaultColor(node, seriesModel, visualColor);
   var normalStyle = itemModel.getModel('itemStyle').getItemStyle();
   var style;
 
@@ -361,6 +380,12 @@ function isNodeHighlighted(node, activeNode, policy) {
   } else {
     return node === activeNode || node.isDescendantOf(activeNode);
   }
+} // Fix tooltip callback function params.color incorrect when pick a default color
+
+
+function fillDefaultColor(node, seriesModel, color) {
+  var data = seriesModel.getData();
+  data.setItemVisual(node.dataIndex, 'color', color);
 }
 
 module.exports = _default;

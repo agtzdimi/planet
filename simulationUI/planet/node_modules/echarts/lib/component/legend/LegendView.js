@@ -1,3 +1,23 @@
+
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 var _config = require("../../config");
 
 var __DEV__ = _config.__DEV__;
@@ -59,6 +79,14 @@ var _default = echarts.extendComponentView({
      */
 
     this._backgroundEl;
+    /**
+     * If first rendering, `contentGroup.position` is [0, 0], which
+     * does not make sense and may cause unexepcted animation if adopted.
+     * @private
+     * @type {boolean}
+     */
+
+    this._isFirstRender = true;
   },
 
   /**
@@ -72,6 +100,8 @@ var _default = echarts.extendComponentView({
    * @override
    */
   render: function (legendModel, ecModel, api) {
+    var isFirstRender = this._isFirstRender;
+    this._isFirstRender = false;
     this.resetInner();
 
     if (!legendModel.get('show', true)) {
@@ -93,7 +123,7 @@ var _default = echarts.extendComponentView({
     };
     var padding = legendModel.get('padding');
     var maxSize = layoutUtil.getLayoutRect(positionInfo, viewportSize, padding);
-    var mainRect = this.layoutInner(legendModel, itemAlign, maxSize); // Place mainGroup, based on the calculated `mainRect`.
+    var mainRect = this.layoutInner(legendModel, itemAlign, maxSize, isFirstRender); // Place mainGroup, based on the calculated `mainRect`.
 
     var layoutRect = layoutUtil.getLayoutRect(zrUtil.defaults({
       width: mainRect.width,
@@ -157,7 +187,7 @@ var _default = echarts.extendComponentView({
 
         var itemGroup = this._createItem(name, dataIndex, itemModel, legendModel, legendSymbolType, symbolType, itemAlign, color, selectMode);
 
-        itemGroup.on('click', curry(dispatchSelectAction, name, api)).on('mouseover', curry(dispatchHighlightAction, seriesModel, null, api, excludeSeriesId)).on('mouseout', curry(dispatchDownplayAction, seriesModel, null, api, excludeSeriesId));
+        itemGroup.on('click', curry(dispatchSelectAction, name, api)).on('mouseover', curry(dispatchHighlightAction, seriesModel.name, null, api, excludeSeriesId)).on('mouseout', curry(dispatchDownplayAction, seriesModel.name, null, api, excludeSeriesId));
         legendDrawnMap.set(name, true);
       } else {
         // Data legend of pie, funnel
@@ -181,8 +211,9 @@ var _default = echarts.extendComponentView({
             var itemGroup = this._createItem(name, dataIndex, itemModel, legendModel, legendSymbolType, null, itemAlign, color, selectMode); // FIXME: consider different series has items with the same name.
 
 
-            itemGroup.on('click', curry(dispatchSelectAction, name, api)) // FIXME Should not specify the series name
-            .on('mouseover', curry(dispatchHighlightAction, seriesModel, name, api, excludeSeriesId)).on('mouseout', curry(dispatchDownplayAction, seriesModel, name, api, excludeSeriesId));
+            itemGroup.on('click', curry(dispatchSelectAction, name, api)) // Should not specify the series name, consider legend controls
+            // more than one pie series.
+            .on('mouseover', curry(dispatchHighlightAction, null, name, api, excludeSeriesId)).on('mouseout', curry(dispatchDownplayAction, null, name, api, excludeSeriesId));
             legendDrawnMap.set(name, true);
           }
         }, this);
@@ -207,7 +238,7 @@ var _default = echarts.extendComponentView({
     // PENDING
 
     if (!itemIcon && symbolType // At least show one symbol, can't be all none
-    && (symbolType !== legendSymbolType || symbolType == 'none')) {
+    && (symbolType !== legendSymbolType || symbolType === 'none')) {
       var size = itemHeight * 0.8;
 
       if (symbolType === 'none') {
@@ -279,6 +310,14 @@ var _default = echarts.extendComponentView({
     var contentRect = contentGroup.getBoundingRect();
     contentGroup.attr('position', [-contentRect.x, -contentRect.y]);
     return this.group.getBoundingRect();
+  },
+
+  /**
+   * @protected
+   */
+  remove: function () {
+    this.getContentGroup().removeAll();
+    this._isFirstRender = true;
   }
 });
 
@@ -289,28 +328,28 @@ function dispatchSelectAction(name, api) {
   });
 }
 
-function dispatchHighlightAction(seriesModel, dataName, api, excludeSeriesId) {
+function dispatchHighlightAction(seriesName, dataName, api, excludeSeriesId) {
   // If element hover will move to a hoverLayer.
   var el = api.getZr().storage.getDisplayList()[0];
 
   if (!(el && el.useHoverLayer)) {
     api.dispatchAction({
       type: 'highlight',
-      seriesName: seriesModel.name,
+      seriesName: seriesName,
       name: dataName,
       excludeSeriesId: excludeSeriesId
     });
   }
 }
 
-function dispatchDownplayAction(seriesModel, dataName, api, excludeSeriesId) {
+function dispatchDownplayAction(seriesName, dataName, api, excludeSeriesId) {
   // If element hover will move to a hoverLayer.
   var el = api.getZr().storage.getDisplayList()[0];
 
   if (!(el && el.useHoverLayer)) {
     api.dispatchAction({
       type: 'downplay',
-      seriesName: seriesModel.name,
+      seriesName: seriesName,
       name: dataName,
       excludeSeriesId: excludeSeriesId
     });

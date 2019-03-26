@@ -1,3 +1,23 @@
+
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 var _util = require("zrender/lib/core/util");
 
 var createHashMap = _util.createHashMap;
@@ -131,7 +151,15 @@ function completeDimensions(sysDims, source, opt) {
 
 
   encodeDef.each(function (dataDims, coordDim) {
-    dataDims = normalizeToArray(dataDims).slice();
+    dataDims = normalizeToArray(dataDims).slice(); // Note: It is allowed that `dataDims.length` is `0`, e.g., options is
+    // `{encode: {x: -1, y: 1}}`. Should not filter anything in
+    // this case.
+
+    if (dataDims.length === 1 && dataDims[0] < 0) {
+      encodeDef.set(coordDim, false);
+      return;
+    }
+
     var validDataDims = encodeDef.set(coordDim, []);
     each(dataDims, function (resultDimIdx, idx) {
       // The input resultDimIdx can be dim name or index.
@@ -166,7 +194,13 @@ function completeDimensions(sysDims, source, opt) {
       sysDimItem.name = sysDimItem.coordDim = sysDimItem.coordDimIndex = sysDimItem.dimsDef = sysDimItem.otherDims = null;
     }
 
-    var dataDims = normalizeToArray(encodeDef.get(coordDim)); // dimensions provides default dim sequences.
+    var dataDims = encodeDef.get(coordDim); // negative resultDimIdx means no need to mapping.
+
+    if (dataDims === false) {
+      return;
+    }
+
+    var dataDims = normalizeToArray(dataDims); // dimensions provides default dim sequences.
 
     if (!dataDims.length) {
       for (var i = 0; i < (sysDimItemDimsDef && sysDimItemDimsDef.length || 1); i++) {

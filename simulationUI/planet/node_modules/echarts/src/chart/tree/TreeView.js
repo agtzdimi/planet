@@ -18,7 +18,8 @@
 */
 
 /**
- * @file  This file used to draw tree view
+ * @file This file used to draw tree view.
+ * @author Deqing Li(annong035@gmail.com)
  */
 
 import * as zrUtil from 'zrender/src/core/util';
@@ -26,6 +27,11 @@ import * as graphic from '../../util/graphic';
 import SymbolClz from '../helper/Symbol';
 import {radialCoordinate} from './layoutHelper';
 import * as echarts from '../../echarts';
+import * as bbox from 'zrender/src/core/bbox';
+import View from '../../coord/View';
+import * as roamHelper from '../../component/helper/roamHelper';
+import RoamController from '../../component/helper/RoamController';
+import {onIrrelevantElement} from '../../component/helper/cursorHelper';
 
 export default echarts.extendChartView({
 
@@ -51,11 +57,18 @@ export default echarts.extendChartView({
          */
         this._mainGroup = new graphic.Group();
 
+        /**
+         * @private
+         * @type {module:echarts/componet/helper/RoamController}
+         */
+        this._controller = new RoamController(api.getZr());
+
+        this._controllerHost = {target: this.group};
+
         this.group.add(this._mainGroup);
     },
 
     render: function (seriesModel, ecModel, api, payload) {
-
         var data = seriesModel.getData();
 
         var layoutInfo = seriesModel.layoutInfo;
@@ -70,6 +83,9 @@ export default echarts.extendChartView({
         else {
             group.attr('position', [layoutInfo.x, layoutInfo.y]);
         }
+
+        this._updateViewCoordSys(seriesModel);
+        this._updateController(seriesModel, ecModel, api);
 
         var oldData = this._data;
 
@@ -88,7 +104,7 @@ export default echarts.extendChartView({
         data.diff(oldData)
             .add(function (newIdx) {
                 if (symbolNeedsDraw(data, newIdx)) {
-                    // create node and edge
+                    // Create node and edge
                     updateNode(data, newIdx, null, group, seriesModel, seriesScope);
                 }
             })
@@ -98,7 +114,7 @@ export default echarts.extendChartView({
                     symbolEl && removeNode(oldData, oldIdx, symbolEl, group, seriesModel, seriesScope);
                     return;
                 }
-                // update  node and edge
+                // Update node and edge
                 updateNode(data, newIdx, symbolEl, group, seriesModel, seriesScope);
             })
             .remove(function (oldIdx) {
@@ -114,6 +130,10 @@ export default echarts.extendChartView({
             })
             .execute();
 
+        this._nodeScaleRatio = seriesModel.get('nodeScaleRatio');
+
+        this._updateNodeAndLinkScale(seriesModel);
+
         if (seriesScope.expandAndCollapse === true) {
             data.eachItemGraphicEl(function (el, dataIndex) {
                 el.off('click').on('click', function () {
@@ -125,11 +145,120 @@ export default echarts.extendChartView({
                 });
             });
         }
-
         this._data = data;
     },
 
-    dispose: function () {},
+    _updateViewCoordSys: function (seriesModel) {
+        var data = seriesModel.getData();
+        var points = [];
+        data.each(function (idx) {
+            var layout = data.getItemLayout(idx);
+            if (layout && !isNaN(layout.x) && !isNaN(layout.y)) {
+                points.push([+layout.x, +layout.y]);
+            }
+        });
+        var min = [];
+        var max = [];
+        bbox.fromPoints(points, min, max);
+        // If width or height is 0
+        if (max[0] - min[0] === 0) {
+            max[0] += 1;
+            min[0] -= 1;
+        }
+        if (max[1] - min[1] === 0) {
+            max[1] += 1;
+            min[1] -= 1;
+        }
+
+        var viewCoordSys = seriesModel.coordinateSystem = new View();
+        viewCoordSys.zoomLimit = seriesModel.get('scaleLimit');
+
+        viewCoordSys.setBoundingRect(min[0], min[1], max[0] - min[0], max[1] - min[1]);
+
+        viewCoordSys.setCenter(seriesModel.get('center'));
+        viewCoordSys.setZoom(seriesModel.get('zoom'));
+
+        // Here we use viewCoordSys just for computing the 'position' and 'scale' of the group
+        this.group.attr({
+            position: viewCoordSys.position,
+            scale: viewCoordSys.scale
+        });
+
+        this._viewCoordSys = viewCoordSys;
+    },
+
+    _updateController: function (seriesModel, ecModel, api) {
+        var controller = this._controller;
+        var controllerHost = this._controllerHost;
+        var group = this.group;
+        controller.setPointerChecker(function (e, x, y) {
+            var rect = group.getBoundingRect();
+            rect.applyTransform(group.transform);
+            return rect.contain(x, y)
+                && !onIrrelevantElement(e, api, seriesModel);
+        });
+
+        controller.enable(seriesModel.get('roam'));
+        controllerHost.zoomLimit = seriesModel.get('scaleLimit');
+        controllerHost.zoom = seriesModel.coordinateSystem.getZoom();
+
+        controller
+            .off('pan')
+            .off('zoom')
+            .on('pan', function (e) {
+                roamHelper.updateViewOnPan(controllerHost, e.dx, e.dy);
+                api.dispatchAction({
+                    seriesId: seriesModel.id,
+                    type: 'treeRoam',
+                    dx: e.dx,
+                    dy: e.dy
+                });
+            }, this)
+            .on('zoom', function (e) {
+                roamHelper.updateViewOnZoom(controllerHost, e.scale, e.originX, e.originY);
+                api.dispatchAction({
+                    seriesId: seriesModel.id,
+                    type: 'treeRoam',
+                    zoom: e.scale,
+                    originX: e.originX,
+                    originY: e.originY
+                });
+                this._updateNodeAndLinkScale(seriesModel);
+            }, this);
+    },
+
+    _updateNodeAndLinkScale: function (seriesModel) {
+        var data = seriesModel.getData();
+
+        var nodeScale = this._getNodeGlobalScale(seriesModel);
+        var invScale = [nodeScale, nodeScale];
+
+        data.eachItemGraphicEl(function (el, idx) {
+            el.attr('scale', invScale);
+        });
+    },
+
+    _getNodeGlobalScale: function (seriesModel) {
+        var coordSys = seriesModel.coordinateSystem;
+        if (coordSys.type !== 'view') {
+            return 1;
+        }
+
+        var nodeScaleRatio = this._nodeScaleRatio;
+
+        var groupScale = coordSys.scale;
+        var groupZoom = (groupScale && groupScale[0]) || 1;
+        // Scale node when zoom changes
+        var roamZoom = coordSys.getZoom();
+        var nodeScale = (roamZoom - 1) * nodeScaleRatio + 1;
+
+        return nodeScale / groupZoom;
+    },
+
+    dispose: function () {
+        this._controller && this._controller.dispose();
+        this._controllerHost = {};
+    },
 
     remove: function () {
         this._mainGroup.removeAll();
@@ -258,7 +387,7 @@ function updateNode(data, dataIndex, symbolEl, group, seriesModel, seriesScope) 
         if (!edge) {
             edge = symbolEl.__edge = new graphic.BezierCurve({
                 shape: getEdgeShape(seriesScope, sourceOldLayout, sourceOldLayout),
-                style: zrUtil.defaults({opacity: 0}, seriesScope.lineStyle)
+                style: zrUtil.defaults({opacity: 0, strokeNoScale: true}, seriesScope.lineStyle)
             });
         }
 
@@ -311,12 +440,16 @@ function getEdgeShape(seriesScope, sourceLayout, targetLayout) {
     var cpx2;
     var cpy2;
     var orient = seriesScope.orient;
+    var x1;
+    var x2;
+    var y1;
+    var y2;
 
     if (seriesScope.layout === 'radial') {
-        var x1 = sourceLayout.rawX;
-        var y1 = sourceLayout.rawY;
-        var x2 = targetLayout.rawX;
-        var y2 = targetLayout.rawY;
+        x1 = sourceLayout.rawX;
+        y1 = sourceLayout.rawY;
+        x2 = targetLayout.rawX;
+        y2 = targetLayout.rawY;
 
         var radialCoor1 = radialCoordinate(x1, y1);
         var radialCoor2 = radialCoordinate(x1, y1 + (y2 - y1) * seriesScope.curvature);
@@ -335,10 +468,10 @@ function getEdgeShape(seriesScope, sourceLayout, targetLayout) {
         };
     }
     else {
-        var x1 = sourceLayout.x;
-        var y1 = sourceLayout.y;
-        var x2 = targetLayout.x;
-        var y2 = targetLayout.y;
+        x1 = sourceLayout.x;
+        y1 = sourceLayout.y;
+        x2 = targetLayout.x;
+        y2 = targetLayout.y;
 
         if (orient === 'LR' || orient === 'RL') {
             cpx1 = x1 + (x2 - x1) * seriesScope.curvature;
@@ -352,15 +485,17 @@ function getEdgeShape(seriesScope, sourceLayout, targetLayout) {
             cpx2 = x2;
             cpy2 = y2 + (y1 - y2) * seriesScope.curvature;
         }
-        return {
-            x1: x1,
-            y1: y1,
-            x2: x2,
-            y2: y2,
-            cpx1: cpx1,
-            cpy1: cpy1,
-            cpx2: cpx2,
-            cpy2: cpy2
-        };
     }
+
+    return {
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        cpx1: cpx1,
+        cpy1: cpy1,
+        cpx2: cpx2,
+        cpy2: cpy2
+    };
+
 }

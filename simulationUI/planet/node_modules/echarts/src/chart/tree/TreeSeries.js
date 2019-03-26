@@ -19,6 +19,7 @@
 
 /**
  * @file Create data struct and define tree view's series model
+ * @author Deqing Li(annong035@gmail.com)
  */
 
 import SeriesModel from '../../model/Series';
@@ -67,7 +68,7 @@ export default SeriesModel.extend({
 
         tree.root.eachNode('preorder', function (node) {
             var item = node.hostTree.data.getRawDataItem(node.dataIndex);
-            // add item.collapsed != null, because users can collapse node original in the series.data.
+            // Add item.collapsed != null, because users can collapse node original in the series.data.
             node.isExpand = (item && item.collapsed != null)
                 ? !item.collapsed
                 : node.depth <= expandTreeDepth;
@@ -75,7 +76,7 @@ export default SeriesModel.extend({
 
         return tree.data;
     },
-    
+
     /**
      * Make the configuration 'orient' backward compatibly, with 'horizontal = LR', 'vertical = TB'.
      * @returns {string} orient
@@ -89,6 +90,14 @@ export default SeriesModel.extend({
             orient = 'TB';
         }
         return orient;
+    },
+
+    setZoom: function (zoom) {
+        this.option.zoom = zoom;
+    },
+
+    setCenter: function (center) {
+        this.option.center = center;
     },
 
     /**
@@ -113,6 +122,7 @@ export default SeriesModel.extend({
     defaultOption: {
         zlevel: 0,
         z: 2,
+        coordinateSystem: 'view',
 
         // the position of the whole view
         left: '12%',
@@ -122,6 +132,15 @@ export default SeriesModel.extend({
 
         // the layout of the tree, two value can be selected, 'orthogonal' or 'radial'
         layout: 'orthogonal',
+
+        roam: false, // true | false | 'move' | 'scale', see module:component/helper/RoamController.
+        // Symbol size scale ratio in roam
+        nodeScaleRatio: 0.4,
+
+        // Default on center of graph
+        center: null,
+
+        zoom: 1,
 
         // The orient of orthoginal layout, can be setted to 'LR', 'TB', 'RL', 'BT'.
         // and the backward compatibility configuration 'horizontal = LR', 'vertical = TB'.
