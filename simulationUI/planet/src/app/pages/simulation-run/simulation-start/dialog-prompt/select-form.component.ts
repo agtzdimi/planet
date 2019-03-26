@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
-import ipJson from '../../../../../../public/planetParams/planet_IPs.json';
+import ipJson from '../../../../../assets/data//planet_IPs.json';
 
 @Component({
   selector: 'nb-select-form-prompt',

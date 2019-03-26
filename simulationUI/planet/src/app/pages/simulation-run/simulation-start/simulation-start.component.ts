@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
 import { NbDialogService } from '@nebular/theme';
-import ipJson from '../../../../../public/planetParams/planet_IPs.json';
+import ipJson from '../../../../assets/data//planet_IPs.json';
 
 @Component({
   selector: 'ngx-simulation-start',

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import ipJson from '../../../../../public/planetParams/planet_IPs.json';
+import ipJson from '../../../../assets/data//planet_IPs.json';
 
 @Injectable()
 export class GetJWTService {

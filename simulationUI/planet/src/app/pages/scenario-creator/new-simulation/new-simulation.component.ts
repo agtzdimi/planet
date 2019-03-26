@@ -7,7 +7,7 @@ import { DialogNamePromptComponent } from '../dialog-prompt/dialog-prompt.compon
 import { DialogTechParamPromptComponent } from '../dialog-prompt/tech-param-dialog.component';
 import { DialogControlSystemPromptComponent } from '../dialog-prompt/control-system-dialog.component';
 import { DialogEconomyPromptComponent } from '../dialog-prompt/economy-dialog.component';
-import ipJson from '../../../../../public/planetParams/planet_IPs.json';
+import ipJson from '../../../../assets/data//planet_IPs.json';
 
 @Component({
     selector: 'ngx-new-simulation',
@@ -224,7 +224,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
         formData.append('method', 'NEW');
-        let url = 'http://' + ipJson['planet'] + ':8000/upload'
+        let url = 'http://' + ipJson['planet'] + ':8000/upload';
         this.httpClient.post(url, formData,
         )
             .subscribe(
@@ -233,7 +233,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
                     this.windParam['payload']['formDescription'] = this.formDescription;
                     this.pvParam['payload']['formName'] = this.formName;
                     this.pvParam['payload']['formDescription'] = this.formDescription;
-                    url = 'http://' + ipJson['planet'] + ':8000/save_data'
+                    url = 'http://' + ipJson['planet'] + ':8000/save_data';
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import ipJson from '../../../../../public/planetParams/planet_IPs.json';
+import ipJson from '../../../../assets/data/planet_IPs.json';
 
 @Component({
   selector: 'ngx-params-setup',
@@ -23,12 +23,12 @@ export class ParamsSetupComponent {
     this.loading = true;
     const url = 'http://' + this.planetIP + ':8000/update_IPs';
     this.httpClient.post(url, {
-      "planet": this.planetIP,
-      "sitewhere": this.sitewhereIP,
+      'planet': this.planetIP,
+      'sitewhere': this.sitewhereIP,
     })
       .subscribe(res => {
         this.saveMessage = res['text'];
-      })
+      });
     this.loading = false;
   }
 
