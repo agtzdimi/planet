@@ -6,6 +6,7 @@ import { NotFoundComponent } from './miscellaneous/not-found/not-found.component
 import { SimulationRunComponent } from './simulation-run/simulation-run.component';
 import { SimulationComparisonComponent } from './simulation-comparison/simulation-comparison.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { GlobalParamsComponent } from './global-params/global-params.component';
 
 const routes: Routes = [{
   path: '',
@@ -13,6 +14,9 @@ const routes: Routes = [{
   children: [{
     path: 'miscellaneous',
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
+  }, {
+    path: 'global-params',
+    component: GlobalParamsComponent,
   }, {
     path: 'scenario-creator',
     loadChildren: './scenario-creator/scenario-creator.module#ScenarioCreatorModule',
@@ -40,7 +44,8 @@ const routes: Routes = [{
   }, {
     path: '**',
     component: NotFoundComponent,
-  }],
+  },
+  ],
 }];
 
 @NgModule({

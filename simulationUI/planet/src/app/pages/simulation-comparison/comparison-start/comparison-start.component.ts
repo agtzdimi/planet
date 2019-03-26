@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectMultipleFormPromptComponent } from './dialog-prompt/select-multiple-form.component';
 import { NbDialogService } from '@nebular/theme';
+import ipJson from '../../../../../public/planetParams/planet_IPs.json';
 
 @Component({
   selector: 'ngx-comparison-start',
@@ -35,7 +36,8 @@ export class ComparisonStartComponent {
     this.initializeCharts();
     const interval = setInterval(() => {
       this.forms = this.selectedForms.split('  -  ');
-      this.httpClient.get('http://160.40.49.244:8000/multi_simulation', {
+      const url = 'http://' + ipJson['planet'] + ':8000/multi_simulation';
+      this.httpClient.get(url, {
         params: {
           'formName1': this.forms[0],
           'formName2': this.forms[1],

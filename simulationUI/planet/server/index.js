@@ -206,6 +206,15 @@ app.get("/multi_simulation", (req, res) => {
     }
 });
 
+app.post("/update_IPs", (req, res) => {
+    const fileCreation = shell.echo(JSON.stringify(eval(req.body))).to(`${__dirname}/../public/planetParams/planet_IPs.json`);
+    if (!fileCreation.stderr) {
+        res.send({ text: 'Parameters successfully updated!' });
+    } else {
+        res.send({ text: 'Error: Parameters were not updated!' });
+    }
+});
+
 app.post("/create_user", api.create_user);
 app.post("/update_user", api.update_user);
 app.post("/login_with_email_password", api.login_with_email_password);

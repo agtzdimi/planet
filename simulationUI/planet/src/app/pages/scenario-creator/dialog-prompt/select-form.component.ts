@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
+import ipJson from '../../../../../public/planetParams/planet_IPs.json';
 
 @Component({
   selector: 'nb-sel-form-prompt',
@@ -34,7 +35,8 @@ export class DialogSelFormPromptComponent {
   finalForm: Object = {};
 
   constructor(protected dialogRef: NbDialogRef<DialogSelFormPromptComponent>, private httpClient: HttpClient) {
-    this.httpClient.get('http://160.40.49.244:8000/get_form_names', {
+    const url = 'http://' + ipJson['planet'] + ':8000/get_form_names';
+    this.httpClient.get(url, {
       params: {
         'executed': 'false',
       },

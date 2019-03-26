@@ -2,6 +2,11 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
+    title: 'Global Parameters',
+    icon: 'nb-gear',
+    link: '/pages/global-params',
+  },
+  {
     title: 'Scenario Creator',
     icon: 'nb-compose',
     children: [

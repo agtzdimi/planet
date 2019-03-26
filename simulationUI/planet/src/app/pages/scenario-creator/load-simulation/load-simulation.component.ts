@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService, NbCalendarRange, NbDateService } from '@nebular/theme';
 import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
+import ipJson from '../../../../../public/planetParams/planet_IPs.json';
 
 @Component({
     selector: 'ngx-load-simulation',
@@ -50,7 +51,8 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                     let finalFormName = '';
                     finalFormName = this.formName.toString();
                     this.formDescription = name['formDescription'];
-                    this.httpClient.get('http://160.40.49.244:8000/load_data', {
+                    let url = 'http://' + ipJson['planet'] + ':8000/load_data'
+                    this.httpClient.get(url, {
                         params: {
                             'formName': finalFormName,
                         },
@@ -222,7 +224,8 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         formData.append('param4', JSON.stringify(this.elecParam));
         formData.append('param5', JSON.stringify(this.heatParam));
         formData.append('method', 'LOAD');
-        this.httpClient.post('http://160.40.49.244:8000/upload', formData,
+        let url = 'http://' + ipJson['planet'] + ':8000/upload'
+        this.httpClient.post(url, formData,
         )
             .subscribe(
                 () => {
@@ -230,7 +233,8 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                     this.windParam['payload']['formDescription'] = this.formDescription;
                     this.pvParam['payload']['formName'] = this.formName;
                     this.pvParam['payload']['formDescription'] = this.formDescription;
-                    this.httpClient.post('http://160.40.49.244:8000/save_data', {
+                    url = 'http://' + ipJson['planet'] + ':8000/save_data'
+                    this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),
                         'method': 'LOAD',

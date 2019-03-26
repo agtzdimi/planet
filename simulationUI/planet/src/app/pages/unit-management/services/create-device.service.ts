@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import ipJson from '../../../../../public/planetParams/planet_IPs.json';
 
 @Injectable()
 export class CreateDeviceService {
@@ -10,7 +11,8 @@ export class CreateDeviceService {
     public createNewDevice(data: Object, jwtToken: string) {
 
         return new Promise(resolve => {
-            this.httpClient.post('http://130.192.180.234:8080/sitewhere/api/devices', data, {
+            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devices';
+            this.httpClient.post(url, data, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + jwtToken,

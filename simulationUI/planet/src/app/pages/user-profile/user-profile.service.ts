@@ -1,5 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import ipJson from '../../../../public/planetParams/planet_IPs.json';
 
 @Injectable()
 export class UserProfileService {
@@ -10,7 +11,8 @@ export class UserProfileService {
 
     public uploadImage(image, email, name): Promise<any> {
         return new Promise(resolve => {
-            this.httpClient.post<HttpResponse<Object>>('http://160.40.49.244:8000/update_user', {
+            const url = 'http://' + ipJson['planet'] + ':8000/update_user';
+            this.httpClient.post<HttpResponse<Object>>(url, {
                 image: image,
                 email: email,
                 name: name,

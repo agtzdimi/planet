@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import ipJson from '../../../../../public/planetParams/planet_IPs.json';
 
 @Injectable()
 export class GetJWTService {
@@ -11,8 +12,9 @@ export class GetJWTService {
 
     public getToken(): Promise<any> {
         const token = btoa('admin:password');
+        const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/authapi/jwt';
         return new Promise(resolve => {
-            this.httpClient.get<HttpResponse<Object>>('http://130.192.180.234:8080/sitewhere/authapi/jwt', {
+            this.httpClient.get<HttpResponse<Object>>(url, {
                 observe: 'response',
                 headers: new HttpHeaders({
                     'authorization': 'Basic ' + token,

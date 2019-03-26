@@ -12,18 +12,27 @@ export class TechInputFieldComponent {
     @Input() label2;
     @Input() compId;
     @Input() val: Number;
+    @Input() type: string;
     @Output() valChange: EventEmitter<Number>;
+    @Output() stringValChange: EventEmitter<string>;
     @Input() inputHtmlLabel1: string;
     @Input() inputHtmlLabel2: string;
 
     constructor() {
         this.val = 0;
         this.valChange = new EventEmitter<Number>();
+        this.stringValChange = new EventEmitter<string>();
+        this.type = 'Number';
     }
 
     onChange(event) {
-        this.val = +event.target.value;
-        this.valChange.emit(this.val);
+        if (this.type === 'string') {
+            const value = event.target.value.toString();
+            this.stringValChange.emit(value);
+        } else {
+            this.val = +event.target.value;
+            this.valChange.emit(this.val);
+        }
     }
 
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
 import { NbDialogService } from '@nebular/theme';
+import ipJson from '../../../../../public/planetParams/planet_IPs.json';
 
 @Component({
   selector: 'ngx-simulation-start',
@@ -38,7 +39,8 @@ export class SimulationStartComponent {
     this.showBar = false;
     this.initializeCharts();
     this.status = '';
-    this.httpClient.post('http://160.40.49.244:8000/transfer',
+    let url = 'http://' + ipJson['planet'] + ':8000/transfer';
+    this.httpClient.post(url,
       {
         'formName': this.formName,
       })
@@ -51,7 +53,8 @@ export class SimulationStartComponent {
         },
       );
     const interval = setInterval(() => {
-      this.httpClient.get('http://160.40.49.244:8000/simulation', {
+      url = 'http://' + ipJson['planet'] + ':8000/simulation';
+      this.httpClient.get(url, {
         params: {
           'formName': this.formName,
         },

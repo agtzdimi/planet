@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col">
+
+    <nb-card>
+      <nb-card-header>Setup Global Parameters</nb-card-header>
+      <nb-card-body>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="sitewhereIP=$event"
+          [(val)]="sitewhereIP" [compId]="'sitewhereIP'" [inputHtmlLabel1]="'Sitewhere Installation IP'"
+          [type]="'string'">
+        </ngx-input-field>
+        <hr>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="planetIP=$event"
+          [(val)]="planetIP" [compId]="'planetIP'" [inputHtmlLabel1]="'PLANET Installation IP'" [type]="'string'">
+        </ngx-input-field>
+
+      </nb-card-body>
+    </nb-card>
+
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-2">
+        <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"
+          nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startUpload()">
+          Save Parameters
+        </button>
+      </div>
+      <div class="col-md-2">
+        <div *ngIf="saveMessage!==''" [ngClass]="{
+          'errorTextarea': saveMessage.includes('Error'),
+          'successTextarea': !saveMessage.includes('Error')
+        }">
+          {{saveMessage}}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
