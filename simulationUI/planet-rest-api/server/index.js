@@ -207,7 +207,12 @@ app.get("/multi_simulation", (req, res) => {
 });
 
 app.post("/update_IPs", (req, res) => {
-    const fileCreation = shell.echo(JSON.stringify(eval(req.body))).to(`${__dirname}/../src/assets/data/planet_IPs.json`);
+    const fileCreation = shell.echo(JSON.stringify(eval(req.body))).to(`${__dirname}/keys/planet_IPs.json`);
+    const path = shell.exec("sshpass -p " + req.body.planetSSHPass + " find /home/" + req.body.planetSSHUser + " -wholename \"*data/planet_IPs.json*\"");
+    shell.echo("sshpass -p \"" + req.body.planetSSHPass + "\" scp -P " + req.body.planetSSHPort + ` ${__dirname}/../server/keys/planet_IPs.json `
+        + req.body.planetSSHUser + "@" + req.body.planetSSHIP + ":" + path);
+    shell.exec("sshpass -p \"" + req.body.planetSSHPass + "\" scp -P " + req.body.planetSSHPort + ` ${__dirname}/../server/keys/planet_IPs.json `
+        + req.body.planetSSHUser + "@" + req.body.planetSSHIP + ":" + path);
     if (!fileCreation.stderr) {
         res.send({ text: 'Parameters successfully updated!' });
     } else {
