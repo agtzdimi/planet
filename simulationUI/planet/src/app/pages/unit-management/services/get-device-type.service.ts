@@ -11,7 +11,7 @@ export class GetDeviceTypeService {
     public getDeviceType(jwtToken: string, groupToken) {
 
         return new Promise(resolve => {
-            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devicetypes' + groupToken;
+            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devicetypes/' + groupToken;
             this.httpClient.get(url, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',

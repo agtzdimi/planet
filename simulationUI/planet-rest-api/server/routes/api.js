@@ -523,9 +523,9 @@ exports.update_user = (req, res) => {
 };
 
 exports.refresh = (req, res) => {
-    let email = req.body.email;
-    let fullName = req.body.name;
-    let image = req.body.image;
+    let email = req.body.payload.email;
+    let fullName = req.body.payload.fullName;
+    let image = req.body.payload.image;
 
     // find user
     mongoDbHelper
@@ -628,7 +628,6 @@ exports.forgot = (req, res, next) => {
                 };
                 transporter.sendMail(mailOptions, function (err) {
                     const message = 'An e-mail has been sent to ' + user.emails[0]['address'] + ' with further instructions.'
-                    console.log(err, message)
                     // res.json({ message: message });
                     done(err, 'done');
                 });

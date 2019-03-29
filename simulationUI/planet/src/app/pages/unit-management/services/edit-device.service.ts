@@ -11,7 +11,7 @@ export class EditDeviceService {
     public editDevice(jwtToken: string, data, token) {
 
         return new Promise(resolve => {
-            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devices' + token;
+            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devices/' + token;
             this.httpClient.put(url, data, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',

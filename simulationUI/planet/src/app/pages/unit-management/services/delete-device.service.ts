@@ -11,7 +11,7 @@ export class DeleteDeviceService {
     public deleteDevice(jwtToken: string, token) {
 
         return new Promise(resolve => {
-            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devices' + token;
+            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devices/' + token;
             this.httpClient.delete(url, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',

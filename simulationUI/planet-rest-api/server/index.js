@@ -60,12 +60,12 @@ app.use(cookieParser());
 
 app.use(fileUpload({}));
 
-app.use("/public", express.static(__dirname + "../public"));
+app.use("/public", express.static("/home/planet/upload"));
 
 app.post("/upload", (req, res, next) => {
-    shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
-    shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
-    shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
+    shell.echo(req.body.param1).to('/home/planet/upload/Parameters_initialization.txt');
+    shell.echo(req.body.param2).to('/home/planet/upload/Control_initialization.txt');
+    shell.echo(req.body.param3).to('/home/planet/upload/Economy_environment_initialization.txt');
     res.json({
         file: `$(req.files.file)`
     });
