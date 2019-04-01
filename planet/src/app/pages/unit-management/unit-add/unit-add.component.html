@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="col">
+
+    <nb-card>
+      <nb-card-header>Sitewhere Device Type Registration</nb-card-header>
+      <nb-card-body>
+
+        <div class="row">
+          <div class="col-md-2">
+            <button nbButton hero status="info" (click)="handleClick()">Save Data to Sitewhere</button>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-3">
+            <div *ngIf="message" [ngClass]="{
+                'errorTextarea': message.includes('Error'),
+                'successTextarea': !message.includes('Error')
+              }">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <h2>Create a New Device</h2>
+
+    <div class="row">
+      <div class="col-md-4" *ngFor="let unit of flexUnits">
+        <div class="imageCard">
+          <nb-card>
+            <nb-card-body (click)="animateInfo(transitionController,transitionName,unit.id)">
+              <img class="component-icon" src="assets/images/{{unit.id}}.jpg"
+                [ngStyle]="{'width': '120px', 'height': '100px'}">
+              <label class="component-name">{{unit.label}}</label>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeModel" [suiTransition]="transitionController">
+      <nb-card [ngSwitch]="activeModel">
+        <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'EH'">Electric Heater Unit Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'HP'">Heat Pump Unit Parameters</nb-card-header>
+        <nb-card-body>
+
+          <div class="form-group row">
+
+            <div class="col-md-3"></div>
+            <label for="'unitName'" class="col-md-1 formLabel">Unit Name</label>
+            <div class="col-md-3">
+              <input type="text" fullWidth nbInput shape="semi-round" id="'unitName'" [(ngModel)]="unitName">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-3"></div>
+            <label for="'unitDescr'" class="col-md-1 formDescr">Unit Description</label>
+            <div class="col-md-3">
+              <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'" [(ngModel)]="unitDescr"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2">
+              <nb-select class="m-2" placeholder="Select grid" shape="semi-round" status="primary"
+                (selectedChange)="gridSelected($event)">
+                <nb-option value="grid['name]'" *ngFor="let grid of grids" [value]="grid">
+                  {{grid['name']}}</nb-option>
+              </nb-select>
+            </div>
+          </div>
+
+          <hr class="m-4">
+          <div class="row">
+            <div class="col-md-6">
+              <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="p2gUnit=$event"></ngx-p2g-unit>
+              <ngx-p2h-heat-pump-unit *ngSwitchCase="'HP'" (p2hHeatPump)="hpUnit=$event"></ngx-p2h-heat-pump-unit>
+              <ngx-p2h-electric-heat-unit *ngSwitchCase="'EH'" (p2hElectricHeat)="ehUnit=$event">
+              </ngx-p2h-electric-heat-unit>
+            </div>
+
+            <div class="col-md-6">
+              <svg height="495" width="800" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid">
+
+                <g [attr.id]="room.id" [class.selected-room]="selectedRoom == room.id" *ngFor="let room of sortedRooms">
+                  <path class="room-border" (click)="selectRoom(room.id)" [attr.d]="room.area.d"
+                    [style.filter]="isIE || isFirefox ? 'inherit': ''" />
+                  <path class="room-border" [attr.d]="room.border.d" />
+                  <path class="room-border room-border-glow" [attr.d]="room.border.d"
+                    [style.filter]="isIE || isFirefox ? 'inherit': ''" />
+                  <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.name.x"
+                    [attr.y]="room.name.y">{{room.name.text}}</text>
+                  <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.number.x"
+                    [attr.y]="room.number.y">{{room.number.text}}</text>
+                  <text *ngIf="room.number.x2" class="room-text" (click)="selectRoom(room.id)" text-anchor="middle"
+                    [attr.x]="room.number.x2" [attr.y]="room.number.y2">{{room.number.text2}}</text>
+                </g>
+
+              </svg>
+            </div>
+          </div>
+        </nb-card-body>
+        <div ng-switch-default></div>
+      </nb-card>
+    </div>
+
+  </div>
+</div>
