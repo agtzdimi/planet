@@ -31,11 +31,11 @@ def load():
    """
    subprocess.Popen(['python','load.py'])
 
-def execute(typ,name):
+def execute(typ,name,path):
    """ Function to be called when a user wants to execute a simulink model
        This function will run the corresponding python script for executing a simulink model
    """
-   p1 = subprocess.Popen(['python','execute.py','--type',typ,'--name',name])
+   p1 = subprocess.Popen(['python','execute.py','--type',typ,'--name',name,'--path',path])
    p1.wait()
 
 def reset():
@@ -81,7 +81,7 @@ def executeMode(mode,path,info,type,formNam):
    print ("Executing:", func)
    os.chdir("Simulation_" + str(timeStamp))
    print("Running " + type + " for Simulation " + formNam)
-   func(type, formNam)
+   func(type, formNam,path)
    os.chdir("..")
    time.sleep(15)
    #shutil.rmtree(destPath, ignore_errors=True)

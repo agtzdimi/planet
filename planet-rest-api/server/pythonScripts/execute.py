@@ -31,6 +31,8 @@ if __name__ == "__main__":
    help="simulation type")
    parser.add_argument("--name", required=True,
    help="simulation name")
+   parser.add_argument("--path", required=True,
+   help="Path to send the files")
    args = vars(parser.parse_args())
    # Start the matlab workspace
    print ("Starting Matlab engine...")
@@ -75,7 +77,8 @@ if __name__ == "__main__":
       os.rename("Results1.csv", args["type"] + "Results1.csv")
       os.rename("Results2.csv", args["type"] + "Results2.csv")
 
-   p1 = subprocess.Popen(['pscp','-pw','7156471564','simulationStatus.txt','planet@192.168.11.128:/home/planet'])
+   logPath='planet@192.168.11.128:' + os.path.dirname(os.path.dirname(args['path']))
+   p1 = subprocess.Popen(['pscp','-pw','7156471564','simulationStatus.txt',logPath])
    p1.wait()
-   p1 = subprocess.Popen(['pscp','-pw','7156471564','*.csv','planet@192.168.11.128:/home/planet'])
+   p1 = subprocess.Popen(['pscp','-pw','7156471564','*.csv',logPath])
    p1.wait()

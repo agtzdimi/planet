@@ -26,7 +26,6 @@ export class HeaderComponent implements OnInit {
       });
   }
 
-  myImage = new Image(100, 200);
   user = {};
   logOut = false;
   login_token;
@@ -39,7 +38,6 @@ export class HeaderComponent implements OnInit {
     private layoutService: LayoutService,
     private authService: NbAuthService,
     protected router: Router) {
-    this.myImage.src = 'assets/images/DAg.jpg';
     this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
