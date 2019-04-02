@@ -11,7 +11,7 @@ import os
 import xlrd
 import csv
 import shutil
-import argparse
+import json
 import pandas as pd
 import shutil
 import re
@@ -24,16 +24,18 @@ def csv_from_excel(filename):
       for rownum in range(sh.nrows):
          wr.writerow(sh.row_values(rownum))
 
+def sendFiles(fileName):
+   finalFile = '"\n'
+   with open(fileName) as f:
+      content = f.readlines()
+   
+   for i in range(len(content)):
+      finalFile = finalFile + content[i]
+   finalFile = finalFile + '\n"'
+   p1 = subprocess.Popen(['mosquitto_pub','-m',finalFile,'-h','192.168.11.128','-t','simulations_results'])
+   p1.wait()
+
 if __name__ == "__main__":
-   print("Start Arg Parsing")
-   parser = argparse.ArgumentParser()
-   parser.add_argument("--type", required=True,
-   help="simulation type")
-   parser.add_argument("--name", required=True,
-   help="simulation name")
-   parser.add_argument("--path", required=True,
-   help="Path to send the files")
-   args = vars(parser.parse_args())
    # Start the matlab workspace
    print ("Starting Matlab engine...")
    eng = matlab.engine.start_matlab()
@@ -58,14 +60,18 @@ if __name__ == "__main__":
       simStatus.write(message)
    print ("Simulation Finished!")
 
+   with open("Control_initialization.txt", "r") as read_file:
+      data = json.load(read_file)
+   
+   formName = data['payload']['formName']
    try:
       csv_from_excel("Results1")
       csv_from_excel("Results2")
       csv_input = pd.read_csv('Results1.csv')
-      csv_input['formName'] = args["name"]
+      csv_input['formName'] = formName
       csv_input.to_csv('output.csv', index=False)
       csv_input2 = pd.read_csv('Results2.csv')
-      csv_input2['formName'] = args["name"]
+      csv_input2['formName'] = formName
       csv_input2.to_csv('output2.csv', index=False)
       os.remove("Results1.csv")
       os.rename("output.csv", "Results1.csv")
@@ -73,12 +79,7 @@ if __name__ == "__main__":
       os.rename("output2.csv", "Results2.csv")
    except Exception as e:
       print(str(e))
-   if args["type"] != "single":
-      os.rename("Results1.csv", args["type"] + "Results1.csv")
-      os.rename("Results2.csv", args["type"] + "Results2.csv")
 
-   logPath='planet@192.168.11.128:' + os.path.dirname(os.path.dirname(args['path']))
-   p1 = subprocess.Popen(['pscp','-pw','7156471564','simulationStatus.txt',logPath])
-   p1.wait()
-   p1 = subprocess.Popen(['pscp','-pw','7156471564','*.csv',logPath])
-   p1.wait()
+   sendFiles("Results1.csv")
+   sendFiles("Results2.csv")
+   sendFiles("simulationStatus.txt")

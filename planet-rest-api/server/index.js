@@ -178,9 +178,7 @@ app.get("/simulation", (req, res) => {
     }
     res.send(finalResults);
     if (results1.stderr === '' && results2.stderr === '') {
-        shell.exec("rm " + `${__dirname}/../public/files/Results1.csv`);
-        shell.exec("rm " + `${__dirname}/../public/files/Results2.csv`);
-        shell.exec("rm -f " + `${__dirname}/../public/files/simulationStatus.txt`);
+        shell.exec("rm -rf " + `${__dirname}/../public/files/*`);
     }
 });
 
@@ -201,8 +199,7 @@ app.get("/multi_simulation", (req, res) => {
     }
     res.send(finalResults);
     if (results1.stderr === '' && results2.stderr === '') {
-        shell.exec("rm " + `${__dirname}/../public/files/multi1Results*.csv`);
-        shell.exec("rm " + `${__dirname}/../public/files/multi2Results*.csv`);
+        shell.exec("rm -rf " + `${__dirname}/../public/files/*`);
     }
 });
 

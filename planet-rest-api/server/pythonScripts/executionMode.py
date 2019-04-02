@@ -24,6 +24,7 @@ import subprocess
 import glob, os
 import time
 import shutil
+import pandas as pd
 
 def load():
    """ Function to be called when a user wants to load a simulink model
@@ -31,11 +32,11 @@ def load():
    """
    subprocess.Popen(['python','load.py'])
 
-def execute(typ,name,path):
+def execute():
    """ Function to be called when a user wants to execute a simulink model
        This function will run the corresponding python script for executing a simulink model
    """
-   p1 = subprocess.Popen(['python','execute.py','--type',typ,'--name',name,'--path',path])
+   p1 = subprocess.Popen(['python','execute.py'])
    p1.wait()
 
 def reset():
@@ -50,7 +51,17 @@ def edit():
    """
    subprocess.Popen(['python','edit.py'])
 
-def executeMode(mode,path,info,type,formNam):
+def createExcelFile(fileName,finalFileName):
+   with open(fileName) as f:
+      content = f.readlines()
+   fileName="Final_"+fileName
+   with open(fileName, 'w') as f:
+      for value in content[0].split(' '):
+         if value != '':
+            f.write("%s\n" % value)
+   pd.read_csv(fileName).to_excel(finalFileName, index=False)
+
+def executeMode(message):
    """ Function to be called when the user sends a message to execute a specific mode
        This function will initiate the process given in the recieved message
    """
@@ -60,28 +71,46 @@ def executeMode(mode,path,info,type,formNam):
       "reset": reset,
       "edit" : edit
    }
-   # Get the function from switcher dictionary
-   func = switcher.get(mode.rstrip(), lambda: "Invalid Mode")
    timeStamp = time.time()
    os.makedirs("Simulation_" + str(timeStamp))
    destPath = "Simulation_" + str(timeStamp)
-   print(logInInfo)
-   print(destPath)
-   p1 = subprocess.Popen(['pscp','-pw','7156471564',logInInfo,destPath])
-   p1.wait()
+   os.chdir(destPath)
+   for line in message.split('########'):
+      if line == '':
+         continue
+      file = switcher.get(line.rstrip(), "Invalid Mode")
+      if line.rstrip() == 'Control_initialization.txt':
+         file = line.rstrip()
+      elif line.rstrip() == 'Economy_environment_initialization.txt':
+         file = line.rstrip()
+      elif line.rstrip() == 'Parameters_initialization.txt':
+         file = line.rstrip()
+      elif line.rstrip() == 'Heat.csv':
+         file = line.rstrip()
+      elif line.rstrip() == 'Electricity.csv':
+         file = line.rstrip()
+      else:
+         file = 'Invalid Mode'
+      
+      if file != 'Invalid Mode':
+         fileName = line.rstrip()
+      else:
+         with open(fileName, "w") as f:
+            f.write(line.rstrip())
+
+   createExcelFile('Heat.csv','Heat.xlsx')
+   createExcelFile('Electricity.csv','Electricity.xlsx')
+   os.chdir("..")
    files = [f for f in os.listdir('.') if os.path.isfile(f)]
    for file in files:
-      path_file = os.path.join("C:\\Users\\agtzdimi\\Desktop\\PLANET",file)
+      path_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),file)
       shutil.copy2(path_file,destPath)
    filesDest = [f for f in os.listdir(destPath)]
-   while len(filesDest) != 15:
+   while len(filesDest) != 19:
       len(filesDest)
       time.sleep(1)
-   # Execute the function
-   print ("Executing:", func)
-   os.chdir("Simulation_" + str(timeStamp))
-   print("Running " + type + " for Simulation " + formNam)
-   func(type, formNam,path)
+   os.chdir(destPath)
+   execute()
    os.chdir("..")
    time.sleep(15)
    #shutil.rmtree(destPath, ignore_errors=True)
@@ -89,8 +118,5 @@ def executeMode(mode,path,info,type,formNam):
 if __name__ == "__main__":
    proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
-      msg, path, logInInfo, simType, formName = msg.decode("utf-8").split(",")
-      simType = simType.rstrip()
-      formName = formName.rstrip()
-      logInInfo = logInInfo.rstrip() + path
-      executeMode(msg,path,logInInfo,simType,formName)
+      msg = msg.decode("utf-8")
+      executeMode(msg)
