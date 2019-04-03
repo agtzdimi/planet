@@ -7,6 +7,13 @@ const smtpTransport = require('nodemailer-smtp-transport');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const async = require('async');
+const {
+    mongoUser,
+    mongoPass,
+    mongoIP,
+    mongoPort,
+    planetPort,
+    planetIP } = require('../bin/www');
 
 // use 'utf8' to get string instead of byte array  (512 bit key)
 const privateKEY = fs.readFileSync('./server/keys/private.key', 'utf8');
@@ -17,7 +24,8 @@ const db_name = "planet";
 
 // Connection URL
 const MongoDbHelper = require("./MongoDbHelper");
-let url = "mongodb://localhost:21569/" + db_name;
+let url = "mongodb://" + mongoUser + ':' + mongoPass + '@' + mongoIP + ':' + mongoPort + "/" + db_name + '?authSource=admin';
+console.log(url)
 let mongoDbHelper = new MongoDbHelper(url);
 
 getJwtToken = (payload) => {
@@ -526,7 +534,6 @@ exports.refresh = (req, res) => {
     let email = req.body.payload.email;
     let fullName = req.body.payload.fullName;
     let image = req.body.payload.image;
-
     // find user
     mongoDbHelper
         .collection("users")
@@ -535,7 +542,6 @@ exports.refresh = (req, res) => {
             if (results === null) {
                 return Promise.reject("no such user");
             }
-
             login_token = getJwtToken({ email: email, fullName: fullName, image: image });
             const hashed_token = crypto
                 .createHash("sha256")
@@ -623,7 +629,7 @@ exports.forgot = (req, res, next) => {
                     subject: 'Password Reset',
                     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                        'http://' + '160.40.49.244:21569/#/auth/reset-password/' + token + '\n\n' +
+                        'http://' + planetIP + ':' + planetPort + '/#/auth/reset-password/' + token + '\n\n' +
                         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
                 };
                 transporter.sendMail(mailOptions, function (err) {

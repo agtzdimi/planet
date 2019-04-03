@@ -13,6 +13,7 @@ export class TechInputFieldComponent {
     @Input() compId;
     @Input() val: Number;
     @Input() type: string;
+    @Input() inputType: string;
     @Output() valChange: EventEmitter<Number>;
     @Output() stringValChange: EventEmitter<string>;
     @Input() inputHtmlLabel1: string;
@@ -23,6 +24,7 @@ export class TechInputFieldComponent {
         this.valChange = new EventEmitter<Number>();
         this.stringValChange = new EventEmitter<string>();
         this.type = 'Number';
+        this.inputType = 'text';
     }
 
     onChange(event) {

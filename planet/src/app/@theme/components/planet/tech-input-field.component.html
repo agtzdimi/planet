@@ -5,7 +5,8 @@
             <div class="form-group row">
                 <label [for]="compId" class="col-sm-2 col-form-label">{{label1}}</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" [id]="compId" (change)="onChange($event)" [value]="val">
+                    <input [type]="inputType" class="form-control" [id]="compId" (change)="onChange($event)"
+                        [value]="val">
                 </div>
                 <label [for]="compId" class="col-sm-1 col-form-label">{{label2}}</label>
             </div>
@@ -18,7 +19,8 @@
                 <label [for]="compId" class="col-sm-2 col-form-label innerHtmlLabels"
                     [innerHtml]="inputHtmlLabel1"></label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" [id]="compId" (change)="onChange($event)" [value]="val">
+                    <input [type]="inputType" class="form-control" [id]="compId" (change)="onChange($event)"
+                        [value]="val">
                 </div>
                 <label [for]="compId" class="col-sm-1 col-form-label innerHtmlLabels"
                     [innerHtml]="inputHtmlLabel2"></label>

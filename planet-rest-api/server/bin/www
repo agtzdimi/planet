@@ -4,6 +4,20 @@
  * Module dependencies.
  */
 
+const dotenv = require('dotenv');
+dotenv.config();
+module.exports = {
+  endpoint: process.env.PLANET,
+  mongoUser: process.env.MONGO_USER,
+  mongoPass: process.env.MONGO_PASSWORD,
+  mongoPort: process.env.MONGO_PORT,
+  mongoIP: process.env.MONGO_IP,
+  mongoAuthDb: process.env.MONGO_AUTH_DB,
+  port: process.env.PLANET_REST_PORT,
+  planetPort: process.env.PLANET_PORT,
+  planetIP: process.env.PLANET
+};
+
 var app = require('../index');
 var debug = require('debug')('file-upload-api:server');
 var http = require('http');
@@ -12,7 +26,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8000');
+var port = normalizePort(process.env.PLANET_REST_PORT || '8000');
 app.set('port', port);
 
 /**

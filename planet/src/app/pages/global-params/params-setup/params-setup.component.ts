@@ -9,29 +9,35 @@ import { EnvService } from '../../../env.service';
 })
 export class ParamsSetupComponent {
 
-  sitewhereIP = '';
-  sitewhereUIPort = 0;
+  sitewhereIP: string = '';
+  sitewhereUIPort: number = 0;
   sitewhereMQTTPort = 0;
-  saveMessage = '';
-  planetRestPort = 0;
-  planetUISSHPort = 0;
-  planetUISSHPass = '';
-  planetUISSHUser = '';
-  planetUISSHIP = '';
-  planetRestIP = '';
+  saveMessage: string = '';
+  planetRestPort: number = 0;
+  planetRestIP: string = '';
   loading = false;
+  mongoIP: string;
+  mongoPort: number;
+  mongoUser: string;
+  mongoPassword: string;
+  mongoAuthDB: string;
+  simulationMachine: string;
+  planetUIPort: string;
 
   constructor(private httpClient: HttpClient,
     env: EnvService) {
     this.sitewhereIP = env.sitewhere;
     this.planetRestIP = env.planet;
     this.planetRestPort = env.planetRESTPort;
-    this.planetUISSHIP = env.planetSSHIP;
-    this.planetUISSHPass = env.planetSSHPass;
-    this.planetUISSHPort = env.planetSSHPort;
     this.sitewhereUIPort = env.sitewhereUIPort;
     this.sitewhereMQTTPort = env.sitewhereMQTTPort;
-    this.planetUISSHUser = env.planetSSHUser;
+    this.mongoIP = env.mongoIP;
+    this.mongoPort = env.mongoPort;
+    this.mongoUser = env.mongoUser;
+    this.mongoPassword = env.mongoPassword;
+    this.mongoAuthDB = env.mongoAuthDB;
+    this.simulationMachine = env.simulationMachine;
+    this.planetUIPort = window.location.port;
   }
 
   startUpload() {
@@ -43,10 +49,13 @@ export class ParamsSetupComponent {
       'planetRESTPort': this.planetRestPort,
       'sitewhereUIPort': this.sitewhereUIPort,
       'sitewhereMQTTPort': this.sitewhereMQTTPort,
-      'planetSSHIP': this.planetUISSHIP,
-      'planetSSHUser': this.planetUISSHUser,
-      'planetSSHPass': this.planetUISSHPass,
-      'planetSSHPort': this.planetUISSHPort,
+      'mongoIP': this.mongoIP,
+      'mongoPort': this.mongoPort,
+      'mongoUser': this.mongoUser,
+      'mongoPassword': this.mongoPassword,
+      'mongoAuthDB': this.mongoAuthDB,
+      'simulationMachine': this.simulationMachine,
+      'planetUIPort': this.planetUIPort,
     })
       .subscribe(res => {
         this.saveMessage = res['text'];

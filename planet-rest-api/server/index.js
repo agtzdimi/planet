@@ -6,6 +6,12 @@ const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const shell = require("shelljs");
+const {
+    mongoUser,
+    mongoPass,
+    mongoIP,
+    mongoPort,
+    mongoAuthDb } = require('./bin/www');
 const app = express();
 var fs = require('fs');
 const session = require("express-session");
@@ -92,15 +98,23 @@ app.post("/upload", (req, res, next) => {
 });
 
 app.post("/save_data", (req, res, next) => {
-    formName = JSON.parse(shell.exec("mongo --port 21569 planet --quiet --eval 'db.files.distinct(\"formName\");'"));
+    formName = JSON.parse(shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+        " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+        " planet --quiet --eval 'db.files.distinct(\"formName\");'"));
     inputFormName = JSON.parse(req.body.pvPayload)
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/^\s/, '');
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/\s$/, '');
     if (formName.includes(inputFormName.payload.formName)) {
         if (req.body.method === 'LOAD') {
-            shell.exec("mongo --port 21569 planet --eval \"db.files.remove({'payload.formName': '" + inputFormName.payload.formName + "'})\"");
-            shell.exec("mongo --port 21569 planet --eval \"db.files.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
-            shell.exec("mongo --port 21569 planet --eval \"db.results.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
+            shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+                " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+                " planet --eval \"db.files.remove({'payload.formName': '" + inputFormName.payload.formName + "'})\"");
+            shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+                " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+                " planet --eval \"db.files.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
+            shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+                " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+                " planet --eval \"db.results.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
             shell.exec(`${__dirname}/pythonScripts/generateData.sh '` + req.body.windPayload + "' '" + req.body.pvPayload + "'", function (code, stdout, stderr) {
                 if (code === 1) {
                     return res.send("Error: Not all data are loaded to the DB!");
@@ -131,8 +145,12 @@ app.get("/get_form_names", (req, res) => {
     } else {
         collection = "files"
     }
-    formName = JSON.parse(shell.exec("mongo --port 21569 --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'"));
-    formDescr = JSON.parse(shell.exec("mongo --port 21569 --quiet planet --eval 'db.files.distinct(\"payload.formDescription\");'"));
+    formName = JSON.parse(shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+        " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+        " --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'"));
+    formDescr = JSON.parse(shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+        " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+        " --quiet planet --eval 'db.files.distinct(\"payload.formDescription\");'"));
     res.send({ "formName": formName, "formDescription": formDescr });
 });
 
@@ -204,13 +222,13 @@ app.get("/multi_simulation", (req, res) => {
 });
 
 app.post("/update_IPs", (req, res) => {
-    const fileCreation = shell.echo(JSON.stringify(eval(req.body))).to(`${__dirname}/keys/planet_IPs.json`);
-    const path = shell.exec("sshpass -p " + req.body.planetSSHPass + " find /home/" + req.body.planetSSHUser + " -wholename \"*data/planet_IPs.json*\"");
-    shell.echo("sshpass -p \"" + req.body.planetSSHPass + "\" scp -P " + req.body.planetSSHPort + ` ${__dirname}/../server/keys/planet_IPs.json `
-        + req.body.planetSSHUser + "@" + req.body.planetSSHIP + ":" + path);
-    shell.exec("sshpass -p \"" + req.body.planetSSHPass + "\" scp -P " + req.body.planetSSHPort + ` ${__dirname}/../server/keys/planet_IPs.json `
-        + req.body.planetSSHUser + "@" + req.body.planetSSHIP + ":" + path);
-    if (!fileCreation.stderr) {
+    update = shell.exec(`${__dirname}/pythonScripts/updateParams.sh ` + req.body.planet + " " + req.body.sitewhere + " " +
+        req.body.planetRESTPort + " " + req.body.sitewhereUIPort + " " + req.body.sitewhereMQTTPort + " " +
+        req.body.mongoIP + " " + req.body.mongoPort + " " + req.body.mongoUser + " " + req.body.mongoPassword + " " +
+        req.body.mongoAuthDB + " " + req.body.simulationMachine + " " + req.body.planetUIPort)
+    if (!update.stderr) {
+        const dotenv = require('dotenv');
+        dotenv.config();
         res.send({ text: 'Parameters successfully updated!' });
     } else {
         res.send({ text: 'Error: Parameters were not updated!' });

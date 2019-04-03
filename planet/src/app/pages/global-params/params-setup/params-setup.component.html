@@ -2,63 +2,75 @@
   <div class="col">
 
     <nb-card>
-      <nb-card-header>Setup Global Parameters</nb-card-header>
       <nb-card-body>
 
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="planetRestIP=$event"
+        <h2>
+          PLANET REST Parameters
+        </h2>
+        <hr>
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="planetRestIP=$event"
           [(val)]="planetRestIP" [compId]="'planetRestIP'" [inputHtmlLabel1]="'PLANET\'s REST IP'" [type]="'string'">
         </ngx-input-field>
 
-        <hr>
-
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="planetRestPort=+$event"
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="planetRestPort=+$event"
           [(val)]="planetRestPort" [compId]="'planetRestPort'" [inputHtmlLabel1]="'PLANET\'s REST Port'">
         </ngx-input-field>
 
-        <hr>
-
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="planetUISSHIP=$event"
-          [(val)]="planetUISSHIP" [compId]="'planetUISSHIP'" [inputHtmlLabel1]="'PLANET\'s SSH IP'" [type]="'string'">
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+          (stringValChange)="simulationMachine=$event" [(val)]="simulationMachine" [compId]="'simulationMachine'"
+          [inputHtmlLabel1]="'Simulations\' Machine IP'" [type]="'string'">
         </ngx-input-field>
 
         <hr>
 
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="planetUISSHPort=+$event"
-          [(val)]="planetUISSHPort" [compId]="'planetUISSHPort'" [inputHtmlLabel1]="'PLANET\'s SSH Port'">
-        </ngx-input-field>
+        <h2>
+          Middleware Parameters
+        </h2>
 
         <hr>
 
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="planetUISSHUser=$event"
-          [(val)]="planetUISSHUser" [compId]="'planetUISSHUser'" [inputHtmlLabel1]="'PLANET User for SSH'"
-          [type]="'string'">
-        </ngx-input-field>
-
-        <hr>
-
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="planetUISSHPass=$event"
-          [(val)]="planetUISSHPass" [compId]="'planetUISSHPass'" [inputHtmlLabel1]="'PLANET User Password for SSH'"
-          [type]="'string'">
-        </ngx-input-field>
-
-        <hr>
-
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="sitewhereIP=$event"
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="sitewhereIP=$event"
           [(val)]="sitewhereIP" [compId]="'sitewhereIP'" [inputHtmlLabel1]="'Sitewhere Installation IP'"
           [type]="'string'">
         </ngx-input-field>
 
-        <hr>
-
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="sitewhereUIPort=+$event"
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="sitewhereUIPort=+$event"
           [(val)]="sitewhereUIPort" [compId]="'sitewhereUIPort'" [inputHtmlLabel1]="'Sitewhere Installation UI Port'">
+        </ngx-input-field>
+
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="sitewhereMQTTPort=+$event"
+          [(val)]="sitewhereMQTTPort" [compId]="'sitewhereMQTTPort'"
+          [inputHtmlLabel1]="'Sitewhere Installation MQTT Port'">
         </ngx-input-field>
 
         <hr>
 
-        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="sitewhereMQTTPort=+$event"
-          [(val)]="sitewhereMQTTPort" [compId]="'sitewhereMQTTPort'"
-          [inputHtmlLabel1]="'Sitewhere Installation MQTT Port'">
+        <h2>
+          MongoDB Parameters
+        </h2>
+
+        <hr>
+
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoIP=$event"
+          [(val)]="mongoIP" [compId]="'mongoIP'" [inputHtmlLabel1]="'MongoDB\'s IP'" [type]="'string'">
+        </ngx-input-field>
+
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="mongoPort=+$event"
+          [(val)]="mongoPort" [compId]="'mongoPort'" [inputHtmlLabel1]="'MongoDB\'s Port'">
+        </ngx-input-field>
+
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoUser=$event"
+          [(val)]="mongoUser" [compId]="'mongoUser'" [inputHtmlLabel1]="'MongoDB PLANET UserName'" [type]="'string'">
+        </ngx-input-field>
+
+        <ngx-input-field class="m-2" [inputType]="'password'" [isChecked]="true" [inputHtmlLabel2]="''"
+          (stringValChange)="mongoPassword=$event" [(val)]="mongoPassword" [compId]="'mongoPassword'"
+          [inputHtmlLabel1]="'MongoDB Password'" [type]="'string'">
+        </ngx-input-field>
+
+        <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoAuthDB=$event"
+          [(val)]="mongoAuthDB" [compId]="'mongoAuthDB'" [inputHtmlLabel1]="'MongoDB Authentication DB'"
+          [type]="'string'">
         </ngx-input-field>
 
       </nb-card-body>

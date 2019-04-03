@@ -7,3 +7,11 @@
     color: green;
     margin-top: 7.5%;
   }
+
+  h2 {
+    flex: 1 1 100%;
+    color: nb-theme(color-fg-heading-light);
+    margin: 1rem 0 2rem;
+    text-align: center;
+  }
+  

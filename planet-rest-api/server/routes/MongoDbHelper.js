@@ -19,6 +19,9 @@ module.exports = class MongoDbHelper {
       this.url,
       { useNewUrlParser: true },
       (err, db) => {
+        if (err !== null) {
+          console.log(err)
+        }
         this.db = db;
         callback(db);
       }
