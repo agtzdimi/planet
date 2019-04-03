@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
 import { NbDialogService } from '@nebular/theme';
-import ipJson from '../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../env.service';
 
 @Component({
   selector: 'ngx-simulation-start',
@@ -25,7 +25,9 @@ export class SimulationStartComponent {
   themeSubscription: any;
   formName = 'Select Saved Simulation';
 
-  constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
+  constructor(private httpClient: HttpClient,
+    private dialogService: NbDialogService,
+    private env: EnvService) {
     this.initializeCharts();
   }
 
@@ -39,7 +41,7 @@ export class SimulationStartComponent {
     this.showBar = false;
     this.initializeCharts();
     this.status = '';
-    let url = 'http://' + ipJson['planet'] + ':8000/transfer';
+    let url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/transfer';
     this.httpClient.post(url,
       {
         'formName': this.formName,
@@ -53,7 +55,7 @@ export class SimulationStartComponent {
         },
       );
     const interval = setInterval(() => {
-      url = 'http://' + ipJson['planet'] + ':8000/simulation';
+      url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/simulation';
       this.httpClient.get(url, {
         params: {
           'formName': this.formName,

@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { EnvService } from '../../../../env.service';
 
 @Component({
     selector: 'ngx-send-reset-req',
@@ -17,7 +18,8 @@ export class NgxSendResetRequestComponent implements OnChanges {
         Accept: 'application/json',
     };
 
-    constructor(private httpClient: HttpClient, protected router: Router) {
+    constructor(private httpClient: HttpClient, protected router: Router,
+        private env: EnvService) {
         this.message = new EventEmitter<Object>();
     }
 
@@ -29,7 +31,7 @@ export class NgxSendResetRequestComponent implements OnChanges {
         // console.log('HERE', this.isAdmin)
         this.finalParameters = { ...this.password };
         // this.finalParameters.push({ isAdmin: this.isAdmin })
-        this.httpClient.post('http://160.40.49.244:8000/reset',
+        this.httpClient.post('http://' + this.env.planet + ':' + this.env.planetRESTPort + '/reset',
             {
                 method: 'POST',
                 headers: {

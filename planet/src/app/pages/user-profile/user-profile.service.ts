@@ -1,17 +1,18 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import ipJson from '../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../env.service';
 
 @Injectable()
 export class UserProfileService {
     message: string = '';
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient,
+        private env: EnvService) {
     }
 
     public uploadImage(image, email, name): Promise<any> {
         return new Promise(resolve => {
-            const url = 'http://' + ipJson['planet'] + ':8000/update_user';
+            const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/update_user';
             this.httpClient.post<HttpResponse<Object>>(url, {
                 image: image,
                 email: email,

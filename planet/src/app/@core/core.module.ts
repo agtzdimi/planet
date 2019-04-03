@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
+import { EnvService } from '../env.service';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { DataModule } from './data/data.module';
@@ -13,7 +14,10 @@ import {
   StateService,
 } from './utils';
 
+const env = new EnvService();
+
 export class NbSimpleRoleProvider extends NbRoleProvider {
+
   getRole() {
     // here you could provide any role based on any auth flow
     return observableOf('guest');
@@ -40,7 +44,7 @@ export const NB_CORE_PROVIDERS = [
         refreshToken: {
           endpoint: '/refresh',
         },
-        baseEndpoint: 'http://160.40.49.244:8000',
+        baseEndpoint: 'http://' + env.planet + ':' + env.planetRESTPort,
         login: {
           endpoint: '/login_with_email_password',
           method: 'post',

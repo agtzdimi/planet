@@ -1,17 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import ipJson from '../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../env.service';
 
 @Injectable()
 export class DeleteDeviceService {
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient,
+        private env: EnvService) { }
 
 
     public deleteDevice(jwtToken: string, token) {
 
         return new Promise(resolve => {
-            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devices/' + token;
+            const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/api/devices/' + token;
             this.httpClient.delete(url, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',

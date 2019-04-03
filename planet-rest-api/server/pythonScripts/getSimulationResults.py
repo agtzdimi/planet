@@ -8,15 +8,11 @@ if __name__ == "__main__":
       for line in msg.split('\n'):
           lineLength = len(line.split(','))
           if lineLength == 22:
-              currentFile = 'Results1 File'
               with open (os.path.join(os.getcwd(),'../../public/files','Results1.csv'), 'a') as f:
                   f.write("%s\n" % line)
           elif lineLength == 3:
-              currentFile = 'Results2 File'
               with open (os.path.join(os.getcwd(),'../../public/files','Results2.csv'), 'a') as f:
                   f.write("%s\n" % line)
           elif lineLength == 1 and line != '' and line != '"':
-              currentFile = 'Status File'
               with open (os.path.join(os.getcwd(),'../../public/files','simulationStatus.txt'), 'a') as f:
                   f.write("%s\n" % line)
-      print('Generating: ' + currentFile)

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService, NbCalendarRange, NbDateService } from '@nebular/theme';
 import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
-import ipJson from '../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../env.service';
 
 @Component({
     selector: 'ngx-load-simulation',
@@ -51,7 +51,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                     let finalFormName = '';
                     finalFormName = this.formName.toString();
                     this.formDescription = name['formDescription'];
-                    const url = 'http://' + ipJson['planet'] + ':8000/load_data';
+                    const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/load_data';
                     this.httpClient.get(url, {
                         params: {
                             'formName': finalFormName,
@@ -144,7 +144,10 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
 
     revealed = false;
 
-    constructor(private httpClient: HttpClient, private dialogService: NbDialogService, protected dateService: NbDateService<Date>) {
+    constructor(private httpClient: HttpClient,
+        private dialogService: NbDialogService,
+        protected dateService: NbDateService<Date>,
+        private env: EnvService) {
         for (let i = 0; i < 7; i++) {
             this.fileName.push('Upload File');
         }
@@ -224,7 +227,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         formData.append('param4', JSON.stringify(this.elecParam));
         formData.append('param5', JSON.stringify(this.heatParam));
         formData.append('method', 'LOAD');
-        let url = 'http://' + ipJson['planet'] + ':8000/upload';
+        let url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/upload';
         this.httpClient.post(url, formData,
         )
             .subscribe(
@@ -233,7 +236,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                     this.windParam['payload']['formDescription'] = this.formDescription;
                     this.pvParam['payload']['formName'] = this.formName;
                     this.pvParam['payload']['formDescription'] = this.formDescription;
-                    url = 'http://' + ipJson['planet'] + ':8000/save_data';
+                    url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/save_data';
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),

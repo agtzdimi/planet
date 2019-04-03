@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import ipJson from '../../../../assets/data/planet_IPs.json';
+import { HttpClient } from '@angular/common/http';
+import { EnvService } from '../../../env.service';
 
 @Component({
   selector: 'ngx-params-setup',
@@ -21,31 +21,22 @@ export class ParamsSetupComponent {
   planetRestIP = '';
   loading = false;
 
-  constructor(private httpClient: HttpClient) {
-    this.httpClient.get('assets/data/planet_IPs.json', {
-      headers: new HttpHeaders({
-        'Cache-Control': 'no-cache, no-store, must-revalidate, post- check=0, pre-check=0',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      }),
-    })
-      .subscribe(res => {
-        // console.log(res)
-      });
-    this.sitewhereIP = ipJson['sitewhere'];
-    this.planetRestIP = ipJson['planet'];
-    this.planetRestPort = ipJson['planetRESTPort'];
-    this.planetUISSHIP = ipJson['planetSSHIP'];
-    this.planetUISSHPass = ipJson['planetSSHPass'];
-    this.planetUISSHPort = ipJson['planetSSHPort'];
-    this.sitewhereUIPort = ipJson['sitewhereUIPort'];
-    this.sitewhereMQTTPort = ipJson['sitewhereMQTTPort'];
-    this.planetUISSHUser = ipJson['planetSSHUser'];
+  constructor(private httpClient: HttpClient,
+    env: EnvService) {
+    this.sitewhereIP = env.sitewhere;
+    this.planetRestIP = env.planet;
+    this.planetRestPort = env.planetRESTPort;
+    this.planetUISSHIP = env.planetSSHIP;
+    this.planetUISSHPass = env.planetSSHPass;
+    this.planetUISSHPort = env.planetSSHPort;
+    this.sitewhereUIPort = env.sitewhereUIPort;
+    this.sitewhereMQTTPort = env.sitewhereMQTTPort;
+    this.planetUISSHUser = env.planetSSHUser;
   }
 
   startUpload() {
     this.loading = true;
-    const url = 'http://' + this.planetRestIP + ':8000/update_IPs';
+    const url = 'http://' + this.planetRestIP + ':' + this.planetRestPort + '/update_IPs';
     this.httpClient.post(url, {
       'planet': this.planetRestIP,
       'sitewhere': this.sitewhereIP,

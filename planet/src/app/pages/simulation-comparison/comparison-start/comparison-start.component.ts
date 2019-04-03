@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectMultipleFormPromptComponent } from './dialog-prompt/select-multiple-form.component';
 import { NbDialogService } from '@nebular/theme';
-import ipJson from '../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../env.service';
 
 @Component({
   selector: 'ngx-comparison-start',
@@ -22,7 +22,9 @@ export class ComparisonStartComponent {
   themeSubscription: any;
   selectedForms = 'Select Saved Simulations';
 
-  constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
+  constructor(private httpClient: HttpClient,
+    private dialogService: NbDialogService,
+    private env: EnvService) {
     this.initializeCharts();
   }
 
@@ -36,7 +38,7 @@ export class ComparisonStartComponent {
     this.initializeCharts();
     const interval = setInterval(() => {
       this.forms = this.selectedForms.split('  -  ');
-      const url = 'http://' + ipJson['planet'] + ':8000/multi_simulation';
+      const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/multi_simulation';
       this.httpClient.get(url, {
         params: {
           'formName1': this.forms[0],

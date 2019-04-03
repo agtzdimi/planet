@@ -1,18 +1,19 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import ipJson from '../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../env.service';
 
 @Injectable()
 export class GetJWTService {
     message: string = '';
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient,
+        private env: EnvService) { }
 
 
     public getToken(): Promise<any> {
         const token = btoa('admin:password');
-        const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/authapi/jwt';
+        const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/authapi/jwt';
         return new Promise(resolve => {
             this.httpClient.get<HttpResponse<Object>>(url, {
                 observe: 'response',

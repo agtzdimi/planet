@@ -1,17 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import ipJson from '../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../env.service';
 
 @Injectable()
 export class CreateDeviceService {
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient,
+        private env: EnvService) { }
 
 
     public createNewDevice(data: Object, jwtToken: string) {
 
         return new Promise(resolve => {
-            const url = 'http://' + ipJson['sitewhere'] + ':8080/sitewhere/api/devices';
+            const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/api/devices';
             this.httpClient.post(url, data, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',

@@ -7,7 +7,7 @@ import { DialogNamePromptComponent } from '../dialog-prompt/dialog-prompt.compon
 import { DialogTechParamPromptComponent } from '../dialog-prompt/tech-param-dialog.component';
 import { DialogControlSystemPromptComponent } from '../dialog-prompt/control-system-dialog.component';
 import { DialogEconomyPromptComponent } from '../dialog-prompt/economy-dialog.component';
-import ipJson from '../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../env.service';
 
 @Component({
     selector: 'ngx-new-simulation',
@@ -141,7 +141,9 @@ export class NewSimulationFilesComponent implements AfterViewInit {
 
     revealed = false;
 
-    constructor(private httpClient: HttpClient, private dialogService: NbDialogService) {
+    constructor(private httpClient: HttpClient,
+        private dialogService: NbDialogService,
+        private env: EnvService) {
         for (let i = 0; i < 7; i++) {
             this.fileName.push('Upload File');
         }
@@ -224,7 +226,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
         formData.append('method', 'NEW');
-        let url = 'http://' + ipJson['planet'] + ':8000/upload';
+        let url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/upload';
         this.httpClient.post(url, formData,
         )
             .subscribe(
@@ -233,7 +235,7 @@ export class NewSimulationFilesComponent implements AfterViewInit {
                     this.windParam['payload']['formDescription'] = this.formDescription;
                     this.pvParam['payload']['formName'] = this.formName;
                     this.pvParam['payload']['formDescription'] = this.formDescription;
-                    url = 'http://' + ipJson['planet'] + ':8000/save_data';
+                    url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/save_data';
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),

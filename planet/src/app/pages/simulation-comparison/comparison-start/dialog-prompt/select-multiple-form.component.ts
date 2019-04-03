@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
-import ipJson from '../../../../../assets/data//planet_IPs.json';
+import { EnvService } from '../../../../env.service';
 
 @Component({
   selector: 'nb-select-multiple-form-prompt',
@@ -62,8 +62,9 @@ export class DialogSelectMultipleFormPromptComponent {
   errorMessage: String = '';
 
   constructor(protected dialogRef: NbDialogRef<DialogSelectMultipleFormPromptComponent>,
-    private httpClient: HttpClient) {
-    const url = 'http://' + ipJson['planet'] + ':8000/get_form_names';
+    private httpClient: HttpClient,
+    private env: EnvService) {
+    const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/get_form_names';
     this.httpClient.get(url, {
       params: {
         'executed': 'true',
