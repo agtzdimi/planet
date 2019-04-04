@@ -25,10 +25,13 @@ sed -i "s/SIMULATION_MACHINE = .*/SIMULATION_MACHINE = '"$simulationMachine"'/" 
 
 sed -i "s/window\.__env.planet = .*/window\.__env.planet = '"$planet"';/" ../planet/src/env.js
 sed -i "s/window\.__env.sitewhere = .*/window\.__env.sitewhere = '"$sitewhere"';/" ../planet/src/env.js
-sed -i "s/window\.__env.planetRESTPort = .*/window\.__env.planetRESTPort = '"$planetRESTPort"';/" ../planet/src/env.js
-sed -i "s/window\.__env.sitewhereUIPort = .*/window\.__env.sitewhereUIPort = '"$sitewhereUIPort"';/" ../planet/src/env.js
-sed -i "s/window\.__env.mongoPort = .*/window\.__env.mongoPort = '"$mongoPort"';/" ../planet/src/env.js
+sed -i "s/window\.__env.planetRESTPort = .*/window\.__env.planetRESTPort = "$planetRESTPort";/" ../planet/src/env.js
+sed -i "s/window\.__env.sitewhereUIPort = .*/window\.__env.sitewhereUIPort = "$sitewhereUIPort";/" ../planet/src/env.js
+sed -i "s/window\.__env.mongoPort = .*/window\.__env.mongoPort = "$mongoPort";/" ../planet/src/env.js
 sed -i "s/window\.__env.mongoUser = .*/window\.__env.mongoUser = '"$mongoUser"';/" ../planet/src/env.js
 sed -i "s/window\.__env.mongoPassword = .*/window\.__env.mongoPassword = '"$mongoPassword"';/" ../planet/src/env.js
 sed -i "s/window\.__env.mongoAuthDB = .*/window\.__env.mongoAuthDB = '"$mongoAuthDB"';/" ../planet/src/env.js
 sed -i "s/window\.__env.simulationMachine = .*/window\.__env.simulationMachine = '"$simulationMachine"';/" ../planet/src/env.js
+
+nodePID=$(ps aux|grep '/server/bin/www' | grep -v 'grep' | sed -E 's/[[:space:]]+/ /' | cut -d ' ' -f2)
+kill $nodePID
