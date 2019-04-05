@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
-import { EnvService } from '../env.service';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { DataModule } from './data/data.module';
@@ -13,8 +12,6 @@ import {
   PlayerService,
   StateService,
 } from './utils';
-
-const env = new EnvService();
 
 export class NbSimpleRoleProvider extends NbRoleProvider {
 
@@ -44,7 +41,7 @@ export const NB_CORE_PROVIDERS = [
         refreshToken: {
           endpoint: '/refresh',
         },
-        baseEndpoint: 'http://' + env.planet + ':' + env.planetRESTPort,
+        baseEndpoint: 'http://' + window['__env'].planet + ':' + window['__env'].planetRESTPort,
         login: {
           endpoint: '/login_with_email_password',
           method: 'post',

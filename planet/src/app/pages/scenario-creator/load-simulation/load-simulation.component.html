@@ -165,9 +165,8 @@
     <div class="row">
       <div class="col-md-12">
         <div class="ui content">
-          <ngx-tech-param [(data)]="paramInit" (dataChange)="paramInit" [(pvParam)]="pvParam" [(windParam)]="windParam"
-            [defaultValues]="false" (pvChange)="pvParam" (windChange)="windParam" [isLoadModule]="true"
-            [startDate]="startingDate" [endDate]="endingDate">
+          <ngx-tech-param [(pvParam)]="pvParam" [(windParam)]="windParam" (pvChange)="pvParam" (windChange)="windParam"
+            [isLoadModule]="true">
           </ngx-tech-param>
         </div>
       </div>

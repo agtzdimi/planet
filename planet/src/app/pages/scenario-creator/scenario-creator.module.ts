@@ -23,6 +23,7 @@ import { DialogSelFormPromptComponent } from './dialog-prompt/select-form.compon
 import { DialogNamePromptComponent } from './dialog-prompt/dialog-prompt.component';
 import { NbDialogModule } from '@nebular/theme';
 import { HighlDirective } from './dialog-prompt/highlight.directive';
+import { GeneralParamsComponent } from './general-params/general-params.component';
 
 
 const COMPONENTS = [
@@ -70,6 +71,7 @@ const ENTRY_COMPONENTS = [
   ],
   declarations: [
     ...COMPONENTS,
+    GeneralParamsComponent,
   ],
   entryComponents: [
     ...ENTRY_COMPONENTS,
