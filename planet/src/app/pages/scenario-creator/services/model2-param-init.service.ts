@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable()
 export class Model2ParamInitService {
+
+    paramUpdated = new EventEmitter<Object>();
 
     paramInit = {
         'file.name': 'Parameters_initialization',
@@ -491,6 +493,152 @@ export class Model2ParamInitService {
     };
 
     constructor() { }
+
+    updateDefaultValues(id, flag, displayingNode) {
+        switch (id) {
+            case 0:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['PV'] = {
+                        'nominal.electric.power': 100,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['PV'] = {
+                        'nominal.electric.power': 0,
+                    };
+                }
+                break;
+            case 1:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['WT'] = {
+                        'nominal.electric.power': 0,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['WT'] = {
+                        'nominal.electric.power': 0,
+                    };
+                }
+                break;
+            case 2:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['CHP'] = {
+                        'nominal.electric.power': 0,
+                        'efficiency.electric': 40,
+                        'efficiency.thermal': 45,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['CHP'] = {
+                        'nominal.electric.power': 0,
+                        'efficiency.electric': 40,
+                        'efficiency.thermal': 45,
+                    };
+                }
+                break;
+            case 3:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['DH']['HP'] = {
+                        'nominal.heat.power': 0,
+                        'cop': 3,
+                    };
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['DH']['EH'] = {
+                        'nominal.heat.power': 0,
+                        'efficiency.thermal': 98,
+                    };
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['LHD']['HP'] = {
+                        'nominal.heat.power': 0,
+                        'cop': 3,
+                    };
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['LHD']['EH'] = {
+                        'nominal.heat.power': 0,
+                        'efficiency.thermal': 98,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['DH']['HP'] = {
+                        'nominal.heat.power': 0,
+                        'cop': 3,
+                    };
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['DH']['EH'] = {
+                        'nominal.heat.power': 0,
+                        'efficiency.thermal': 98,
+                    };
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['LHD']['HP'] = {
+                        'nominal.heat.power': 0,
+                        'cop': 3,
+                    };
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H']['LHD']['EH'] = {
+                        'nominal.heat.power': 0,
+                        'efficiency.thermal': 98,
+                    };
+                }
+                break;
+            case 4:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2G'] = {
+                        'nominal.electric.power': 0,
+                        'efficiency.electrolysis': 75,
+                        'efficiency.methanation': 80,
+                        'efficiency.thermal': 24,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2G'] = {
+                        'nominal.electric.power': 0,
+                        'efficiency.electrolysis': 75,
+                        'efficiency.methanation': 80,
+                        'efficiency.thermal': 24,
+                    };
+                }
+                break;
+            case 5:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['EB'] = {
+                        'storage.electric.capacity': 0,
+                        'efficiency.charge': 92.1,
+                        'efficiency.discharge': 92.1,
+                        'c.rate': 0.25,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['EB'] = {
+                        'storage.electric.capacity': 0,
+                        'efficiency.charge': 92.1,
+                        'efficiency.discharge': 92.1,
+                        'c.rate': 0.25,
+                    };
+                }
+                break;
+        }
+        this.paramUpdated.emit(this.paramInit);
+    }
+
+    updateG2HValues(id, flag) {
+        switch (id) {
+            case 1:
+                if (flag) {
+                    this.paramInit['payload']['centralised.heat']['G2H'] = {
+                        'nomial.heat.power': 1000,
+                        'efficiency.thermal': 90,
+                    };
+                } else {
+                    this.paramInit['payload']['centralised.heat']['G2H'] = {
+                        'nomial.heat.power': 0,
+                        'efficiency.thermal': 90,
+                    };
+                }
+                break;
+            case 2:
+                if (flag) {
+                    this.paramInit['payload']['localised.heat']['G2H'] = {
+                        'nomial.heat.power': 1500,
+                        'efficiency.thermal': 90,
+                    };
+                } else {
+                    this.paramInit['payload']['localised.heat']['G2H'] = {
+                        'nomial.heat.power': 0,
+                        'efficiency.thermal': 90,
+                    };
+                }
+                break;
+        }
+        this.paramUpdated.emit(this.paramInit);
+    }
 
 
 }

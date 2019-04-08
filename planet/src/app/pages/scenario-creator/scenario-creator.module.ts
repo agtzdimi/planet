@@ -11,7 +11,6 @@ import { ScenarioCreatorRoutingModule } from './scenario-creator-routing.module'
 import { ScenarioCreatorComponent } from './scenario-creator.component';
 import { NewSimulationFilesComponent } from './new-simulation/new-simulation.component';
 import { LoadSimulationFilesComponent } from './load-simulation/load-simulation.component';
-import { ParamHeaderComponent } from './param-header/param-header.component';
 import { MatSlideToggleModule } from '@angular/material';
 import { TechParamComponent } from './tech-param/tech-param.component';
 import { TechCostComponent } from './tech-cost/tech-cost.component';
@@ -30,7 +29,6 @@ const COMPONENTS = [
   ScenarioCreatorComponent,
   NewSimulationFilesComponent,
   LoadSimulationFilesComponent,
-  ParamHeaderComponent,
   TechParamComponent,
   TechCostComponent,
   LeafletMapComponent,

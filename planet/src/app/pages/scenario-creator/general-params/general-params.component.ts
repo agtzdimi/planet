@@ -9,7 +9,6 @@ import { DialogNamePromptComponent } from '../dialog-prompt/dialog-prompt.compon
 @Component({
   selector: 'ngx-general-params',
   templateUrl: './general-params.component.html',
-  providers: [GeneralParamsService, Model2ParamInitService],
   styleUrls: ['./general-params.component.scss'],
 })
 export class GeneralParamsComponent implements OnInit, AfterViewInit {
@@ -35,6 +34,7 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
 
   phase2 = false;
   @Output() phaseOutput = new EventEmitter<boolean>();
+  @Output() timeStepType = new EventEmitter<Object>();
 
   constructor(private model: Model2ParamInitService,
     private generalParams: GeneralParamsService,
@@ -67,6 +67,7 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
 
   handleDescriptionChange(event) {
     this.formDescription = event.target.value;
+    this.generalParams.formDescriptionUpdated.emit(event.target.value);
   }
 
   animateImage(transitionName: string = 'scale', event) {
@@ -129,6 +130,8 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
       this.timeStep['mins'] = false;
       this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
     }
+    this.timeStepType.emit(this.timeStep);
+    this.generalParams.timeStepUpdate.emit(this.paramInit['payload']['simulation']['time.step']);
   }
 
   handleDateChange(event) {
@@ -171,6 +174,8 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
       this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
         * 24 / timeStep;
     }
+
+    this.generalParams.simulationTimeUpdate.emit(this.paramInit['payload']['simulation']['simulation.time']);
   }
 
   onUploadOutput(output: UploadOutput, id): void {
@@ -234,5 +239,15 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
   setCoord(event) {
     this.coordinates[0] = event[0];
     this.coordinates[1] = event[1];
+  }
+
+  formNameChange(event) {
+    this.formName = event;
+    this.generalParams.formNameUpdated.emit(event);
+  }
+
+  formDescriptionChange(event) {
+    this.formDescription = event;
+    this.generalParams.formDescriptionUpdated.emit(event);
   }
 }

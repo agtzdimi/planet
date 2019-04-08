@@ -29,6 +29,8 @@ export class NewSimulationFilesComponent {
     capacity = 1;
     systemLoss = 10;
     gotPhase2 = 0;
+    paramInit = {};
+    timeStep = {};
     phase3: boolean = false;
     phase4: boolean = false;
     phase5: boolean = false;
@@ -57,6 +59,7 @@ export class NewSimulationFilesComponent {
                 }
                 break;
             case 5:
+                this.phase5 = true;
                 break;
         }
         controller.animate(
@@ -105,6 +108,27 @@ export class NewSimulationFilesComponent {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
         this.coordinates = this.generalParams.coordinates;
+        this.paramInit = this.model2.paramInit;
+
+        this.model2.paramUpdated.subscribe(
+            (data) => this.paramInit = data,
+        );
+
+        this.generalParams.formNameUpdated.subscribe(
+            (data) => this.generalParams.formName = data,
+        );
+
+        this.generalParams.formDescriptionUpdated.subscribe(
+            (data) => this.generalParams.formDescription = data,
+        );
+
+        this.generalParams.simulationTimeUpdate.subscribe(
+            (data) => this.generalParams.simulationTime = data,
+        );
+
+        this.generalParams.timeStepUpdate.subscribe(
+            (data) => this.generalParams.timeStep = data,
+        );
     }
 
     startUpload(): void {
@@ -115,25 +139,25 @@ export class NewSimulationFilesComponent {
             const file: File = this.generalParams.files[i];
             formData.append('file', file, file.name);
         }
-        if (this.generalParams.timeStep['mins']) {
-            this.model2.paramInit['payload']['simulation']['time.step'] = this.model2.paramInit['payload']['simulation']['time.step'] / 60;
+        if (this.timeStep['mins']) {
+            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
         if (this.generalParams.simulationTime['days']) {
-            this.model2.paramInit['payload']['simulation']['simulation.time'] =
-                this.model2.paramInit['payload']['simulation']['simulation.time']
-                * 24 / this.model2.paramInit['payload']['simulation']['time.step'];
+            this.paramInit['payload']['simulation']['simulation.time'] =
+                this.paramInit['payload']['simulation']['simulation.time']
+                * 24 / this.paramInit['payload']['simulation']['time.step'];
         }
         this.generalParams.simulationTime['days'] = false;
         this.generalParams.simulationTime['hours'] = true;
-        this.generalParams.timeStep['mins'] = false;
-        this.generalParams.timeStep['hours'] = true;
-        this.model2.paramInit['payload']['formName'] = this.generalParams.formName;
-        this.model2.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
+        this.timeStep['mins'] = false;
+        this.timeStep['hours'] = true;
+        this.paramInit['payload']['formName'] = this.generalParams.formName;
+        this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
         this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
         this.econEnv['payload']['formName'] = this.generalParams.formName;
         this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
-        formData.append('param1', JSON.stringify(this.model2.paramInit));
+        formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
         formData.append('method', 'NEW');
