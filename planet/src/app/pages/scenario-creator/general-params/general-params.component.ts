@@ -13,18 +13,8 @@ import { DialogNamePromptComponent } from '../dialog-prompt/dialog-prompt.compon
 })
 export class GeneralParamsComponent implements OnInit, AfterViewInit {
 
-  formName: string;
-  formDescription: string;
-  areaPicked: boolean;
   paramInit: Object;
-  timeStep: Object;
-  dateRangeClicked: boolean;
-  simulationTime: Object;
   options: UploaderOptions;
-  errorMessage: String;
-  gridImage: string;
-  showMap: boolean;
-  coordinates: number[];
   transitionController1 = new TransitionController();
 
   times = 1;
@@ -34,26 +24,25 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
 
   phase2 = false;
   @Output() phaseOutput = new EventEmitter<boolean>();
-  @Output() timeStepType = new EventEmitter<Object>();
 
   constructor(private model: Model2ParamInitService,
     private generalParams: GeneralParamsService,
     private dialogService: NbDialogService) {
     this.paramInit = this.model.paramInit;
-    this.formName = this.generalParams.formName;
-    this.areaPicked = this.generalParams.areaPicked;
-    this.formDescription = this.generalParams.formDescription;
-    this.timeStep = this.generalParams.timeStep;
-    this.dateRangeClicked = this.generalParams.dateRangeClicked;
-    this.simulationTime = this.generalParams.simulationTime;
     this.options = this.generalParams.options;
-    this.errorMessage = this.generalParams.errorMessage;
-    this.gridImage = this.generalParams.gridImage;
-    this.coordinates = this.generalParams.coordinates;
-    this.showMap = this.generalParams.showMap;
     for (let i = 0; i < 7; i++) {
       this.fileName.push('Upload File');
     }
+
+    this.model.paramUpdated.subscribe(
+      (data) => {
+        // console.log(data)
+        this.generalParams.formName = data['payload']['formName'];
+        this.generalParams.formNameUpdated.emit(data['payload']['formName']);
+        this.paramInit = data;
+
+      },
+    );
   }
 
   ngOnInit() {
@@ -61,17 +50,19 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.showMap = !this.showMap;
+      this.generalParams.showMap = !this.generalParams.showMap;
+      this.generalParams.showMapUpdate.emit(this.generalParams.showMap);
     }, 500);
   }
 
   handleDescriptionChange(event) {
-    this.formDescription = event.target.value;
+    this.generalParams.formDescription = event.target.value;
     this.generalParams.formDescriptionUpdated.emit(event.target.value);
   }
 
   animateImage(transitionName: string = 'scale', event) {
-    this.areaPicked = true;
+    this.generalParams.areaPicked = true;
+    this.generalParams.areaPickedUpdate.emit(this.generalParams.areaPicked);
     this.transitionController1.animate(
       new Transition(transitionName, 2000, TransitionDirection.In));
     this.dialogService.open(DialogNamePromptComponent)
@@ -96,11 +87,9 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
   changeTab(event) {
     if (this.times === 1) {
       setTimeout(() => {
-        this.showMap = !this.showMap;
-      }, 500);
-      setTimeout(() => {
-        this.showMap = !this.showMap;
-      }, 500);
+        this.generalParams.showMap = !this.generalParams.showMap;
+        this.generalParams.showMapUpdate.emit(this.generalParams.showMap);
+      }, 1000);
       this.times++;
     }
     this.currentTab = event.tabTitle;
@@ -108,30 +97,31 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
 
   onRadioButtonClicked(event) {
     if (event['target']['textContent'] === '8 Node') {
-      this.gridImage = 'assets/images/grid.png';
+      this.generalParams.gridImage = 'assets/images/grid.png';
     } else if (event['target']['textContent'] === '3 Node') {
-      this.gridImage = 'assets/images/3NodeDH.png';
+      this.generalParams.gridImage = 'assets/images/3NodeDH.png';
     } else if (this.currentTab === 'Electric Grid') {
-      this.gridImage = 'assets/images/singleNodeElectric.png';
+      this.generalParams.gridImage = 'assets/images/singleNodeElectric.png';
     } else if (this.currentTab === 'Gas Network') {
-      this.gridImage = 'assets/images/singleNodeGas.png';
+      this.generalParams.gridImage = 'assets/images/singleNodeGas.png';
     } else {
-      this.gridImage = 'assets/images/singleNodeDistrictHeating.png';
+      this.generalParams.gridImage = 'assets/images/singleNodeDistrictHeating.png';
     }
+    this.generalParams.gridImageUpdate.emit(this.generalParams.gridImage);
   }
 
   handleTimeStep(event, type) {
     if (type === 'mins') {
-      this.timeStep['mins'] = event;
-      this.timeStep['hours'] = false;
+      this.generalParams.timeStep['mins'] = event;
+      this.generalParams.timeStep['hours'] = false;
       this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] * 60;
     } else {
-      this.timeStep['hours'] = event;
-      this.timeStep['mins'] = false;
+      this.generalParams.timeStep['hours'] = event;
+      this.generalParams.timeStep['mins'] = false;
       this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
     }
-    this.timeStepType.emit(this.timeStep);
-    this.generalParams.timeStepUpdate.emit(this.paramInit['payload']['simulation']['time.step']);
+    this.model.paramUpdated.emit(this.paramInit);
+    this.generalParams.timeStepUpdate.emit(this.generalParams.timeStep);
   }
 
   handleDateChange(event) {
@@ -139,10 +129,10 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
       this.generalParams.startingDate = event.start;
       this.generalParams.endingDate = event.end;
       const daysTotal = Math.round(Math.abs((event.start.getTime() - event.end.getTime()) / (24 * 60 * 60 * 1000))) + 1;
-      if (this.simulationTime['days']) {
+      if (this.generalParams.simulationTime['days']) {
         this.paramInit['payload']['simulation']['simulation.time'] = daysTotal;
       } else {
-        if (this.timeStep['mins']) {
+        if (this.generalParams.timeStep['mins']) {
           const timeStepHour = this.paramInit['payload']['simulation']['time.step'] / 60;
           this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
             timeStepHour;
@@ -152,30 +142,33 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
         }
       }
 
+      this.model.paramUpdated.emit(this.paramInit);
+
     }
 
   }
 
   handleSimulationTime(event, type) {
     let timeStep: number;
-    if (this.timeStep['mins']) {
+    if (this.generalParams.timeStep['mins']) {
       timeStep = this.paramInit['payload']['simulation']['time.step'] / 60;
     } else {
       timeStep = this.paramInit['payload']['simulation']['time.step'];
     }
     if (type === 'days') {
-      this.simulationTime['days'] = event;
-      this.simulationTime['hours'] = false;
+      this.generalParams.simulationTime['days'] = event;
+      this.generalParams.simulationTime['hours'] = false;
       this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
         * timeStep / 24;
     } else {
-      this.simulationTime['hours'] = event;
-      this.simulationTime['days'] = false;
+      this.generalParams.simulationTime['hours'] = event;
+      this.generalParams.simulationTime['days'] = false;
       this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
         * 24 / timeStep;
     }
 
-    this.generalParams.simulationTimeUpdate.emit(this.paramInit['payload']['simulation']['simulation.time']);
+    this.model.paramUpdated.emit(this.paramInit);
+    this.generalParams.simulationTimeUpdate.emit(this.generalParams.simulationTime);
   }
 
   onUploadOutput(output: UploadOutput, id): void {
@@ -209,45 +202,53 @@ export class GeneralParamsComponent implements OnInit, AfterViewInit {
   }
 
   checkDefaultData() {
-    if (this.formDescription === '' || this.formName === '' || this.formName.includes('  -  ')) {
-      this.errorMessage = 'Please fill in/correct the Simulation Name and Description';
-      return false;
+    let status;
+    if (this.generalParams.formDescription === '' || this.generalParams.formName === '' || this.generalParams.formName.includes('  -  ')) {
+      this.generalParams.errorMessage = 'Please fill in/correct the Simulation Name and Description';
+      status = false;
     } else if (this.getFileName(0) !== 'Electricity.xlsx') {
-      this.errorMessage = 'Please upload Electricity.xlsx';
-      return false;
+      this.generalParams.errorMessage = 'Please upload Electricity.xlsx';
+      status = false;
     } else if (this.getFileName(1) !== 'Heat.xlsx') {
-      this.errorMessage = 'Please upload Heat.xlsx';
-      return false;
+      this.generalParams.errorMessage = 'Please upload Heat.xlsx';
+      status = false;
     } else if (!Number(+this.paramInit['payload']['simulation']['time.step'])) {
-      this.errorMessage = 'Please give a number for time.step';
-      return false;
+      this.generalParams.errorMessage = 'Please give a number for time.step';
+      status = false;
     } else if (!Number(+this.paramInit['payload']['simulation']['simulation.time'])) {
-      this.errorMessage = 'Please give a number for simulation.time';
-      return false;
-    } else if (!this.timeStep['mins'] && !this.timeStep['hours']) {
-      this.errorMessage = 'Please Specify if time step is given on Days or Hours';
-      return false;
-    } else if (!this.simulationTime['days'] && !this.simulationTime['hours']) {
-      this.errorMessage = 'Please Specify if Simulation Horizon is given on Days or Hours';
-      return false;
+      this.generalParams.errorMessage = 'Please give a number for simulation.time';
+      status = false;
+    } else if (!this.generalParams.timeStep['mins'] && !this.generalParams.timeStep['hours']) {
+      this.generalParams.errorMessage = 'Please Specify if time step is given on Days or Hours';
+      status = false;
+    } else if (!this.generalParams.simulationTime['days'] && !this.generalParams.simulationTime['hours']) {
+      this.generalParams.errorMessage = 'Please Specify if Simulation Horizon is given on Days or Hours';
+      status = false;
     } else {
-      return true;
+      status = true;
     }
+    this.generalParams.errorMessageUpdate.emit(this.generalParams.errorMessage);
+    return status;
 
   }
 
   setCoord(event) {
-    this.coordinates[0] = event[0];
-    this.coordinates[1] = event[1];
+    this.generalParams.coordinates[0] = event[0];
+    this.generalParams.coordinates[1] = event[1];
   }
 
   formNameChange(event) {
-    this.formName = event;
+    this.generalParams.formName = event;
     this.generalParams.formNameUpdated.emit(event);
   }
 
   formDescriptionChange(event) {
-    this.formDescription = event;
+    this.generalParams.formDescription = event;
     this.generalParams.formDescriptionUpdated.emit(event);
+  }
+
+  dateRangeChange() {
+    this.generalParams.dateRangeClicked = !this.generalParams.dateRangeClicked;
+    this.generalParams.dateRangeUpdate.emit(this.generalParams.dateRangeClicked);
   }
 }

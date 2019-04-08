@@ -17,7 +17,6 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
     @Output() pvChange: EventEmitter<Object>;
     @Output() windChange: EventEmitter<Object>;
     @Output() phase3: EventEmitter<Boolean>;
-    nodeData: Object = {};
     nodeWindParam: Object = {};
     nodePvParam: Object = {};
     displayingNode: string;
@@ -93,6 +92,9 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         this.phase3 = new EventEmitter<Boolean>();
         this.nodes = Object.getOwnPropertyNames(this.model2.paramInit['payload']['electric.grid']);
         this.displayingNode = 'node.1';
+        this.model2.paramUpdated.subscribe(
+            (data) => this.model2.paramInit = data,
+        );
     }
 
     ngOnChanges(changes: SimpleChanges) {

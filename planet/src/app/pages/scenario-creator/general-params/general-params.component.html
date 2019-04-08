@@ -13,22 +13,24 @@
           <div class="row">
             <div class="col-md-6">
               <input class="m-2" type="text" nbInput fullWidth fieldSize="small" placeholder="Simulation Name"
-                [ngModel]="formName" (ngModelChange)="formNameChange($event)">
+                [ngModel]="generalParams.formName" (ngModelChange)="formNameChange($event)">
             </div>
             <div class="col-md-6">
-              <div *ngIf="formName === ''" class="requiredField"> Simulation Name is
+              <div *ngIf="generalParams.formName === ''" class="requiredField"> Simulation Name is
                 required</div>
-              <div *ngIf="formName.includes('  -  ')" class="requiredField"> '[space][space]-[space][space]' is a
+              <div *ngIf="generalParams.formName.includes('  -  ')" class="requiredField">
+                '[space][space]-[space][space]' is a
                 reserved word!</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
               <textarea class="m-2" nbInput fullWidth shape="round" (change)="handleDescriptionChange($event)"
-                placeholder="Simulation Description">{{formDescription}}</textarea>
+                placeholder="Simulation Description">{{generalParams.formDescription}}</textarea>
             </div>
             <div class="col-md-6">
-              <div *ngIf="formDescription === ''" class="requiredTextarea"> Simulation Description is required</div>
+              <div *ngIf="generalParams.formDescription === ''" class="requiredTextarea"> Simulation Description is
+                required</div>
             </div>
           </div>
         </div>
@@ -50,7 +52,7 @@
                 <nb-option value="Athens" disabled>Athens</nb-option>
               </nb-select>
             </div>
-            <div class="row" *ngIf="areaPicked">
+            <div class="row" *ngIf="generalParams.areaPicked">
               <div class="col-md-12">
                 <nb-tabset (changeTab)="changeTab($event)">
                   <nb-tab tabTitle="Electric Grid">
@@ -78,7 +80,7 @@
           <!-- Configuration Options -->
           <div class="row">
             <div class="col-md-6">
-              <div *ngIf="areaPicked">
+              <div *ngIf="generalParams.areaPicked">
 
                 <hr>
 
@@ -95,7 +97,8 @@
                         <div class="ui form">
                           <div class="grouped fields">
                             <div class="field">
-                              <sui-checkbox [ngModel]="timeStep['mins']" [isReadonly]="timeStep['mins']"
+                              <sui-checkbox [ngModel]="generalParams.timeStep['mins']"
+                                [isReadonly]="generalParams.timeStep['mins']"
                                 (ngModelChange)="handleTimeStep($event,'mins')">
                                 Mins
                               </sui-checkbox>
@@ -108,7 +111,8 @@
                         <div class="ui form">
                           <div class="grouped fields">
                             <div class="field">
-                              <sui-checkbox [ngModel]="timeStep['hours']" [isReadonly]="timeStep['hours']"
+                              <sui-checkbox [ngModel]="generalParams.timeStep['hours']"
+                                [isReadonly]="generalParams.timeStep['hours']"
                                 (ngModelChange)="handleTimeStep($event,'hours')">
                                 Hours</sui-checkbox>
                             </div>
@@ -126,7 +130,7 @@
                   <div class="row">
                     <div class="ui icon input datePickerButton">
                       <input nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
-                        (click)="dateRangeClicked=!dateRangeClicked">
+                        (click)="dateRangeChange()">
                       <i class="calendar alternate outline icon"></i>
                     </div>
                     <nb-rangepicker (rangeChange)="handleDateChange($event)" #formpicker>
@@ -144,7 +148,8 @@
                         <div class="ui form">
                           <div class="grouped fields">
                             <div class="field">
-                              <sui-checkbox [ngModel]="simulationTime.days" [isReadonly]="simulationTime.days"
+                              <sui-checkbox [ngModel]="generalParams.simulationTime.days"
+                                [isReadonly]="generalParams.simulationTime.days"
                                 (ngModelChange)="handleSimulationTime($event,'days')">
                                 Days</sui-checkbox>
                             </div>
@@ -156,7 +161,8 @@
                         <div class="ui form">
                           <div class="grouped fields">
                             <div class="field">
-                              <sui-checkbox [ngModel]="simulationTime.hours" [isReadonly]="simulationTime.hours"
+                              <sui-checkbox [ngModel]="generalParams.simulationTime.hours"
+                                [isReadonly]="generalParams.simulationTime.hours"
                                 (ngModelChange)="handleSimulationTime($event,'hours')">
                                 Hours</sui-checkbox>
                             </div>
@@ -192,15 +198,15 @@
                 <div class="row">
                   <button *ngIf="checkDefaultData()" nbButton hero class="m-3" status="info" shape="round"
                     (click)="animateInfo()">Continue</button>
-                  <div *ngIf="!checkDefaultData()" class="requiredField"> {{errorMessage}}</div>
+                  <div *ngIf="!checkDefaultData()" class="requiredField"> {{generalParams.errorMessage}}</div>
                 </div>
               </div>
             </div>
 
             <div class="col-md-6">
-              <div *ngIf="areaPicked" class="col-md-12">
-                <div *ngIf="gridImage">
-                  <img [suiTransition]="transitionController1" [src]="gridImage">
+              <div *ngIf="generalParams.areaPicked" class="col-md-12">
+                <div *ngIf="generalParams.gridImage">
+                  <img [suiTransition]="transitionController1" [src]="generalParams.gridImage">
                 </div>
               </div>
             </div>
@@ -208,8 +214,9 @@
           </div>
         </div>
 
-        <div *ngIf="areaPicked" class="col-md-8">
-          <ngx-leaflet-map [load]="showMap" [(coordinates)]="coordinates" (coordChange)="setCoord($event)">
+        <div *ngIf="generalParams.areaPicked" class="col-md-8">
+          <ngx-leaflet-map [load]="generalParams.showMap" [(coordinates)]="generalParams.coordinates"
+            (coordChange)="setCoord($event)">
           </ngx-leaflet-map>
         </div>
       </div>

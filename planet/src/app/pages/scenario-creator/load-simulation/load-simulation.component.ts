@@ -1,14 +1,17 @@
 import { Component, EventEmitter, AfterViewInit, OnInit } from '@angular/core';
-import { UploadOutput, UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
+import { UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
-import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
+import { TransitionController } from 'ng2-semantic-ui';
 import { NbDialogService, NbCalendarRange, NbDateService } from '@nebular/theme';
 import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
 import { EnvService } from '../../../env.service';
+import { Model2ParamInitService } from '../services/model2-param-init.service';
+import { GeneralParamsService } from '../services/general-params.service';
 
 @Component({
     selector: 'ngx-load-simulation',
     styleUrls: ['./load-simulation.component.scss'],
+    providers: [Model2ParamInitService, GeneralParamsService],
     templateUrl: './load-simulation.component.html',
 })
 export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
@@ -60,8 +63,7 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
                         .subscribe(
                             data => {
                                 let temp = JSON.parse(data['paramInit']);
-                                this.paramInit['payload']['simulation'] = temp['payload']['simulation'];
-                                this.paramInit['payload']['technologies'] = temp['payload']['technologies'];
+                                this.model2.paramUpdated.emit(temp);
                                 temp = JSON.parse(data['econEnv']);
                                 this.econEnv['payload'] = temp['payload'];
                                 temp = JSON.parse(data['controlSystem']);
@@ -86,30 +88,9 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             );
     }
 
-    public animateImage(transitionName: string = 'scale', event) {
-        this.areaPicked = true;
-        this.area = event;
-        this.transitionController1.animate(
-            new Transition(transitionName, 2000, TransitionDirection.In));
-    }
-
-    setCoord(event) {
-        this.coordinates[0] = event[0];
-        this.coordinates[1] = event[1];
-    }
-
     paramInit = {
-        'file.name': 'Parameters_initialization',
-        'payload': {
-
-            'simulation': {
-                'time.step': 1,
-                'simulation.time': 0,
-            },
-            'technologies': {
-            },
-        },
     };
+
     controlSystem = {
         'file.name': 'Control_initialization',
         'payload': {
@@ -146,48 +127,33 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
 
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
-        protected dateService: NbDateService<Date>,
-        private env: EnvService) {
-        for (let i = 0; i < 7; i++) {
-            this.fileName.push('Upload File');
-        }
-        this.options = { concurrency: 1, maxUploads: Number.MAX_SAFE_INTEGER };
-        this.files = []; // local uploading files array
+        private env: EnvService,
+        private generalParams: GeneralParamsService,
+        private model2: Model2ParamInitService,
+        private dateService: NbDateService<Date>) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
-        this.formName = '';
-        this.formDescription = '';
-        this.timeStep = {
-            'mins': false,
-            'hours': true,
-        };
-        this.simulationTime = {
-            'days': false,
-            'hours': true,
-        };
-    }
+        this.coordinates = this.generalParams.coordinates;
 
-    updateFilename(id, output) {
-        this.fileName[id] = output.file.name;
-    }
+        this.model2.paramUpdated.subscribe(
+            (data) => this.paramInit = data,
+        );
 
-    onUploadOutput(output: UploadOutput, id): void {
+        this.generalParams.formNameUpdated.subscribe(
+            (data) => this.generalParams.formName = data,
+        );
 
-        switch (output.type) {
-            case 'rejected':
-                if (typeof output.file !== 'undefined') {
-                    this.files = [];
-                    this.files.push(output.file.nativeFile);
-                    this.updateFilename(id, output);
-                }
-                break;
-            case 'addedToQueue':
-                if (typeof output.file !== 'undefined') {
-                    this.files.push(output.file.nativeFile);
-                    this.updateFilename(id, output);
-                }
-                break;
-        }
+        this.generalParams.formDescriptionUpdated.subscribe(
+            (data) => this.generalParams.formDescription = data,
+        );
+
+        this.generalParams.simulationTimeUpdate.subscribe(
+            (data) => this.generalParams.simulationTime = data,
+        );
+
+        this.generalParams.timeStepUpdate.subscribe(
+            (data) => this.generalParams.timeStep = data,
+        );
     }
 
     ngAfterViewInit() {
@@ -261,86 +227,9 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
             );
     }
 
-    getFileName(id) {
-        return this.fileName[id];
-    }
-
     openDialogBox(component) {
         this.dialogService.open(component)
             .onClose.subscribe();
-    }
-
-    handleDescriptionChange(event) {
-        this.formDescription = event.target.value;
-    }
-
-    checkDefaultData() {
-        if (this.formDescription === '' || this.formName === '') {
-            this.errorMessage = 'Please fill in the Simulation Name and Description';
-            return false;
-        } else if (!Number(+this.paramInit['payload']['simulation']['time.step'])) {
-            this.errorMessage = 'Please give a number for time.step';
-            return false;
-        } else if (!Number(+this.paramInit['payload']['simulation']['simulation.time'])) {
-            this.errorMessage = 'Please give a number for time.step';
-            return false;
-        } else {
-            return true;
-        }
-
-    }
-
-    handleTimeStep(event, type) {
-        if (type === 'mins') {
-            this.timeStep['mins'] = event;
-            this.timeStep['hours'] = false;
-            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] * 60;
-        } else {
-            this.timeStep['hours'] = event;
-            this.timeStep['mins'] = false;
-            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
-        }
-    }
-
-    handleSimulationTime(event, type) {
-        let timeStep: number;
-        if (this.timeStep['mins']) {
-            timeStep = this.paramInit['payload']['simulation']['time.step'] / 60;
-        } else {
-            timeStep = this.paramInit['payload']['simulation']['time.step'];
-        }
-        if (type === 'days') {
-            this.simulationTime['days'] = event;
-            this.simulationTime['hours'] = false;
-            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
-                * timeStep / 24;
-        } else {
-            this.simulationTime['hours'] = event;
-            this.simulationTime['days'] = false;
-            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
-                * 24 / timeStep;
-        }
-    }
-
-    handleDateChange(event) {
-        if (event.end) {
-            this.startingDate = event.start;
-            this.endingDate = event.end;
-            const daysTotal = Math.round(Math.abs((event.start.getTime() - event.end.getTime()) / (24 * 60 * 60 * 1000))) + 1;
-            if (this.simulationTime['days']) {
-                this.paramInit['payload']['simulation']['simulation.time'] = daysTotal;
-            } else {
-                if (this.timeStep['mins']) {
-                    const timeStepHour = this.paramInit['payload']['simulation']['time.step'] / 60;
-                    this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
-                        timeStepHour;
-                } else {
-                    this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
-                        this.paramInit['payload']['simulation']['time.step'];
-                }
-            }
-
-        }
     }
 
     get dateStart(): Date {

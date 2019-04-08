@@ -30,7 +30,7 @@ export class NewSimulationFilesComponent {
     systemLoss = 10;
     gotPhase2 = 0;
     paramInit = {};
-    timeStep = {};
+    simulationTime = {};
     phase3: boolean = false;
     phase4: boolean = false;
     phase5: boolean = false;
@@ -139,7 +139,7 @@ export class NewSimulationFilesComponent {
             const file: File = this.generalParams.files[i];
             formData.append('file', file, file.name);
         }
-        if (this.timeStep['mins']) {
+        if (this.generalParams.timeStep['mins']) {
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
         if (this.generalParams.simulationTime['days']) {
@@ -149,8 +149,8 @@ export class NewSimulationFilesComponent {
         }
         this.generalParams.simulationTime['days'] = false;
         this.generalParams.simulationTime['hours'] = true;
-        this.timeStep['mins'] = false;
-        this.timeStep['hours'] = true;
+        this.generalParams.timeStep['mins'] = false;
+        this.generalParams.timeStep['hours'] = true;
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
