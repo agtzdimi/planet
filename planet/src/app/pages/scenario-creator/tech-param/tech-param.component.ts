@@ -95,6 +95,18 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         this.model2.paramUpdated.subscribe(
             (data) => this.model2.paramInit = data,
         );
+
+        this.generalParams.startingDateUpdate.subscribe(
+            (data) => this.generalParams.startingDate = data,
+        );
+
+        this.generalParams.endingDateUpdate.subscribe(
+            (data) => this.generalParams.endingDate = data,
+        );
+
+        this.generalParams.updateIsDefault.subscribe(
+            (data) => this.generalParams.isDefault = data,
+        );
     }
 
     ngOnChanges(changes: SimpleChanges) {

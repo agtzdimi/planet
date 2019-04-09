@@ -52,7 +52,7 @@
                 <nb-option value="Athens" disabled>Athens</nb-option>
               </nb-select>
             </div>
-            <div class="row" *ngIf="generalParams.areaPicked">
+            <div class="row" *ngIf="generalParams.areaPicked || isLoadModule">
               <div class="col-md-12">
                 <nb-tabset (changeTab)="changeTab($event)">
                   <nb-tab tabTitle="Electric Grid">
@@ -80,7 +80,7 @@
           <!-- Configuration Options -->
           <div class="row">
             <div class="col-md-6">
-              <div *ngIf="generalParams.areaPicked">
+              <div *ngIf="generalParams.areaPicked || isLoadModule">
 
                 <hr>
 
@@ -204,7 +204,7 @@
             </div>
 
             <div class="col-md-6">
-              <div *ngIf="generalParams.areaPicked" class="col-md-12">
+              <div *ngIf="generalParams.areaPicked || isLoadModule" class="col-md-12">
                 <div *ngIf="generalParams.gridImage">
                   <img [suiTransition]="transitionController1" [src]="generalParams.gridImage">
                 </div>
@@ -214,7 +214,7 @@
           </div>
         </div>
 
-        <div *ngIf="generalParams.areaPicked" class="col-md-8">
+        <div *ngIf="generalParams.areaPicked || isLoadModule" class="col-md-8">
           <ngx-leaflet-map [load]="generalParams.showMap" [(coordinates)]="generalParams.coordinates"
             (coordChange)="setCoord($event)">
           </ngx-leaflet-map>

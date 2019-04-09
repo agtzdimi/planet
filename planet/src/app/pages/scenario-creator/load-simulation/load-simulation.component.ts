@@ -1,5 +1,5 @@
-import { Component, EventEmitter, AfterViewInit, OnInit } from '@angular/core';
-import { UploadInput, humanizeBytes, UploaderOptions } from 'ngx-uploader';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { UploadInput, humanizeBytes } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController } from 'ng2-semantic-ui';
 import { NbDialogService, NbCalendarRange, NbDateService } from '@nebular/theme';
@@ -14,80 +14,20 @@ import { GeneralParamsService } from '../services/general-params.service';
     providers: [Model2ParamInitService, GeneralParamsService],
     templateUrl: './load-simulation.component.html',
 })
-export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
+export class LoadSimulationFilesComponent implements OnInit {
 
-    options: UploaderOptions;
-    formName: String;
     loadPage: boolean = false;
-    formDescription: String;
+    revealed = false;
     errorMessage: String = '';
     saveMessage: String = '';
     formData: FormData;
-    files: File[];
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
-    dragOver: boolean;
-    fileName: string[] = [];
-    text: any;
-    timeStep: Object;
-    simulationTime: Object;
-    showMap = false;
-    coordinates: number[] = [7.6825, 45.0678];
-    capacity = 1;
     elecParam: any;
     heatParam: any;
-    systemLoss = 10;
-    areaPicked: boolean = true;
     transitionController1 = new TransitionController();
-    area: string = 'Turin';
     loading: boolean = false;
-    dateRangeClicked: boolean = false;
     range: NbCalendarRange<Date>;
-    startingDate: Date;
-    endingDate: Date;
-
-    ngOnInit() {
-        this.dialogService.open(DialogSelFormPromptComponent)
-            .onClose.subscribe(name => {
-                if (name) {
-                    this.formName = name['formName'];
-                    let finalFormName = '';
-                    finalFormName = this.formName.toString();
-                    this.formDescription = name['formDescription'];
-                    const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/load_data';
-                    this.httpClient.get(url, {
-                        params: {
-                            'formName': finalFormName,
-                        },
-                    })
-                        .subscribe(
-                            data => {
-                                let temp = JSON.parse(data['paramInit']);
-                                this.model2.paramUpdated.emit(temp);
-                                temp = JSON.parse(data['econEnv']);
-                                this.econEnv['payload'] = temp['payload'];
-                                temp = JSON.parse(data['controlSystem']);
-                                this.controlSystem['payload']['control'] = temp['payload']['control'];
-                                this.elecParam = data['elecParam'];
-                                this.heatParam = data['heatParam'];
-                                temp = JSON.parse(data['date']);
-                                this.startingDate = temp['payload']['startDate'];
-                                this.endingDate = temp['payload']['endDate'];
-                                this.range = {
-                                    start: this.dateService.addDay(this.dateStart, 0),
-                                    end: this.dateService.addDay(this.dateEnd, 0),
-                                };
-                            },
-                            error => {
-                                // console.log('Error', error);
-                            },
-                        );
-                }
-                this.loadPage = true;
-            },
-            );
-    }
-
     paramInit = {
     };
 
@@ -110,20 +50,18 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     windParam = {
         'file.name': 'Wind.xlsx',
         'payload': {
-            'lat': this.coordinates[1],
-            'lon': this.coordinates[0],
+            'lat': this.generalParams.coordinates[1],
+            'lon': this.generalParams.coordinates[0],
         },
     };
 
     pvParam = {
         'file.name': 'PV.xlsx',
         'payload': {
-            'lat': this.coordinates[1],
-            'lon': this.coordinates[0],
+            'lat': this.generalParams.coordinates[1],
+            'lon': this.generalParams.coordinates[0],
         },
     };
-
-    revealed = false;
 
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
@@ -133,12 +71,14 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         private dateService: NbDateService<Date>) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
-        this.coordinates = this.generalParams.coordinates;
 
         this.model2.paramUpdated.subscribe(
-            (data) => this.paramInit = data,
+            (data) => {
+                this.paramInit = data;
+            },
         );
 
+        // Subscribe to events to get modified data
         this.generalParams.formNameUpdated.subscribe(
             (data) => this.generalParams.formName = data,
         );
@@ -156,37 +96,91 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         );
     }
 
-    ngAfterViewInit() {
-        setTimeout(() => {
-            this.showMap = !this.showMap;
-        }, 500);
+    ngOnInit() {
+        this.dialogService.open(DialogSelFormPromptComponent)
+            .onClose.subscribe(name => {
+                if (name) {
+                    // Update formName - formDescription based on user input in dialog box
+                    this.generalParams.formName = name['formName'];
+                    let finalFormName = '';
+                    finalFormName = this.generalParams.formName.toString();
+                    this.generalParams.formDescription = name['formDescription'];
+                    this.generalParams.updateFormDescription(this.generalParams.formDescription);
+                    this.generalParams.updateFormName(this.generalParams.formName);
+                    const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/load_data';
+                    this.httpClient.get(url, {
+                        params: {
+                            'formName': finalFormName,
+                        },
+                    })
+                        .subscribe(
+                            data => {
+                                // Load and emit the data coming from Database
+
+                                this.loadPage = true;
+                                let temp = JSON.parse(data['paramInit']);
+                                this.paramInit = temp;
+                                temp = JSON.parse(data['econEnv']);
+                                this.econEnv['payload'] = temp['payload'];
+                                temp = JSON.parse(data['controlSystem']);
+                                this.controlSystem['payload']['control'] = temp['payload']['control'];
+                                this.elecParam = data['elecParam'];
+                                this.heatParam = data['heatParam'];
+                                temp = JSON.parse(data['date']);
+                                this.generalParams.startingDate = temp['payload']['node.1']['startDate'];
+                                this.generalParams.endingDate = temp['payload']['node.1']['endDate'];
+                                this.generalParams.updateStartDate(this.generalParams.startingDate);
+                                this.generalParams.updateEndDate(this.generalParams.endingDate);
+                                this.range = {
+                                    start: this.dateService.addDay(this.dateStart, 0),
+                                    end: this.dateService.addDay(this.dateEnd, 0),
+                                };
+                                setTimeout(() => {
+                                    this.model2.paramUpdated.emit(this.paramInit);
+                                }, 2000);
+                            },
+                            error => {
+                                // console.log('Error', error);
+                            },
+                        );
+                }
+            },
+            );
     }
 
     startUpload(): void {
+        // Start spinner
         this.loading = true;
         const formData: FormData = new FormData();
 
-        for (let i = 0; i < this.files.length; i++) {
-            const file: File = this.files[i];
+        for (let i = 0; i < this.generalParams.files.length; i++) {
+            const file: File = this.generalParams.files[i];
             formData.append('file', file, file.name);
         }
-        if (this.timeStep['mins']) {
+        if (this.generalParams.timeStep['mins']) {
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
-        if (this.simulationTime['days']) {
+        if (this.generalParams.simulationTime['days']) {
             this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
                 * 24 / this.paramInit['payload']['simulation']['time.step'];
         }
-        this.simulationTime['days'] = false;
-        this.simulationTime['hours'] = true;
-        this.timeStep['mins'] = false;
-        this.timeStep['hours'] = true;
-        this.paramInit['payload']['formName'] = this.formName;
-        this.paramInit['payload']['formDescription'] = this.formDescription;
-        this.controlSystem['payload']['formName'] = this.formName;
-        this.controlSystem['payload']['formDescription'] = this.formDescription;
-        this.econEnv['payload']['formName'] = this.formName;
-        this.econEnv['payload']['formDescription'] = this.formDescription;
+        // Update values in case current instance will be used to save another scenario
+        this.generalParams.simulationTime['days'] = false;
+        this.generalParams.simulationTime['hours'] = true;
+        this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
+        this.generalParams.timeStep['mins'] = false;
+        this.generalParams.timeStep['hours'] = true;
+        this.generalParams.updateTimestep(this.generalParams.timeStep);
+        this.paramInit['payload']['formName'] = this.generalParams.formName;
+        this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
+        this.model2.paramUpdated.emit(this.paramInit);
+        this.generalParams.updateTimestep(this.generalParams.timeStep);
+        this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
+
+        this.controlSystem['payload']['formName'] = this.generalParams.formName;
+        this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
+        this.econEnv['payload']['formName'] = this.generalParams.formName;
+        this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
@@ -198,10 +192,10 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
         )
             .subscribe(
                 () => {
-                    this.windParam['payload']['formName'] = this.formName;
-                    this.windParam['payload']['formDescription'] = this.formDescription;
-                    this.pvParam['payload']['formName'] = this.formName;
-                    this.pvParam['payload']['formDescription'] = this.formDescription;
+                    this.windParam['payload']['formName'] = this.generalParams.formName;
+                    this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
+                    this.pvParam['payload']['formName'] = this.generalParams.formName;
+                    this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
                     url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/save_data';
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
@@ -233,17 +227,17 @@ export class LoadSimulationFilesComponent implements AfterViewInit, OnInit {
     }
 
     get dateStart(): Date {
-        if (!this.startingDate) {
-            this.startingDate = new Date(2016, 1, 1);
+        if (!this.generalParams.startingDate) {
+            this.generalParams.startingDate = new Date(2016, 1, 1);
         }
-        return new Date(this.startingDate);
+        return new Date(this.generalParams.startingDate);
     }
 
     get dateEnd(): Date {
-        if (!this.endingDate) {
-            this.endingDate = new Date(2016, 12, 31);
+        if (!this.generalParams.endingDate) {
+            this.generalParams.endingDate = new Date(2016, 12, 31);
         }
-        return new Date(this.endingDate);
+        return new Date(this.generalParams.endingDate);
     }
 
     getDateFormat() {

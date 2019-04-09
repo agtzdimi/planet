@@ -18,54 +18,24 @@ import { GeneralParamsService } from '../services/general-params.service';
 })
 export class NewSimulationFilesComponent {
 
-    formName: String;
-    formDescription: String;
     formData: FormData;
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
     dragOver: boolean;
-    text: any;
-    coordinates: number[];
-    capacity = 1;
-    systemLoss = 10;
     gotPhase2 = 0;
     paramInit = {};
-    simulationTime = {};
+    phase2: boolean = false;
     phase3: boolean = false;
     phase4: boolean = false;
     phase5: boolean = false;
-    phase2: boolean = false;
     loading: boolean = false;
+    revealed = false;
     saveMessage: String = '';
     transitionController2 = new TransitionController();
     transitionController3 = new TransitionController();
     transitionController4 = new TransitionController();
     transitionController5 = new TransitionController();
     transitionController6 = new TransitionController();
-
-    public animateInfo(controller, transitionName: string = 'slide down', id) {
-        switch (id) {
-            case 2:
-                this.openDialogBox(DialogTechParamPromptComponent);
-                break;
-            case 3:
-                this.phase3 = true;
-                this.openDialogBox(DialogControlSystemPromptComponent);
-                break;
-            case 4:
-                this.phase4 = true;
-                if (controller === this.transitionController4) {
-                    this.openDialogBox(DialogEconomyPromptComponent);
-                }
-                break;
-            case 5:
-                this.phase5 = true;
-                break;
-        }
-        controller.animate(
-            new Transition(transitionName, 2000, TransitionDirection.In));
-    }
-
     controlSystem = {
         'file.name': 'Control_initialization',
         'payload': {
@@ -98,8 +68,6 @@ export class NewSimulationFilesComponent {
         },
     };
 
-    revealed = false;
-
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
         private env: EnvService,
@@ -107,15 +75,17 @@ export class NewSimulationFilesComponent {
         private model2: Model2ParamInitService) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
-        this.coordinates = this.generalParams.coordinates;
         this.paramInit = this.model2.paramInit;
 
+        // Subscribe to Events and get back the modified data
         this.model2.paramUpdated.subscribe(
             (data) => this.paramInit = data,
         );
 
         this.generalParams.formNameUpdated.subscribe(
-            (data) => this.generalParams.formName = data,
+            (data) => {
+                this.generalParams.formName = data;
+            },
         );
 
         this.generalParams.formDescriptionUpdated.subscribe(
@@ -132,13 +102,16 @@ export class NewSimulationFilesComponent {
     }
 
     startUpload(): void {
+        // Start spinner
         this.loading = true;
         const formData: FormData = new FormData();
 
+        // Add files to formData and transform the time step to the form that the model works
         for (let i = 0; i < this.generalParams.files.length; i++) {
             const file: File = this.generalParams.files[i];
             formData.append('file', file, file.name);
         }
+
         if (this.generalParams.timeStep['mins']) {
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
@@ -147,12 +120,18 @@ export class NewSimulationFilesComponent {
                 this.paramInit['payload']['simulation']['simulation.time']
                 * 24 / this.paramInit['payload']['simulation']['time.step'];
         }
+
+        // Update Parameters in case the user will save another scenario in the same instance
         this.generalParams.simulationTime['days'] = false;
         this.generalParams.simulationTime['hours'] = true;
         this.generalParams.timeStep['mins'] = false;
         this.generalParams.timeStep['hours'] = true;
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
+        this.model2.paramUpdated.emit(this.paramInit);
+        this.generalParams.updateTimestep(this.generalParams.timeStep);
+        this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
+
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
         this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
         this.econEnv['payload']['formName'] = this.generalParams.formName;
@@ -197,11 +176,13 @@ export class NewSimulationFilesComponent {
     }
 
     openDialogBox(component) {
+        // Function to open a new dialog box given its corresponding component
         this.dialogService.open(component)
             .onClose.subscribe(value => { });
     }
 
     checkPhase2() {
+        // Check if the general parameters are set to continue
         if (this.phase2) {
             if (this.gotPhase2 === 0) {
                 this.animateInfo(this.transitionController2, 'transitionName2', 2);
@@ -211,5 +192,29 @@ export class NewSimulationFilesComponent {
         } else {
             return false;
         }
+    }
+
+    public animateInfo(controller, transitionName: string = 'slide down', id) {
+        // Switcher to call the correct dialog component based on the phase of configuration
+        switch (id) {
+            case 2:
+                this.openDialogBox(DialogTechParamPromptComponent);
+                break;
+            case 3:
+                this.phase3 = true;
+                this.openDialogBox(DialogControlSystemPromptComponent);
+                break;
+            case 4:
+                this.phase4 = true;
+                if (controller === this.transitionController4) {
+                    this.openDialogBox(DialogEconomyPromptComponent);
+                }
+                break;
+            case 5:
+                this.phase5 = true;
+                break;
+        }
+        controller.animate(
+            new Transition(transitionName, 2000, TransitionDirection.In));
     }
 }

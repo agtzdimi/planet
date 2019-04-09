@@ -1,8 +1,10 @@
 <div class="row">
   <div class="col-xxl-12">
 
-    <ngx-general-params (phaseOutput)="phase2=$event"></ngx-general-params>
+    <!-- Phase 1 General Parameters -->
+    <ngx-general-params (phaseOutput)="phase2=$event" [isLoadModule]="false"></ngx-general-params>
 
+    <!-- Phase 2 Simulation Technologies Parameters -->
     <div class="row">
       <div class="col-md-12">
         <div class="ui content">
@@ -13,6 +15,7 @@
         </div>
       </div>
 
+      <!-- Phase 3 Control Simulation Parameters -->
       <div class="col-md-12">
         <div [suiTransition]="transitionController3">
           <nb-card *ngIf="phase3">
@@ -59,6 +62,8 @@
           </nb-card>
         </div>
       </div>
+
+      <!-- Phase 4 Economy Simulation Parameters -->
 
       <div class="col-md-12">
         <ngx-tech-cost [suiTransition]="transitionController4" *ngIf="phase4" [(data)]="econEnv" (dataChange)="econEnv">
@@ -121,6 +126,7 @@
 
     </div>
 
+    <!-- Phase 5 Start Uploading -->
     <div class="row" *ngIf="phase5">
       <div class="col-md-4"></div>
       <div class="col-md-2">

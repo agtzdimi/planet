@@ -1,7 +1,7 @@
-<div class="row" *ngIf="loadPage && formName !== ''">
+<div class="row" *ngIf="loadPage && generalParams.formName !== ''">
   <div class="col-xxl-12">
 
-    <ngx-general-params></ngx-general-params>
+    <ngx-general-params [isLoadModule]="true"></ngx-general-params>
 
     <div class="row">
       <div class="col-md-12">
@@ -120,14 +120,15 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-2">
-        <button *ngIf="!formName.includes('  -  ')" nbButton type="button" [nbSpinner]="loading"
+        <button *ngIf="!generalParams.formName.includes('  -  ')" nbButton type="button" [nbSpinner]="loading"
           nbSpinnerStatus="primary" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="large"
           class="start-upload-btn m-2" (click)="startUpload()">
           Save Scenario
         </button>
       </div>
       <div class="col-md-2">
-        <div *ngIf="formName.includes('  -  ')" class="errorTextarea"> '[space][space]-[space][space]' is a
+        <div *ngIf="generalParams.formName.includes('  -  ')" class="errorTextarea"> '[space][space]-[space][space]' is
+          a
           reserved word!</div>
         <div *ngIf="saveMessage!==''" [ngClass]="{
           'errorTextarea': saveMessage.includes('Error'),

@@ -1,9 +1,10 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, Input } from '@angular/core';
 import { UploaderOptions } from 'ngx-uploader';
 
 @Injectable()
 export class GeneralParamsService {
 
+    @Input() isLoadModule: boolean;
     formName: string;
     formDescription: string;
     areaPicked: boolean = false;
@@ -32,6 +33,7 @@ export class GeneralParamsService {
     filesUpdate = new EventEmitter<File[]>();
     startingDateUpdate = new EventEmitter<Date>();
     endingDateUpdate = new EventEmitter<Date>();
+    updateIsDefault = new EventEmitter<boolean>();
 
     constructor() {
         this.options = {
@@ -42,12 +44,12 @@ export class GeneralParamsService {
         this.formName = '';
         this.formDescription = '';
         this.timeStep = {
-            'mins': true,
-            'hours': false,
+            'mins': false,
+            'hours': true,
         };
         this.simulationTime = {
-            'days': true,
-            'hours': false,
+            'days': false,
+            'hours': true,
         };
         this.startingDate = new Date(2016, 1, 1);
         this.endingDate = new Date(2016, 12, 31);
@@ -93,9 +95,9 @@ export class GeneralParamsService {
         this.gridImageUpdate.emit(this.gridImage);
     }
 
-    updateShowMap() {
+    updateShowMap(flag: boolean) {
         setTimeout(() => {
-            this.showMap = !this.showMap;
+            this.showMap = flag;
             this.showMapUpdate.emit(this.showMap);
         }, 500);
     }
@@ -110,9 +112,14 @@ export class GeneralParamsService {
         this.startingDateUpdate.emit(this.startingDate);
     }
 
-    updateendDate(endDate: Date) {
+    updateEndDate(endDate: Date) {
         this.endingDate = endDate;
         this.endingDateUpdate.emit(this.endingDate);
+    }
+
+    isDefaultUpdate(isDef: boolean) {
+        this.isDefault = isDef;
+        this.updateIsDefault.emit(this.isDefault);
     }
 
 }
