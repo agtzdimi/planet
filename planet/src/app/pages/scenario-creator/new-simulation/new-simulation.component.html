@@ -51,6 +51,9 @@
                   </div>
                 </div>
               </div>
+            </nb-card-body>
+
+            <nb-card-footer *ngIf="!isLoadModule">
               <div class="row">
                 <div class="col-md-9"></div>
                 <div class="col-md-3">
@@ -58,7 +61,8 @@
                     (click)="animateInfo(transitionController4,transitionName4,4);animateInfo(transitionController5,transitionName5,4)">Continue</button>
                 </div>
               </div>
-            </nb-card-body>
+            </nb-card-footer>
+
           </nb-card>
         </div>
       </div>
@@ -112,6 +116,9 @@
                 </div>
                 <label for="ec_ng.cost" class="col-sm-2 col-form-label">%</label>
               </div>
+            </nb-card-body>
+
+            <nb-card-footer>
               <div class="row">
                 <div class="col-md-9"></div>
                 <div class="col-md-3">
@@ -119,7 +126,8 @@
                     (click)="animateInfo(transitionController6,transitionName6,5)">Continue</button>
                 </div>
               </div>
-            </nb-card-body>
+            </nb-card-footer>
+
           </nb-card>
         </div>
       </div>

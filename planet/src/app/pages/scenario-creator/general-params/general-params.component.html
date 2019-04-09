@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>New Simulation</nb-card-header>
+  <nb-card-header>Simulation Parameters</nb-card-header>
   <nb-card-body>
 
     <div class="col-md-12">
@@ -196,8 +196,8 @@
                 </div>
 
                 <div class="row">
-                  <button *ngIf="checkDefaultData()" nbButton hero class="m-3" status="info" shape="round"
-                    (click)="animateInfo()">Continue</button>
+                  <button *ngIf="checkDefaultData() && !isLoadModule" nbButton hero class="m-3" status="info"
+                    shape="round" (click)="animateInfo()">Continue</button>
                   <div *ngIf="!checkDefaultData()" class="requiredField"> {{generalParams.errorMessage}}</div>
                 </div>
               </div>

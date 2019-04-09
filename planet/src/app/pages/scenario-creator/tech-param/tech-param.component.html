@@ -464,10 +464,10 @@
 
     </nb-card-body>
 
-    <nb-card-footer>
+    <nb-card-footer *ngIf="!isLoadModule">
         <div class="row">
-            <div class="col-md-11"></div>
-            <div class="col-md-1">
+            <div class="col-md-9"></div>
+            <div class="col-md-3">
                 <button nbButton hero status="info" shape="round" (click)="nextPhase()">Continue</button>
             </div>
         </div>
