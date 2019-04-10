@@ -9,11 +9,12 @@ import { DialogEconomyPromptComponent } from '../dialog-prompt/economy-dialog.co
 import { EnvService } from '../../../env.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
+import { Model1ParamInitService } from '../services/model1-param-init.service';
 
 @Component({
     selector: 'ngx-new-simulation',
     styleUrls: ['./new-simulation.component.scss'],
-    providers: [GeneralParamsService, Model2ParamInitService],
+    providers: [GeneralParamsService, Model2ParamInitService, Model1ParamInitService],
     templateUrl: './new-simulation.component.html',
 })
 export class NewSimulationFilesComponent {
@@ -72,20 +73,22 @@ export class NewSimulationFilesComponent {
         private dialogService: NbDialogService,
         private env: EnvService,
         private generalParams: GeneralParamsService,
-        private model2: Model2ParamInitService) {
+        private model2: Model2ParamInitService,
+        private model1: Model1ParamInitService) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
-        this.paramInit = this.model2.paramInit;
 
         // Subscribe to Events and get back the modified data
+        this.model1.paramUpdated.subscribe(
+            (data) => this.paramInit = data,
+        );
+
         this.model2.paramUpdated.subscribe(
             (data) => this.paramInit = data,
         );
 
         this.generalParams.formNameUpdated.subscribe(
-            (data) => {
-                this.generalParams.formName = data;
-            },
+            (data) => this.generalParams.formName = data,
         );
 
         this.generalParams.formDescriptionUpdated.subscribe(
@@ -98,6 +101,14 @@ export class NewSimulationFilesComponent {
 
         this.generalParams.timeStepUpdate.subscribe(
             (data) => this.generalParams.timeStep = data,
+        );
+
+        this.generalParams.filesUpdate.subscribe(
+            (data) => this.generalParams.files = data,
+        );
+
+        this.generalParams.modelUpdate.subscribe(
+            (data) => this.generalParams.model = data,
         );
     }
 
@@ -128,7 +139,7 @@ export class NewSimulationFilesComponent {
         this.generalParams.timeStep['hours'] = true;
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
-        this.model2.paramUpdated.emit(this.paramInit);
+        this.updateModel();
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
 
@@ -216,5 +227,16 @@ export class NewSimulationFilesComponent {
         }
         controller.animate(
             new Transition(transitionName, 2000, TransitionDirection.In));
+    }
+
+    updateModel() {
+        switch (this.generalParams.model) {
+            case 1:
+                this.model1.paramUpdated.emit(this.paramInit);
+                break;
+            case 2:
+                this.model2.paramUpdated.emit(this.paramInit);
+                break;
+        }
     }
 }

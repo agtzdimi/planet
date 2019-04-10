@@ -1,5 +1,6 @@
-import { Component, AfterViewInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, AfterViewInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
 import { UploaderOptions, UploadOutput } from 'ngx-uploader';
+import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
@@ -19,15 +20,18 @@ export class GeneralParamsComponent implements AfterViewInit {
   times = 1;
   currentTab = 'Electric Grid';
   fileName: string[] = [];
-  files: File[];
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
+  @ViewChild('elecRadio') elecRadio: ElementRef;
+  @ViewChild('dhRadio') dhRadio: ElementRef;
+  @ViewChild('gasRadio') gasRadio: ElementRef;
 
-  constructor(private model: Model2ParamInitService,
+  constructor(private model1: Model1ParamInitService,
+    private model2: Model2ParamInitService,
     private generalParams: GeneralParamsService,
     private dialogService: NbDialogService) {
-    this.paramInit = this.model.paramInit;
+
     this.options = this.generalParams.options;
     for (let i = 0; i < 7; i++) {
       this.fileName.push('Upload File');
@@ -70,8 +74,26 @@ export class GeneralParamsComponent implements AfterViewInit {
       (data) => this.generalParams.dateRangeClicked = data,
     );
 
-    // In case it is loadModule we need to get generaParameters from the Database
-    this.model.paramUpdated.subscribe(
+    this.generalParams.selectedModelUpdate.subscribe(
+      (data) => this.generalParams.selectedModel = data,
+    );
+
+    this.generalParams.modelUpdate.subscribe(
+      (data) => this.generalParams.model = data,
+    );
+
+    // In case it is loadModule we need to get generalParameters from the Database
+    this.model1.paramUpdated.subscribe(
+      (data) => {
+        if (this.isLoadModule) {
+          this.generalParams.updateFormName(data['payload']['formName']);
+          this.generalParams.updateFormDescription(data['payload']['formDescription']);
+          this.paramInit = data;
+        }
+      },
+    );
+
+    this.model2.paramUpdated.subscribe(
       (data) => {
         if (this.isLoadModule) {
           this.generalParams.updateFormName(data['payload']['formName']);
@@ -100,7 +122,8 @@ export class GeneralParamsComponent implements AfterViewInit {
         this.generalParams.isDefault = status;
         this.generalParams.isDefaultUpdate(status);
         if (this.generalParams.isDefault) {
-          this.paramInit['payload']['simulation']['simulation.time'] = 96;
+          // code if default values
+          // this.paramInit['payload']['simulation']['simulation.time'] = 96;
         }
       });
   }
@@ -145,7 +168,18 @@ export class GeneralParamsComponent implements AfterViewInit {
       this.generalParams.updateTimestep({ 'mins': false, 'hours': event });
       this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
     }
-    this.model.paramUpdated.emit(this.paramInit);
+    this.updateModel();
+  }
+
+  updateModel() {
+    switch (this.generalParams.model) {
+      case 1:
+        this.model1.paramUpdated.emit(this.paramInit);
+        break;
+      case 2:
+        this.model2.paramUpdated.emit(this.paramInit);
+        break;
+    }
   }
 
   handleDateChange(event) {
@@ -165,9 +199,7 @@ export class GeneralParamsComponent implements AfterViewInit {
             this.paramInit['payload']['simulation']['time.step'];
         }
       }
-
-      this.model.paramUpdated.emit(this.paramInit);
-
+      this.updateModel();
     }
 
   }
@@ -188,8 +220,7 @@ export class GeneralParamsComponent implements AfterViewInit {
       this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
         * 24 / timeStep;
     }
-
-    this.model.paramUpdated.emit(this.paramInit);
+    this.updateModel();
   }
 
   onUploadOutput(output: UploadOutput, id): void {
@@ -212,6 +243,7 @@ export class GeneralParamsComponent implements AfterViewInit {
         }
         break;
     }
+    this.generalParams.updateFiles(this.generalParams.files);
   }
 
   updateFilename(id, output) {
@@ -220,6 +252,19 @@ export class GeneralParamsComponent implements AfterViewInit {
 
   getFileName(id) {
     return this.fileName[id];
+  }
+
+  updateSelectedModel(event, modelType) {
+    this.generalParams.selectedModel[modelType] = event;
+    this.generalParams.updateSelectedModel(this.generalParams.selectedModel);
+  }
+
+  checkGrids() {
+    if (!this.generalParams.selectedModel['dh'] || !this.generalParams.selectedModel['elec'] || !this.generalParams.selectedModel['gas']) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   checkDefaultData() {
@@ -238,6 +283,8 @@ export class GeneralParamsComponent implements AfterViewInit {
       this.generalParams.updateErrorMessage('Please Specify if time step is given on Days or Hours');
     } else if (!this.generalParams.simulationTime['days'] && !this.generalParams.simulationTime['hours']) {
       this.generalParams.updateErrorMessage('Please Specify if Simulation Horizon is given on Days or Hours');
+    } else if (!this.checkGrids()) {
+      this.generalParams.updateErrorMessage('Please Specify the Electricity / District Heating / Gas Grid');
     } else {
       status = true;
     }
@@ -259,5 +306,28 @@ export class GeneralParamsComponent implements AfterViewInit {
 
   dateRangeChange() {
     this.generalParams.updateDateRange(!this.generalParams.dateRangeClicked);
+  }
+
+  openParams() {
+    if (this.generalParams.areaPicked && this.checkGrids() || this.isLoadModule) {
+      // Initialize model base on user input
+      if (this.times === 2) {
+        this.calculateModel();
+        this.times++;
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  calculateModel() {
+    if (this.generalParams.selectedModel['elec'] === '1 Node' && this.generalParams.selectedModel['dh'] === '1 Node') {
+      this.generalParams.updateModel(1);
+      this.paramInit = this.model1.paramInit;
+    } else if (this.generalParams.selectedModel['elec'] === '8 Node' && this.generalParams.selectedModel['dh'] === '1 Node') {
+      this.paramInit = this.model2.paramInit;
+      this.generalParams.updateModel(2);
+    }
   }
 }

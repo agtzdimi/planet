@@ -20,6 +20,8 @@ export class GeneralParamsService {
     startingDate: Date;
     endingDate: Date;
     isDefault: boolean = false;
+    selectedModel: Object = {};
+    model: number;
 
     formNameUpdated = new EventEmitter<string>();
     formDescriptionUpdated = new EventEmitter<string>();
@@ -34,6 +36,8 @@ export class GeneralParamsService {
     startingDateUpdate = new EventEmitter<Date>();
     endingDateUpdate = new EventEmitter<Date>();
     updateIsDefault = new EventEmitter<boolean>();
+    selectedModelUpdate = new EventEmitter<Object>();
+    modelUpdate = new EventEmitter<number>();
 
     constructor() {
         this.options = {
@@ -53,6 +57,11 @@ export class GeneralParamsService {
         };
         this.startingDate = new Date(2016, 1, 1);
         this.endingDate = new Date(2016, 12, 31);
+        this.selectedModel = {
+            'elec': '',
+            'dh': '',
+            'gas': '',
+        };
     }
 
     updateFormName(newName: string) {
@@ -120,6 +129,16 @@ export class GeneralParamsService {
     isDefaultUpdate(isDef: boolean) {
         this.isDefault = isDef;
         this.updateIsDefault.emit(this.isDefault);
+    }
+
+    updateSelectedModel(model: Object) {
+        this.selectedModel = model;
+        this.selectedModelUpdate.emit(this.selectedModel);
+    }
+
+    updateModel(model: number) {
+        this.model = model;
+        this.modelUpdate.emit(this.model);
     }
 
 }

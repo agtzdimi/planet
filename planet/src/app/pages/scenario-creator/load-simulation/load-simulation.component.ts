@@ -6,12 +6,13 @@ import { NbDialogService, NbCalendarRange, NbDateService } from '@nebular/theme'
 import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
 import { EnvService } from '../../../env.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
+import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
 
 @Component({
     selector: 'ngx-load-simulation',
     styleUrls: ['./load-simulation.component.scss'],
-    providers: [Model2ParamInitService, GeneralParamsService],
+    providers: [Model2ParamInitService, GeneralParamsService, Model1ParamInitService],
     templateUrl: './load-simulation.component.html',
 })
 export class LoadSimulationFilesComponent implements OnInit {
@@ -68,14 +69,17 @@ export class LoadSimulationFilesComponent implements OnInit {
         private env: EnvService,
         private generalParams: GeneralParamsService,
         private model2: Model2ParamInitService,
+        private model1: Model1ParamInitService,
         private dateService: NbDateService<Date>) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
 
         this.model2.paramUpdated.subscribe(
-            (data) => {
-                this.paramInit = data;
-            },
+            (data) => this.paramInit = data,
+        );
+
+        this.model1.paramUpdated.subscribe(
+            (data) => this.paramInit = data,
         );
 
         // Subscribe to events to get modified data
@@ -93,6 +97,10 @@ export class LoadSimulationFilesComponent implements OnInit {
 
         this.generalParams.timeStepUpdate.subscribe(
             (data) => this.generalParams.timeStep = data,
+        );
+
+        this.generalParams.modelUpdate.subscribe(
+            (data) => this.generalParams.model = data,
         );
     }
 
@@ -136,7 +144,7 @@ export class LoadSimulationFilesComponent implements OnInit {
                                     end: this.dateService.addDay(this.dateEnd, 0),
                                 };
                                 setTimeout(() => {
-                                    this.model2.paramUpdated.emit(this.paramInit);
+                                    this.updateModel();
                                 }, 2000);
                             },
                             error => {
@@ -173,7 +181,7 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
-        this.model2.paramUpdated.emit(this.paramInit);
+        this.updateModel();
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
 
@@ -253,5 +261,16 @@ export class LoadSimulationFilesComponent implements OnInit {
         }
 
         return temp;
+    }
+
+    updateModel() {
+        switch (this.generalParams.model) {
+            case 1:
+                this.model1.paramUpdated.emit(this.paramInit);
+                break;
+            case 2:
+                this.model2.paramUpdated.emit(this.paramInit);
+                break;
+        }
     }
 }

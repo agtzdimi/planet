@@ -52,24 +52,27 @@
                 <nb-option value="Athens" disabled>Athens</nb-option>
               </nb-select>
             </div>
-            <div class="row" *ngIf="generalParams.areaPicked || isLoadModule">
-              <div class="col-md-12">
+            <div class="row">
+              <div class=" col-md-12">
                 <nb-tabset (changeTab)="changeTab($event)">
                   <nb-tab tabTitle="Electric Grid">
-                    <nb-radio-group class="m-2" (click)="onRadioButtonClicked($event)">
-                      <nb-radio>1 Node</nb-radio>
-                      <nb-radio>8 Node</nb-radio>
+                    <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'elec')"
+                      (click)="onRadioButtonClicked($event)" #elecRadio name="elecRadio">
+                      <nb-radio [value]="'1 Node'">1 Node</nb-radio>
+                      <nb-radio [value]="'8 Node'">8 Node</nb-radio>
                     </nb-radio-group>
                   </nb-tab>
                   <nb-tab tabTitle="District Heating">
-                    <nb-radio-group class="m-2" (click)="onRadioButtonClicked($event)">
-                      <nb-radio>1 Node</nb-radio>
-                      <nb-radio>3 Node</nb-radio>
+                    <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'dh')"
+                      (click)="onRadioButtonClicked($event)" #dhRadio name="dhRadio">
+                      <nb-radio [value]="'1 Node'">1 Node</nb-radio>
+                      <nb-radio [value]="'3 Node'">3 Node</nb-radio>
                     </nb-radio-group>
                   </nb-tab>
-                  <nb-tab tabTitle="Gas Network" (click)="onRadioButtonClicked($event)">
-                    <nb-radio-group class="m-2">
-                      <nb-radio>1 Node</nb-radio>
+                  <nb-tab tabTitle="Gas Network">
+                    <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'gas')"
+                      (click)="onRadioButtonClicked($event)" #gasRadio name="gasRadio">
+                      <nb-radio [value]="'1 Node'">1 Node</nb-radio>
                     </nb-radio-group>
                   </nb-tab>
                 </nb-tabset>
@@ -80,7 +83,7 @@
           <!-- Configuration Options -->
           <div class="row">
             <div class="col-md-6">
-              <div *ngIf="generalParams.areaPicked || isLoadModule">
+              <div *ngIf="openParams()">
 
                 <hr>
 
@@ -204,7 +207,7 @@
             </div>
 
             <div class="col-md-6">
-              <div *ngIf="generalParams.areaPicked || isLoadModule" class="col-md-12">
+              <div *ngIf="openParams()" class="col-md-12">
                 <div *ngIf="generalParams.gridImage">
                   <img [suiTransition]="transitionController1" [src]="generalParams.gridImage">
                 </div>
@@ -214,7 +217,7 @@
           </div>
         </div>
 
-        <div *ngIf="generalParams.areaPicked || isLoadModule" class="col-md-8">
+        <div *ngIf="openParams()" class="col-md-8">
           <ngx-leaflet-map [load]="generalParams.showMap" [(coordinates)]="generalParams.coordinates"
             (coordChange)="setCoord($event)">
           </ngx-leaflet-map>
