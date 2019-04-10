@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, SimpleChanges, OnChanges, AfterViewChecked } from '@angular/core';
+import { Component, Input, EventEmitter, Output, SimpleChanges, OnChanges, AfterViewChecked, OnInit } from '@angular/core';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
@@ -8,7 +8,7 @@ import { GeneralParamsService } from '../services/general-params.service';
     styleUrls: ['./tech-param.component.scss'],
     templateUrl: './tech-param.component.html',
 })
-export class TechParamComponent implements OnChanges, AfterViewChecked {
+export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
 
     checkVal: Object = {};
     @Input() pvParam: Object;
@@ -67,7 +67,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         this.phase3 = new EventEmitter<Boolean>();
         this.model2.paramUpdated.subscribe(
             (data) => {
-                if (this.currentModel !== 2) {
+                if (this.currentModel !== 2 || this.isLoadModule) {
                     this.getNodesNames();
                     this.paramInit = data;
                     this.initializeValues();
@@ -78,7 +78,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
 
         this.model1.paramUpdated.subscribe(
             (data) => {
-                if (this.currentModel !== 1) {
+                if (this.currentModel !== 1 || this.isLoadModule) {
                     this.getNodesNames();
                     this.paramInit = data;
                     this.initializeValues();
@@ -101,8 +101,23 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
 
         this.generalParams.modelUpdate.subscribe(
             (data) => this.generalParams.model = data,
-        )
+        );
 
+    }
+
+    ngOnInit() {
+        if (!this.paramInit['payload']) {
+            if (this.generalParams.model === 1) {
+                this.paramInit = this.model1.paramInit;
+            } else if (this.generalParams.model === 2) {
+                this.paramInit = this.model2.paramInit;
+            }
+
+        }
+    }
+
+    ngAfterViewChecked() {
+        this.initializeValues();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -169,10 +184,6 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         this.nodePvParam['lon'] = data.payload['lon'];
         data.payload = this.nodePvParam;
         this.pvChange.emit(this.nodePvParam);
-    }
-
-    ngAfterViewChecked() {
-        this.initializeValues();
     }
 
     initializeValues() {

@@ -128,6 +128,7 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 this.loadPage = true;
                                 let temp = JSON.parse(data['paramInit']);
                                 this.paramInit = temp;
+                                this.generalParams.updateModel(this.paramInit['payload']['model']);
                                 temp = JSON.parse(data['econEnv']);
                                 this.econEnv['payload'] = temp['payload'];
                                 temp = JSON.parse(data['controlSystem']);
@@ -145,7 +146,7 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 };
                                 setTimeout(() => {
                                     this.updateModel();
-                                }, 2000);
+                                }, 2500);
                             },
                             error => {
                                 // console.log('Error', error);
@@ -181,6 +182,7 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
+        this.paramInit['payload']['model'] = this.generalParams.model;
         this.updateModel();
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
@@ -266,9 +268,11 @@ export class LoadSimulationFilesComponent implements OnInit {
     updateModel() {
         switch (this.generalParams.model) {
             case 1:
+                this.model1.changeModel(this.paramInit);
                 this.model1.paramUpdated.emit(this.paramInit);
                 break;
             case 2:
+                this.model2.changeModel(this.paramInit);
                 this.model2.paramUpdated.emit(this.paramInit);
                 break;
         }

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Output, EventEmitter, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { UploaderOptions, UploadOutput } from 'ngx-uploader';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
@@ -12,7 +12,7 @@ import { DialogNamePromptComponent } from '../dialog-prompt/dialog-prompt.compon
   templateUrl: './general-params.component.html',
   styleUrls: ['./general-params.component.scss'],
 })
-export class GeneralParamsComponent implements AfterViewInit {
+export class GeneralParamsComponent implements AfterViewInit, OnInit {
 
   paramInit: Object;
   options: UploaderOptions;
@@ -22,6 +22,7 @@ export class GeneralParamsComponent implements AfterViewInit {
   fileName: string[] = [];
   calculatedTimeStep = false;
   calculatedSimulationTime = false;
+  dataLoaded = false;
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
@@ -87,7 +88,7 @@ export class GeneralParamsComponent implements AfterViewInit {
     // In case it is loadModule we need to get generalParameters from the Database
     this.model1.paramUpdated.subscribe(
       (data) => {
-        if (this.isLoadModule) {
+        if (this.isLoadModule && !this.dataLoaded) {
           this.generalParams.updateFormName(data['payload']['formName']);
           this.generalParams.updateFormDescription(data['payload']['formDescription']);
           this.paramInit = data;
@@ -97,13 +98,20 @@ export class GeneralParamsComponent implements AfterViewInit {
 
     this.model2.paramUpdated.subscribe(
       (data) => {
-        if (this.isLoadModule) {
+        if (this.isLoadModule && !this.dataLoaded) {
+          this.dataLoaded = true;
           this.generalParams.updateFormName(data['payload']['formName']);
           this.generalParams.updateFormDescription(data['payload']['formDescription']);
           this.paramInit = data;
         }
       },
     );
+  }
+
+  ngOnInit() {
+    if (!this.paramInit) {
+      this.paramInit = this.model1.paramInit;
+    }
   }
 
   ngAfterViewInit() {
@@ -140,7 +148,7 @@ export class GeneralParamsComponent implements AfterViewInit {
   }
 
   changeTab(event) {
-    if (this.times === 1) {
+    if (this.times === 1 && !this.isLoadModule) {
       this.generalParams.updateShowMap(false);
       this.generalParams.updateShowMap(true);
       this.times++;

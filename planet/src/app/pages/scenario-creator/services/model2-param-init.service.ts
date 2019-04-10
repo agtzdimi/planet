@@ -640,5 +640,9 @@ export class Model2ParamInitService {
         this.paramUpdated.emit(this.paramInit);
     }
 
+    changeModel(newModel) {
+        this.paramInit = newModel;
+    }
+
 
 }
