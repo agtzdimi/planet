@@ -139,6 +139,7 @@ export class NewSimulationFilesComponent {
         this.generalParams.timeStep['hours'] = true;
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
+        this.paramInit['payload']['model'] = this.generalParams.model;
         this.updateModel();
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.generalParams.updateSimulationTime(this.generalParams.simulationTime);

@@ -20,6 +20,8 @@ export class GeneralParamsComponent implements AfterViewInit {
   times = 1;
   currentTab = 'Electric Grid';
   fileName: string[] = [];
+  calculatedTimeStep = false;
+  calculatedSimulationTime = false;
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
@@ -168,6 +170,7 @@ export class GeneralParamsComponent implements AfterViewInit {
       this.generalParams.updateTimestep({ 'mins': false, 'hours': event });
       this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
     }
+    this.calculatedTimeStep = true;
     this.updateModel();
   }
 
@@ -199,6 +202,7 @@ export class GeneralParamsComponent implements AfterViewInit {
             this.paramInit['payload']['simulation']['time.step'];
         }
       }
+      this.calculatedSimulationTime = true;
       this.updateModel();
     }
 
@@ -220,6 +224,7 @@ export class GeneralParamsComponent implements AfterViewInit {
       this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
         * 24 / timeStep;
     }
+    this.calculatedSimulationTime = true;
     this.updateModel();
   }
 
@@ -311,10 +316,7 @@ export class GeneralParamsComponent implements AfterViewInit {
   openParams() {
     if (this.generalParams.areaPicked && this.checkGrids() || this.isLoadModule) {
       // Initialize model base on user input
-      if (this.times === 2) {
-        this.calculateModel();
-        this.times++;
-      }
+      this.calculateModel();
       return true;
     } else {
       return false;
@@ -323,11 +325,35 @@ export class GeneralParamsComponent implements AfterViewInit {
 
   calculateModel() {
     if (this.generalParams.selectedModel['elec'] === '1 Node' && this.generalParams.selectedModel['dh'] === '1 Node') {
-      this.generalParams.updateModel(1);
-      this.paramInit = this.model1.paramInit;
+      if (this.generalParams.model !== 1) {
+        this.generalParams.updateModel(1);
+        this.paramInit = this.model1.paramInit;
+        this.model1.paramUpdated.emit(this.paramInit);
+      }
     } else if (this.generalParams.selectedModel['elec'] === '8 Node' && this.generalParams.selectedModel['dh'] === '1 Node') {
-      this.paramInit = this.model2.paramInit;
-      this.generalParams.updateModel(2);
+      if (this.generalParams.model !== 2) {
+        this.generalParams.updateModel(2);
+        this.paramInit = this.model2.paramInit;
+        this.model2.paramUpdated.emit(this.paramInit);
+      }
+    }
+  }
+
+  changeTimeStepByUser(event) {
+    if (!this.calculatedTimeStep) {
+      this.paramInit['payload']['simulation']['time.step'] = event;
+      this.updateModel();
+    } else {
+      this.calculatedTimeStep = false;
+    }
+  }
+
+  changeSimulationTimeByUser(event) {
+    if (!this.calculatedSimulationTime) {
+      this.paramInit['payload']['simulation']['simulation.time'] = event;
+      this.updateModel();
+    } else {
+      this.calculatedSimulationTime = false;
     }
   }
 }

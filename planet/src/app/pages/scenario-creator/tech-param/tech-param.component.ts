@@ -30,6 +30,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         'localised': true,
     };
     paramInit = {};
+    currentModel = 0;
 
     constructor(private model2: Model2ParamInitService,
         private generalParams: GeneralParamsService,
@@ -61,38 +62,29 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
             'Windmaster WM43 750', 'Windflow 500', 'XANT M21 100'];
 
         this.getNodesNames();
-        for (let i = 0; i < this.nodes.length; i++) {
-            this.checkVal['node.' + (i + 1)] = {};
-        }
-
-        for (let i = 0; i < this.nodes.length; i++) {
-            this.nodeWindParam['node.' + (i + 1)] = {
-                'startDate': this.generalParams.startingDate,
-                'endDate': this.generalParams.endingDate,
-                'capacity': 1,
-                'hub.height': 80,
-                'turbine.model': 'Vestas+V80+2000',
-            };
-            this.nodePvParam['node.' + (i + 1)] = {
-                'startDate': this.generalParams.startingDate,
-                'endDate': this.generalParams.endingDate,
-                'capacity': 1,
-                'system.loss': 10,
-                'tracking': 0,
-                'tilt': 35,
-                'azimuth': 180,
-            };
-        }
         this.pvChange = new EventEmitter<Object>();
         this.windChange = new EventEmitter<Object>();
         this.phase3 = new EventEmitter<Boolean>();
-        this.displayingNode = 'node.1';
         this.model2.paramUpdated.subscribe(
-            (data) => this.paramInit = data,
+            (data) => {
+                if (this.currentModel !== 2) {
+                    this.getNodesNames();
+                    this.paramInit = data;
+                    this.initializeValues();
+                    this.currentModel = 2;
+                }
+            },
         );
 
         this.model1.paramUpdated.subscribe(
-            (data) => this.paramInit = data,
+            (data) => {
+                if (this.currentModel !== 1) {
+                    this.getNodesNames();
+                    this.paramInit = data;
+                    this.initializeValues();
+                    this.currentModel = 1;
+                }
+            },
         );
 
         this.generalParams.startingDateUpdate.subscribe(
@@ -106,6 +98,11 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
         this.generalParams.updateIsDefault.subscribe(
             (data) => this.generalParams.isDefault = data,
         );
+
+        this.generalParams.modelUpdate.subscribe(
+            (data) => this.generalParams.model = data,
+        )
+
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -129,10 +126,34 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
     }
 
     getNodesNames() {
+        this.displayingNode = 'node.1';
         if (this.generalParams.model === 1) {
             this.nodes = Object.getOwnPropertyNames(this.model1.paramInit['payload']['electric.grid']);
         } else if (this.generalParams.model === 2) {
             this.nodes = Object.getOwnPropertyNames(this.model2.paramInit['payload']['electric.grid']);
+        }
+
+        for (let i = 0; i < this.nodes.length; i++) {
+            this.checkVal['node.' + (i + 1)] = {};
+        }
+
+        for (let i = 0; i < this.nodes.length; i++) {
+            this.nodeWindParam['node.' + (i + 1)] = {
+                'startDate': this.generalParams.startingDate,
+                'endDate': this.generalParams.endingDate,
+                'capacity': 1,
+                'hub.height': 80,
+                'turbine.model': 'Vestas+V80+2000',
+            };
+            this.nodePvParam['node.' + (i + 1)] = {
+                'startDate': this.generalParams.startingDate,
+                'endDate': this.generalParams.endingDate,
+                'capacity': 1,
+                'system.loss': 10,
+                'tracking': 0,
+                'tilt': 35,
+                'azimuth': 180,
+            };
         }
     }
 
@@ -151,7 +172,10 @@ export class TechParamComponent implements OnChanges, AfterViewChecked {
     }
 
     ngAfterViewChecked() {
+        this.initializeValues();
+    }
 
+    initializeValues() {
         for (let i = 0; i < this.nodes.length; i++) {
             for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
                 switch (j) {

@@ -93,7 +93,8 @@
                     <div class="row">
                       <div class="col-md-6">
                         <input type="number" class="form-control" id="dt"
-                          [(ngModel)]="paramInit.payload.simulation['time.step']">
+                          [ngModel]="paramInit['payload']['simulation']['time.step']"
+                          (ngModelChange)="changeTimeStepByUser($event)">
                       </div>
 
                       <div class="col-md-3 checkBoxMove">
@@ -144,7 +145,8 @@
                     <div class="row">
                       <div class="col-md-6">
                         <input type="number" class="form-control" id="simulation-time"
-                          [(ngModel)]="paramInit.payload.simulation['simulation.time']">
+                          [ngModel]="paramInit['payload']['simulation']['simulation.time']"
+                          (ngModelChange)="changeSimulationTimeByUser($event)">
                       </div>
 
                       <div class="col-md-3 checkBoxMove">
