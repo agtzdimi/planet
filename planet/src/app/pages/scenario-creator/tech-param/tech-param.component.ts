@@ -26,6 +26,8 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     turbineModels = [];
     currentTab = 'Electric Grid';
     g2h = {
+        'dh.connected.heat.load': true,
+        'not.dh.connected.heat.load': true,
         'centralised': true,
         'localised': true,
     };
@@ -245,6 +247,14 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
                             this.checkVal['node.' + (i + 1)][j] = true;
                         }
                         break;
+                    case 6:
+                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['uncontrollable.load']['peak.load'] === 0
+                            && this.checkVal['node.' + (i + 1)][j] !== true) {
+                            this.checkVal['node.' + (i + 1)][j] = false;
+                        } else {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
                 }
             }
         }
@@ -284,12 +294,23 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     }
 
     changeG2H(id) {
-        if (id === 1) {
-            this.g2h['centralised'] = !this.g2h['centralised'];
-            this.emitG2H(1, 'centralised');
-        } else {
-            this.g2h['localised'] = !this.g2h['localised'];
-            this.emitG2H(2, 'localised');
+        switch (id) {
+            case 1:
+                this.g2h['dh.connected.heat.load'] = !this.g2h['dh.connected.heat.load'];
+                this.emitG2H(id, 'dh.connected.heat.load');
+                break;
+            case 2:
+                this.g2h['centralised'] = !this.g2h['centralised'];
+                this.emitG2H(id, 'centralised');
+                break;
+            case 3:
+                this.g2h['not.dh.connected.heat.load'] = !this.g2h['not.dh.connected.heat.load'];
+                this.emitG2H(id, 'not.dh.connected.heat.load');
+                break;
+            case 4:
+                this.g2h['localised'] = !this.g2h['localised'];
+                this.emitG2H(id, 'localised');
+                break;
         }
     }
 

@@ -207,6 +207,17 @@ export class Model1ParamInitService {
                     };
                 }
                 break;
+            case 6:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load'] = {
+                        'peak.load': 2000,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load'] = {
+                        'peak.load': 0,
+                    };
+                }
+                break;
         }
         this.paramUpdated.emit(this.paramInit);
     }
@@ -214,6 +225,17 @@ export class Model1ParamInitService {
     updateG2HValues(id, flag) {
         switch (id) {
             case 1:
+                if (flag) {
+                    this.paramInit['payload']['centralised.heat']['uncontrollable.load'] = {
+                        'peak.load': 1500,
+                    };
+                } else {
+                    this.paramInit['payload']['centralised.heat']['uncontrollable.load'] = {
+                        'peak.load': 0,
+                    };
+                }
+                break;
+            case 2:
                 if (flag) {
                     this.paramInit['payload']['centralised.heat']['G2H'] = {
                         'nomial.heat.power': 1000,
@@ -226,7 +248,18 @@ export class Model1ParamInitService {
                     };
                 }
                 break;
-            case 2:
+            case 3:
+                if (flag) {
+                    this.paramInit['payload']['localised.heat']['uncontrollable.load'] = {
+                        'peak.load': 1500,
+                    };
+                } else {
+                    this.paramInit['payload']['localised.heat']['uncontrollable.load'] = {
+                        'peak.load': 0,
+                    };
+                }
+                break;
+            case 4:
                 if (flag) {
                     this.paramInit['payload']['localised.heat']['G2H'] = {
                         'nomial.heat.power': 1500,

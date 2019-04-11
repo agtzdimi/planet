@@ -1,5 +1,7 @@
 <nb-card size="large">
     <nb-card-header>
+
+        <!--    Tabs  and Dropdown with Nodes-->
         <nb-tabset (changeTab)="changeTab($event)">
             <nb-tab tabTitle="Electric Grid">
             </nb-tab>
@@ -21,13 +23,11 @@
         </div>
     </nb-card-header>
 
+    <!--    Electric Grid TAB   -->
+
     <nb-card-body *ngIf="currentTab === 'Electric Grid'">
 
-        <ngx-input-field [isChecked]="true" [label1]="'Peak Load'" [label2]="'MW'"
-            (valChange)="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']=+$event"
-            [(val)]="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']"
-            [compId]="'uncontrollable.peak.load.1'">
-        </ngx-input-field>
+        <!--    PV switcher   -->
 
         <div class="row p-2">
             <div class="col-md-1">
@@ -80,6 +80,8 @@
             </ngx-input-field>
         </div>
 
+        <!--    WT switcher   -->
+
         <div class="row p-2">
             <div class="col-md-1">
                 <label>WT</label>
@@ -122,6 +124,8 @@
             </ngx-input-field>
         </div>
 
+        <!--    CHP switcher   -->
+
         <div class="row p-2">
             <div class="col-md-1">
                 <label>CHP</label>
@@ -150,6 +154,8 @@
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']"
                 [compId]="'techParamCheckInput3.3'"></ngx-input-field>
         </div>
+
+        <!--    P2H switcher   -->
 
         <div class="row p-2">
             <div class="col-md-1">
@@ -208,6 +214,8 @@
             </ngx-input-field>
         </div>
 
+        <!--    P2G switcher   -->
+
         <div class="row p-2">
             <div class="col-md-1">
                 <label>P2G</label>
@@ -243,6 +251,8 @@
                 [compId]="'techParamCheckInput5.4'"></ngx-input-field>
         </div>
 
+        <!--    EB switcher   -->
+
         <div class="row p-2">
             <div class="col-md-1">
                 <label>EB</label>
@@ -277,11 +287,47 @@
                 [compId]="'techParamCheckInput6.4'"></ngx-input-field>
         </div>
 
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>Electric Load</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="checkVal[displayingNode][6]" (change)="changeCheckBoxVal(6)"
+                        id="techParamCheck7" #techParamCheck7>
+                    <label class="label" for="techParamCheck7"></label>
+                </section>
+            </div>
+        </div>
+
+        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
+            <ngx-input-field [isChecked]="techParamCheck7.checked" [label1]="'Peak Load'" [label2]="'MW'"
+                (valChange)="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']=+$event"
+                [(val)]="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']"
+                [compId]="'techParamCheckInput7.1'">
+            </ngx-input-field>
+        </div>
+
     </nb-card-body>
+
+    <!--    Centralised Heat TAB   -->
 
     <nb-card-body *ngIf="currentTab === 'Centralised Heat'">
 
-        <ngx-input-field [isChecked]="true" [label1]="'Peak Load'" [label2]="'MW'"
+        <div class="row p-2">
+            <div class="col-md-1">
+                <label>DH Heat Load</label>
+            </div>
+            <div class="col-md-2">
+                <section class="slider-checkbox">
+                    <input type="checkbox" [checked]="g2h['dh.connected.heat.load']" (change)="changeG2H(1)" id="dhh1"
+                        #dhh1>
+                    <label class="label" for="dhh1"></label>
+                </section>
+            </div>
+        </div>
+
+        <ngx-input-field [isChecked]="g2h['dh.connected.heat.load']" [label1]="'Peak Load'" [label2]="'MW'"
             (valChange)="paramInit['payload']['centralised.heat']['uncontrollable.load']['peak.load']=+$event"
             [(val)]="paramInit['payload']['centralised.heat']['uncontrollable.load']['peak.load']"
             [compId]="'centralised.peak.load.1'">
@@ -289,11 +335,11 @@
 
         <div class="row p-2">
             <div class="col-md-1">
-                <label>G2H</label>
+                <label>Centralised G2H</label>
             </div>
             <div class="col-md-2">
                 <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="g2h['centralised']" (change)="changeG2H(1)" id="g2h1" #g2h1>
+                    <input type="checkbox" [checked]="g2h['centralised']" (change)="changeG2H(2)" id="g2h1" #g2h1>
                     <label class="label" for="g2h1"></label>
                 </section>
             </div>
@@ -311,23 +357,46 @@
 
     </nb-card-body>
 
+    <!--    Localised Heat TAB   -->
+
     <nb-card-body *ngIf="currentTab === 'Localised Heat'">
 
-        <ngx-input-field [isChecked]="true" [label1]="'Peak Load'" [label2]="'MW'"
+        <div class="row p-2">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Not DH Heat Load</label>
+                    </div>
+                    <div class="col-md-4">
+                        <section class="slider-checkbox">
+                            <input type="checkbox" [checked]="g2h['not.dh.connected.heat.load']" (change)="changeG2H(3)"
+                                id="dhh2" #dhh2>
+                            <label class="label" for="dhh2"></label>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ngx-input-field [isChecked]="g2h['not.dh.connected.heat.load']" [label1]="'Peak Load'" [label2]="'MW'"
             (valChange)="paramInit['payload']['localised.heat']['uncontrollable.load']['peak.load']=+$event"
             [(val)]="paramInit['payload']['localised.heat']['uncontrollable.load']['peak.load']"
             [compId]="'centralised.peak.load.2'">
         </ngx-input-field>
 
         <div class="row p-2">
-            <div class="col-md-1">
-                <label>G2H</label>
-            </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="g2h['localised']" (change)="changeG2H(2)" id="g2h2" #g2h2>
-                    <label class="label" for="g2h2"></label>
-                </section>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Localised G2H</label>
+                    </div>
+                    <div class="col-md-4">
+                        <section class="slider-checkbox">
+                            <input type="checkbox" [checked]="g2h['localised']" (change)="changeG2H(4)" id="g2h2" #g2h2>
+                            <label class="label" for="g2h2"></label>
+                        </section>
+                    </div>
+                </div>
             </div>
         </div>
 
