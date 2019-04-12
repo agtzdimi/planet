@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col">
 
-    <nb-card>
+    <nb-card accent="active">
       <nb-card-header>Simulation Comparison</nb-card-header>
       <nb-card-body>
 
@@ -21,7 +21,7 @@
     </nb-card>
 
     <div *ngIf="showLine">
-      <nb-card *ngFor="let lineCh of lineChart">
+      <nb-card *ngFor="let lineCh of lineChart" accent="active">
         <nb-card-header>{{lineCh.title}}</nb-card-header>
         <nb-card-body>
           <ngx-simulation-line [data]="lineCh.data"></ngx-simulation-line>

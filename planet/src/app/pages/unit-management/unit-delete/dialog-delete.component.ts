@@ -4,7 +4,7 @@ import { NbDialogRef } from '@nebular/theme';
 @Component({
   selector: 'ngx-dialog-delete',
   template: `
-    <nb-card>
+    <nb-card accent="active">
       <nb-card-header>Are you sure you Want to Delete {{unitName}} Unit?</nb-card-header>
       <nb-card-footer>
       <div class="row">

@@ -15,7 +15,7 @@ import { takeWhile } from 'rxjs/operators';
   template: `
     <nb-layout>
       <nb-layout-column>
-        <nb-card>
+        <nb-card accent="active">
           <nb-card-header>
             <a href="#" (click)="back()"><img src="assets/images/planet.png"></a>
           </nb-card-header>

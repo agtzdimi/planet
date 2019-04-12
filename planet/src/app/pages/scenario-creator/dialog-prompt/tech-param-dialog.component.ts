@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 
 @Component({
-    selector: 'nb-tech-param-prompt',
-    template: `
-    <nb-card>
+  selector: 'nb-tech-param-prompt',
+  template: `
+    <nb-card accent="active">
       <nb-card-header>Enter the technologies and their parameters for each of the nodes</nb-card-header>
       <nb-card-footer>
         <div class="row">
@@ -17,13 +17,13 @@ import { NbDialogRef } from '@nebular/theme';
       </nb-card-footer>
     </nb-card>
   `,
-    styles: [``],
+  styles: [``],
 })
 export class DialogTechParamPromptComponent {
-    constructor(protected dialogRef: NbDialogRef<DialogTechParamPromptComponent>) {
-    }
+  constructor(protected dialogRef: NbDialogRef<DialogTechParamPromptComponent>) {
+  }
 
-    submit() {
-        this.dialogRef.close();
-    }
+  submit() {
+    this.dialogRef.close();
+  }
 }

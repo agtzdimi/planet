@@ -4,7 +4,7 @@ import { NbDialogRef } from '@nebular/theme';
 @Component({
   selector: 'nb-tech-param-prompt',
   template: `
-    <nb-card>
+    <nb-card accent="active">
       <nb-card-header>Enter the control node</nb-card-header>
       <nb-card-footer>
         <div class="row">

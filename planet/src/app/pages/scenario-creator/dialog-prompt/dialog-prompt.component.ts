@@ -4,7 +4,7 @@ import { NbDialogRef } from '@nebular/theme';
 @Component({
   selector: 'nb-name-prompt',
   template: `
-    <nb-card>
+    <nb-card accent="active">
       <nb-card-header>Initialize with default simulation values?</nb-card-header>
       <nb-card-footer>
       <div class="row">
