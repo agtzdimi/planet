@@ -36,17 +36,28 @@ def sendFiles(fileName):
    p1.wait()
 
 if __name__ == "__main__":
+
+   switcher = {
+      1: "DEMO_PLANETm_POC3_model1",
+      2: "DEMO_PLANETm_POC3_model2",
+      3: "DEMO_PLANETm_POC3_model3",
+      4 : "DEMO_PLANETm_POC3_model4"
+   }
    # Start the matlab workspace
    print ("Starting Matlab engine...")
    eng = matlab.engine.start_matlab()
    # Initialize the simulink file
    try:
-      eng.PLANETm_v2(nargout=0)
+      with open("Parameters_initialization.txt", "r") as read_file:
+         data = json.load(read_file)
+      model = data['payload']['model']
+      currentModel = switcher.get(model, "Invalid Model")
+      eng.run(currentModel,nargout=0)
       message='Simulation finished successfully'
    except Exception as e:
       message=str(e)
       lineMatch = re.search(' line (.*),',message)
-      with open('PLANETm_v2.m') as file:
+      with open( currentModel + '.m' ) as file:
          for i, line in enumerate(file):
             index = i+1
             if str(index) == str(lineMatch.group(1)):
