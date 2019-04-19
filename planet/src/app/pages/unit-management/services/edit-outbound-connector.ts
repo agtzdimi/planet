@@ -3,15 +3,13 @@ import { Injectable } from '@angular/core';
 import { EnvService } from '../../../env.service';
 
 @Injectable()
-export class AddOutboundConnService {
-
-    connectors = {};
+export class EditOutboundConnService {
 
     constructor(private httpClient: HttpClient,
         private env: EnvService) { }
 
 
-    public addOutBoundConnector(data: Object, jwtToken: string) {
+    public editOutBoundConnector(data: Object, jwtToken: string) {
 
         return new Promise(resolve => {
             const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort +
@@ -33,32 +31,24 @@ export class AddOutboundConnService {
             })
                 .subscribe(
                     res => {
-                        this.connectors = {
-                            'name': 'mqtt-connector',
-                            'attributes': [
-                                {
-                                    'name': 'connectorId',
-                                    'value': data['token'],
-                                }, {
-                                    'name': 'hostname',
-                                    'value': data['ip'],
-                                }, {
-                                    'name': 'numProcessingThreads',
-                                    'value': '5',
-                                }, {
-                                    'name': 'port',
-                                    'value': data['port'],
-                                }, {
-                                    'name': 'protocol',
-                                    'value': 'tcp',
-                                }, {
-                                    'name': 'topic',
-                                    'value': data['token'],
-                                },
-                            ],
-                        };
                         // index 1 holds outbound connectors
-                        res['children'][1]['children'].push(this.connectors);
+                        res['children'][1]['children'] = res['children'][1]['children'].find(obj => {
+                            let flag = false;
+                            for (let attr = 0; attr < obj['attributes'].length; attr++) {
+                                if (obj['attributes'][attr]['value'] === data['token'] &&
+                                    obj['attributes'][attr]['value'] === 'connectorId') {
+                                    flag = true;
+                                }
+                                if (flag && obj['attributes'][attr]['name'] === 'hostname') {
+                                    obj['attributes'][attr]['value'] = data['ip'];
+                                }
+                                if (flag && obj['attributes'][attr]['name'] === 'port') {
+                                    obj['attributes'][attr]['value'] = data['port'];
+                                }
+                            }
+                            return obj;
+                        });
+                        // console.log(res)
                         this.httpClient.post(url, res, {
                             headers: headers,
                         })
@@ -71,7 +61,7 @@ export class AddOutboundConnService {
                                 },
                             );
 
-                        resolve('Device was successfully created!');
+                        resolve('Device was successfully updated!');
                     },
                     error => {
                         resolve('Error: ' + error['error']);

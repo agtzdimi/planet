@@ -2,17 +2,21 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { GetJWTService } from '../services/get-jwt.service';
 import { CreateDeviceService } from '../services/create-device.service';
 import { GetAreaGridsService } from '../services/get-area-grids.service';
+import { AddOutboundConnService } from '../services/add-outbound-connector';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 
 @Component({
   selector: 'ngx-unit-add',
   styleUrls: ['./unit-add.component.scss'],
-  providers: [GetJWTService, CreateDeviceService, GetAreaGridsService],
+  providers: [GetJWTService, CreateDeviceService,
+    GetAreaGridsService, AddOutboundConnService],
   templateUrl: './unit-add.component.html',
 })
 export class UnitAddComponent implements OnInit {
   data: Object;
   unitName: string;
+  unitIP: string;
+  unitPort: string;
   unitDescr: string;
   jwtToken: any;
   message: string;
@@ -137,8 +141,10 @@ export class UnitAddComponent implements OnInit {
     ],
   };
 
-  constructor(private getJWTService: GetJWTService, private createDeviceService: CreateDeviceService,
-    private getAreaGridsService: GetAreaGridsService) {
+  constructor(private getJWTService: GetJWTService,
+    private createDeviceService: CreateDeviceService,
+    private getAreaGridsService: GetAreaGridsService,
+    private addOutboundConnService: AddOutboundConnService) {
     this.data = {};
     this.selectRoom('2');
   }
@@ -219,6 +225,16 @@ export class UnitAddComponent implements OnInit {
         this.createDeviceService.createNewDevice(this.data, this.jwtToken)
           .then(results => {
             this.message = JSON.stringify(results);
+          });
+        this.addOutboundConnService.addOutBoundConnector(
+          {
+            'ip': this.unitIP,
+            'port': this.unitPort,
+            'token': this.unitName,
+          },
+          this.jwtToken)
+          .then(results => {
+            // console.log(results);
           });
       });
   }

@@ -3,16 +3,20 @@ import { GetJWTService } from '../services/get-jwt.service';
 import { GetDeviceByTypeService } from '../services/get-deviceByType.service';
 import { EditDeviceService } from '../services/edit-device.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
+import { EditOutboundConnService } from '../services/edit-outbound-connector';
 
 @Component({
   selector: 'ngx-unit-edit',
   styleUrls: ['./unit-edit.component.scss'],
-  providers: [GetJWTService, GetDeviceByTypeService, EditDeviceService],
+  providers: [GetJWTService, GetDeviceByTypeService,
+    EditDeviceService, EditOutboundConnService],
   templateUrl: './unit-edit.component.html',
 })
 export class UnitEditComponent implements OnInit {
   data: Object;
   unitName: string;
+  unitIP: string;
+  unitPort: string;
   message: string;
   jwtToken: any;
   p2gUnit: Object = [{}];
@@ -27,7 +31,8 @@ export class UnitEditComponent implements OnInit {
 
   constructor(private getJWTService: GetJWTService,
     private getDeviceByType: GetDeviceByTypeService,
-    private editDevice: EditDeviceService) {
+    private editDevice: EditDeviceService,
+    private editOutboundConnService: EditOutboundConnService) {
     this.data = {};
   }
 
@@ -87,6 +92,15 @@ export class UnitEditComponent implements OnInit {
             metadata,
           };
           this.editDevice.editDevice(this.jwtToken, this.data, this.unitName)
+            .then(results => {
+              this.message = JSON.stringify(results);
+            });
+
+          this.editOutboundConnService.editOutBoundConnector({
+            'ip': this.unitIP,
+            'port': this.unitPort,
+            'token': this.unitName,
+          }, this.jwtToken)
             .then(results => {
               this.message = JSON.stringify(results);
             });
