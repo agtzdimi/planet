@@ -16,54 +16,11 @@
       </div>
 
       <!-- Phase 3 Control Simulation Parameters -->
-      <div class="col-md-12">
+      <div class="col-md-12" *ngIf="phase3">
         <div [suiTransition]="transitionController3">
-          <nb-card *ngIf="phase3" accent="active">
-            <nb-card-header>Control System</nb-card-header>
-            <nb-card-body>
-              <div class="form-group row">
-                <label for="control-system" class="col-sm-2 col-form-label">Control</label>
-                <div class="col-sm-3">
-                  <div class="ui icon input">
-                    <ng-template #popContent> Dispatch priority order: <br>
-                      <ol type="1">
-                        <li> P2H - EB - P2G </li>
-                        <li> P2H - P2G - EB </li>
-                        <li> EB - P2H - P2G </li>
-                        <li> EB - P2G - P2H </li>
-                        <li> P2G - P2H - EB </li>
-                        <li> P2G - EB - P2H </li>
-                      </ol>
-                    </ng-template>
-                    <input type="number" class="form-control" id="control-system"
-                      [(ngModel)]="+controlSystem.payload.control" [nbPopover]="popContent" nbPopoverTrigger="hover"
-                      nbPopoverPlacement="right">
-                    <i class="info circle icon"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="control-Curtailment" class="col-sm-2 col-form-label">RES Curtailment</label>
-                <div class="col-sm-3">
-                  <div class="ui input">
-                    <input type="number" class="form-control" id="control-Curtailment"
-                      [(ngModel)]="+controlSystem.payload['RES.curtailment']">
-                  </div>
-                </div>
-              </div>
-            </nb-card-body>
-
-            <nb-card-footer *ngIf="!isLoadModule">
-              <div class="row">
-                <div class="col-md-9"></div>
-                <div class="col-md-3">
-                  <button nbButton hero status="info" shape="round"
-                    (click)="animateInfo(transitionController4,transitionName4,4);animateInfo(transitionController5,transitionName5,4)">Continue</button>
-                </div>
-              </div>
-            </nb-card-footer>
-
-          </nb-card>
+          <ngx-tech-control [isLoadModule]="false" (phase4)="animateInfo(transitionController4,transitionName4,4)
+        ;animateInfo(transitionController5,transitionName5,4)">
+          </ngx-tech-control>
         </div>
       </div>
 

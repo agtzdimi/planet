@@ -23,6 +23,7 @@ import { DialogNamePromptComponent } from './dialog-prompt/dialog-prompt.compone
 import { NbDialogModule } from '@nebular/theme';
 import { HighlDirective } from './dialog-prompt/highlight.directive';
 import { GeneralParamsComponent } from './general-params/general-params.component';
+import { TechControlComponent } from './tech-control/tech-control.component';
 
 
 const COMPONENTS = [
@@ -70,6 +71,7 @@ const ENTRY_COMPONENTS = [
   declarations: [
     ...COMPONENTS,
     GeneralParamsComponent,
+    TechControlComponent,
   ],
   entryComponents: [
     ...ENTRY_COMPONENTS,

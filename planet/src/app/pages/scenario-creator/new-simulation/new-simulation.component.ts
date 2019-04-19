@@ -10,11 +10,15 @@ import { EnvService } from '../../../env.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
+import { ControlFileService } from '../services/control-file.service';
 
 @Component({
     selector: 'ngx-new-simulation',
     styleUrls: ['./new-simulation.component.scss'],
-    providers: [GeneralParamsService, Model2ParamInitService, Model1ParamInitService],
+    providers: [GeneralParamsService,
+        Model2ParamInitService,
+        Model1ParamInitService,
+        ControlFileService],
     templateUrl: './new-simulation.component.html',
 })
 export class NewSimulationFilesComponent {
@@ -37,13 +41,7 @@ export class NewSimulationFilesComponent {
     transitionController4 = new TransitionController();
     transitionController5 = new TransitionController();
     transitionController6 = new TransitionController();
-    controlSystem = {
-        'file.name': 'Control_initialization',
-        'payload': {
-            'control': 5,
-            'RES.curtailment': 0,
-        },
-    };
+    controlSystem = {};
 
     econEnv = {
         'file.name': '',
@@ -74,7 +72,8 @@ export class NewSimulationFilesComponent {
         private env: EnvService,
         private generalParams: GeneralParamsService,
         private model2: Model2ParamInitService,
-        private model1: Model1ParamInitService) {
+        private model1: Model1ParamInitService,
+        private controlFileService: ControlFileService) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
 
@@ -109,6 +108,10 @@ export class NewSimulationFilesComponent {
 
         this.generalParams.modelUpdate.subscribe(
             (data) => this.generalParams.model = data,
+        );
+
+        this.controlFileService.controlFileUpdated.subscribe(
+            (data) => this.controlSystem = data,
         );
     }
 
@@ -146,6 +149,7 @@ export class NewSimulationFilesComponent {
 
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
         this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
+        this.updateControlFile();
         this.econEnv['payload']['formName'] = this.generalParams.formName;
         this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
         formData.append('param1', JSON.stringify(this.paramInit));
@@ -239,5 +243,9 @@ export class NewSimulationFilesComponent {
                 this.model2.paramUpdated.emit(this.paramInit);
                 break;
         }
+    }
+
+    updateControlFile() {
+        this.controlFileService.controlFileUpdated.emit(this.controlSystem);
     }
 }

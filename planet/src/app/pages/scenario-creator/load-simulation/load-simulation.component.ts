@@ -8,11 +8,15 @@ import { EnvService } from '../../../env.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
+import { ControlFileService } from '../services/control-file.service';
 
 @Component({
     selector: 'ngx-load-simulation',
     styleUrls: ['./load-simulation.component.scss'],
-    providers: [Model2ParamInitService, GeneralParamsService, Model1ParamInitService],
+    providers: [Model2ParamInitService,
+        GeneralParamsService,
+        Model1ParamInitService,
+        ControlFileService],
     templateUrl: './load-simulation.component.html',
 })
 export class LoadSimulationFilesComponent implements OnInit {
@@ -32,13 +36,7 @@ export class LoadSimulationFilesComponent implements OnInit {
     paramInit = {
     };
 
-    controlSystem = {
-        'file.name': 'Control_initialization',
-        'payload': {
-            'control': 5,
-            'RES.curtailment': 0,
-        },
-    };
+    controlSystem = {};
 
     econEnv = {
         'file.name': '',
@@ -70,7 +68,8 @@ export class LoadSimulationFilesComponent implements OnInit {
         private generalParams: GeneralParamsService,
         private model2: Model2ParamInitService,
         private model1: Model1ParamInitService,
-        private dateService: NbDateService<Date>) {
+        private dateService: NbDateService<Date>,
+        private controlFileService: ControlFileService) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
 
@@ -102,6 +101,10 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.generalParams.modelUpdate.subscribe(
             (data) => this.generalParams.model = data,
         );
+
+        this.controlFileService.controlFileUpdated.subscribe(
+            (data) => this.controlSystem = data,
+        );
     }
 
     ngOnInit() {
@@ -132,7 +135,8 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 temp = JSON.parse(data['econEnv']);
                                 this.econEnv['payload'] = temp['payload'];
                                 temp = JSON.parse(data['controlSystem']);
-                                this.controlSystem['payload']['control'] = temp['payload']['control'];
+                                this.controlSystem = temp;
+                                this.controlFileService.changeModel(this.controlSystem);
                                 this.elecParam = data['elecParam'];
                                 this.heatParam = data['heatParam'];
                                 temp = JSON.parse(data['date']);
@@ -189,6 +193,7 @@ export class LoadSimulationFilesComponent implements OnInit {
 
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
         this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
+        this.updateControlFile();
         this.econEnv['payload']['formName'] = this.generalParams.formName;
         this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
         formData.append('param1', JSON.stringify(this.paramInit));
@@ -276,5 +281,9 @@ export class LoadSimulationFilesComponent implements OnInit {
                 this.model2.paramUpdated.emit(this.paramInit);
                 break;
         }
+    }
+
+    updateControlFile() {
+        this.controlFileService.controlFileUpdated.emit(this.controlSystem);
     }
 }
