@@ -17,54 +17,7 @@
       </div>
 
       <div class="col-md-12">
-        <ngx-tech-cost [(data)]="econEnv" (dataChange)="econEnv"></ngx-tech-cost>
-      </div>
-
-      <div class="col-md-12">
-        <div>
-          <nb-card accent="active">
-            <nb-card-header>Economy Parameters</nb-card-header>
-            <nb-card-body>
-              <div class="form-group row">
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">NG cost</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_ng.cost" [(ngModel)]="+econEnv.payload['NG.cost']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/MWh</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_sng.cost" class="col-sm-2 col-form-label">SNG cost</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_sng.cost" [(ngModel)]="+econEnv.payload['SNG.cost']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/MWh</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_heat.cost" class="col-sm-2 col-form-label">Heat cost</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_heat.cost"
-                    [(ngModel)]="+econEnv.payload['heat.cost']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/MWh</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_carbon" class="col-sm-2 col-form-label">Carbon tax</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_carbon" [(ngModel)]="+econEnv.payload['carbon.tax']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/t</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_ng.emission" class="col-sm-2 col-form-label">NG emission factor</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_ng.emission"
-                    [(ngModel)]="+econEnv.payload['NG.emission.factor']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">%</label>
-              </div>
-            </nb-card-body>
-          </nb-card>
-        </div>
+        <ngx-tech-cost [isLoadModule]="true"></ngx-tech-cost>
       </div>
 
     </div>

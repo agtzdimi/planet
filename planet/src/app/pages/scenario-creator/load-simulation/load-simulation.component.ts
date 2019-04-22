@@ -9,6 +9,7 @@ import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
 import { ControlFileService } from '../services/control-file.service';
+import { EconomyFileService } from '../services/economy-file.service';
 
 @Component({
     selector: 'ngx-load-simulation',
@@ -16,7 +17,8 @@ import { ControlFileService } from '../services/control-file.service';
     providers: [Model2ParamInitService,
         GeneralParamsService,
         Model1ParamInitService,
-        ControlFileService],
+        ControlFileService,
+        EconomyFileService],
     templateUrl: './load-simulation.component.html',
 })
 export class LoadSimulationFilesComponent implements OnInit {
@@ -33,18 +35,9 @@ export class LoadSimulationFilesComponent implements OnInit {
     transitionController1 = new TransitionController();
     loading: boolean = false;
     range: NbCalendarRange<Date>;
-    paramInit = {
-    };
-
+    paramInit = {};
     controlSystem = {};
-
-    econEnv = {
-        'file.name': '',
-        'payload': {
-            'technologies.cost': {
-            },
-        },
-    };
+    econEnv = {};
 
     windParam = {
         'file.name': 'Wind.xlsx',
@@ -69,7 +62,8 @@ export class LoadSimulationFilesComponent implements OnInit {
         private model2: Model2ParamInitService,
         private model1: Model1ParamInitService,
         private dateService: NbDateService<Date>,
-        private controlFileService: ControlFileService) {
+        private controlFileService: ControlFileService,
+        private economyFileService: EconomyFileService) {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
 
@@ -105,6 +99,10 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.controlFileService.controlFileUpdated.subscribe(
             (data) => this.controlSystem = data,
         );
+
+        this.economyFileService.economyFileUpdated.subscribe(
+            (data) => this.econEnv = data,
+        );
     }
 
     ngOnInit() {
@@ -133,7 +131,8 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 this.paramInit = temp;
                                 this.generalParams.updateModel(this.paramInit['payload']['model']);
                                 temp = JSON.parse(data['econEnv']);
-                                this.econEnv['payload'] = temp['payload'];
+                                this.econEnv = temp;
+                                this.economyFileService.changeModel(this.econEnv);
                                 temp = JSON.parse(data['controlSystem']);
                                 this.controlSystem = temp;
                                 this.controlFileService.changeModel(this.controlSystem);
@@ -196,6 +195,7 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.updateControlFile();
         this.econEnv['payload']['formName'] = this.generalParams.formName;
         this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
+        this.updateEconomyFile();
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
@@ -285,5 +285,9 @@ export class LoadSimulationFilesComponent implements OnInit {
 
     updateControlFile() {
         this.controlFileService.controlFileUpdated.emit(this.controlSystem);
+    }
+
+    updateEconomyFile() {
+        this.economyFileService.economyFileUpdated.emit(this.econEnv);
     }
 }

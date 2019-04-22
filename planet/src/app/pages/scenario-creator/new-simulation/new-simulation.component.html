@@ -18,8 +18,7 @@
       <!-- Phase 3 Control Simulation Parameters -->
       <div class="col-md-12" *ngIf="phase3">
         <div [suiTransition]="transitionController3">
-          <ngx-tech-control [isLoadModule]="false" (phase4)="animateInfo(transitionController4,transitionName4,4)
-        ;animateInfo(transitionController5,transitionName5,4)">
+          <ngx-tech-control [isLoadModule]="false" (phase4)="animateInfo(transitionController4,transitionName4,4)">
           </ngx-tech-control>
         </div>
       </div>
@@ -27,65 +26,9 @@
       <!-- Phase 4 Economy Simulation Parameters -->
 
       <div class="col-md-12">
-        <ngx-tech-cost [suiTransition]="transitionController4" *ngIf="phase4" [(data)]="econEnv" (dataChange)="econEnv">
-        </ngx-tech-cost>
-      </div>
-
-      <div class="col-md-12">
-        <div [suiTransition]="transitionController5">
-          <nb-card *ngIf="phase4" accent="active">
-            <nb-card-header>Economy Parameters</nb-card-header>
-            <nb-card-body>
-              <div class="form-group row">
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">NG cost</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_ng.cost" [(ngModel)]="+econEnv.payload['NG.cost']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/MWh</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_sng.cost" class="col-sm-2 col-form-label">SNG cost</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_sng.cost" [(ngModel)]="+econEnv.payload['SNG.cost']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/MWh</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_heat.cost" class="col-sm-2 col-form-label">Heat cost</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_heat.cost"
-                    [(ngModel)]="+econEnv.payload['heat.cost']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/MWh</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_carbon" class="col-sm-2 col-form-label">Carbon tax</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_carbon" [(ngModel)]="+econEnv.payload['carbon.tax']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">€/t</label>
-              </div>
-              <div class="form-group row">
-                <label for="ec_ng.emission" class="col-sm-2 col-form-label">NG emission factor</label>
-                <div class="col-sm-3">
-                  <input type="number" class="form-control" id="ec_ng.emission"
-                    [(ngModel)]="+econEnv.payload['NG.emission.factor']">
-                </div>
-                <label for="ec_ng.cost" class="col-sm-2 col-form-label">%</label>
-              </div>
-            </nb-card-body>
-
-            <nb-card-footer>
-              <div class="row">
-                <div class="col-md-9"></div>
-                <div class="col-md-3">
-                  <button nbButton hero status="info" shape="round"
-                    (click)="animateInfo(transitionController6,transitionName6,5)">Continue</button>
-                </div>
-              </div>
-            </nb-card-footer>
-
-          </nb-card>
+        <div [suiTransition]="transitionController4">
+          <ngx-tech-cost *ngIf="phase4" (phase5)="animateInfo(transitionController5,transitionName5,5)">
+          </ngx-tech-cost>
         </div>
       </div>
 
