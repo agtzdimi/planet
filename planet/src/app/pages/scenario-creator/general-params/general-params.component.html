@@ -209,7 +209,8 @@
                 <div class="row">
                   <button *ngIf="checkDefaultData() && !isLoadModule" nbButton hero class="m-3" status="info"
                     shape="round" (click)="animateInfo()">Continue</button>
-                  <div *ngIf="!checkDefaultData() && !isLoadModule" class="requiredField"> {{generalParams.errorMessage}}</div>
+                  <div *ngIf="!checkDefaultData() && !isLoadModule" class="requiredField">
+                    {{generalParams.errorMessage}}</div>
                 </div>
               </div>
             </div>
@@ -218,6 +219,7 @@
               <div *ngIf="openParams()" class="col-md-12">
                 <div *ngIf="generalParams.gridImage">
                   <img [suiTransition]="transitionController1" [src]="generalParams.gridImage">
+                  <!-- <ngx-eight-node-el-grid></ngx-eight-node-el-grid> -->
                 </div>
               </div>
             </div>

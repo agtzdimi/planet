@@ -24,6 +24,7 @@ import { NbDialogModule } from '@nebular/theme';
 import { HighlDirective } from './dialog-prompt/highlight.directive';
 import { GeneralParamsComponent } from './general-params/general-params.component';
 import { TechControlComponent } from './tech-control/tech-control.component';
+import { EightNodeElGridComponent } from './grids/eight-node-el-grid/eight-node-el-grid.component';
 
 
 const COMPONENTS = [
@@ -72,6 +73,7 @@ const ENTRY_COMPONENTS = [
     ...COMPONENTS,
     GeneralParamsComponent,
     TechControlComponent,
+    EightNodeElGridComponent,
   ],
   entryComponents: [
     ...ENTRY_COMPONENTS,
