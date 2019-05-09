@@ -6,6 +6,7 @@ import { NotFoundComponent } from './miscellaneous/not-found/not-found.component
 import { SimulationRunComponent } from './simulation-run/simulation-run.component';
 import { SimulationComparisonComponent } from './simulation-comparison/simulation-comparison.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { GlobalParamsComponent } from './global-params/global-params.component';
 
 const routes: Routes = [{
@@ -36,6 +37,10 @@ const routes: Routes = [{
   {
     path: 'user-profile',
     component: UserProfileComponent,
+  },
+  {
+    path: 'welcome-screen',
+    component: WelcomeScreenComponent,
   },
   {
     path: '',

@@ -44,7 +44,7 @@
 
         <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'System Loss'" [label2]="'%'"
-                (valChange)="nodePvParam[displayingNode]['system.loss']=+$event"
+                (valChange)="updateWindPVParams('PV','system.loss',+$event)"
                 [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
             </ngx-input-field>
             <div class="row" *ngIf="techParamCheck1.checked">
@@ -59,7 +59,8 @@
                 </div>
                 <div class="col-md-3">
                     <nb-select *ngIf="techParamCheck1.checked" class="m-2" placeholder="Tracking"
-                        [(ngModel)]="nodePvParam[displayingNode]['tracking']">
+                        [ngModel]="nodePvParam[displayingNode]['tracking']"
+                        (ngModelChange)="updateWindPVParams('PV','tracking',$event)">
                         <nb-option value="None">None</nb-option>
                         <nb-option value="1">1-axis (azimuth)</nb-option>
                         <nb-option value="2">2-axis (tilt & azimuth)</nb-option>
@@ -67,11 +68,11 @@
                 </div>
             </div>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'Tilt'" [label2]="'°'"
-                (valChange)="nodePvParam[displayingNode]['tilt']=+$event" [(val)]="nodePvParam[displayingNode]['tilt']"
+                (valChange)="updateWindPVParams('PV','tilt',+$event)" [(val)]="nodePvParam[displayingNode]['tilt']"
                 [compId]="'techParamCheckInput1.2'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'Azimuth'" [label2]="'°'"
-                (valChange)="nodePvParam[displayingNode]['azimuth']=+$event"
+                (valChange)="updateWindPVParams('PV','azimuth',+$event)"
                 [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'"></ngx-input-field>
             <ngx-input-field [isChecked]="techParamCheck1.checked" [label1]="'Nominal Power'" [label2]="'MW'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']=+$event"
@@ -98,7 +99,8 @@
         <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
 
             <ngx-input-field [isChecked]="techParamCheck2.checked" [label1]="'Hub Height'" [label2]="'m'"
-                (valChange)="hubHeight=+$event" [(val)]="hubHeight" [compId]="'techParamCheckInput2.1'">
+                (valChange)="updateWindPVParams('Wind','hubHeight',+$event)" [(val)]="hubHeight"
+                [compId]="'techParamCheckInput2.1'">
             </ngx-input-field>
             <div class="row" *ngIf="techParamCheck2.checked">
                 <div class="col-md-2">
@@ -112,7 +114,8 @@
                 </div>
                 <div class="col-md-3">
                     <nb-select class="m-2" placeholder="Turbine Model"
-                        [(ngModel)]="nodeWindParam[displayingNode]['turbine.model']">
+                        [ngModel]="nodeWindParam[displayingNode]['turbine.model']"
+                        (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)">
                         <nb-option *ngFor="let turbine of turbineModels" [value]="turbine">{{turbine}}</nb-option>
                     </nb-select>
                 </div>

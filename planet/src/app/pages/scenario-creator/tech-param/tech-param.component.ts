@@ -156,15 +156,11 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
 
         for (let i = 0; i < this.nodes.length; i++) {
             this.nodeWindParam['node.' + (i + 1)] = {
-                'startDate': this.generalParams.startingDate,
-                'endDate': this.generalParams.endingDate,
                 'capacity': 1,
                 'hub.height': 80,
                 'turbine.model': 'Vestas+V80+2000',
             };
             this.nodePvParam['node.' + (i + 1)] = {
-                'startDate': this.generalParams.startingDate,
-                'endDate': this.generalParams.endingDate,
                 'capacity': 1,
                 'system.loss': 10,
                 'tracking': 0,
@@ -186,6 +182,16 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
         this.nodePvParam['lon'] = data.payload['lon'];
         data.payload = this.nodePvParam;
         this.pvChange.emit(this.nodePvParam);
+    }
+
+    updateWindPVParams(type, variable, event) {
+        for (let i = 0; i < this.nodes.length; i++) {
+            if (type === 'PV') {
+                this.nodePvParam['node.' + (i + 1)][variable] = event;
+            } else {
+                this.nodeWindParam['node.' + (i + 1)][variable] = event;
+            }
+        }
     }
 
     initializeValues() {

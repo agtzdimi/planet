@@ -6,10 +6,10 @@ import { Component } from '@angular/core';
   template: `
     <span class="created-by">PLANET</span>
     <div class="socials">
-      <a href="#" target="_blank" class="ion ion-social-github"></a>
-      <a href="#" target="_blank" class="ion ion-social-facebook"></a>
-      <a href="#" target="_blank" class="ion ion-social-twitter"></a>
-      <a href="#" target="_blank" class="ion ion-social-linkedin"></a>
+      <a href="mailto:mariapia.martino@polito.it" target="_blank" class="ion ion-email"></a>
+      <a href="https://www.youtube.com/channel/UCJ46Pn1YWFTbNu2EFt4dvdA" target="_blank" class="ion ion-social-youtube"></a>
+      <a href="https://twitter.com/h2020_planet" target="_blank" class="ion ion-social-twitter"></a>
+      <a href="https://www.linkedin.com/company/planet-h2020/" target="_blank" class="ion ion-social-linkedin"></a>
     </div>
   `,
 })

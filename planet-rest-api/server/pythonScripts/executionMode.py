@@ -32,7 +32,7 @@ def load():
    """
    subprocess.Popen(['python','load.py'])
 
-def execute():
+def execute(filesMessage):
    """ Function to be called when a user wants to execute a simulink model
        This function will run the corresponding python script for executing a simulink model
    """
@@ -87,6 +87,10 @@ def executeMode(message):
          file = line.rstrip()
       elif line.rstrip() == 'Heat.csv':
          file = line.rstrip()
+      elif line.rstrip() == 'PV.csv':
+         file = line.rstrip()
+      elif line.rstrip() == 'Wind.csv':
+         file = line.rstrip()
       elif line.rstrip() == 'Electricity.csv':
          file = line.rstrip()
       else:
@@ -100,17 +104,20 @@ def executeMode(message):
 
    createExcelFile('Heat.csv','Heat.xlsx')
    createExcelFile('Electricity.csv','Electricity.xlsx')
+   createExcelFile('PV.csv','PV.xlsx')
+   createExcelFile('Wind.csv','Wind.xlsx')
    os.chdir("..")
    files = [f for f in os.listdir('.') if os.path.isfile(f)]
    for file in files:
       path_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),file)
       shutil.copy2(path_file,destPath)
    filesDest = [f for f in os.listdir(destPath)]
-   while len(filesDest) != 19:
+   print (len(filesDest))
+   while len(filesDest) != 25:
       len(filesDest)
       time.sleep(1)
    os.chdir(destPath)
-   execute()
+   execute(message)
    os.chdir("..")
    time.sleep(15)
    #shutil.rmtree(destPath, ignore_errors=True)

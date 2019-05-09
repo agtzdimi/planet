@@ -11,6 +11,7 @@ import os
 import xlrd
 import csv
 import shutil
+import argparse
 import json
 import pandas as pd
 import shutil
@@ -37,9 +38,13 @@ def sendFiles(fileName):
 
 if __name__ == "__main__":
 
+   #parser = argparse.ArgumentParser()
+   #parser.add_argument("--msg", required=True,
+   #   help="Simulation Files Data")
+   #args = vars(parser.parse_args())
    switcher = {
       1: "DEMO_PLANETm_POC3_model1",
-      2: "DEMO_PLANETm_POC3_model2",
+      2: "PLANETm_POC3_model2",
       3: "DEMO_PLANETm_POC3_model3",
       4 : "DEMO_PLANETm_POC3_model4"
    }

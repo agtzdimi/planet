@@ -8,6 +8,7 @@ import { SimulationRunModule } from './simulation-run/simulation-run.module';
 import { GlobalParamsModule } from './global-params/global-params.module';
 import { SimulationComparisonModule } from './simulation-comparison/simulation-comparison.module';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -25,6 +26,7 @@ const PAGES_COMPONENTS = [
   declarations: [
     ...PAGES_COMPONENTS,
     UserProfileComponent,
+    WelcomeScreenComponent,
   ],
 })
 export class PagesModule {

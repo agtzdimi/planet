@@ -209,8 +209,12 @@ export class LoadSimulationFilesComponent implements OnInit {
                 () => {
                     this.windParam['payload']['formName'] = this.generalParams.formName;
                     this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
+                    this.windParam['payload']['startDate'] = this.generalParams.startingDate;
+                    this.windParam['payload']['endDate'] = this.generalParams.endingDate;
                     this.pvParam['payload']['formName'] = this.generalParams.formName;
                     this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
+                    this.pvParam['payload']['startDate'] = this.generalParams.startingDate;
+                    this.pvParam['payload']['endDate'] = this.generalParams.endingDate;
                     url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/save_data';
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),

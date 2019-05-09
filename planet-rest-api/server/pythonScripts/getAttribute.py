@@ -15,6 +15,7 @@ parser.add_argument('--endDate', help='Ending Date')
 parser.add_argument('--lat', help='Current Lat')
 parser.add_argument('--lon', help='Current Lon')
 parser.add_argument('--formName', help='Current Form Name')
+parser.add_argument('--time.step', help='Time Step of Simulation, relative to 1 hour')
 
 args = parser.parse_args()
 for arg in vars(args):
@@ -25,5 +26,7 @@ for arg in vars(args):
 data = json.load(sys.stdin)
 if attribute == "lat" or attribute == "lon" or attribute == "formName" or attribute == "startDate" or attribute == "endDate":
    print(data['payload'][attribute])
+elif attribute == "time.step":
+   print(data['payload']['simulation'][attribute])
 else:
    print(data['payload'][args.node][attribute])
