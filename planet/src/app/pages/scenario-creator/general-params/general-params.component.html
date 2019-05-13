@@ -57,21 +57,23 @@
                 <nb-tabset (changeTab)="changeTab($event)">
                   <nb-tab tabTitle="Electric Grid">
                     <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'elec')"
-                      (click)="onRadioButtonClicked($event)" #elecRadio name="elecRadio">
+                      (click)="onRadioButtonClicked($event)" #elecRadio name="elecRadio"
+                      [value]="loadedSelections['elec']">
                       <nb-radio [value]="'1 Node'">1 Node</nb-radio>
                       <nb-radio [value]="'8 Node'">8 Node</nb-radio>
                     </nb-radio-group>
                   </nb-tab>
                   <nb-tab tabTitle="District Heating">
                     <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'dh')"
-                      (click)="onRadioButtonClicked($event)" #dhRadio name="dhRadio">
+                      (click)="onRadioButtonClicked($event)" #dhRadio name="dhRadio" [value]="loadedSelections['dh']">
                       <nb-radio [value]="'1 Node'">1 Node</nb-radio>
                       <nb-radio [value]="'3 Node'">3 Node</nb-radio>
                     </nb-radio-group>
                   </nb-tab>
                   <nb-tab tabTitle="Gas Network">
                     <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'gas')"
-                      (click)="onRadioButtonClicked($event)" #gasRadio name="gasRadio">
+                      (click)="onRadioButtonClicked($event)" #gasRadio name="gasRadio"
+                      [value]="loadedSelections['gas']">
                       <nb-radio [value]="'1 Node'">1 Node</nb-radio>
                     </nb-radio-group>
                   </nb-tab>
@@ -138,7 +140,7 @@
                   <div class="row">
                     <div class="ui icon input datePickerButton">
                       <input nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
-                        (click)="dateRangeChange()">
+                        (click)="dateRangeChange()" [ngModel]="generalParams.loadRangeDate">
                       <i class="calendar alternate outline icon"></i>
                     </div>
                     <nb-rangepicker (rangeChange)="handleDateChange($event)" #formpicker>
@@ -161,7 +163,7 @@
                             <div class="field">
                               <sui-checkbox [ngModel]="generalParams.simulationTime.days"
                                 [isReadonly]="generalParams.simulationTime.days"
-                                (ngModelChange)="handleSimulationTime($event,'days')">
+                                (ngModelChange)="handleSimulationTime($event,'days')" #checkbox2>
                                 Days</sui-checkbox>
                             </div>
                           </div>

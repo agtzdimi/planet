@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { UploadInput, humanizeBytes } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController } from 'ng2-semantic-ui';
-import { NbDialogService, NbCalendarRange, NbDateService } from '@nebular/theme';
+import { NbDialogService, NbDateService } from '@nebular/theme';
 import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
 import { EnvService } from '../../../env.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
@@ -34,7 +34,7 @@ export class LoadSimulationFilesComponent implements OnInit {
     heatParam: any;
     transitionController1 = new TransitionController();
     loading: boolean = false;
-    range: NbCalendarRange<Date>;
+
     paramInit = {};
     controlSystem = {};
     econEnv = {};
@@ -138,15 +138,19 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 this.controlFileService.changeModel(this.controlSystem);
                                 this.elecParam = data['elecParam'];
                                 this.heatParam = data['heatParam'];
-                                temp = JSON.parse(data['date']);
-                                this.generalParams.startingDate = temp['payload']['node.1']['startDate'];
-                                this.generalParams.endingDate = temp['payload']['node.1']['endDate'];
+                                temp = JSON.parse(data['windParam']);
+                                this.windParam['payload'] = temp['payload'];
+                                this.generalParams.startingDate = temp['payload']['startDate'];
+                                this.generalParams.endingDate = temp['payload']['endDate'];
                                 this.generalParams.updateStartDate(this.generalParams.startingDate);
                                 this.generalParams.updateEndDate(this.generalParams.endingDate);
-                                this.range = {
+                                this.generalParams.loadRangeDate = {
                                     start: this.dateService.addDay(this.dateStart, 0),
                                     end: this.dateService.addDay(this.dateEnd, 0),
                                 };
+                                this.generalParams.updateLoadRangeDate(this.generalParams.loadRangeDate);
+                                temp = JSON.parse(data['pvParam']);
+                                this.pvParam['payload'] = temp['payload'];
                                 setTimeout(() => {
                                     this.updateModel();
                                 }, 2500);
@@ -207,6 +211,8 @@ export class LoadSimulationFilesComponent implements OnInit {
         )
             .subscribe(
                 () => {
+                    const oldWindValue = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
+                    this.windParam['payload'] = JSON.parse(oldWindValue);
                     this.windParam['payload']['formName'] = this.generalParams.formName;
                     this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
                     this.windParam['payload']['startDate'] = this.generalParams.startingDate;
@@ -257,21 +263,6 @@ export class LoadSimulationFilesComponent implements OnInit {
             this.generalParams.endingDate = new Date(2016, 12, 31);
         }
         return new Date(this.generalParams.endingDate);
-    }
-
-    getDateFormat() {
-        let temp: string = '';
-        if (this.range) {
-            if (this.range.start && this.range.end) {
-                temp = ('0' + this.range.start.getDate()).slice(-2) + '/' +
-                    ('0' + (this.range.start.getUTCMonth() + 1)).slice(-2) + '/' +
-                    this.range.start.getUTCFullYear() + ' - ' + ('0' + this.range.end.getDate()).slice(-2) + '/' +
-                    ('0' + (this.range.end.getUTCMonth() + 1)).slice(-2) + '/' +
-                    this.range.end.getUTCFullYear();
-            }
-        }
-
-        return temp;
     }
 
     updateModel() {

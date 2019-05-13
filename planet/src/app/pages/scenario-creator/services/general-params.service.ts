@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter, Input } from '@angular/core';
 import { UploaderOptions } from 'ngx-uploader';
+import { NbCalendarRange } from '@nebular/theme';
 
 @Injectable()
 export class GeneralParamsService {
@@ -22,6 +23,7 @@ export class GeneralParamsService {
     isDefault: boolean = false;
     selectedModel: Object = {};
     model: number;
+    loadRangeDate: NbCalendarRange<Date>;
 
     formNameUpdated = new EventEmitter<string>();
     formDescriptionUpdated = new EventEmitter<string>();
@@ -38,6 +40,8 @@ export class GeneralParamsService {
     updateIsDefault = new EventEmitter<boolean>();
     selectedModelUpdate = new EventEmitter<Object>();
     modelUpdate = new EventEmitter<number>();
+    loadRangeDateUpdate = new EventEmitter<NbCalendarRange<Date>>();
+
 
     constructor() {
         this.options = {
@@ -139,6 +143,11 @@ export class GeneralParamsService {
     updateModel(model: number) {
         this.model = model;
         this.modelUpdate.emit(this.model);
+    }
+
+    updateLoadRangeDate(range: NbCalendarRange<Date>) {
+        this.loadRangeDate = range;
+        this.loadRangeDateUpdate.emit(this.loadRangeDate);
     }
 
 }

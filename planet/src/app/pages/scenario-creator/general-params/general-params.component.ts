@@ -23,12 +23,19 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
   calculatedTimeStep = false;
   calculatedSimulationTime = false;
   dataLoaded = false;
+  loadedSelections = {
+    'elec': '',
+    'dh': '',
+    'gas': '',
+  };
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
   @ViewChild('elecRadio') elecRadio: ElementRef;
   @ViewChild('dhRadio') dhRadio: ElementRef;
   @ViewChild('gasRadio') gasRadio: ElementRef;
+  @ViewChild('formpicker') formpicker: ElementRef;
+  @ViewChild('checkbox2') checkbox2: ElementRef;
 
   constructor(private model1: Model1ParamInitService,
     private model2: Model2ParamInitService,
@@ -117,6 +124,20 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     this.generalParams.updateShowMap(false);
     this.generalParams.updateShowMap(true);
+    if (this.isLoadModule) {
+      switch (this.generalParams.model) {
+        case 1:
+          this.loadedSelections['elec'] = '1 Node';
+          this.loadedSelections['dh'] = '1 Node';
+          this.loadedSelections['gas'] = '1 Node';
+          break;
+        case 2:
+          this.loadedSelections['elec'] = '8 Node';
+          this.loadedSelections['dh'] = '1 Node';
+          this.loadedSelections['gas'] = '1 Node';
+          break;
+      }
+    }
   }
 
   handleDescriptionChange(event) {
@@ -199,15 +220,15 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       this.generalParams.endingDate = event.end;
       const daysTotal = Math.round(Math.abs((event.start.getTime() - event.end.getTime()) / (24 * 60 * 60 * 1000))) + 1;
       if (this.generalParams.simulationTime['days']) {
-        this.paramInit['payload']['simulation']['simulation.time'] = daysTotal;
+        this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal);
       } else {
         if (this.generalParams.timeStep['mins']) {
           const timeStepHour = this.paramInit['payload']['simulation']['time.step'] / 60;
-          this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
-            timeStepHour;
+          this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal * 24 /
+            timeStepHour);
         } else {
-          this.paramInit['payload']['simulation']['simulation.time'] = daysTotal * 24 /
-            this.paramInit['payload']['simulation']['time.step'];
+          this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal * 24 /
+            this.paramInit['payload']['simulation']['time.step']);
         }
       }
       this.calculatedSimulationTime = true;
@@ -225,12 +246,12 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     }
     if (type === 'days') {
       this.generalParams.updateSimulationTime({ 'days': event, 'hours': false });
-      this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
-        * timeStep / 24;
+      this.paramInit['payload']['simulation']['simulation.time'] = Math.round(this.paramInit['payload']['simulation']['simulation.time']
+        * timeStep / 24);
     } else {
       this.generalParams.updateSimulationTime({ 'days': false, 'hours': event });
-      this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
-        * 24 / timeStep;
+      this.paramInit['payload']['simulation']['simulation.time'] = Math.round(this.paramInit['payload']['simulation']['simulation.time']
+        * 24 / timeStep);
     }
     this.calculatedSimulationTime = true;
     this.updateModel();
@@ -282,6 +303,18 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
 
   checkDefaultData() {
     let status = false;
+    let horizonVal: number;
+    let timeStep: number;
+    if (this.generalParams.timeStep['mins']) {
+      timeStep = this.paramInit['payload']['simulation']['time.step'] / 60;
+    } else {
+      timeStep = this.paramInit['payload']['simulation']['time.step'];
+    }
+    if (this.generalParams.simulationTime['days']) {
+      horizonVal = Math.round(this.paramInit['payload']['simulation']['simulation.time']);
+    } else {
+      horizonVal = Math.round(this.paramInit['payload']['simulation']['simulation.time'] / 24 * timeStep);
+    }
     if (this.generalParams.formDescription === '' || this.generalParams.formName === '' || this.generalParams.formName.includes('  -  ')) {
       this.generalParams.updateErrorMessage('Please fill in/correct the Simulation Name and Description');
     } else if (this.getFileName(0) !== 'Electricity.xlsx' && !this.isLoadModule) {
@@ -298,6 +331,11 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       this.generalParams.updateErrorMessage('Please Specify if Simulation Horizon is given on Days or Hours');
     } else if (!this.checkGrids()) {
       this.generalParams.updateErrorMessage('Please Specify the Electricity / District Heating / Gas Grid');
+    } else if (!this.formpicker['queue']) {
+      this.generalParams.updateErrorMessage('Please Specify the period of the simulation');
+    } else if ((Math.abs(new Date(this.generalParams.endingDate).getTime() -
+      new Date(this.generalParams.startingDate).getTime()) / (24 * 60 * 60 * 1000) + 1) !== horizonVal) {
+      this.generalParams.updateErrorMessage('Simulation Date and horizon must match, counting the days!');
     } else {
       status = true;
     }
@@ -358,7 +396,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
 
   changeSimulationTimeByUser(event) {
     if (!this.calculatedSimulationTime) {
-      this.paramInit['payload']['simulation']['simulation.time'] = event;
+      this.paramInit['payload']['simulation']['simulation.time'] = Math.round(event);
       this.updateModel();
     } else {
       this.calculatedSimulationTime = false;

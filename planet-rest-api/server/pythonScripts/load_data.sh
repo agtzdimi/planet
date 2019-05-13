@@ -12,6 +12,7 @@ grep '"formName":"'"$formName"'"' ./public/files/loadData/allDocuments.txt | gre
 grep '"formName":"'"$formName"'"' ./public/files/loadData/allDocuments.txt | grep 'Economy_environment_initialization' > ./public/files/loadData/Economy_environment_initialization.txt
 grep '"formName":"'"$formName"'"' ./public/files/loadData/allDocuments.txt | grep 'Control_initialization' > ./public/files/loadData/Control_initialization.txt
 grep '"formName":"'"$formName"'"' ./public/files/loadData/allDocuments.txt | grep 'Wind.xlsx' > ./public/files/loadData/WindData.txt
+grep '"formName":"'"$formName"'"' ./public/files/loadData/allDocuments.txt | grep 'PV.xlsx' > ./public/files/loadData/PVData.txt
 mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
     --authenticationDatabase $MONGO_AUTH_DB --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName",Time --out ./public/files/loadData/Heat.csv
 egrep ','"$formName"',|DH_demand|LH_demand' ./public/files/loadData/Heat.csv | sed 's/,'"$formName"'//' | sed 's/,formName//' | sed '/^,,.*/d' > tempFileloadData

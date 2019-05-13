@@ -112,7 +112,6 @@ def executeMode(message):
       path_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),file)
       shutil.copy2(path_file,destPath)
    filesDest = [f for f in os.listdir(destPath)]
-   print (len(filesDest))
    while len(filesDest) != 25:
       len(filesDest)
       time.sleep(1)

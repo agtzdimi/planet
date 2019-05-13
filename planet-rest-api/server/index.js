@@ -164,7 +164,8 @@ app.get("/load_data", (req, res) => {
     paramInitParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/Parameters_initialization.txt`);
     econEnvParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/Economy_environment_initialization.txt`);
     controlParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/Control_initialization.txt`);
-    date = shell.exec("cat " + `${__dirname}/../public/files/loadData/WindData.txt`)
+    windParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/WindData.txt`)
+    pvParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/PVData.txt`)
     shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/loadData/Electricity.csv`);
     shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/loadData/Heat.csv`);
     elecParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/Electricity.csv`);
@@ -175,7 +176,8 @@ app.get("/load_data", (req, res) => {
         "controlSystem": controlParam.stdout,
         "elecParam": elecParam.stdout,
         "heatParam": heatParam.stdout,
-        "date": date.stdout,
+        "windParam": windParam.stdout,
+        "pvParam": pvParam.stdout,
     }
     res.send(Parameters);
     shell.exec("rm -rf " + `${__dirname}/../public/files/loadData`);

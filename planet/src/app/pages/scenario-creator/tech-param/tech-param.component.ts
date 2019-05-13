@@ -104,17 +104,23 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
         this.generalParams.modelUpdate.subscribe(
             (data) => this.generalParams.model = data,
         );
-
     }
 
     ngOnInit() {
+        this.nodePvParam = this.pvParam['payload'];
+        this.nodeWindParam = this.windParam['payload'];
+
+        if (this.isLoadModule) {
+            const oldValue = JSON.stringify(this.nodeWindParam).replace(/\+/g, ' ');
+            this.nodeWindParam = JSON.parse(oldValue);
+            this.windParam['payload'] = this.nodeWindParam;
+        }
         if (!this.paramInit['payload']) {
             if (this.generalParams.model === 1) {
                 this.paramInit = this.model1.paramInit;
             } else if (this.generalParams.model === 2) {
                 this.paramInit = this.model2.paramInit;
             }
-
         }
     }
 
@@ -123,7 +129,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.pvParam) {
+        if (changes.pvParam && !this.isLoadModule) {
             this.afterWindDataRecieved(changes.windParam.currentValue);
             this.afterPvDataRecieved(changes.pvParam.currentValue);
             if (this.generalParams.isDefault) {
@@ -154,19 +160,21 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
             this.checkVal['node.' + (i + 1)] = {};
         }
 
-        for (let i = 0; i < this.nodes.length; i++) {
-            this.nodeWindParam['node.' + (i + 1)] = {
-                'capacity': 1,
-                'hub.height': 80,
-                'turbine.model': 'Vestas+V80+2000',
-            };
-            this.nodePvParam['node.' + (i + 1)] = {
-                'capacity': 1,
-                'system.loss': 10,
-                'tracking': 0,
-                'tilt': 35,
-                'azimuth': 180,
-            };
+        if (this.isLoadModule === false) {
+            for (let i = 0; i < this.nodes.length; i++) {
+                this.nodeWindParam['node.' + (i + 1)] = {
+                    'capacity': 1,
+                    'hub.height': 80,
+                    'turbine.model': 'Vestas+V80+2000',
+                };
+                this.nodePvParam['node.' + (i + 1)] = {
+                    'capacity': 1,
+                    'system.loss': 10,
+                    'tracking': 1,
+                    'tilt': 35,
+                    'azimuth': 180,
+                };
+            }
         }
     }
 
@@ -174,7 +182,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
         this.nodeWindParam['lat'] = data.payload['lat'];
         this.nodeWindParam['lon'] = data.payload['lon'];
         data.payload = this.nodeWindParam;
-        this.pvChange.emit(this.nodeWindParam);
+        this.windChange.emit(this.nodeWindParam);
     }
 
     afterPvDataRecieved(data) {
@@ -193,6 +201,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
             }
         }
     }
+
 
     initializeValues() {
         for (let i = 0; i < this.nodes.length; i++) {

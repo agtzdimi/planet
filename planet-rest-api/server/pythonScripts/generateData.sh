@@ -1,8 +1,8 @@
 #!/bin/bash
 
-function generateFiles {
+function genFilesLessHour {
 
-cut -d , -f1 nodeFiles/$1 | awk -v diff="$steps" 'BEGIN {FS=OFS=","} {
+cut -d , -f1 nodeFiles/$1 | awk -v diff="$2" 'BEGIN {FS=OFS=","} {
    if ( NR == 1 ) { print $0 ; next }
    if ( NR == 2 ) { previous=$0 }
    else { current=$0
@@ -20,6 +20,25 @@ cut -d , -f1 nodeFiles/$1 | awk -v diff="$steps" 'BEGIN {FS=OFS=","} {
          print (previous + i*val )
       }
    }' > temp$1
+
+mv temp$1 nodeFiles/$1
+}
+
+function genFilesMoreHour {
+
+cut -d , -f1 nodeFiles/$1 | awk -v step="$2" 'BEGIN { FS = OFS = "," } {
+   if( NR == 1 ) { 
+      print $0
+      next
+   }
+   if ( NR == 2 ) { start = step }
+   if( start < 1 ) {
+      print $0
+      start = ( start + step )
+   } else {
+      start = ( start - 1 )
+   }
+}' > temp$1
 
 mv temp$1 nodeFiles/$1
 }
@@ -85,12 +104,15 @@ sed -i '1d' nodeFiles/PV1
 sed -i '1d' nodeFiles/Wind1
 
 timeStep=$(cat ./public/files/Parameters_initialization.txt | python ./server/pythonScripts/getAttribute.py --time.step true)
-
 steps=$(awk -v step="$timeStep" 'BEGIN {print (1/step)}')
 
-if [[ $steps != "1" ]]; then
-   generateFiles "PV1"
-   generateFiles "Wind1"
+if [[ $steps > "1" ]]; then
+   genFilesLessHour "PV1" "$steps"
+   genFilesLessHour "Wind1" "$steps"
+elif [[ $steps < "1" ]]; then
+   stepToIncrease=$(awk -v step="$timeStep" 'BEGIN{print (step - 1)}')
+   genFilesMoreHour "PV1" "$stepToIncrease"
+   genFilesMoreHour "Wind1" "$stepToIncrease"
 fi
 
 replicateColumns "PV" "$NODES_COUNT"
@@ -127,7 +149,7 @@ for file in $(ls ./public/files/*.txt); do
    fi
 done
 
-#rm -rf ./public/files/* tempFile
+rm -rf ./public/files/* tempFile
 if [[ $dbError == false ]]; then
    exit 0
 else

@@ -161,6 +161,8 @@ export class NewSimulationFilesComponent {
         )
             .subscribe(
                 () => {
+                    const oldWindValue = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
+                    this.windParam['payload'] = JSON.parse(oldWindValue);
                     this.windParam['payload']['formName'] = this.generalParams.formName;
                     this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
                     this.windParam['payload']['startDate'] = this.generalParams.startingDate;
