@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../../../env.service';
+import { GetJWTService } from '../../unit-management/services/get-jwt.service';
+import { GetDeviceByTypeService } from '../../unit-management/services/get-deviceByType.service';
 
 @Component({
   selector: 'ngx-params-setup',
   styleUrls: ['./params-setup.component.scss'],
   templateUrl: './params-setup.component.html',
+  providers: [GetJWTService, GetDeviceByTypeService],
 })
 export class ParamsSetupComponent {
 
@@ -23,9 +26,14 @@ export class ParamsSetupComponent {
   mongoAuthDB: string;
   simulationMachine: string;
   planetUIPort: string;
+  loaded = false;
+  simUnit = [{}];
+  jwtToken: any;
 
   constructor(private httpClient: HttpClient,
-    env: EnvService) {
+    env: EnvService,
+    private getJWTService: GetJWTService,
+    private getDeviceByType: GetDeviceByTypeService) {
     this.sitewhereIP = env.sitewhere;
     this.planetRestIP = env.planet;
     this.planetRestPort = env.planetRESTPort;
@@ -38,6 +46,16 @@ export class ParamsSetupComponent {
     this.mongoAuthDB = env.mongoAuthDB;
     this.simulationMachine = env.simulationMachine;
     this.planetUIPort = window.location.port;
+
+    this.getJWTService.getToken()
+      .then((data: any) => {
+        this.jwtToken = data;
+        this.getDeviceByType.getDeviceByType(this.jwtToken, 'SimToken')
+          .then(devices => {
+            this.simUnit = devices['results'];
+            this.loaded = true;
+          });
+      });
   }
 
   startUpload() {
@@ -61,6 +79,10 @@ export class ParamsSetupComponent {
         this.saveMessage = res['text'];
       });
     this.loading = false;
+  }
+
+  handleUnit(simulator) {
+    // console.log(simulator)
   }
 
 }

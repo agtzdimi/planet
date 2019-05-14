@@ -13,7 +13,6 @@ import { SimulationStartComponent } from './simulation-start/simulation-start.co
 import { SimulationsAreaStackComponent } from './simulation-start/simulation-area-stack.component';
 import { SimulationsBarComponent } from './simulation-start/simulation-bar-component';
 import { DialogSelectFormPromptComponent } from './simulation-start/dialog-prompt/select-form.component';
-import { DialogSelectSimulatorComponent } from './simulation-start/dialog-prompt/select-simulator.component';
 import { NbDialogModule } from '@nebular/theme';
 import { HighlightDirective } from './simulation-start/dialog-prompt/highlight.directive';
 
@@ -23,7 +22,6 @@ const COMPONENTS = [
   SimulationsAreaStackComponent,
   SimulationsBarComponent,
   DialogSelectFormPromptComponent,
-  DialogSelectSimulatorComponent,
   HighlightDirective,
 ];
 
@@ -33,7 +31,6 @@ const ENTRY_COMPONENTS = [
   SimulationsAreaStackComponent,
   SimulationsBarComponent,
   DialogSelectFormPromptComponent,
-  DialogSelectSimulatorComponent,
 ];
 
 

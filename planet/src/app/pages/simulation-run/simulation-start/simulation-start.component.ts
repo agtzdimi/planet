@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
-import { DialogSelectSimulatorComponent } from './dialog-prompt/select-simulator.component';
 import { NbDialogService } from '@nebular/theme';
 import { EnvService } from '../../../env.service';
 
@@ -242,10 +241,6 @@ export class SimulationStartComponent {
       .onClose.subscribe(name => {
         if (name) {
           this.formName = name['formName'];
-          this.dialogService.open(DialogSelectSimulatorComponent)
-            .onClose.subscribe(val => {
-
-            });
         }
       });
   }
