@@ -22,12 +22,18 @@ export class UnitEditComponent implements OnInit {
   p2gUnit: Object = [{}];
   ehUnit: Object = [{}];
   hpUnit: Object = [{}];
+  simUnit: Object = [{}];
   flexUnits: Object;
   activeModel: string = '';
   phase: string;
   loading: boolean = false;
   selectedModel;
   transitionController = new TransitionController();
+  selectedOptions =
+    {
+      'Simulink': '',
+      'OpalRT': '',
+    };
 
   constructor(private getJWTService: GetJWTService,
     private getDeviceByType: GetDeviceByTypeService,
@@ -48,6 +54,10 @@ export class UnitEditComponent implements OnInit {
     {
       id: 'EH',
       label: 'Electric Heater',
+    },
+    {
+      id: 'Sim',
+      label: 'Simulator',
     },
     ];
     this.phase = '1';
@@ -72,6 +82,9 @@ export class UnitEditComponent implements OnInit {
               case 'HP':
                 this.hpUnit = devices['results'];
                 break;
+              case 'Sim':
+                this.simUnit = devices['results'];
+                break;
             }
             this.loading = false;
           });
@@ -79,8 +92,14 @@ export class UnitEditComponent implements OnInit {
   }
 
   handleClick() {
-    if (this.selectedModel['payload']) {
-      let metadata = JSON.stringify(this.selectedModel['payload']['parameters']['configuration']);
+
+    if (this.selectedModel['payload'] || this.activeModel === 'Sim') {
+      let metadata: string;
+      if (this.activeModel === 'Sim') {
+        metadata = JSON.stringify(this.selectedModel['metadata']);
+      } else {
+        metadata = JSON.stringify(this.selectedModel['payload']['parameters']['configuration']);
+      }
       metadata = metadata.replace('}{', ',');
       metadata = metadata.replace(/\./g, '_');
       metadata = JSON.parse(metadata);
@@ -113,7 +132,24 @@ export class UnitEditComponent implements OnInit {
       new Transition(transitionName, 1500, TransitionDirection.In));
     this.unitName = event['token'];
     this.selectedModel = event;
+    if (this.activeModel === 'Sim') {
+      this.selectedModel['metadata']['Simulink'] = JSON.parse(this.selectedModel['metadata']['Simulink']);
+      this.selectedModel['metadata']['OpalRT'] = JSON.parse(this.selectedModel['metadata']['OpalRT']);
+      this.unitIP = this.selectedModel['metadata']['IP'].replace(/_/g, ':');
+      this.unitPort = this.selectedModel['metadata']['Port'];
+      this.unitName = this.selectedModel['metadata']['Topic'];
+    }
     this.phase = '3';
+  }
+
+  handleSimulator(event, simulator) {
+    if (simulator === 'OpalRT') {
+      this.selectedModel['metadata']['Simulink'] = false;
+      this.selectedModel['metadata']['OpalRT'] = event;
+    } else {
+      this.selectedModel['metadata']['OpalRT'] = false;
+      this.selectedModel['metadata']['Simulink'] = event;
+    }
   }
 
 }

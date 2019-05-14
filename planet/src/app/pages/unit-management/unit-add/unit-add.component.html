@@ -25,7 +25,7 @@
     <h2>Create a New Device</h2>
 
     <div class="row">
-      <div class="col-md-4" *ngFor="let unit of flexUnits">
+      <div class="col-md-3" *ngFor="let unit of flexUnits">
         <div class="imageCard">
           <nb-card accent="active">
             <nb-card-body (click)="animateInfo(transitionController,transitionName,unit.id)">
@@ -43,6 +43,7 @@
         <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit Parameters</nb-card-header>
         <nb-card-header *ngSwitchCase="'EH'">Electric Heater Unit Parameters</nb-card-header>
         <nb-card-header *ngSwitchCase="'HP'">Heat Pump Unit Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'Sim'">Simulator Parameters</nb-card-header>
         <nb-card-body>
 
           <div class="form-group row">
@@ -77,6 +78,22 @@
             <label for="'unitName'" class="col-md-1 formLabel">Unit MQTT Port</label>
             <div class="col-md-3">
               <input type="text" fullWidth nbInput shape="semi-round" id="'unitPort'" [(ngModel)]="unitPort">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngSwitchCase="'Sim'">
+
+            <div class="col-md-3"></div>
+            <label for="'unitName'" class="col-md-1 formLabel">Simulator Type</label>
+            <div class="col-md-1">
+              <sui-checkbox [ngModel]="selectedOptions.Simulink" [isReadonly]="selectedOptions.Simulink"
+                (ngModelChange)="handleSimulator($event,'Simulink')" [ngStyle]="{'margin-top': '13px'}">Simulink
+              </sui-checkbox>
+            </div>
+            <div class=" col-md-1">
+              <sui-checkbox [ngModel]="selectedOptions.OpalRT" [isReadonly]="selectedOptions.OpalRT"
+                (ngModelChange)="handleSimulator($event,'OpalRT')" [ngStyle]="{'margin-top': '13px'}">OpalRT
+              </sui-checkbox>
             </div>
           </div>
 

@@ -6,10 +6,10 @@
       <nb-card-body>
 
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-md-4">
             <button nbButton hero status="info" (click)="openDialogBox()">{{formName}}</button>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <button *ngIf="formName !== 'Select Saved Simulation'" nbButton type="button" [nbSpinner]="loading"
               nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
               class="start-upload-btn" (click)="startSimulation()">

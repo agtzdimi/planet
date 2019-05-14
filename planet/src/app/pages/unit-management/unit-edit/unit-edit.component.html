@@ -26,7 +26,7 @@
       <h2>Edit an Existing Device</h2>
 
       <div class="row">
-        <div class="col-md-4" *ngFor="let unit of flexUnits">
+        <div class="col-md-3" *ngFor="let unit of flexUnits">
           <div class="imageCard">
             <nb-card accent="active">
               <nb-card-body (click)="handleModel(unit.id)">
@@ -71,6 +71,11 @@
             (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
         </div>
 
+        <div class="col-md-12" *ngSwitchCase="'Sim'">
+          <ngx-unit-models [loading]="loading" [models]="simUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
+
       </div>
     </div>
 
@@ -97,6 +102,7 @@
                 <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit</nb-card-header>
                 <nb-card-header *ngSwitchCase="'EH'">Electric Heater Unit</nb-card-header>
                 <nb-card-header *ngSwitchCase="'HP'">Heat Pump Unit</nb-card-header>
+                <nb-card-header *ngSwitchCase="'Sim'">Simulator Unit</nb-card-header>
                 <nb-card-body>
                   <b>Unit Description: </b> <i> {{selectedModel['comments']}}</i>
                   <br>
@@ -136,6 +142,25 @@
                       <ngx-p2h-electric-heat-unit *ngSwitchCase="'EH'" (p2hElectricHeat)="selectedModel=$event"
                         [ehInput]="selectedModel" [mode]="'edit'">
                       </ngx-p2h-electric-heat-unit>
+
+                      <div class="form-group row" *ngSwitchCase="'Sim'">
+
+                        <label for="'unitName'" class="col-md-2 formLabel">Simulator Type</label>
+                        <div class="col-md-2">
+                          <sui-checkbox [ngModel]="selectedModel['metadata']['Simulink']"
+                            [isReadonly]="selectedModel['metadata']['Simulink']"
+                            (ngModelChange)="handleSimulator($event,'Simulink')" [ngStyle]="{'margin-top': '13px'}">
+                            Simulink
+                          </sui-checkbox>
+                        </div>
+                        <div class=" col-md-2">
+                          <sui-checkbox [ngModel]="selectedModel['metadata']['OpalRT']"
+                            [isReadonly]="selectedModel['metadata']['OpalRT']"
+                            (ngModelChange)="handleSimulator($event,'OpalRT')" [ngStyle]="{'margin-top': '13px'}">OpalRT
+                          </sui-checkbox>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </nb-card-body>

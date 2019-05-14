@@ -19,6 +19,7 @@ export class UnitDeleteComponent implements OnInit {
   p2gUnit: Object = [{}];
   ehUnit: Object = [{}];
   hpUnit: Object = [{}];
+  simUnit: Object = [{}];
   flexUnits: Object;
   activeModel: string = '';
   phase: string;
@@ -45,6 +46,10 @@ export class UnitDeleteComponent implements OnInit {
       id: 'EH',
       label: 'Electric Heater',
     },
+    {
+      id: 'Sim',
+      label: 'Simulator',
+    },
     ];
     this.phase = '1';
   }
@@ -66,6 +71,8 @@ export class UnitDeleteComponent implements OnInit {
               case 'HP':
                 this.hpUnit = devices['results'];
                 break;
+              case 'Sim':
+                this.simUnit = devices['results'];
             }
             this.loading = false;
           });

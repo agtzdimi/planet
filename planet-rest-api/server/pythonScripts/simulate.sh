@@ -45,6 +45,11 @@ done
 
 filesPath="$(pwd)/public/files"
 seperatedFiles="$(cat ./public/files/$simulationType/seperatedFiles.txt)"
+eventDate=$(date +"%Y-%m-%dT%H:%M:%S.000Z")
+#mosquitto_pub -h $SIMULATION_MACHINE -t 'SiteWhere/planet/input/json' -m \
+#   '{"deviceToken": "$simulatorToken","type": "DeviceMeasurement","originator": "device",\
+#   "request": {"name": "Status","value": "$mode",\
+#   "eventDate": "$eventDate", "metadata": {"message": "$(echo $seperatedFiles)"}}}' -p 1883
 mosquitto_pub -m "$(echo $seperatedFiles)" -h $SIMULATION_MACHINE -t "$SIMULATION_TOPIC"
 }
 

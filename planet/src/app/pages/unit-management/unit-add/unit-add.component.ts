@@ -31,6 +31,11 @@ export class UnitAddComponent implements OnInit {
   gridLabel = 'Available Grids';
   areaSelected = false;
   area = '';
+  selectedOptions =
+    {
+      'Simulink': true,
+      'OpalRT': false,
+    };
 
   @Output() select: EventEmitter<number> = new EventEmitter();
 
@@ -162,6 +167,10 @@ export class UnitAddComponent implements OnInit {
       id: 'EH',
       label: 'Electric Heater',
     },
+    {
+      id: 'Sim',
+      label: 'Simulator',
+    },
     ];
   }
 
@@ -203,6 +212,13 @@ export class UnitAddComponent implements OnInit {
         break;
       case 'HP':
         metadata = JSON.stringify(this.hpUnit['payload']['parameters']['configuration']);
+        break;
+      case 'Sim':
+        const simData = this.selectedOptions;
+        simData['IP'] = this.unitIP;
+        simData['Port'] = this.unitPort;
+        simData['Topic'] = this.unitName;
+        metadata = JSON.stringify(simData);
         break;
     }
     metadata = metadata.replace('}{', ',');
@@ -255,6 +271,16 @@ export class UnitAddComponent implements OnInit {
     this.select.emit(roomNumber);
     this.selectedRoom = roomNumber;
     this.sortRooms();
+  }
+
+  handleSimulator(event, simulator) {
+    if (simulator === 'OpalRT') {
+      this.selectedOptions['Simulink'] = false;
+      this.selectedOptions['OpalRT'] = event;
+    } else {
+      this.selectedOptions['OpalRT'] = false;
+      this.selectedOptions['Simulink'] = event;
+    }
   }
 
 }
