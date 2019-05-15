@@ -25,6 +25,7 @@ import glob, os
 import time
 import shutil
 import pandas as pd
+import json
 
 def load():
    """ Function to be called when a user wants to load a simulink model
@@ -56,7 +57,7 @@ def createExcelFile(fileName,finalFileName):
       content = f.readlines()
    fileName="Final_"+fileName
    with open(fileName, 'w') as f:
-      for value in content[0].split(' '):
+      for value in content:
          if value != '':
             f.write("%s\n" % value)
    pd.read_csv(fileName).to_excel(finalFileName, index=False)
@@ -122,7 +123,8 @@ def executeMode(message):
    #shutil.rmtree(destPath, ignore_errors=True)
 
 if __name__ == "__main__":
-   proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations'],stdout=subprocess.PIPE)
+   proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','Simulator'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
       msg = msg.decode("utf-8")
-      executeMode(msg)
+      msg = json.loads(msg)
+      executeMode(msg['metadata']['message'])

@@ -7,7 +7,7 @@ import { SimulationRunComponent } from './simulation-run/simulation-run.componen
 import { SimulationComparisonComponent } from './simulation-comparison/simulation-comparison.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
-import { GlobalParamsComponent } from './global-params/global-params.component';
+import { SystemParamsComponent } from './system-params/system-params.component';
 
 const routes: Routes = [{
   path: '',
@@ -16,8 +16,8 @@ const routes: Routes = [{
     path: 'miscellaneous',
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
   }, {
-    path: 'global-params',
-    component: GlobalParamsComponent,
+    path: 'system-params',
+    component: SystemParamsComponent,
   }, {
     path: 'scenario-creator',
     loadChildren: './scenario-creator/scenario-creator.module#ScenarioCreatorModule',

@@ -15,10 +15,6 @@
               [(val)]="planetRestPort" [compId]="'planetRestPort'" [inputHtmlLabel1]="'PLANET\'s REST Port'">
             </ngx-input-field>
 
-            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
-              (stringValChange)="simulationMachine=$event" [(val)]="simulationMachine" [compId]="'simulationMachine'"
-              [inputHtmlLabel1]="'Simulations\' Machine IP'" [type]="'string'">
-            </ngx-input-field>
             <button nbButton disabled nbStepperNext>Previous</button>
             <button nbButton nbStepperNext>Next</button>
           </nb-step>
@@ -67,6 +63,22 @@
             <button nbButton nbStepperNext>Next</button>
           </nb-step>
           <nb-step [label]="'Simulator'">
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="simulationMachine=$event" [(val)]="simulationMachine" [compId]="'simulationMachine'"
+              [inputHtmlLabel1]="'Simulations\' Machine IP'" [type]="'string'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (valChange)="simulationMachinePort=+$event" [(val)]="simulationMachinePort"
+              [compId]="'simulationMachinePort'" [inputHtmlLabel1]="'Simulation\'s Port'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="simulationMachineTopic=$event" [(val)]="simulationMachineTopic"
+              [compId]="'simulationMachineTopic'" [inputHtmlLabel1]="'Simulations\' Machine Topic'" [type]="'string'">
+            </ngx-input-field>
+
             <div *ngIf="loaded">
               <div class="row">
                 <div class="col-md-3" *ngFor="let simulator of simUnit; let i = index">

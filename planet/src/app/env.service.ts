@@ -16,6 +16,8 @@ export class EnvService {
   public mongoPassword = window['__env'].mongoPassword;
   public mongoAuthDB = window['__env'].mongoAuthDB;
   public simulationMachine = window['__env'].simulationMachine;
+  public simulationMachineTopic = window['__env'].simulationMachineTopic;
+  public simulationMachinePort = window['__env'].simulationMachinePort;
 
   constructor() {
   }

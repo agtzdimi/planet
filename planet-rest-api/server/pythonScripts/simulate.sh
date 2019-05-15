@@ -4,6 +4,7 @@ function sendFiles {
 
 formName="$1"
 simulationType="$2"
+mode="$3"
 
 echo "$formName ############"
 mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
@@ -44,19 +45,18 @@ for file in $(ls ./public/files/$simulationType/*); do
 done
 
 filesPath="$(pwd)/public/files"
-seperatedFiles="$(cat ./public/files/$simulationType/seperatedFiles.txt)"
-eventDate=$(date +"%Y-%m-%dT%H:%M:%S.000Z")
-#mosquitto_pub -h $SIMULATION_MACHINE -t 'SiteWhere/planet/input/json' -m \
-#   '{"deviceToken": "$simulatorToken","type": "DeviceMeasurement","originator": "device",\
-#   "request": {"name": "Status","value": "$mode",\
-#   "eventDate": "$eventDate", "metadata": {"message": "$(echo $seperatedFiles)"}}}' -p 1883
-mosquitto_pub -m "$(echo $seperatedFiles)" -h $SIMULATION_MACHINE -t "$SIMULATION_TOPIC"
+seperatedFiles="$(cat ./public/files/$simulationType/seperatedFiles.txt | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
+eventDate=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+sleep 1
+mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$SIMULATION_TOPIC"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles")"'"}}}' -p "$SITEWHERE_PORT"
+# mosquitto_pub -m "$(echo $seperatedFiles)" -h $SIMULATION_MACHINE -t "$SIMULATION_TOPIC"
 }
 
 form="$1"
+mode="$2"
 echo "Starting export of $form"
 lines=$(mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
    --authenticationDatabase $MONGO_AUTH_DB --db planet -q '{"formName": "'"$form"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName | wc -l)
 if (( lines == 1 )); then
-   sendFiles "$(echo $form | sed 's/ $//')" "single"
+   sendFiles "$(echo $form | sed 's/ $//')" "single" "$mode"
 fi

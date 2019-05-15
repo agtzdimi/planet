@@ -26,6 +26,8 @@ export class ParamsSetupComponent {
   mongoAuthDB: string;
   simulationMachine: string;
   planetUIPort: string;
+  simulationMachinePort: number;
+  simulationMachineTopic: string;
   loaded = false;
   simUnit = [{}];
   jwtToken: any;
@@ -46,6 +48,8 @@ export class ParamsSetupComponent {
     this.mongoAuthDB = env.mongoAuthDB;
     this.simulationMachine = env.simulationMachine;
     this.planetUIPort = window.location.port;
+    this.simulationMachinePort = env.simulationMachinePort;
+    this.simulationMachineTopic = env.simulationMachineTopic;
 
     this.getJWTService.getToken()
       .then((data: any) => {
@@ -74,6 +78,8 @@ export class ParamsSetupComponent {
       'mongoAuthDB': this.mongoAuthDB,
       'simulationMachine': this.simulationMachine,
       'planetUIPort': this.planetUIPort,
+      'simulationMachinePort': this.simulationMachinePort,
+      'simulationMachineTopic': this.simulationMachineTopic,
     })
       .subscribe(res => {
         this.saveMessage = res['text'];
@@ -82,7 +88,9 @@ export class ParamsSetupComponent {
   }
 
   handleUnit(simulator) {
-    // console.log(simulator)
+    this.simulationMachine = simulator['metadata']['IP'].replace(/_/g, '.');
+    this.simulationMachinePort = simulator['metadata']['Port'];
+    this.simulationMachineTopic = simulator['metadata']['Topic'];
   }
 
 }

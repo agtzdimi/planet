@@ -45,6 +45,7 @@ export class SimulationStartComponent {
     this.httpClient.post(url,
       {
         'formName': this.formName,
+        'mode': '1',
       })
       .subscribe(
         data => {

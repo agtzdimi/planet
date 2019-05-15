@@ -155,7 +155,7 @@ app.get("/get_form_names", (req, res) => {
 });
 
 app.post("/transfer", (req, res) => {
-    shell.exec(`${__dirname}/pythonScripts/simulate.sh ` + "\"" + req.body.formName + "\"");
+    shell.exec(`${__dirname}/pythonScripts/simulate.sh ` + "\"" + req.body.formName + "\" " + req.body.mode);
     return res.send("Transfer Completed");
 });
 
@@ -227,7 +227,8 @@ app.post("/update_IPs", (req, res) => {
     update = shell.exec(`${__dirname}/pythonScripts/updateParams.sh ` + req.body.planet + " " + req.body.sitewhere + " " +
         req.body.planetRESTPort + " " + req.body.sitewhereUIPort + " " + req.body.sitewhereMQTTPort + " " +
         req.body.mongoIP + " " + req.body.mongoPort + " " + req.body.mongoUser + " " + req.body.mongoPassword + " " +
-        req.body.mongoAuthDB + " " + req.body.simulationMachine + " " + req.body.planetUIPort)
+        req.body.mongoAuthDB + " " + req.body.simulationMachine + " " + req.body.planetUIPort + " " + req.body.simulationMachineTopic +
+        " " + req.body.simulationMachinePort)
     if (!update.stderr) {
         const dotenv = require('dotenv');
         dotenv.config();

@@ -5,7 +5,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { SimulationRunModule } from './simulation-run/simulation-run.module';
-import { GlobalParamsModule } from './global-params/global-params.module';
+import { SystemParamsModule } from './system-params/system-params.module';
 import { SimulationComparisonModule } from './simulation-comparison/simulation-comparison.module';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
@@ -21,7 +21,7 @@ const PAGES_COMPONENTS = [
     MiscellaneousModule,
     SimulationRunModule,
     SimulationComparisonModule,
-    GlobalParamsModule,
+    SystemParamsModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,

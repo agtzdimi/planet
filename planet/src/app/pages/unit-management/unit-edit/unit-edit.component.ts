@@ -96,6 +96,8 @@ export class UnitEditComponent implements OnInit {
     if (this.selectedModel['payload'] || this.activeModel === 'Sim') {
       let metadata: string;
       if (this.activeModel === 'Sim') {
+        this.selectedModel['metadata']['IP'] = this.unitIP;
+        this.selectedModel['metadata']['Port'] = this.unitPort;
         metadata = JSON.stringify(this.selectedModel['metadata']);
       } else {
         metadata = JSON.stringify(this.selectedModel['payload']['parameters']['configuration']);
@@ -135,7 +137,7 @@ export class UnitEditComponent implements OnInit {
     if (this.activeModel === 'Sim') {
       this.selectedModel['metadata']['Simulink'] = JSON.parse(this.selectedModel['metadata']['Simulink']);
       this.selectedModel['metadata']['OpalRT'] = JSON.parse(this.selectedModel['metadata']['OpalRT']);
-      this.unitIP = this.selectedModel['metadata']['IP'].replace(/_/g, ':');
+      this.unitIP = this.selectedModel['metadata']['IP'].replace(/_/g, '.');
       this.unitPort = this.selectedModel['metadata']['Port'];
       this.unitName = this.selectedModel['metadata']['Topic'];
     }

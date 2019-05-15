@@ -8,18 +8,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { ThemeModule } from '../../@theme/theme.module';
 import { SuiModule } from 'ng2-semantic-ui';
 
-import { GlobalParamsRoutingModule } from './global-params-routing.module';
-import { GlobalParamsComponent } from './global-params.component';
+import { SystemParamsRoutingModule } from './system-params-routing.module';
+import { SystemParamsComponent } from './system-params.component';
 import { ParamsSetupComponent } from './params-setup/params-setup.component';
 import { NbDialogModule } from '@nebular/theme';
 
 const COMPONENTS = [
-  GlobalParamsComponent,
+  SystemParamsComponent,
   ParamsSetupComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  GlobalParamsComponent,
+  SystemParamsComponent,
   ParamsSetupComponent,
 ];
 
@@ -27,7 +27,7 @@ const ENTRY_COMPONENTS = [
 @NgModule({
   imports: [
     ThemeModule,
-    GlobalParamsRoutingModule,
+    SystemParamsRoutingModule,
     NbButtonModule,
     NbDialogModule.forRoot(),
     HttpClientModule,
@@ -43,4 +43,4 @@ const ENTRY_COMPONENTS = [
     ...ENTRY_COMPONENTS,
   ],
 })
-export class GlobalParamsModule { }
+export class SystemParamsModule { }
