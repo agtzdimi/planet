@@ -48,7 +48,8 @@ filesPath="$(pwd)/public/files"
 seperatedFiles="$(cat ./public/files/$simulationType/seperatedFiles.txt | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
 eventDate=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
 sleep 1
-mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$SIMULATION_TOPIC"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles")"'"}}}' -p "$SITEWHERE_PORT"
+simTopic="$(echo $SIMULATION_TOPIC | sed 's/^Send//')"
+mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles")"'"}}}' -p "$SITEWHERE_PORT"
 # mosquitto_pub -m "$(echo $seperatedFiles)" -h $SIMULATION_MACHINE -t "$SIMULATION_TOPIC"
 }
 

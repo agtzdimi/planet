@@ -123,8 +123,9 @@ def executeMode(message):
    #shutil.rmtree(destPath, ignore_errors=True)
 
 if __name__ == "__main__":
-   proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','Simulator'],stdout=subprocess.PIPE)
+   proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','SendSimulator'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
       msg = msg.decode("utf-8")
       msg = json.loads(msg)
-      executeMode(msg['metadata']['message'])
+      if msg['name'] == 'Status' and msg['value'] == 1:
+         executeMode(msg['metadata']['message'])

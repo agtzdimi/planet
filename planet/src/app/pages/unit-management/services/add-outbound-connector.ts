@@ -33,32 +33,91 @@ export class AddOutboundConnService {
             })
                 .subscribe(
                     res => {
-                        this.connectors = {
-                            'name': 'mqtt-connector',
-                            'attributes': [
+
+                        if (data['isSimulator']) {
+                            this.connectors = [
                                 {
-                                    'name': 'connectorId',
-                                    'value': data['token'],
-                                }, {
-                                    'name': 'hostname',
-                                    'value': data['ip'],
-                                }, {
-                                    'name': 'numProcessingThreads',
-                                    'value': '5',
-                                }, {
-                                    'name': 'port',
-                                    'value': data['port'],
-                                }, {
-                                    'name': 'protocol',
-                                    'value': 'tcp',
-                                }, {
-                                    'name': 'topic',
-                                    'value': data['token'],
+                                    'name': 'mqtt-connector',
+                                    'attributes': [
+                                        {
+                                            'name': 'connectorId',
+                                            'value': 'Get' + data['token'],
+                                        }, {
+                                            'name': 'hostname',
+                                            'value': data['ip'],
+                                        }, {
+                                            'name': 'numProcessingThreads',
+                                            'value': '5',
+                                        }, {
+                                            'name': 'port',
+                                            'value': data['port'],
+                                        }, {
+                                            'name': 'protocol',
+                                            'value': 'tcp',
+                                        }, {
+                                            'name': 'topic',
+                                            'value': 'Get' + data['token'],
+                                        },
+                                    ],
                                 },
-                            ],
-                        };
-                        // index 1 holds outbound connectors
-                        res['children'][1]['children'].push(this.connectors);
+
+                                {
+                                    'name': 'mqtt-connector',
+                                    'attributes': [
+                                        {
+                                            'name': 'connectorId',
+                                            'value': 'Send' + data['token'],
+                                        }, {
+                                            'name': 'hostname',
+                                            'value': data['ip'],
+                                        }, {
+                                            'name': 'numProcessingThreads',
+                                            'value': '5',
+                                        }, {
+                                            'name': 'port',
+                                            'value': data['port'],
+                                        }, {
+                                            'name': 'protocol',
+                                            'value': 'tcp',
+                                        }, {
+                                            'name': 'topic',
+                                            'value': 'Send' + data['token'],
+                                        },
+                                    ],
+                                },
+                            ];
+                            // index 1 holds outbound connectors
+                            res['children'][1]['children'].push(this.connectors[0]);
+                            res['children'][1]['children'].push(this.connectors[1]);
+                        } else {
+                            this.connectors = [{
+                                'name': 'mqtt-connector',
+                                'attributes': [
+                                    {
+                                        'name': 'connectorId',
+                                        'value': data['token'],
+                                    }, {
+                                        'name': 'hostname',
+                                        'value': data['ip'],
+                                    }, {
+                                        'name': 'numProcessingThreads',
+                                        'value': '5',
+                                    }, {
+                                        'name': 'port',
+                                        'value': data['port'],
+                                    }, {
+                                        'name': 'protocol',
+                                        'value': 'tcp',
+                                    }, {
+                                        'name': 'topic',
+                                        'value': data['token'],
+                                    },
+                                ],
+                            }];
+                            // index 1 holds outbound connectors
+                            res['children'][1]['children'].push(this.connectors[0]);
+                        }
+
                         this.httpClient.post(url, res, {
                             headers: headers,
                         })

@@ -217,7 +217,7 @@ export class UnitAddComponent implements OnInit {
         const simData = this.selectedOptions;
         simData['IP'] = this.unitIP;
         simData['Port'] = this.unitPort;
-        simData['Topic'] = this.unitName;
+        simData['Topic'] = 'Send' + this.unitName;
         metadata = JSON.stringify(simData);
         break;
     }
@@ -247,6 +247,7 @@ export class UnitAddComponent implements OnInit {
             'ip': this.unitIP,
             'port': this.unitPort,
             'token': this.unitName,
+            'isSimulator': (this.activeModel === 'Sim'),
           },
           this.jwtToken)
           .then(results => {
