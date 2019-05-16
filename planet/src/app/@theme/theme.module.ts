@@ -13,6 +13,7 @@ import { NbLogoutComponent } from './components/auth/logout/logout.component';
 import { NbAuthComponent } from './components/auth/auth.component';
 import { TechInputFieldComponent } from './components/planet/tech-input-field.component';
 import { RouterModule } from '@angular/router';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import {
   NbActionsModule,
@@ -161,7 +162,7 @@ const NB_THEME_PROVIDERS = [
 ];
 
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES, RouterModule],
+  imports: [...BASE_MODULES, ...NB_MODULES, RouterModule, Ng2SmartTableModule],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES],
   declarations: [...COMPONENTS, ...PIPES, NgxAuthBlockComponent, NgxLoginComponent,
     NbAuthComponent, NgxRegisterComponent, NgxSendResetRequestComponent, NgxResetPasswordComponent, NgxRequestPasswordComponent,

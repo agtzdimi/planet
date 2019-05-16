@@ -10,7 +10,7 @@ import { StateService } from '../../../@core/utils';
             (click)="toggleSettings()"
             [class.expanded]="expanded"
             [class.sidebarEnd]="sidebarEnd">
-      <i class="nb-gear"></i>
+      <i class="file alternate icon"></i>
     </button>
   `,
 })
@@ -21,7 +21,7 @@ export class ToggleSettingsButtonComponent {
 
   constructor(private sidebarService: NbSidebarService, protected stateService: StateService) {
     this.stateService.onSidebarState()
-      .subscribe(({id}) => {
+      .subscribe(({ id }) => {
         this.sidebarEnd = id === 'end';
       });
   }

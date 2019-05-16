@@ -1,7 +1,7 @@
 @import '../../styles/themes';
 
 @include nb-install-component() {
-  h6 {
+  h6, h4 {
     margin-bottom: 0.875rem;
     text-align: center;
     font-weight: bold;

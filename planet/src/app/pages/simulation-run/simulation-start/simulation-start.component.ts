@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
 import { NbDialogService } from '@nebular/theme';
 import { EnvService } from '../../../env.service';
+import { SendScenarioService } from './sendScenarioName.service';
 
 @Component({
   selector: 'ngx-simulation-start',
@@ -24,10 +25,12 @@ export class SimulationStartComponent {
   status: String = '';
   themeSubscription: any;
   formName = 'Select Saved Simulation';
+  showVal: boolean;
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
-    private env: EnvService) {
+    private env: EnvService,
+    private sendScenarioService: SendScenarioService) {
     this.initializeCharts();
   }
 
@@ -39,6 +42,7 @@ export class SimulationStartComponent {
     this.toggleLoadingAnimation();
     this.showArea = false;
     this.showBar = false;
+    this.showVal = false;
     this.initializeCharts();
     this.status = '';
     let url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/transfer';
@@ -80,6 +84,7 @@ export class SimulationStartComponent {
               }
               clearInterval(interval);
               this.loading = false;
+              this.showVal = true;
             }
           },
           error => {
@@ -154,6 +159,7 @@ export class SimulationStartComponent {
     this.areaChart[2].title = 'Fulfilment of the Heat Demand (both DH and LHD)';
     this.showArea = true;
     this.loading = false;
+    this.showVal = true;
   }
 
   spreadValuesToCharts2(data) {
@@ -242,6 +248,7 @@ export class SimulationStartComponent {
       .onClose.subscribe(name => {
         if (name) {
           this.formName = name['formName'];
+          this.sendScenarioService.updateFormName(this.formName);
         }
       });
   }

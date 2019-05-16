@@ -6,8 +6,8 @@
   .toggle-settings {
     position: fixed;
     top: 50%;
-    height: 8.575rem;
-    width: 8.575rem;
+    height: 3.575rem;
+    width: 3.575rem;
     border: none;
     transition: transform 0.3s ease, background-image 0.3s ease;
     transform: translate(0, -50%);
@@ -44,12 +44,12 @@
     }
 
     &.expanded {
-      @include nb-ltr(transform, translate(-19rem, -50%));
-      @include nb-rtl(transform, translate(19rem, -50%));
+      @include nb-ltr(transform, translate(-60rem, -50%));
+      @include nb-rtl(transform, translate(60rem, -50%));
 
       &.sidebarEnd {
-        @include nb-rtl(transform, translate(-19rem, -50%));
-        @include nb-ltr(transform, translate(19rem, -50%));
+        @include nb-rtl(transform, translate(-60rem, -50%));
+        @include nb-ltr(transform, translate(60rem, -50%));
       }
     }
 
@@ -76,7 +76,7 @@
     }
 
     i {
-      font-size: 6rem;
+      font-size: 2rem;
       color: #ffffff;
 
       @include nb-for-theme(default) {

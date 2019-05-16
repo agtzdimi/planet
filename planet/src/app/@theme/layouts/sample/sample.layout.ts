@@ -8,6 +8,7 @@ import {
   NbSidebarService,
   NbThemeService,
 } from '@nebular/theme';
+import { SendScenarioService } from '../../../pages/simulation-run/simulation-start/sendScenarioName.service';
 
 import { StateService } from '../../../@core/utils';
 
@@ -53,6 +54,7 @@ import { StateService } from '../../../@core/utils';
       </nb-sidebar>
     </nb-layout>
   `,
+  providers: [SendScenarioService],
 })
 export class SampleLayoutComponent implements OnDestroy {
 
