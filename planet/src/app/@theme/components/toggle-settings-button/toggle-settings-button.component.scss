@@ -44,12 +44,12 @@
     }
 
     &.expanded {
-      @include nb-ltr(transform, translate(-60rem, -50%));
-      @include nb-rtl(transform, translate(60rem, -50%));
+      @include nb-ltr(transform, translate(-75rem, -50%));
+      @include nb-rtl(transform, translate(75rem, -50%));
 
       &.sidebarEnd {
-        @include nb-rtl(transform, translate(-60rem, -50%));
-        @include nb-ltr(transform, translate(60rem, -50%));
+        @include nb-rtl(transform, translate(-75rem, -50%));
+        @include nb-ltr(transform, translate(75rem, -50%));
       }
     }
 

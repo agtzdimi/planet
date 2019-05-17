@@ -3,62 +3,199 @@ import { SendScenarioService } from '../../../pages/simulation-run/simulation-st
 import { StateService } from '../../../@core/utils';
 import { EnvService } from '../../../env.service';
 import { HttpClient } from '@angular/common/http';
+import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-theme-settings',
   styleUrls: ['./theme-settings.component.scss'],
   template: `
-    <h4>{{scenarioName}}</h4>
+    <h4 (click)="test()">{{scenarioName}}</h4>
     <h6>( {{startingDate}} - {{endingDate}} )</h6>
     <hr>
     <h6>Technologies</h6>
     <div class="settings-row">
-        <ng2-smart-table [settings]="settings">
+        <ng2-smart-table [settings]="techSettings" [source]="techSource">
         </ng2-smart-table>
     </div>
-
+    <hr>
     <h6>Economy Parameters</h6>
     <div class="settings-row">
+        <ng2-smart-table [settings]="econ2Settings" [source]="econ2Source" [ngStyle]="{'margin-bottom':'1.5rem'}">
+        </ng2-smart-table>
+        <ng2-smart-table [settings]="econSettings" [source]="econSource">
+        </ng2-smart-table>
     </div>
-
+    <hr>
     <h6>Dispatch Priority Order</h6>
     <div class="settings-row">
-
+    <ng2-smart-table [settings]="controlSettings" [source]="controlSource">
+    </ng2-smart-table>
     </div>
   `,
 })
 export class ThemeSettingsComponent {
-  settings = {
+  techSettings = {
+    hideSubHeader: true,
+    actions: false,
     columns: {
-      pv: {
+      nodes: {
+        title: '-',
+        editable: false,
+        filter: false,
+      },
+      PV: {
         title: 'PV',
         editable: false,
+        filter: false,
       },
-      wind: {
+      WT: {
         title: 'Wind',
         editable: false,
+        filter: false,
       },
-      chp: {
+      CHP: {
         title: 'CHP',
         editable: false,
+        filter: false,
       },
-      p2h: {
-        title: 'P2H',
+      p2h1: {
+        title: 'P2H.DH.EH',
         editable: false,
+        filter: false,
       },
-      p2g: {
+      p2h2: {
+        title: 'P2H.DH.HP',
+        editable: false,
+        filter: false,
+      },
+      p2h3: {
+        title: 'P2H.LHD.EH',
+        editable: false,
+        filter: false,
+      },
+      p2h4: {
+        title: 'P2H.LHD.HP',
+        editable: false,
+        filter: false,
+      },
+      P2G: {
         title: 'P2G',
         editable: false,
+        filter: false,
       },
-      eb: {
+      EB: {
         title: 'EB',
         editable: false,
+        filter: false,
       },
       uncontrollableLoad: {
         title: 'Uncontrollable Load',
+        editable: false,
+        filter: false,
       },
     },
   };
+
+  econSettings = {
+    hideSubHeader: true,
+    actions: false,
+    columns: {
+      params: {
+        title: '-',
+        editable: false,
+        filter: false,
+      },
+      PV: {
+        title: 'PV',
+        editable: false,
+        filter: false,
+      },
+      WT: {
+        title: 'Wind',
+        editable: false,
+        filter: false,
+      },
+      CHP: {
+        title: 'CHP',
+        editable: false,
+        filter: false,
+      },
+      EH: {
+        title: 'EH',
+        editable: false,
+        filter: false,
+      },
+      HP: {
+        title: 'HP',
+        editable: false,
+        filter: false,
+      },
+      P2G: {
+        title: 'P2G',
+        editable: false,
+        filter: false,
+      },
+      EB: {
+        title: 'EB',
+        editable: false,
+        filter: false,
+      },
+    },
+  };
+
+  econ2Settings = {
+    hideSubHeader: true,
+    actions: false,
+    columns: {
+      'NG.cost': {
+        title: 'NG cost',
+        editable: false,
+        filter: false,
+      },
+      'SNG.cost': {
+        title: 'SNG cost',
+        editable: false,
+        filter: false,
+      },
+      'heat.cost': {
+        title: 'Heat cost',
+        editable: false,
+        filter: false,
+      },
+      'carbon.tax': {
+        title: 'Carbon tax',
+        editable: false,
+        filter: false,
+      },
+      'NG.emission.factor': {
+        title: 'NG emission factor',
+        editable: false,
+        filter: false,
+      },
+    },
+  };
+
+  controlSettings = {
+    hideSubHeader: true,
+    actions: false,
+    columns: {
+      'RES.curtailment': {
+        title: 'RES Curtailment',
+        editable: false,
+        filter: false,
+      },
+      'control': {
+        title: 'Dispatch Priority Order',
+        editable: false,
+        filter: false,
+      },
+    },
+  };
+
+  techData = [];
+  econData = [];
+  econ2Data = [];
+  controlData = [];
   layouts = [];
   sidebars = [];
   scenarioName: string;
@@ -67,6 +204,10 @@ export class ThemeSettingsComponent {
   controlSystem: Object;
   startingDate;
   endingDate;
+  techSource: LocalDataSource = new LocalDataSource();
+  econSource: LocalDataSource = new LocalDataSource();
+  econ2Source: LocalDataSource = new LocalDataSource();
+  controlSource: LocalDataSource = new LocalDataSource();
 
   constructor(protected stateService: StateService,
     private sendScenarioService: SendScenarioService,
@@ -96,6 +237,74 @@ export class ThemeSettingsComponent {
               temp = JSON.parse(res['windParam']);
               this.startingDate = temp['payload']['startDate'].replace(/T.*/, '').replace(/-/g, '/');
               this.endingDate = temp['payload']['endDate'].replace(/T.*/, '').replace(/-/g, '/');
+
+              // Generate Technologies Values
+              let tempTechData = {};
+              for (const node of Object.keys(this.paramInit['payload']['electric.grid'])) {
+                for (const tech of Object.keys(this.paramInit['payload']['electric.grid'][node])) {
+                  if (tech === 'P2H') {
+                    tempTechData['p2h1'] = this.paramInit['payload']['electric.grid'][node][tech]['DH']['EH']['nominal.heat.power'];
+                    tempTechData['p2h2'] = this.paramInit['payload']['electric.grid'][node][tech]['DH']['HP']['nominal.heat.power'];
+                    tempTechData['p2h3'] = this.paramInit['payload']['electric.grid'][node][tech]['LHD']['EH']['nominal.heat.power'];
+                    tempTechData['p2h4'] = this.paramInit['payload']['electric.grid'][node][tech]['LHD']['HP']['nominal.heat.power'];
+                  } else if (tech === 'uncontrollable.load') {
+                    tempTechData['uncontrollableLoad'] =
+                      this.paramInit['payload']['electric.grid'][node]['uncontrollable.load']['peak.load'];
+                  } else if (tech === 'EB') {
+                    tempTechData[tech] = this.paramInit['payload']['electric.grid'][node][tech]['storage.electric.capacity'];
+                  } else {
+                    tempTechData[tech] = this.paramInit['payload']['electric.grid'][node][tech]['nominal.electric.power'];
+                  }
+                }
+                tempTechData['nodes'] = node;
+                this.techData.push(tempTechData);
+                tempTechData = {};
+              }
+              this.techSource.load(this.techData);
+              // Generate Economy Values
+              const tempEconData = [{}, {}, {}];
+              for (const tech of Object.keys(this.econEnv['payload']['technologies.cost'])) {
+                for (const param of Object.keys(this.econEnv['payload']['technologies.cost'][tech])) {
+
+                  switch (param) {
+                    case 'CAPEX':
+                      tempEconData[0]['params'] = param;
+                      tempEconData[0][tech] = this.econEnv['payload']['technologies.cost'][tech][param];
+                      break;
+                    case 'OPEX':
+                      tempEconData[1]['params'] = param;
+                      tempEconData[1][tech] = this.econEnv['payload']['technologies.cost'][tech][param];
+                      break;
+                    case 'life.time':
+                      tempEconData[2]['params'] = param;
+                      tempEconData[2][tech] = this.econEnv['payload']['technologies.cost'][tech][param];
+                      break;
+                  }
+
+                }
+              }
+              this.econData = [...tempEconData];
+              this.econSource.load(this.econData);
+
+              const tempEcon2Data = {};
+              for (const tech of Object.keys(this.econEnv['payload'])) {
+                if (tech === 'NG.cost' || tech === 'SNG.cost' || tech === 'heat.cost' ||
+                  tech === 'carbon.tax' || tech === 'NG.emission.factor') {
+                  tempEcon2Data[tech] = this.econEnv['payload'][tech];
+                }
+              }
+              this.econ2Data.push(tempEcon2Data);
+
+              this.econ2Source.load(this.econ2Data);
+
+              this.controlData = [
+                {
+                  'RES.curtailment': this.controlSystem['payload']['RES.curtailment'],
+                  'control': this.controlSystem['payload']['control'],
+                },
+              ];
+
+              this.controlSource.load(this.controlData);
             },
             error => {
               // console.log('Error', error);
