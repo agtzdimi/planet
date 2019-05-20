@@ -37,6 +37,7 @@ export class ThemeSettingsComponent {
   techSettings = {
     hideSubHeader: true,
     actions: false,
+    sort: false,
     columns: {
       nodes: {
         title: '-',
@@ -99,6 +100,7 @@ export class ThemeSettingsComponent {
   econSettings = {
     hideSubHeader: true,
     actions: false,
+    sort: false,
     columns: {
       params: {
         title: '-',
@@ -146,6 +148,7 @@ export class ThemeSettingsComponent {
   econ2Settings = {
     hideSubHeader: true,
     actions: false,
+    sort: false,
     columns: {
       'NG.cost': {
         title: 'NG cost',
@@ -178,6 +181,7 @@ export class ThemeSettingsComponent {
   controlSettings = {
     hideSubHeader: true,
     actions: false,
+    sort: false,
     columns: {
       'RES.curtailment': {
         title: 'RES Curtailment',
@@ -297,10 +301,31 @@ export class ThemeSettingsComponent {
 
               this.econ2Source.load(this.econ2Data);
 
+              let controlVal: string;
+              switch (this.controlSystem['payload']['control']) {
+                case 1:
+                  controlVal = '1 -> P2H - EB - P2G';
+                  break;
+                case 2:
+                  controlVal = '2 -> P2H - P2G - EB';
+                  break;
+                case 3:
+                  controlVal = '3 -> EB - P2H - P2G';
+                  break;
+                case 4:
+                  controlVal = '4 -> P2G - P2H - EB';
+                  break;
+                case 5:
+                  controlVal = '5 -> P2G - P2H - EB';
+                  break;
+                case 6:
+                  controlVal = '6 -> P2G - EB - P2H';
+                  break;
+              }
               this.controlData = [
                 {
                   'RES.curtailment': this.controlSystem['payload']['RES.curtailment'],
-                  'control': this.controlSystem['payload']['control'],
+                  'control': controlVal,
                 },
               ];
 

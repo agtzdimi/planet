@@ -4,11 +4,13 @@ import { GetDeviceByTypeService } from '../services/get-deviceByType.service';
 import { DeleteDeviceService } from '../services/delete-device.service';
 import { NbDialogService } from '@nebular/theme';
 import { DialogDeleteComponent } from './dialog-delete.component';
+import { DeleteOutboundConnService } from '../services/delete-outbound-connector';
 
 @Component({
   selector: 'ngx-unit-delete',
   styleUrls: ['./unit-delete.component.scss'],
-  providers: [GetJWTService, DeleteDeviceService, GetDeviceByTypeService],
+  providers: [GetJWTService, DeleteDeviceService,
+    GetDeviceByTypeService, DeleteOutboundConnService],
   templateUrl: './unit-delete.component.html',
 })
 export class UnitDeleteComponent implements OnInit {
@@ -29,7 +31,8 @@ export class UnitDeleteComponent implements OnInit {
   constructor(private getJWTService: GetJWTService,
     private getDeviceByType: GetDeviceByTypeService,
     private deleteDevice: DeleteDeviceService,
-    private dialogService: NbDialogService) {
+    private dialogService: NbDialogService,
+    private deleteOutboundConnService: DeleteOutboundConnService) {
     this.data = {};
   }
 
@@ -97,6 +100,11 @@ export class UnitDeleteComponent implements OnInit {
               this.jwtToken = data;
               this.deleteDevice.deleteDevice(this.jwtToken, this.unitName)
                 .then(results => {
+                  this.deleteOutboundConnService.deleteOutBoundConnector({
+                    'token': this.unitName,
+                    'isSimulator': (this.activeModel === 'Sim'),
+                  },
+                    this.jwtToken);
                   this.message = JSON.stringify(results);
                   this.getModels(this.activeModel);
                 });

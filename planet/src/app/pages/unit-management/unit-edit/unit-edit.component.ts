@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GetJWTService } from '../services/get-jwt.service';
 import { GetDeviceByTypeService } from '../services/get-deviceByType.service';
 import { EditDeviceService } from '../services/edit-device.service';
+import { GetOutboundConnService } from '../services/get-outbound-connector';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { EditOutboundConnService } from '../services/edit-outbound-connector';
 
@@ -9,7 +10,8 @@ import { EditOutboundConnService } from '../services/edit-outbound-connector';
   selector: 'ngx-unit-edit',
   styleUrls: ['./unit-edit.component.scss'],
   providers: [GetJWTService, GetDeviceByTypeService,
-    EditDeviceService, EditOutboundConnService],
+    EditDeviceService, EditOutboundConnService,
+    GetOutboundConnService],
   templateUrl: './unit-edit.component.html',
 })
 export class UnitEditComponent implements OnInit {
@@ -38,6 +40,7 @@ export class UnitEditComponent implements OnInit {
   constructor(private getJWTService: GetJWTService,
     private getDeviceByType: GetDeviceByTypeService,
     private editDevice: EditDeviceService,
+    private getOutboundConnService: GetOutboundConnService,
     private editOutboundConnService: EditOutboundConnService) {
     this.data = {};
   }
@@ -88,6 +91,7 @@ export class UnitEditComponent implements OnInit {
             }
             this.loading = false;
           });
+
       });
   }
 
@@ -117,16 +121,22 @@ export class UnitEditComponent implements OnInit {
               this.message = JSON.stringify(results);
             });
 
-          this.editOutboundConnService.editOutBoundConnector({
-            'ip': this.unitIP,
-            'port': this.unitPort,
-            'token': this.unitName,
-          }, this.jwtToken)
-            .then(results => {
-              this.message = JSON.stringify(results);
-            });
+          this.editConnector(this.unitName);
+
         });
     }
+  }
+
+  editConnector(name) {
+    this.editOutboundConnService.editOutBoundConnector({
+      'ip': this.unitIP,
+      'port': this.unitPort,
+      'token': name,
+      'isSimulator': (this.activeModel === 'Sim'),
+    }, this.jwtToken)
+      .then(results => {
+        this.message = JSON.stringify(results);
+      });
   }
 
   handleSelectedModel(event, controller, transitionName: string = 'fade down') {
@@ -137,10 +147,25 @@ export class UnitEditComponent implements OnInit {
     if (this.activeModel === 'Sim') {
       this.selectedModel['metadata']['Simulink'] = JSON.parse(this.selectedModel['metadata']['Simulink']);
       this.selectedModel['metadata']['OpalRT'] = JSON.parse(this.selectedModel['metadata']['OpalRT']);
-      this.unitIP = this.selectedModel['metadata']['IP'].replace(/_/g, '.');
-      this.unitPort = this.selectedModel['metadata']['Port'];
       this.unitName = this.selectedModel['metadata']['Topic'];
     }
+
+    this.getJWTService.getToken()
+      .then((data: any) => {
+        this.jwtToken = data;
+        this.getOutboundConnService.getOutBoundConnector(this.unitName, this.jwtToken)
+          .then(connectors => {
+            for (const attr of connectors['attributes']) {
+              if (attr['name'] === 'hostname') {
+                this.unitIP = attr['value'];
+              } else if (attr['name'] === 'port') {
+                this.unitPort = attr['value'];
+              }
+            }
+            this.unitName = this.unitName.replace(/^Send/, '').replace(/^Get/, '');
+          });
+      });
+
     this.phase = '3';
   }
 

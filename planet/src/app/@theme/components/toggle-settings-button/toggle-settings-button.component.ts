@@ -24,6 +24,13 @@ export class ToggleSettingsButtonComponent {
       .subscribe(({ id }) => {
         this.sidebarEnd = id === 'end';
       });
+
+    this.sidebarService.onCollapse()
+      .subscribe((data) => {
+        if (this.expanded === true) {
+          this.expanded = !this.expanded;
+        }
+      });
   }
 
   toggleSettings() {
