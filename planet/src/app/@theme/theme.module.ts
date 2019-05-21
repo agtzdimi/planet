@@ -14,6 +14,7 @@ import { NbAuthComponent } from './components/auth/auth.component';
 import { TechInputFieldComponent } from './components/planet/tech-input-field.component';
 import { RouterModule } from '@angular/router';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { EnergyGridComponent } from './components/planet/grids/energy-grid/energy-grid.component';
 
 import {
   NbActionsModule,
@@ -128,6 +129,7 @@ const COMPONENTS = [
   SampleLayoutComponent,
   ToggleSettingsButtonComponent,
   TechInputFieldComponent,
+  EnergyGridComponent,
 ];
 
 const ENTRY_COMPONENTS = [

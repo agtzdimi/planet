@@ -1,0 +1,28 @@
+<svg height="495" width="800" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid">
+
+  <g [attr.id]="room.id" [class.selected-room]="selectedRoom == room.id && checkNode(room.number.text)"
+    *ngFor="let room of sortedRooms">
+    <path (click)="selectRoom(room.id)" [attr.d]="room.area.d" [style.filter]="isIE || isFirefox ? 'inherit': ''"
+      [ngClass]="{'room-border-gas':checkNode(room.number.text) === 1,
+      'room-border-dh':checkNode(room.number.text) === 2,
+      'room-border-electrical':checkNode(room.number.text) === 3,
+      'room-border-node':checkNode(room.number.text) === 4}" />
+    <path [attr.d]="room.border.d" [ngClass]="{'room-border-gas':checkNode(room.number.text) === 1,
+    'room-border-dh':checkNode(room.number.text) === 2,
+    'room-border-electrical':checkNode(room.number.text) === 3,
+    'room-border-node':checkNode(room.number.text) === 4}" />
+    <path class=" room-border-glow" [attr.d]="room.border.d" [style.filter]="isIE || isFirefox ? 'inherit': ''"
+      [ngClass]="{'room-border-gas':checkNode(room.number.text) === 1,
+      'room-border-dh':checkNode(room.number.text) === 2,
+      'room-border-electrical':checkNode(room.number.text) === 3,
+      'room-border-node':checkNode(room.number.text) === 4}" />
+    <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.name.x"
+      [attr.y]="room.name.y">{{room.name.text}}</text>
+    <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.number.x"
+      [attr.y]="room.number.y">{{room.number.text}}</text>
+    <text *ngIf="room.number.x2" class="room-text" (click)="selectRoom(room.id)" text-anchor="middle"
+      [attr.x]="room.number.x2" [attr.y]="room.number.y2">{{room.number.text2}}</text>
+  </g>
+
+</svg>

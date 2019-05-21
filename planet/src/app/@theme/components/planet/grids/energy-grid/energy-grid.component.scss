@@ -1,4 +1,4 @@
-@import '../../../../@theme/styles/themes';
+@import '../../../../../@theme/styles/themes';
 @import '~@nebular/theme/components/card/card.component.theme';
 
 @include nb-install-component() {
@@ -18,9 +18,32 @@
   fill: url('#New_Pattern_Swatch_1');
 }
 
-.room-border {
-  stroke-width: 4px;
-  stroke: #bdc4cd;
+.room-border-gas {
+  stroke-width: 14px;
+  stroke: rgb(30, 255, 0);
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+.room-border-dh {
+  stroke-width: 14px;
+  stroke: rgba(255, 51, 0, 0.651);
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+.room-border-electrical {
+  stroke-width: 14px;
+  stroke: rgb(0, 89, 255);
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+.room-border-node {
+  stroke-width: 7px;
+  font-weight: 800px;
+  
+  stroke: lightgray;
   stroke-miterlimit: 10;
   fill: none;
 }
@@ -43,6 +66,8 @@
   user-select: none;
   pointer-events: none;
   fill: nb-theme(color-fg);
+  font-weight: 700;
+  font-size: large;
 }
 
 .selected-room {
@@ -51,9 +76,11 @@
   .room-text {
     fill: nb-theme(color-fg-heading);
     font-weight: nb-theme(font-weight-bolder);
+    font-size: large;
   }
-  .room-border {
-    stroke: nb-theme(color-success);
+
+  .room-border-node {
+    stroke:  #B8B8B8;
   }
 }
 
