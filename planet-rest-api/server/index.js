@@ -104,6 +104,7 @@ app.post("/save_data", (req, res, next) => {
     inputFormName = JSON.parse(req.body.pvPayload)
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/^\s/, '');
     inputFormName.payload.formName = inputFormName.payload.formName.replace(/\s$/, '');
+    console.log(req.body.pvPayload + "################################################")
     if (formName.includes(inputFormName.payload.formName)) {
         if (req.body.method === 'LOAD') {
             shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +

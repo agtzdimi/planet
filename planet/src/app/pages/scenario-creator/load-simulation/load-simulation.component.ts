@@ -80,6 +80,14 @@ export class LoadSimulationFilesComponent implements OnInit {
             (data) => this.generalParams.formName = data,
         );
 
+        this.generalParams.startingDateUpdate.subscribe(
+            (data) => this.generalParams.startingDate = data,
+        );
+
+        this.generalParams.endingDateUpdate.subscribe(
+            (data) => this.generalParams.endingDate = data,
+        );
+
         this.generalParams.formDescriptionUpdated.subscribe(
             (data) => this.generalParams.formDescription = data,
         );
@@ -215,12 +223,18 @@ export class LoadSimulationFilesComponent implements OnInit {
                     this.windParam['payload'] = JSON.parse(oldWindValue);
                     this.windParam['payload']['formName'] = this.generalParams.formName;
                     this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
-                    this.windParam['payload']['startDate'] = this.generalParams.startingDate;
-                    this.windParam['payload']['endDate'] = this.generalParams.endingDate;
+                    const startDate = this.generalParams.startingDate.getFullYear().toString() +
+                        '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
+                        '-' + this.generalParams.startingDate.getDate().toString();
+                    const endDate = this.generalParams.endingDate.getFullYear().toString() +
+                        '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
+                        '-' + this.generalParams.endingDate.getDate().toString();
+                    this.windParam['payload']['startDate'] = startDate;
+                    this.windParam['payload']['endDate'] = endDate;
                     this.pvParam['payload']['formName'] = this.generalParams.formName;
                     this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
-                    this.pvParam['payload']['startDate'] = this.generalParams.startingDate;
-                    this.pvParam['payload']['endDate'] = this.generalParams.endingDate;
+                    this.pvParam['payload']['startDate'] = startDate;
+                    this.pvParam['payload']['endDate'] = endDate;
                     url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/save_data';
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),

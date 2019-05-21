@@ -218,6 +218,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     if (event.end) {
       this.generalParams.startingDate = event.start;
       this.generalParams.endingDate = event.end;
+      this.generalParams.updateStartDate(this.generalParams.startingDate);
+      this.generalParams.updateEndDate(this.generalParams.endingDate);
       const daysTotal = Math.round(Math.abs((event.start.getTime() - event.end.getTime()) / (24 * 60 * 60 * 1000))) + 1;
       if (this.generalParams.simulationTime['days']) {
         this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal);

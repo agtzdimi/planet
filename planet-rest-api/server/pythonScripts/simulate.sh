@@ -38,18 +38,28 @@ sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' tempFile$simulationType | head -
 
 rm ./public/files/$simulationType/allDocuments.txt tempFile$simulationType
 
-for file in $(ls ./public/files/$simulationType/*); do
+for file in $(ls ./public/files/$simulationType/*.txt); do
    fileName=$(basename $(echo -e "${file}"))
    echo "########$fileName########" >> "./public/files/$simulationType/seperatedFiles.txt"
    cat $file >> "./public/files/$simulationType/seperatedFiles.txt"
 done
 
 filesPath="$(pwd)/public/files"
-seperatedFiles="$(cat ./public/files/$simulationType/seperatedFiles.txt | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
+seperatedFiles1="$(cat ./public/files/$simulationType/PV.csv | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
+seperatedFiles2="$(cat ./public/files/$simulationType/Heat.csv | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
+seperatedFiles3="$(cat ./public/files/$simulationType/Electricity.csv | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
+seperatedFiles4="$(cat ./public/files/$simulationType/Wind.csv | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
+seperatedFiles5="$(cat ./public/files/$simulationType/seperatedFiles.txt | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
 eventDate=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
 sleep 1
-simTopic="$(echo $SIMULATION_TOPIC | sed 's/^Send//')"
-mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles")"'"}}}' -p "$SITEWHERE_PORT"
+
+simTopic="$(echo ""$SIMULATION_TOPIC"" | sed 's/^Send//')"
+
+mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles1")"'"}}}' -p "$SITEWHERE_PORT"
+mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles2")"'"}}}' -p "$SITEWHERE_PORT"
+mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles3")"'"}}}' -p "$SITEWHERE_PORT"
+mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles4")"'"}}}' -p "$SITEWHERE_PORT"
+mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles5")"'"}}}' -p "$SITEWHERE_PORT"
 # mosquitto_pub -m "$(echo $seperatedFiles)" -h $SIMULATION_MACHINE -t "$SIMULATION_TOPIC"
 }
 

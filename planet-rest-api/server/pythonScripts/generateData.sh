@@ -88,8 +88,16 @@ hubHeight=$(echo "$windData" | python ./server/pythonScripts/getAttribute.py --n
 turbineModel=$(echo "$windData" | python ./server/pythonScripts/getAttribute.py --node node.1 --turbine.model true)
 windCapacity=$(echo "$windData" | python ./server/pythonScripts/getAttribute.py --node node.1 --capacity true)
 pvCapacity=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --node node.1 --capacity true)
-pvStartYear=$(echo "$pvStartYear" | sed 's/\(.*\)T.*/\1/' | sed 's/^[0-9]*\(\-.*\)/2016\1/')
-pvEndYear=$(echo "$pvEndYear" | sed 's/\(.*\)T.*/\1/' | sed 's/^[0-9]*\(\-.*\)/2016\1/')
+leapYearIndexBefore=$(python ./server/pythonScripts/checkLeapYear.py --startDate "$pvStartYear" --endDate "$pvEndYear" | cut -d ' ' -f1)
+if [[ "$(echo $pvStartYear | cut -d - -f1)" != "$(echo $pvEndYear | cut -d - -f1)" ]]; then 
+   pvStartYear=$(echo "$pvStartYear" | sed 's/^[0-9]*\(\-.*\)/2015\1/')
+   pvEndYear=$(echo "$pvEndYear" | sed 's/^[0-9]*\(\-.*\)/2016\1/')
+else
+   pvStartYear=$(echo "$pvStartYear" | sed 's/^[0-9]*\(\-.*\)/2016\1/')
+   pvEndYear=$(echo "$pvEndYear" | sed 's/^[0-9]*\(\-.*\)/2016\1/')
+fi
+leapYearIndexAfter=$(python ./server/pythonScripts/checkLeapYear.py --startDate "$pvStartYear" --endDate "$pvEndYear" | cut -d ' ' -f1)
+
 windEndYear="$pvEndYear"
 windStartYear="$pvStartYear"
 turbineModel=$(echo "$turbineModel" | sed 's/[[:space:]]/+/g')
@@ -102,6 +110,9 @@ curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "
 
 sed -i '1d' nodeFiles/PV1
 sed -i '1d' nodeFiles/Wind1
+if [[ "$leapYearIndexAfter" != "$leapYearIndexBefore" ]]; then
+   eval ' for hour in {'"$((leapYearIndexAfter+1))"'..'"$((leapYearIndexAfter+24))"'}; do sed -i ""$hour"d" nodeFiles/PV1; sed -i ""$hour"d" nodeFiles/Wind1 ;done'
+fi
 
 timeStep=$(cat ./public/files/Parameters_initialization.txt | python ./server/pythonScripts/getAttribute.py --time.step true)
 steps=$(awk -v step="$timeStep" 'BEGIN {print (1/step)}')
