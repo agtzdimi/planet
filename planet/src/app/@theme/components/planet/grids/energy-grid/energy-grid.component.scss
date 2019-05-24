@@ -43,7 +43,7 @@
   stroke-width: 7px;
   font-weight: 800px;
   
-  stroke: lightgray;
+  stroke: #b8b8b8;
   stroke-miterlimit: 10;
   fill: none;
 }
@@ -80,7 +80,7 @@
   }
 
   .room-border-node {
-    stroke:  #b8b8b8;
+    stroke:  #262626;
   }
 }
 
@@ -89,4 +89,9 @@
   border-bottom: none;
   padding-bottom: 0;
 }
+}
+
+svg {
+  display: block;
+  margin: auto;
 }

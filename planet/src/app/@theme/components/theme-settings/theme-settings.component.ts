@@ -8,30 +8,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 @Component({
   selector: 'ngx-theme-settings',
   styleUrls: ['./theme-settings.component.scss'],
-  template: `
-    <h4 (click)="test()">{{scenarioName}}</h4>
-    <h6>( {{startingDate}} - {{endingDate}} )</h6>
-    <hr>
-    <h6>Technologies</h6>
-    <div class="settings-row">
-        <ng2-smart-table [settings]="techSettings" [source]="techSource">
-        </ng2-smart-table>
-    </div>
-    <hr>
-    <h6>Economy Parameters</h6>
-    <div class="settings-row">
-        <ng2-smart-table [settings]="econ2Settings" [source]="econ2Source" [ngStyle]="{'margin-bottom':'1.5rem'}">
-        </ng2-smart-table>
-        <ng2-smart-table [settings]="econSettings" [source]="econSource">
-        </ng2-smart-table>
-    </div>
-    <hr>
-    <h6>Dispatch Priority Order</h6>
-    <div class="settings-row">
-    <ng2-smart-table [settings]="controlSettings" [source]="controlSource">
-    </ng2-smart-table>
-    </div>
-  `,
+  templateUrl: './theme-settings.component.html',
 })
 export class ThemeSettingsComponent {
   techSettings = {
@@ -203,7 +180,11 @@ export class ThemeSettingsComponent {
   layouts = [];
   sidebars = [];
   scenarioName: string;
-  paramInit: Object;
+  paramInit: Object = {
+    'payload': {
+      'model': '',
+    },
+  };
   econEnv: Object;
   controlSystem: Object;
   startingDate;

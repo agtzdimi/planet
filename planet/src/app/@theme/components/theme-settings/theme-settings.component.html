@@ -1,0 +1,34 @@
+<h4 (click)="test()">{{scenarioName}}</h4>
+<h6>( {{startingDate}} - {{endingDate}} )</h6>
+<hr [ngStyle]="{'margin-bottom': '0rem'}">
+
+<nb-tabset>
+    <nb-tab tabTitle="Table Data">
+        <h6 [ngStyle]="{'margin-top': '1rem'}">Technologies</h6>
+        <div class="settings-row">
+            <ng2-smart-table [settings]="techSettings" [source]="techSource">
+            </ng2-smart-table>
+        </div>
+        <hr>
+        <h6>Economy Parameters</h6>
+        <div class="settings-row">
+            <ng2-smart-table [settings]="econ2Settings" [source]="econ2Source" [ngStyle]="{'margin-bottom':'1.5rem'}">
+            </ng2-smart-table>
+            <ng2-smart-table [settings]="econSettings" [source]="econSource">
+            </ng2-smart-table>
+        </div>
+        <hr>
+        <h6>Dispatch Priority Order</h6>
+        <div class="settings-row">
+            <ng2-smart-table [settings]="controlSettings" [source]="controlSource">
+            </ng2-smart-table>
+        </div>
+    </nb-tab>
+    <nb-tab tabTitle="Grid Image" [ngSwitch]="paramInit['payload']['model']">
+        <ngx-energy-grid *ngSwitchCase="1" [gasNodes]="1" [dhNodes]="1" [elecNodes]="1"></ngx-energy-grid>
+        <ngx-energy-grid *ngSwitchCase="2" [gasNodes]="1" [dhNodes]="1" [elecNodes]="8" [paramInit]="paramInit">
+        </ngx-energy-grid>
+        <ngx-energy-grid *ngSwitchCase="3" [gasNodes]="1" [dhNodes]="3" [elecNodes]="1"></ngx-energy-grid>
+        <ngx-energy-grid *ngSwitchCase="4" [gasNodes]="1" [dhNodes]="3" [elecNodes]="8"></ngx-energy-grid>
+    </nb-tab>
+</nb-tabset>

@@ -1,15 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'ngx-energy-grid',
   templateUrl: './energy-grid.component.html',
   styleUrls: ['./energy-grid.component.scss'],
 })
-export class EnergyGridComponent implements OnInit {
+export class EnergyGridComponent implements OnChanges {
 
   @Input() gasNodes: number;
   @Input() dhNodes: number;
   @Input() elecNodes: number;
+  @Input() paramInit: any;
+  items;
   selectedRoom: null;
   sortedRooms = [];
   viewBox = '-10 -10 768.88 567.99';
@@ -26,11 +28,11 @@ export class EnergyGridComponent implements OnInit {
         id: '0',
         name: { text: '', x: -50, y: 4.1 },
         number: {
-          text: 'Gas', x: 17, y: 372,
-          text2: 'Network', x2: 17, y2: 394,
+          text: 'Gas', x: 147, y: 422,
+          text2: 'Network', x2: 147, y2: 444,
         },
         area: {
-          d: `M 20,0 V350`,
+          d: `M 150,0 V400`,
         },
         border: {
           d: ``,
@@ -40,11 +42,11 @@ export class EnergyGridComponent implements OnInit {
         id: '1',
         name: { text: '', x: -50, y: 4.1 },
         number: {
-          text: 'DH', x: 197, y: 372,
-          text2: 'Network', x2: 197, y2: 394,
+          text: 'DH', x: 297, y: 422,
+          text2: 'Network', x2: 297, y2: 444,
         },
         area: {
-          d: `M 200,0 V350`,
+          d: `M 300,0 V400`,
         },
         border: {
           d: ``,
@@ -54,62 +56,11 @@ export class EnergyGridComponent implements OnInit {
         id: '2',
         name: { text: '', x: -50, y: 4.1 },
         number: {
-          text: 'Electrical', x: 377, y: 372,
-          text2: 'Grid', x2: 377, y2: 394,
+          text: 'Electrical', x: 447, y: 422,
+          text2: 'Grid', x2: 447, y2: 444,
         },
         area: {
-          d: `M 380,0 V350`,
-        },
-        border: {
-          d: ``,
-        },
-      },
-      {
-        id: '3',
-        name: { text: '', x: -50, y: 4.1 },
-        number: {
-          text: 1, x: 20, y: 180,
-          text2: '', x2: 377, y2: 394,
-        },
-        area: {
-          d: `M 20, 175
-          m -15, 0
-          a 15,15 0 1,0 30,0
-          a 15,15 0 1,0 -30,0`,
-        },
-        border: {
-          d: ``,
-        },
-      },
-      {
-        id: '4',
-        name: { text: '', x: -50, y: 4.1 },
-        number: {
-          text: 1, x: 200, y: 180,
-          text2: '', x2: 377, y2: 394,
-        },
-        area: {
-          d: `M 200, 175
-          m -15, 0
-          a 15,15 0 1,0 30,0
-          a 15,15 0 1,0 -30,0`,
-        },
-        border: {
-          d: ``,
-        },
-      },
-      {
-        id: '5',
-        name: { text: '', x: -50, y: 4.1 },
-        number: {
-          text: 1, x: 380, y: 180,
-          text2: '', x2: 377, y2: 394,
-        },
-        area: {
-          d: `M 380, 175
-          m -15, 0
-          a 15,15 0 1,0 30,0
-          a 15,15 0 1,0 -30,0`,
+          d: `M 450,0 V400`,
         },
         border: {
           d: ``,
@@ -119,16 +70,44 @@ export class EnergyGridComponent implements OnInit {
   };
 
   constructor() {
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.items = [
+      { title: 'Profile' },
+      { title: 'Logout' },
+    ];
     this.generateNodes();
     this.selectRoom('3');
   }
 
-  ngOnInit() {
+  generateNodes() {
+    this.createNode(this.gasNodes, 150);
+    this.createNode(this.dhNodes, 300);
+    this.createNode(this.elecNodes, 450);
   }
 
-  generateNodes() {
-    for (let gas = 0; gas < this.gasNodes; gas++) {
-
+  createNode(nodesLength, xAxis) {
+    let tempNode;
+    for (let node = 0; node < nodesLength; node++) {
+      tempNode = {
+        id: (this.roomSvg.rooms.length),
+        name: { text: '', x: -50, y: 4.1 },
+        number: {
+          text: (node + 1), x: xAxis, y: ((400 / (nodesLength + 1)) * (node + 1) + 5),
+        },
+        area: {
+          d: `M` + xAxis + `,` + ((400 / (nodesLength + 1)) * (node + 1)) + `
+          m -15, 0
+          a 15,15 0 1,0 30,0
+          a 15,15 0 1,0 -30,0`,
+        },
+        border: {
+          d: ``,
+        },
+      };
+      this.roomSvg.rooms.push(tempNode);
     }
   }
 
@@ -161,7 +140,14 @@ export class EnergyGridComponent implements OnInit {
     } else if (node === 'Electrical') {
       return 3;
     }
+  }
 
+  showPopup(node) {
+    if (this.checkNode(node) === 4) {
+      return 'hint';
+    } else {
+      return 'click';
+    }
   }
 
 }
