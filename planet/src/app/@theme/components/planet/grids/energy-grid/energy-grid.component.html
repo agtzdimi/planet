@@ -7,19 +7,16 @@
       [ngClass]="{'room-border-gas':checkNode(room.number.text) === 1,
       'room-border-dh':checkNode(room.number.text) === 2,
       'room-border-electrical':checkNode(room.number.text) === 3,
-      'room-border-node':checkNode(room.number.text) === 4}" [nbContextMenu]="items"
-      [nbContextMenuTrigger]="showPopup(room.number.text)" nbContextMenuPlacement="right" />
+      'room-border-node':checkNode(room.number.text) === 4}" />
     <path [attr.d]="room.border.d" [ngClass]="{'room-border-gas':checkNode(room.number.text) === 1,
     'room-border-dh':checkNode(room.number.text) === 2,
     'room-border-electrical':checkNode(room.number.text) === 3,
-    'room-border-node':checkNode(room.number.text) === 4}" [nbContextMenu]="items"
-      [nbContextMenuTrigger]="showPopup(room.number.text)" nbContextMenuPlacement="right" />
+    'room-border-node':checkNode(room.number.text) === 4}" />
     <path class=" room-border-glow" [attr.d]="room.border.d" [style.filter]="isIE || isFirefox ? 'inherit': ''"
       [ngClass]="{'room-border-gas':checkNode(room.number.text) === 1,
       'room-border-dh':checkNode(room.number.text) === 2,
       'room-border-electrical':checkNode(room.number.text) === 3,
-      'room-border-node':checkNode(room.number.text) === 4}" [nbContextMenu]="items"
-      [nbContextMenuTrigger]="showPopup(room.number.text)" nbContextMenuPlacement="right" />
+      'room-border-node':checkNode(room.number.text) === 4}" />
     <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.name.x"
       [attr.y]="room.name.y">{{room.name.text}}</text>
     <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.number.x"

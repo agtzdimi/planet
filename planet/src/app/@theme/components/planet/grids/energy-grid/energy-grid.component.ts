@@ -1,4 +1,6 @@
 import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { NbDialogService } from '@nebular/theme';
+import { TechnologiesDialogComponent } from './energy-grid.tech.component';
 
 @Component({
   selector: 'ngx-energy-grid',
@@ -11,6 +13,7 @@ export class EnergyGridComponent implements OnChanges {
   @Input() dhNodes: number;
   @Input() elecNodes: number;
   @Input() paramInit: any;
+  show = false;
   items;
   selectedRoom: null;
   sortedRooms = [];
@@ -69,7 +72,7 @@ export class EnergyGridComponent implements OnChanges {
     ],
   };
 
-  constructor() {
+  constructor(private dialogService: NbDialogService) {
 
   }
 
@@ -126,6 +129,10 @@ export class EnergyGridComponent implements OnChanges {
   selectRoom(roomNumber) {
     if (typeof (this.roomSvg['rooms'][roomNumber]['number']['text']) === 'number') {
       this.selectedRoom = roomNumber;
+      if (this.show) {
+        this.open(false);
+      }
+      this.show = true;
       this.sortRooms();
     }
   }
@@ -142,12 +149,19 @@ export class EnergyGridComponent implements OnChanges {
     }
   }
 
-  showPopup(node) {
-    if (this.checkNode(node) === 4) {
-      return 'hint';
+  protected open(hasBackdrop: boolean) {
+    let type: string;
+    const number: number = this.selectedRoom;
+    if (this.roomSvg['rooms'][number]['number']['x'] === 150) {
+      type = 'Gas';
+    } else if (this.roomSvg['rooms'][number]['number']['x'] === 300) {
+      type = 'DH';
     } else {
-      return 'click';
+      type = 'Electrical';
     }
+
+    type = type + ' Node ' + this.roomSvg['rooms'][number]['number']['text'];
+    this.dialogService.open(TechnologiesDialogComponent, { hasBackdrop, 'context': type });
   }
 
 }
