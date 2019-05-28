@@ -33,7 +33,19 @@ def sendFiles(fileName):
    for i in range(len(content)):
       finalFile = finalFile + content[i]
    finalFile = finalFile + '\n"'
-   p1 = subprocess.Popen(['mosquitto_pub','-m',finalFile,'-h','192.168.11.128','-t','simulations_results'])
+   
+   splitted = []
+   splitted = finalFile.split('\n')
+   msg=""
+   for line in range(1,len(splitted)):
+      if line % 100 == 0:
+         msg = msg + splitted[line] + "\n"
+         p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','192.168.11.128','-t','simulations_results'])
+         p1.wait()
+         msg=""
+      else:
+         msg = msg + splitted[line] + "\n"
+   p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','192.168.11.128','-t','simulations_results'])
    p1.wait()
 
 if __name__ == "__main__":

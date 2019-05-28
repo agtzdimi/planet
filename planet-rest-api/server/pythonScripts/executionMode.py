@@ -53,6 +53,19 @@ def edit():
    subprocess.Popen(['python','edit.py'])
 
 def createExcelFile(fileName,finalFileName):
+   rgx = ""
+   if fileName != 'Heat.csv':
+      rgx = '.\\' + fileName + '*'
+      with open(fileName,'wb') as wfd:
+         for f in glob.glob(rgx):
+            with open(f,'a') as fd:
+               fd.write('\n')
+
+      with open(fileName,'wb') as wfd:
+         for f in glob.glob(rgx):
+            with open(f,'rb') as fd:
+               shutil.copyfileobj(fd, wfd)
+
    with open(fileName) as f:
       content = f.readlines()
    fileName="Final_"+fileName
@@ -88,11 +101,11 @@ def executeMode(message):
          file = line.rstrip()
       elif line.rstrip() == 'Heat.csv':
          file = line.rstrip()
-      elif line.rstrip() == 'PV.csv':
+      elif 'PV.csv' in line.rstrip():
          file = line.rstrip()
-      elif line.rstrip() == 'Wind.csv':
+      elif 'Wind.csv' in line.rstrip():
          file = line.rstrip()
-      elif line.rstrip() == 'Electricity.csv':
+      elif 'Electricity.csv' in line.rstrip():
          file = line.rstrip()
       else:
          file = 'Invalid Mode'
@@ -110,12 +123,10 @@ def executeMode(message):
    os.chdir("..")
    files = [f for f in os.listdir('.') if os.path.isfile(f)]
    for file in files:
-      path_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),file)
-      shutil.copy2(path_file,destPath)
+      pathFile = os.path.join(os.path.dirname(os.path.abspath(__file__)),file)
+      shutil.copy2(pathFile,destPath)
    filesDest = [f for f in os.listdir(destPath)]
-   while len(filesDest) != 25:
-      len(filesDest)
-      time.sleep(1)
+   time.sleep(2)
    os.chdir(destPath)
    execute(message)
    os.chdir("..")
@@ -123,9 +134,14 @@ def executeMode(message):
    #shutil.rmtree(destPath, ignore_errors=True)
 
 if __name__ == "__main__":
+   allFiles = 0
+   message=""
    proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','SendSimulator'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
+      actualMessage = msg.decode("utf-8")
       msg = msg.decode("utf-8")
-      msg = json.loads(msg)
-      if msg['name'] == 'Status' and msg['value'] == 1:
-         executeMode(msg['metadata']['message'])
+      if "END OF SIM" not in msg:
+         msg = json.loads(msg)
+         message = message + msg['metadata']['message']
+      else:
+         executeMode(message)

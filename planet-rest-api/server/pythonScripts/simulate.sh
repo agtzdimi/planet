@@ -38,21 +38,12 @@ sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' tempFile$simulationType | head -
 
 rm ./public/files/$simulationType/allDocuments.txt tempFile$simulationType
 
-for file in $(ls ./public/files/$simulationType/*); do
-   fileName=$(basename $(echo -e "${file}"))
-   echo "########$fileName########" >> "./public/files/$simulationType/seperatedFiles.txt"
-   cat $file >> "./public/files/$simulationType/seperatedFiles.txt"
-done
-
-seperatedFiles="$(cat ./public/files/$simulationType/seperatedFiles.txt | awk 'BEGIN {RS="\n";ORS="\\n"}{print $0}' | sed 's/"/\\"/g')"
 eventDate=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
 sleep 1
 
-echo "$seperatedFiles" > /home/planet/sssssss
 simTopic="$(echo ""$SIMULATION_TOPIC"" | sed 's/^Send//')"
 
-mosquitto_pub -h "$SITEWHERE_IP" -t 'SiteWhere/planet/input/json' -m '{"deviceToken": "'"$simTopic"'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'"$mode"'", "eventDate": "'"$eventDate"'", "metadata": {"message": "'"$(printf %s "$seperatedFiles")"'"}}}' -p "$SITEWHERE_PORT"
-# mosquitto_pub -m "$(echo $seperatedFiles)" -h $SIMULATION_MACHINE -t "$SIMULATION_TOPIC"
+python ./server/pythonScripts/splitMgs.py --ip "$SITEWHERE_IP" --device "$simTopic" --date "$eventDate" --mode "$mode"
 }
 
 form="$1"
