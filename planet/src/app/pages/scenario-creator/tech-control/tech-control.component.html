@@ -15,7 +15,7 @@
               <li> P2G - EB - P2H </li>
             </ol>
           </ng-template>
-          <input type="number" class="form-control" id="control-system" [(ngModel)]="+controlSystem.payload.control"
+          <input type="number" class="form-control" id="control-system" [(ngModel)]="+controlSystem['payload'].control"
             [nbPopover]="popContent" nbPopoverTrigger="hover" nbPopoverPlacement="right">
           <i class="info circle icon"></i>
         </div>
@@ -29,7 +29,7 @@
       <div class="col-sm-3">
         <div class="ui input">
           <input type="number" class="form-control" id="control-Curtailment"
-            [(ngModel)]="+controlSystem.payload['RES.curtailment']">
+            [(ngModel)]="+controlSystem['payload']['RES.curtailment']">
         </div>
       </div>
     </div>

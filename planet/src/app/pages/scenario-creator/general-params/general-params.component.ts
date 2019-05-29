@@ -39,7 +39,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
 
   constructor(private model1: Model1ParamInitService,
     private model2: Model2ParamInitService,
-    private generalParams: GeneralParamsService,
+    public generalParams: GeneralParamsService,
     private dialogService: NbDialogService) {
 
     this.options = this.generalParams.options;

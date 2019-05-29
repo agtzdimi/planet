@@ -58,7 +58,7 @@ export class LoadSimulationFilesComponent implements OnInit {
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
         private env: EnvService,
-        private generalParams: GeneralParamsService,
+        public generalParams: GeneralParamsService,
         private model2: Model2ParamInitService,
         private model1: Model1ParamInitService,
         private dateService: NbDateService<Date>,
