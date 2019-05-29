@@ -148,8 +148,8 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 this.heatParam = data['heatParam'];
                                 temp = JSON.parse(data['windParam']);
                                 this.windParam['payload'] = temp['payload'];
-                                this.generalParams.startingDate = temp['payload']['startDate'];
-                                this.generalParams.endingDate = temp['payload']['endDate'];
+                                this.generalParams.startingDate = new Date(temp['payload']['startDate']);
+                                this.generalParams.endingDate = new Date(temp['payload']['endDate']);
                                 this.generalParams.updateStartDate(this.generalParams.startingDate);
                                 this.generalParams.updateEndDate(this.generalParams.endingDate);
                                 this.generalParams.loadRangeDate = {
@@ -195,6 +195,7 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.generalParams.timeStep['mins'] = false;
         this.generalParams.timeStep['hours'] = true;
         this.generalParams.updateTimestep(this.generalParams.timeStep);
+        delete this.paramInit['_id'];
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
         this.paramInit['payload']['model'] = this.generalParams.model;
@@ -202,9 +203,11 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
 
+        delete this.controlSystem['_id'];
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
         this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
         this.updateControlFile();
+        delete this.econEnv['_id'];
         this.econEnv['payload']['formName'] = this.generalParams.formName;
         this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
         this.updateEconomyFile();

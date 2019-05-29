@@ -213,6 +213,10 @@ export class ThemeSettingsComponent {
         })
           .subscribe(
             res => {
+              this.techData = [];
+              this.econData = [];
+              this.econ2Data = [];
+              this.controlData = [];
               let temp = JSON.parse(res['paramInit']);
               this.paramInit = temp;
               temp = JSON.parse(res['econEnv']);

@@ -145,3 +145,4 @@ if __name__ == "__main__":
          message = message + msg['metadata']['message']
       else:
          executeMode(message)
+         message = ""

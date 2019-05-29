@@ -63,14 +63,14 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
             'Vestas V112 3000', 'Vestas V112 3300', 'Wind World W3700', 'Wind World W4200', 'Windmaster WM28 300',
             'Windmaster WM43 750', 'Windflow 500', 'XANT M21 100'];
 
-        this.getNodesNames();
+        this.getNodesNames(false);
         this.pvChange = new EventEmitter<Object>();
         this.windChange = new EventEmitter<Object>();
         this.phase3 = new EventEmitter<Boolean>();
         this.model2.paramUpdated.subscribe(
             (data) => {
                 if (this.currentModel !== 2 || this.isLoadModule) {
-                    this.getNodesNames();
+                    this.getNodesNames(true);
                     this.paramInit = data;
                     this.initializeValues();
                     this.currentModel = 2;
@@ -81,7 +81,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
         this.model1.paramUpdated.subscribe(
             (data) => {
                 if (this.currentModel !== 1 || this.isLoadModule) {
-                    this.getNodesNames();
+                    this.getNodesNames(true);
                     this.paramInit = data;
                     this.initializeValues();
                     this.currentModel = 1;
@@ -132,24 +132,32 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
         if (changes.pvParam && !this.isLoadModule) {
             this.afterWindDataRecieved(changes.windParam.currentValue);
             this.afterPvDataRecieved(changes.pvParam.currentValue);
-            if (this.generalParams.isDefault) {
-                for (let i = 0; i < this.nodes.length; i++) {
-                    this.displayingNode = 'node.' + (i + 1);
-                    for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-                        if (this.generalParams.model === 1) {
+            for (let i = 0; i < this.nodes.length; i++) {
+                this.displayingNode = 'node.' + (i + 1);
+                for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
+                    if (this.generalParams.model === 1) {
+                        if (this.generalParams.isDefault) {
                             this.model1.updateDefaultValues(j, true, this.displayingNode);
-                        } else if (this.generalParams.model === 2) {
+                        } else {
+                            this.model1.updateDefaultValues(j, false, this.displayingNode);
+                        }
+                    } else if (this.generalParams.model === 2) {
+                        if (this.generalParams.isDefault) {
                             this.model2.updateDefaultValues(j, true, this.displayingNode);
+                        } else {
+                            this.model2.updateDefaultValues(j, false, this.displayingNode);
                         }
                     }
                 }
-                this.displayingNode = 'node.1';
             }
+            this.displayingNode = 'node.1';
         }
     }
 
-    getNodesNames() {
-        this.displayingNode = 'node.1';
+    getNodesNames(calledFromModel: boolean) {
+        if (calledFromModel === false) {
+            this.displayingNode = 'node.1';
+        }
         if (this.generalParams.model === 1) {
             this.nodes = Object.getOwnPropertyNames(this.model1.paramInit['payload']['electric.grid']);
         } else if (this.generalParams.model === 2) {
@@ -167,6 +175,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
                     'hub.height': 80,
                     'turbine.model': 'Vestas+V80+2000',
                 };
+
                 this.nodePvParam['node.' + (i + 1)] = {
                     'capacity': 1,
                     'system.loss': 10,

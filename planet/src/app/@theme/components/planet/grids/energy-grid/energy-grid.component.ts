@@ -81,6 +81,7 @@ export class EnergyGridComponent implements OnChanges {
       { title: 'Profile' },
       { title: 'Logout' },
     ];
+    this.show = false;
     this.generateNodes();
     this.selectRoom('3');
   }
