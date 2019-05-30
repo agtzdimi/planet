@@ -2,6 +2,13 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
+    title: 'Welcome Screen',
+    icon: 'nb-gear',
+    link: '/pages/welcome-screen',
+    hidden: true,
+    home: true,
+  },
+  {
     title: 'System Parameters',
     icon: 'nb-gear',
     link: '/pages/system-params',

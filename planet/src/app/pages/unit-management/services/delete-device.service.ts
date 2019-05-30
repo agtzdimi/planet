@@ -34,9 +34,9 @@ export class DeleteDeviceService {
             })
                 .subscribe((assignments) => {
                     assignmentToken = assignments['results'][0]['token'];
-                    url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/api/assignments/' + assignmentToken;
-                    assignments['results'][0]['status'] = 'Released';
-                    this.httpClient.put(url, assignments, {
+                    url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/api/assignments/' +
+                        assignmentToken + '/end';
+                    this.httpClient.post(url, {}, {
                         headers: headers,
                         params: {
                             'token': assignmentToken,
@@ -56,8 +56,8 @@ export class DeleteDeviceService {
                                         asments => {
                                             // console.log(asments)
                                         },
-                                        error => {
-                                            // console.log(error)
+                                        asmentsError => {
+                                            // console.log(asmentsError)
                                         },
                                     );
 
@@ -78,8 +78,8 @@ export class DeleteDeviceService {
                                         },
                                     );
                             },
-                            error => {
-                                // console.log(error)
+                            assigneMentError => {
+                                // console.log(assigneMentError)
                             },
                         );
 
