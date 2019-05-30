@@ -4,6 +4,7 @@ import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.com
 import { NbDialogService } from '@nebular/theme';
 import { EnvService } from '../../../env.service';
 import { SendScenarioService } from './sendScenarioName.service';
+import { NbSidebarService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-simulation-start',
@@ -26,11 +27,17 @@ export class SimulationStartComponent {
   themeSubscription: any;
   formName = 'Select Saved Simulation';
   showVal: boolean;
+  expanded = false;
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
     private env: EnvService,
-    private sendScenarioService: SendScenarioService) {
+    private sendScenarioService: SendScenarioService,
+    private sidebarService: NbSidebarService) {
+    this.sidebarService.onToggle()
+      .subscribe((data) => {
+        this.expanded = !this.expanded;
+      });
     this.initializeCharts();
   }
 
@@ -40,6 +47,10 @@ export class SimulationStartComponent {
 
   startSimulation(): void {
     this.toggleLoadingAnimation();
+    if (this.expanded === true) {
+      this.sidebarService.toggle(false, 'settings-sidebar');
+    }
+    this.sendScenarioService.updateFormName(this.formName);
     this.showArea = false;
     this.showBar = false;
     this.showVal = false;
@@ -249,7 +260,6 @@ export class SimulationStartComponent {
       .onClose.subscribe(name => {
         if (name) {
           this.formName = name['formName'];
-          this.sendScenarioService.updateFormName(this.formName);
         }
       });
   }

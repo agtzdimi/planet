@@ -58,6 +58,7 @@ export class ComparisonStartComponent {
             // console.log('Error', error);
           },
         );
+      clearInterval(interval);
     }, 2000);
   }
 
