@@ -317,7 +317,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     } else {
       horizonVal = Math.round(this.paramInit['payload']['simulation']['simulation.time'] / 24 * timeStep);
     }
-    if (this.generalParams.formDescription === '' || this.generalParams.formName === '' || this.generalParams.formName.includes('  -  ')) {
+    if (this.generalParams.formDescription === '' || this.generalParams.formName === '' ||
+      this.generalParams.formName.includes('  -  ') || this.generalParams.formName.includes('|')) {
       this.generalParams.updateErrorMessage('Please fill in/correct the Simulation Name and Description');
     } else if (this.getFileName(0) !== 'Electricity.xlsx' && !this.isLoadModule) {
       this.generalParams.updateErrorMessage('Please upload Electricity.xlsx');

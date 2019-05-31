@@ -21,6 +21,8 @@
               <div *ngIf="generalParams.formName.includes('  -  ')" class="requiredField">
                 '[space][space]-[space][space]' is a
                 reserved word!</div>
+              <div *ngIf="generalParams.formName.includes('|')" class="requiredField">
+                The symbol '|' is reserved!</div>
             </div>
           </div>
           <div class="row">

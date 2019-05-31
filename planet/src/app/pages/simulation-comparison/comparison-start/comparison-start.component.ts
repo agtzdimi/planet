@@ -58,8 +58,7 @@ export class ComparisonStartComponent {
             // console.log('Error', error);
           },
         );
-      clearInterval(interval);
-    }, 2000);
+    }, 10000);
   }
 
   getCurtailment(data, id) {

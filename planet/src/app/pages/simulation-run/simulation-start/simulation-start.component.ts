@@ -102,8 +102,7 @@ export class SimulationStartComponent {
             // console.log('Error', error);
           },
         );
-      clearInterval(interval);
-    }, 2000);
+    }, 10000);
   }
 
   spreadValuesToCharts(data) {

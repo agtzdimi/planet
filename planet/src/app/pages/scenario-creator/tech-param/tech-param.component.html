@@ -353,7 +353,7 @@
             [(val)]="paramInit['payload']['centralised.heat']['G2H']['nomial.heat.power']" [compId]="'g2h1nomial'">
         </ngx-input-field>
 
-        <ngx-input-field [isChecked]="g2h['centralised']" [label1]="'C Rate'" [label2]="'MW'"
+        <ngx-input-field [isChecked]="g2h['centralised']" [label1]="'Efficiency Thermal'" [label2]="'%'"
             (valChange)="paramInit['payload']['centralised.heat']['G2H']['efficiency.thermal']=+$event"
             [(val)]="paramInit['payload']['centralised.heat']['G2H']['efficiency.thermal']" [compId]="'g2h1eff'">
         </ngx-input-field>
@@ -408,7 +408,7 @@
             [(val)]="paramInit['payload']['localised.heat']['G2H']['nomial.heat.power']" [compId]="'g2h2nomial'">
         </ngx-input-field>
 
-        <ngx-input-field [isChecked]="g2h['localised']" [label1]="'C Rate'" [label2]="'MW'"
+        <ngx-input-field [isChecked]="g2h['localised']" [label1]="'Efficiency Thermal'" [label2]="'%'"
             (valChange)="paramInit['payload']['localised.heat']['G2H']['efficiency.thermal']=+$event"
             [(val)]="paramInit['payload']['localised.heat']['G2H']['efficiency.thermal']" [compId]="'g2h2eff'">
         </ngx-input-field>
