@@ -16,6 +16,7 @@ import json
 import pandas as pd
 import shutil
 import re
+import datetime
 
 def csv_from_excel(filename):
    wb = xlrd.open_workbook(filename + ".xlsx")
@@ -68,6 +69,12 @@ if __name__ == "__main__":
       with open("Parameters_initialization.txt", "r") as read_file:
          data = json.load(read_file)
       model = data['payload']['model']
+      startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
+      endDate = datetime.datetime.strptime(data['payload']['endDate'], '%Y-%m-%d')
+      steps = data['payload']['simulation']['time.step']
+      mins = 60 * steps
+      horizon = data['payload']['simulation']['simulation.time']
+      horizonDays= round(24 /steps, 0)
       currentModel = switcher.get(model, "Invalid Model")
       eng.run(currentModel,nargout=0)
       message='Simulation finished successfully'
@@ -97,6 +104,14 @@ if __name__ == "__main__":
       csv_from_excel("Results2")
       csv_input = pd.read_csv('Results1.csv')
       csv_input['formName'] = formName
+      i = 0
+      for timestep in csv_input['Time']:
+         if timestep % horizonDays == 0:
+            csv_input['Time'][i] = str(startDate.year) + "/" + str(startDate.month) + "/" + str(startDate.day)
+         else:
+            csv_input['Time'][i] = "{:02d}".format(startDate.hour) + ":" + "{:02d}".format(startDate.minute)
+         startDate = startDate + datetime.timedelta(steps / 24)
+         i+=1
       csv_input.to_csv('output.csv', index=False)
       csv_input2 = pd.read_csv('Results2.csv')
       csv_input2['formName'] = formName

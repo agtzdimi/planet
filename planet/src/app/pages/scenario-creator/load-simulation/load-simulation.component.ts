@@ -204,11 +204,19 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
         this.generalParams.timeStep['mins'] = false;
         this.generalParams.timeStep['hours'] = true;
+        const startDate = this.generalParams.startingDate.getFullYear().toString() +
+            '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
+            '-' + this.generalParams.startingDate.getDate().toString();
+        const endDate = this.generalParams.endingDate.getFullYear().toString() +
+            '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
+            '-' + this.generalParams.endingDate.getDate().toString();
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         delete this.paramInit['_id'];
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
         this.paramInit['payload']['model'] = this.generalParams.model;
+        this.paramInit['payload']['startDate'] = startDate;
+        this.paramInit['payload']['endDate'] = endDate;
         this.updateModel();
         this.generalParams.updateTimestep(this.generalParams.timeStep);
         this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
@@ -236,12 +244,6 @@ export class LoadSimulationFilesComponent implements OnInit {
                     this.windParam['payload'] = JSON.parse(oldWindValue);
                     this.windParam['payload']['formName'] = this.generalParams.formName;
                     this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
-                    const startDate = this.generalParams.startingDate.getFullYear().toString() +
-                        '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
-                        '-' + this.generalParams.startingDate.getDate().toString();
-                    const endDate = this.generalParams.endingDate.getFullYear().toString() +
-                        '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
-                        '-' + this.generalParams.endingDate.getDate().toString();
                     this.windParam['payload']['startDate'] = startDate;
                     this.windParam['payload']['endDate'] = endDate;
                     this.pvParam['payload']['formName'] = this.generalParams.formName;
