@@ -154,7 +154,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
         this.generalParams.isDefaultUpdate(status);
         if (this.generalParams.isDefault) {
           // code if default values
-          // this.paramInit['payload']['simulation']['simulation.time'] = 96;
         }
       });
   }
@@ -224,14 +223,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       if (this.generalParams.simulationTime['days']) {
         this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal);
       } else {
-        if (this.generalParams.timeStep['mins']) {
-          const timeStepHour = this.paramInit['payload']['simulation']['time.step'] / 60;
-          this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal * 24 /
-            timeStepHour);
-        } else {
-          this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal * 24 /
-            this.paramInit['payload']['simulation']['time.step']);
-        }
+        this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal * 24);
       }
       this.calculatedSimulationTime = true;
       this.updateModel();
@@ -249,11 +241,11 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     if (type === 'days') {
       this.generalParams.updateSimulationTime({ 'days': event, 'hours': false });
       this.paramInit['payload']['simulation']['simulation.time'] = Math.round(this.paramInit['payload']['simulation']['simulation.time']
-        * timeStep / 24);
+        / 24);
     } else {
       this.generalParams.updateSimulationTime({ 'days': false, 'hours': event });
       this.paramInit['payload']['simulation']['simulation.time'] = Math.round(this.paramInit['payload']['simulation']['simulation.time']
-        * 24 / timeStep);
+        * 24);
     }
     this.calculatedSimulationTime = true;
     this.updateModel();
@@ -306,16 +298,10 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
   checkDefaultData() {
     let status = false;
     let horizonVal: number;
-    let timeStep: number;
-    if (this.generalParams.timeStep['mins']) {
-      timeStep = this.paramInit['payload']['simulation']['time.step'] / 60;
-    } else {
-      timeStep = this.paramInit['payload']['simulation']['time.step'];
-    }
     if (this.generalParams.simulationTime['days']) {
       horizonVal = Math.round(this.paramInit['payload']['simulation']['simulation.time']);
     } else {
-      horizonVal = Math.round(this.paramInit['payload']['simulation']['simulation.time'] / 24 * timeStep);
+      horizonVal = Math.round(this.paramInit['payload']['simulation']['simulation.time'] / 24);
     }
     if (this.generalParams.formDescription === '' || this.generalParams.formName === '' ||
       this.generalParams.formName.includes('  -  ') || this.generalParams.formName.includes('|')) {

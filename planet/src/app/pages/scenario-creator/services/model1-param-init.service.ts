@@ -11,7 +11,7 @@ export class Model1ParamInitService {
 
             'simulation': {
                 'time.step': 0.25,
-                'simulation.time': 96,
+                'simulation.time': 24,
             },
 
             'electric.grid': {
@@ -191,23 +191,6 @@ export class Model1ParamInitService {
                 }
                 break;
             case 5:
-                if (flag) {
-                    this.paramInit['payload']['electric.grid'][displayingNode]['EB'] = {
-                        'storage.electric.capacity': 0,
-                        'efficiency.charge': 92.1,
-                        'efficiency.discharge': 92.1,
-                        'c.rate': 0.25,
-                    };
-                } else {
-                    this.paramInit['payload']['electric.grid'][displayingNode]['EB'] = {
-                        'storage.electric.capacity': 0,
-                        'efficiency.charge': 92.1,
-                        'efficiency.discharge': 92.1,
-                        'c.rate': 0.25,
-                    };
-                }
-                break;
-            case 6:
                 if (flag) {
                     this.paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load'] = {
                         'peak.load': 2000,

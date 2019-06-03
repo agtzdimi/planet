@@ -133,13 +133,19 @@ export class NewSimulationFilesComponent {
             formData.append('file', file, file.name);
         }
 
+        const originalTimestep = this.paramInit['payload']['simulation']['time.step'];
+        const originalHorizon = this.paramInit['payload']['simulation']['simulation.time'];
         if (this.generalParams.timeStep['mins']) {
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
         if (this.generalParams.simulationTime['days']) {
             this.paramInit['payload']['simulation']['simulation.time'] =
-                this.paramInit['payload']['simulation']['simulation.time']
-                * 24 / this.paramInit['payload']['simulation']['time.step'];
+                Math.round(this.paramInit['payload']['simulation']['simulation.time']
+                    * 24 / this.paramInit['payload']['simulation']['time.step']);
+        } else if (this.generalParams.simulationTime['hours']) {
+            this.paramInit['payload']['simulation']['simulation.time'] =
+                Math.round(this.paramInit['payload']['simulation']['simulation.time']
+                    / this.paramInit['payload']['simulation']['time.step']);
         }
 
         // Update Parameters in case the user will save another scenario in the same instance
@@ -196,10 +202,14 @@ export class NewSimulationFilesComponent {
                             data => {
                                 this.loading = false;
                                 this.saveMessage = '';
+                                this.paramInit['payload']['simulation']['time.step'] = originalTimestep;
+                                this.paramInit['payload']['simulation']['simulation.time'] = originalHorizon;
                             },
                             error => {
                                 this.loading = false;
                                 this.saveMessage = error.error.text;
+                                this.paramInit['payload']['simulation']['time.step'] = originalTimestep;
+                                this.paramInit['payload']['simulation']['simulation.time'] = originalHorizon;
                                 // console.log("2", error.error);
                             },
                         );

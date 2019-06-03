@@ -10,7 +10,7 @@ export class TechCostComponent implements OnChanges {
 
     checkVal: boolean[] = [];
     economyParams: Object;
-    CHECKBOX_COUNT = 6;
+    CHECKBOX_COUNT = 5;
     @Output() phase5: EventEmitter<Boolean>;
     @Input() isLoadModule: Boolean;
 

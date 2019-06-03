@@ -61,11 +61,6 @@ export class ThemeSettingsComponent {
         editable: false,
         filter: false,
       },
-      EB: {
-        title: 'EB',
-        editable: false,
-        filter: false,
-      },
       uncontrollableLoad: {
         title: 'Uncontrollable Load',
         editable: false,
@@ -111,11 +106,6 @@ export class ThemeSettingsComponent {
       },
       P2G: {
         title: 'P2G',
-        editable: false,
-        filter: false,
-      },
-      EB: {
-        title: 'EB',
         editable: false,
         filter: false,
       },
@@ -240,7 +230,7 @@ export class ThemeSettingsComponent {
                     tempTechData['uncontrollableLoad'] =
                       this.paramInit['payload']['electric.grid'][node]['uncontrollable.load']['peak.load'];
                   } else if (tech === 'EB') {
-                    tempTechData[tech] = this.paramInit['payload']['electric.grid'][node][tech]['storage.electric.capacity'];
+                    continue;
                   } else {
                     tempTechData[tech] = this.paramInit['payload']['electric.grid'][node][tech]['nominal.electric.power'];
                   }

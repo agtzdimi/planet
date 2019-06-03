@@ -137,6 +137,9 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 this.loadPage = true;
                                 let temp = JSON.parse(data['paramInit']);
                                 this.paramInit = temp;
+                                this.paramInit['payload']['simulation']['simulation.time'] =
+                                    this.paramInit['payload']['simulation']['simulation.time'] *
+                                    this.paramInit['payload']['simulation']['time.step'];
                                 this.generalParams.updateModel(this.paramInit['payload']['model']);
                                 temp = JSON.parse(data['econEnv']);
                                 this.econEnv = temp;
@@ -176,6 +179,8 @@ export class LoadSimulationFilesComponent implements OnInit {
         // Start spinner
         this.loading = true;
         const formData: FormData = new FormData();
+        const originalTimestep = this.paramInit['payload']['simulation']['time.step'];
+        const originalHorizon = this.paramInit['payload']['simulation']['simulation.time'];
 
         for (let i = 0; i < this.generalParams.files.length; i++) {
             const file: File = this.generalParams.files[i];
@@ -185,8 +190,13 @@ export class LoadSimulationFilesComponent implements OnInit {
             this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         }
         if (this.generalParams.simulationTime['days']) {
-            this.paramInit['payload']['simulation']['simulation.time'] = this.paramInit['payload']['simulation']['simulation.time']
-                * 24 / this.paramInit['payload']['simulation']['time.step'];
+            this.paramInit['payload']['simulation']['simulation.time'] =
+                Math.round(this.paramInit['payload']['simulation']['simulation.time']
+                    * 24 / this.paramInit['payload']['simulation']['time.step']);
+        } else if (this.generalParams.simulationTime['hours']) {
+            this.paramInit['payload']['simulation']['simulation.time'] =
+                Math.round(this.paramInit['payload']['simulation']['simulation.time']
+                    / this.paramInit['payload']['simulation']['time.step']);
         }
         // Update values in case current instance will be used to save another scenario
         this.generalParams.simulationTime['days'] = false;
@@ -248,11 +258,15 @@ export class LoadSimulationFilesComponent implements OnInit {
                         .subscribe(
                             data => {
                                 this.loading = false;
+                                this.paramInit['payload']['simulation']['time.step'] = originalTimestep;
+                                this.paramInit['payload']['simulation']['simulation.time'] = originalHorizon;
                             },
                             error => {
                                 // console.log('Error', error);
                                 this.loading = false;
                                 this.saveMessage = error.error.text;
+                                this.paramInit['payload']['simulation']['time.step'] = originalTimestep;
+                                this.paramInit['payload']['simulation']['simulation.time'] = originalHorizon;
                             },
                         );
                 },

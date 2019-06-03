@@ -21,7 +21,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     nodePvParam: Object = {};
     displayingNode: string;
     nodes = [];
-    CHECKBOX_COUNT = 7;
+    CHECKBOX_COUNT = 6;
     hubHeight = 80;
     turbineModels = [];
     currentTab = 'Electric Grid';
@@ -264,14 +264,6 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
                         }
                         break;
                     case 5:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['EB']['storage.electric.capacity'] === 0
-                            && this.checkVal['node.' + (i + 1)][j] !== true) {
-                            this.checkVal['node.' + (i + 1)][j] = false;
-                        } else {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                        }
-                        break;
-                    case 6:
                         if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['uncontrollable.load']['peak.load'] === 0
                             && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;

@@ -254,11 +254,9 @@
                 [compId]="'techParamCheckInput5.4'"></ngx-input-field>
         </div>
 
-        <!--    EB switcher   -->
-
         <div class="row p-2">
             <div class="col-md-1">
-                <label>EB</label>
+                <label>Electric Load</label>
             </div>
             <div class="col-md-2">
                 <section class="slider-checkbox">
@@ -270,44 +268,10 @@
         </div>
 
         <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-            <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'Storage Electric Capacity'"
-                [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].EB['storage.electric.capacity']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].EB['storage.electric.capacity']"
-                [compId]="'techParamCheckInput6.1'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'Efficiency Charge'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].EB['efficiency.charge']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].EB['efficiency.charge']"
-                [compId]="'techParamCheckInput6.2'"></ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'Efficiency Discharge'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].EB['efficiency.discharge']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].EB['efficiency.discharge']"
-                [compId]="'techParamCheckInput6.3'"></ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'C Rate'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].EB['c.rate']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].EB['c.rate']"
-                [compId]="'techParamCheckInput6.4'"></ngx-input-field>
-        </div>
-
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>Electric Load</label>
-            </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[displayingNode][6]" (change)="changeCheckBoxVal(6)"
-                        id="techParamCheck7" #techParamCheck7>
-                    <label class="label" for="techParamCheck7"></label>
-                </section>
-            </div>
-        </div>
-
-        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-            <ngx-input-field [isChecked]="techParamCheck7.checked" [label1]="'Peak Load'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck6.checked" [label1]="'Peak Load'" [label2]="'MW'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']"
-                [compId]="'techParamCheckInput7.1'">
+                [compId]="'techParamCheckInput6.1'">
             </ngx-input-field>
         </div>
 

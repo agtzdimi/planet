@@ -149,7 +149,7 @@
 
         <div class="row p-2">
             <div class="col-md-1">
-                <label>EB</label>
+                <label>P2G</label>
             </div>
             <div class="col-md-2">
                 <section class="slider-checkbox">
@@ -161,47 +161,18 @@
         </div>
 
         <div *ngIf="economyParams['payload']['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'CAPEX'" [label2]="'€/kWhel'"
-                (valChange)="economyParams['payload']['technologies.cost'].EB['CAPEX']=+$event"
-                [(val)]="economyParams['payload']['technologies.cost'].EB['CAPEX']" [compId]="'techCostCheckInput6.1'">
+            <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'CAPEX'" [label2]="'€/kWel'"
+                (valChange)="economyParams['payload']['technologies.cost'].P2G['CAPEX']=+$event"
+                [(val)]="economyParams['payload']['technologies.cost'].P2G['CAPEX']" [compId]="'techCostCheckInput6.1'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'OPEX'" [label2]="'%CAPEX'"
-                (valChange)="economyParams['payload']['technologies.cost'].EB['OPEX']=+$event"
-                [(val)]="economyParams['payload']['technologies.cost'].EB['OPEX']" [compId]="'techCostCheckInput6.2'">
+                (valChange)="economyParams['payload']['technologies.cost'].P2G['OPEX']=+$event"
+                [(val)]="economyParams['payload']['technologies.cost'].P2G['OPEX']" [compId]="'techCostCheckInput6.2'">
             </ngx-input-field>
             <ngx-input-field [isChecked]="techCostCheck6.checked" [label1]="'life.time'" [label2]="'Years'"
-                (valChange)="economyParams['payload']['technologies.cost'].EB['life.time']=+$event"
-                [(val)]="economyParams['payload']['technologies.cost'].EB['life.time']"
-                [compId]="'techCostCheckInput6.3'">
-            </ngx-input-field>
-        </div>
-
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>P2G</label>
-            </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[6]" (change)="changeCheckBoxVal(6)" id="techCostCheck7"
-                        #techCostCheck7>
-                    <label class="label" for="techCostCheck7"></label>
-                </section>
-            </div>
-        </div>
-
-        <div *ngIf="economyParams['payload']['technologies.cost']">
-            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'CAPEX'" [label2]="'€/kWel'"
-                (valChange)="economyParams['payload']['technologies.cost'].P2G['CAPEX']=+$event"
-                [(val)]="economyParams['payload']['technologies.cost'].P2G['CAPEX']" [compId]="'techCostCheckInput7.1'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'OPEX'" [label2]="'%CAPEX'"
-                (valChange)="economyParams['payload']['technologies.cost'].P2G['OPEX']=+$event"
-                [(val)]="economyParams['payload']['technologies.cost'].P2G['OPEX']" [compId]="'techCostCheckInput7.2'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="techCostCheck7.checked" [label1]="'life.time'" [label2]="'Years'"
                 (valChange)="economyParams['payload']['technologies.cost'].P2G['life.time']=+$event"
                 [(val)]="economyParams['payload']['technologies.cost'].P2G['life.time']"
-                [compId]="'techCostCheckInput7.3'">
+                [compId]="'techCostCheckInput6.3'">
             </ngx-input-field>
         </div>
 
