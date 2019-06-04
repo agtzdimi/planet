@@ -9,12 +9,22 @@
           <div class="col-md-4">
             <button nbButton hero status="info" (click)="openDialogBox()">{{selectedForms}}</button>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-2">
             <button *ngIf="selectedForms !== 'Select Saved Simulations'" nbButton type="button" [nbSpinner]="loading"
               nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
               class="start-upload-btn" (click)="startComparison()">
               Comparison Start
             </button>
+          </div>
+          <div class="col-md-3">
+            <div *ngIf="status">
+              <div [ngClass]="{
+                'errorTextarea': status.includes('error'),
+                'successTextarea': status.includes('success')
+              }">
+                {{textMessage}}
+              </div>
+            </div>
           </div>
         </div>
       </nb-card-body>

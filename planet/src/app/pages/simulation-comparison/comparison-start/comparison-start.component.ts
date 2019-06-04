@@ -17,6 +17,9 @@ export class ComparisonStartComponent {
   count = 0;
   forms: string[] = [];
   results1Data: any;
+  timers = [];
+  status = '';
+  textMessage = '';
 
   options: any = {};
   themeSubscription: any;
@@ -67,6 +70,10 @@ export class ComparisonStartComponent {
     for (let index = 0; index < headers.length; index++) {
       switch (headers[index]) {
         case 'Time':
+          this.timers.push({
+            id: id,
+            time: this.getColumnData(lines, index).length,
+          });
           this.lineChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'Electric_grid_power_flow':
@@ -82,12 +89,18 @@ export class ComparisonStartComponent {
     }
 
     if (this.count === 2) {
-      this.lineChart[0].title = 'Electric grid power flow';
-      this.showLine = true;
+      if (this.timers[0]['time'] !== this.timers[1]['time']) {
+        this.status = 'error';
+        this.textMessage = 'These scenarios have different horizon!';
+      } else {
+        this.status = 'success';
+        this.textMessage = 'Data successfully retrieved!';
+        this.lineChart[0].title = 'Electric grid power flow';
+        this.showLine = true;
+      }
       this.loading = false;
       this.count = 0;
     }
-
   }
 
   getColumnData(lines, column: number) {
@@ -109,9 +122,12 @@ export class ComparisonStartComponent {
   }
 
   initializeCharts() {
+    this.status = '';
+    this.textMessage = '';
     this.lineChart[0] = {
       data: [],
     };
+    this.timers = [];
   }
 
 }
