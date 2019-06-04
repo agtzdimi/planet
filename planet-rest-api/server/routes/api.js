@@ -31,7 +31,7 @@ let mongoDbHelper = new MongoDbHelper(url);
 getJwtToken = (payload) => {
 
     const signOptions = {
-        expiresIn: 30,    // 30 days validity
+        expiresIn: "30d",    // 30 days validity
         algorithm: "RS256"
     };
 
