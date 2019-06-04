@@ -69,7 +69,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
             for (let index = 0; index < headers.length; index++) {
                 let tempData;
                 switch (headers[index]) {
-                    case 'Time':
+                    case 'Hours':
                         time = csvData[index];
                         break;
                     case 'Surplus':

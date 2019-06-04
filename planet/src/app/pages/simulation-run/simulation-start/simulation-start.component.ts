@@ -110,7 +110,7 @@ export class SimulationStartComponent {
     const headers = lines[0].split(',');
     for (let index = 0; index < headers.length; index++) {
       switch (headers[index]) {
-        case 'Time':
+        case 'Hours':
           this.areaChart[0].data.push(this.getColumnData(lines, index));
           this.areaChart[1].data.push(this.getColumnData(lines, index));
           this.areaChart[2].data.push(this.getColumnData(lines, index));

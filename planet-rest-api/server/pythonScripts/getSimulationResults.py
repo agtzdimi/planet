@@ -7,7 +7,7 @@ if __name__ == "__main__":
       msg = msg.decode("utf-8")
       for line in msg.split('\n'):
           lineLength = len(line.split(','))
-          if lineLength == 22:
+          if lineLength == 23:
               with open (os.path.join(os.getcwd(),'../../public/files','Results1.csv'), 'a') as f:
                   f.write("%s\n" % line)
           elif lineLength == 3:
