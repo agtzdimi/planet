@@ -128,7 +128,7 @@ export class SimulationStartComponent {
           this.areaChart[2].data.push(this.getColumnData(lines, index));
           break;
         case 'EB_output':
-          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          // this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_Curtailment':
           this.areaChart[0].data.push(this.getColumnData(lines, index));
@@ -159,7 +159,7 @@ export class SimulationStartComponent {
           this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'EB_input':
-          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          // this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
         default:
           break;
@@ -217,7 +217,7 @@ export class SimulationStartComponent {
           this.barChart[2].data.push(keyVal);
           break;
         case 'RES to EB':
-          this.barChart[2].data.push(keyVal);
+          // this.barChart[2].data.push(keyVal);
           break;
         case 'RES to P2H':
           this.barChart[2].data.push(keyVal);
@@ -229,7 +229,7 @@ export class SimulationStartComponent {
           }
           break;
         case 'RES producibility':
-          this.barChart[2].data.push(keyVal);
+          // this.barChart[2].data.push(keyVal);
           break;
         default:
           break;
@@ -246,11 +246,14 @@ export class SimulationStartComponent {
   }
 
   getColumnData(lines, column: number) {
-    const result = lines.map(val => {
+    let result = lines.map(val => {
       const value = val.split(',');
       return value[column];
     },
     );
+    if (result[result.length - 1] === undefined) {
+      result = result.slice(0, -1);
+    }
     return result;
   }
 

@@ -24,13 +24,38 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
     constructor(private theme: NbThemeService) {
     }
 
+    comparator(a, b) {
+        if (+a[1] > +b[1]) return -1;
+        if (+a[1] < +b[1]) return 1;
+        return 0;
+    }
+
     afterDataRecieved(data) {
 
         this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
 
             const colors: any = config.variables;
             const echarts: any = config.variables.echarts;
-            const csvData = data;
+            let csvData = data;
+
+            const colorList = [
+                '#B5C334', '#C1232B', '#F0805A', '#E87C25', '#27727B',
+                '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
+                '#D7504B', '#C6E579', '#F4E001', '#FCCE10', '#26C0C0',
+            ];
+
+            const series: any = [];
+            let yIndex: number;
+            let barGap: string;
+            let type: string;
+            const checkGraph = csvData.find(val => val[0] === 'RES curtailment');
+            if (checkGraph) {
+                csvData = csvData.sort(this.comparator);
+                barGap = '-100%';
+                yIndex = 0;
+                type = 'bar';
+            }
+
             const ObjHeaders = csvData.map((val) => {
                 const res = val.filter((v, index) => {
                     if (index === 0) {
@@ -45,21 +70,6 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                 headers = [...headers, ObjHeaders[obj][0]];
             }
 
-            const colorList = [
-                '#C1232B', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
-                '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
-                '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0',
-            ];
-            const series: any = [];
-            let yIndex: number;
-            let barGap: string;
-            let type: string;
-            const checkGraph = headers.find(val => val === 'RES producibility');
-            if (checkGraph) {
-                barGap = '30%';
-                yIndex = 0;
-                type = 'bar';
-            }
             for (let index = 0; index < headers.length; index++) {
                 switch (headers[index]) {
                     case 'Total CO2 emissions':
