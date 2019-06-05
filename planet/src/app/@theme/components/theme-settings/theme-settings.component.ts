@@ -117,6 +117,11 @@ export class ThemeSettingsComponent {
     actions: false,
     sort: false,
     columns: {
+      'external.electricity.price': {
+        title: 'External Electricity Price',
+        editable: false,
+        filter: false,
+      },
       'NG.cost': {
         title: 'NG cost',
         editable: false,
@@ -268,7 +273,7 @@ export class ThemeSettingsComponent {
               const tempEcon2Data = {};
               for (const tech of Object.keys(this.econEnv['payload'])) {
                 if (tech === 'NG.cost' || tech === 'SNG.cost' || tech === 'heat.cost' ||
-                  tech === 'carbon.tax' || tech === 'NG.emission.factor') {
+                  tech === 'carbon.tax' || tech === 'NG.emission.factor' || tech === 'external.electricity.price') {
                   tempEcon2Data[tech] = this.econEnv['payload'][tech];
                 }
               }

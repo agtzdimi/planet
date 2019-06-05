@@ -13,7 +13,8 @@ import { NbSidebarService } from '@nebular/theme';
 })
 export class SimulationStartComponent {
 
-  CHARTS_TOTAL = 3;
+  AREAS_TOTAL = 3;
+  BARS_TOTAL = 5;
   areaChart = [];
   barChart = [];
   showBar: boolean = false;
@@ -198,6 +199,9 @@ export class SimulationStartComponent {
         case 'LCOE':
           this.barChart[0].data.push(keyVal);
           break;
+        case 'CHP el production':
+          this.barChart[3].data.push(keyVal);
+          break;
         case 'G2H CO2 emissions':
           this.barChart[1].data.push(keyVal);
           break;
@@ -225,11 +229,30 @@ export class SimulationStartComponent {
         case 'RES direct utilization':
           if (directUtil === 0) {
             this.barChart[2].data.push(keyVal);
+            this.barChart[3].data.push(keyVal);
             directUtil += 1;
           }
           break;
+        case 'Imported electricity cost':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'Imported electricity':
+          this.barChart[3].data.push(keyVal);
+          break;
         case 'RES producibility':
           // this.barChart[2].data.push(keyVal);
+          break;
+        case 'P2G heat':
+          this.barChart[4].data.push(keyVal);
+          break;
+        case 'G2H heat':
+          this.barChart[4].data.push(keyVal);
+          break;
+        case 'CHP heat':
+          this.barChart[4].data.push(keyVal);
+          break;
+        case 'P2H heat':
+          this.barChart[4].data.push(keyVal);
           break;
         default:
           break;
@@ -241,7 +264,11 @@ export class SimulationStartComponent {
     this.barChart[1].title = 'Yearly CO' + '\u2082' + ' emissions';
     this.barChart[1].yAxisLabel = 'CO' + '\u2082' + ' emissions 10' + '\u00B3' + ' t/y';
     this.barChart[2].title = 'Yearly RES producibility dispatch';
-    this.barChart[2].yAxisLabel = 'RES producibility GWh/y';
+    this.barChart[2].yAxisLabel = 'RES producibility MWh/y';
+    this.barChart[3].title = 'Electric Demand Fulfilment';
+    this.barChart[3].yAxisLabel = 'Electric Demand MWh/y';
+    this.barChart[4].title = 'Thermal Demand Fulfilment';
+    this.barChart[4].yAxisLabel = 'Thermal Demand MWh/y';
     this.showBar = true;
   }
 
@@ -267,10 +294,13 @@ export class SimulationStartComponent {
   }
 
   initializeCharts() {
-    for (let i = 0; i < this.CHARTS_TOTAL; i++) {
+    for (let i = 0; i < this.AREAS_TOTAL; i++) {
       this.areaChart[i] = {
         data: [],
       };
+    }
+
+    for (let i = 0; i < this.BARS_TOTAL; i++) {
       this.barChart[i] = {
         data: [],
       };

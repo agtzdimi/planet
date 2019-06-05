@@ -35,7 +35,6 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
             return {
                 name: name,
                 type: 'line',
-                stack: 'Total amount',
                 areaStyle: { normal: { opacity: echarts.areaOpacity } },
                 data: data,
             };

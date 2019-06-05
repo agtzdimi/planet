@@ -183,6 +183,11 @@
     <nb-card-header>Economy Parameters</nb-card-header>
     <nb-card-body>
 
+        <ngx-input-field [isChecked]="true" [label1]="'External Electricity Price'" [label2]="'€/MWh'"
+            (valChange)="economyParams['payload']['external.electricity.price']=+$event"
+            [(val)]="economyParams['payload']['external.electricity.price']" [compId]="'ec_external.electricity.price'">
+        </ngx-input-field>
+
         <ngx-input-field [isChecked]="true" [label1]="'NG cost'" [label2]="'€/MWh'"
             (valChange)="economyParams['payload']['NG.cost']=+$event" [(val)]="economyParams['payload']['NG.cost']"
             [compId]="'ec_ng.cost'">

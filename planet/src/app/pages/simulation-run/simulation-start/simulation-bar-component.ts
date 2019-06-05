@@ -48,10 +48,18 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
             let yIndex: number;
             let barGap: string;
             let type: string;
-            const checkGraph = csvData.find(val => val[0] === 'RES curtailment');
+            let barWidth = '150';
+            const checkGraph = csvData.find(val => {
+                if (val[0] === 'RES direct utilization' || val[0] === 'P2H heat') {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
             if (checkGraph) {
                 csvData = csvData.sort(this.comparator);
                 barGap = '-100%';
+                barWidth = '200';
                 yIndex = 0;
                 type = 'bar';
             }
@@ -95,7 +103,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                     },
                     name: headers[index],
                     type: type,
-                    barWidth: '150',
+                    barWidth: barWidth,
                     barGap: barGap,
                     yAxisIndex: yIndex,
                     symbolSize: [40, 40],

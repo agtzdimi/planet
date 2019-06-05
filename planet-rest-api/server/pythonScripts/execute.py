@@ -57,7 +57,7 @@ if __name__ == "__main__":
    #args = vars(parser.parse_args())
    pd.options.mode.chained_assignment = None  # default='warn'
    switcher = {
-      1: "DEMO_PLANETm_POC3_model1",
+      1: "PLANETm_POC3_model1",
       2: "PLANETm_POC3_model2",
       3: "DEMO_PLANETm_POC3_model3",
       4 : "DEMO_PLANETm_POC3_model4"

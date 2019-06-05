@@ -8,7 +8,7 @@ export class EconomyFileService {
     economyFile = {
         'file.name': 'Economy_environment_initialization',
         'payload': {
-
+            'external.electricity.price': 100,
             'NG.cost': 50,
             'SNG.cost': 50,
             'heat.cost': 45,
@@ -66,7 +66,7 @@ export class EconomyFileService {
             this.economyFile = {
                 'file.name': 'Economy_environment_initialization',
                 'payload': {
-
+                    'external.electricity.price': 100,
                     'NG.cost': 50,
                     'SNG.cost': 50,
                     'heat.cost': 45,
@@ -119,7 +119,7 @@ export class EconomyFileService {
             this.economyFile = {
                 'file.name': 'Economy_environment_initialization',
                 'payload': {
-
+                    'external.electricity.price': 100,
                     'NG.cost': 50,
                     'SNG.cost': 50,
                     'heat.cost': 45,
