@@ -34,7 +34,7 @@
     </nb-card>
 
     <div *ngIf="showArea">
-      <nb-card *ngFor="let areaCh of areaChart" accent="active">
+      <nb-card *ngFor="let areaCh of areaChart" accent="active" size="large">
         <nb-card-header>{{areaCh.title}}</nb-card-header>
         <nb-card-body>
           <ngx-simulation-area-stack [data]="areaCh.data"></ngx-simulation-area-stack>
@@ -43,13 +43,20 @@
     </div>
 
     <div *ngIf="showBar">
-      <nb-card *ngFor="let barCh of barChart" accent="active">
-        <nb-card-header>{{barCh.title}}</nb-card-header>
-        <nb-card-body>
-          <ngx-simulation-bar [yAxisLabel]="barCh.yAxisLabel" [yRightAxisLabel]="barCh.yRightAxisLabel"
-            [data]="barCh.data"></ngx-simulation-bar>
-        </nb-card-body>
-      </nb-card>
+      <div class="row">
+        <div *ngFor="let barCh of barChart" [ngClass]="{
+          'col-md-12': barCh.title.includes('LCOE and economic resultsYearly CO2 emissions'),
+          'col-md-6': !barCh.title.includes('LCOE and economic resultsYearly CO2 emissions')
+        }">
+          <nb-card accent="active">
+            <nb-card-header>{{barCh.title}}</nb-card-header>
+            <nb-card-body>
+              <ngx-simulation-bar [yAxisLabel]="barCh.yAxisLabel" [yRightAxisLabel]="barCh.yRightAxisLabel"
+                [data]="barCh.data" [yVal]="yVal"></ngx-simulation-bar>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
     </div>
 
   </div>

@@ -13,7 +13,7 @@ import { NbSidebarService } from '@nebular/theme';
 })
 export class SimulationStartComponent {
 
-  AREAS_TOTAL = 3;
+  AREAS_TOTAL = 4;
   BARS_TOTAL = 5;
   areaChart = [];
   barChart = [];
@@ -115,6 +115,7 @@ export class SimulationStartComponent {
           this.areaChart[0].data.push(this.getColumnData(lines, index));
           this.areaChart[1].data.push(this.getColumnData(lines, index));
           this.areaChart[2].data.push(this.getColumnData(lines, index));
+          this.areaChart[3].data.push(this.getColumnData(lines, index));
           break;
         case 'P2H_heat':
           this.areaChart[2].data.push(this.getColumnData(lines, index));
@@ -155,6 +156,9 @@ export class SimulationStartComponent {
           break;
         case 'Total_heat_demand':
           this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'Electric_grid_power_flow':
+          this.areaChart[3].data.push(this.getColumnData(lines, index));
           break;
         case 'RES_power':
           this.areaChart[0].data.push(this.getColumnData(lines, index));
@@ -269,6 +273,18 @@ export class SimulationStartComponent {
     this.barChart[3].yAxisLabel = 'Electric Demand MWh/y';
     this.barChart[4].title = 'Thermal Demand Fulfilment';
     this.barChart[4].yAxisLabel = 'Thermal Demand MWh/y';
+    const maxYValueArr = [];
+    maxYValueArr.push(this.barChart[2]);
+    maxYValueArr.push(this.barChart[3]);
+    maxYValueArr.push(this.barChart[4]);
+    let yVal = Math.max.apply(Math, maxYValueArr.map(function (o) {
+      let max = 0;
+      for (let arr = 0; arr < o['data'].length; arr++) {
+        max = +o['data'][arr][1] + max;
+      }
+      return max;
+    }));
+    yVal = Math.ceil((yVal + 1) / 10) * 10;
     this.showBar = true;
   }
 

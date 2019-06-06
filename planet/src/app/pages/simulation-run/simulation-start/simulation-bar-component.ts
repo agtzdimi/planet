@@ -13,6 +13,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
     @Input() data;
     @Input() yRightAxisLabel;
     @Input() yAxisLabel;
+    @Input() yVal = null;
 
     ngOnChanges(changes: SimpleChanges) {
         this.afterDataRecieved(changes.data.currentValue);
@@ -33,7 +34,6 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
     afterDataRecieved(data) {
 
         this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
             const colors: any = config.variables;
             const echarts: any = config.variables.echarts;
             let csvData = data;
@@ -45,10 +45,11 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
             ];
 
             const series: any = [];
+            let stack = null;
             let yIndex: number;
             let barGap: string;
             let type: string;
-            let barWidth = '150';
+            let barWidth = '135';
             const checkGraph = csvData.find(val => {
                 if (val[0] === 'RES direct utilization' || val[0] === 'P2H heat') {
                     return true;
@@ -59,9 +60,12 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
             if (checkGraph) {
                 csvData = csvData.sort(this.comparator);
                 barGap = '-100%';
-                barWidth = '200';
+                barWidth = '185';
                 yIndex = 0;
                 type = 'bar';
+                stack = 'stackBars';
+            } else {
+                this.yVal = null;
             }
 
             const ObjHeaders = csvData.map((val) => {
@@ -107,6 +111,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                     barGap: barGap,
                     yAxisIndex: yIndex,
                     symbolSize: [40, 40],
+                    stack: stack,
                     data: [csvData[index][1], csvData[index][0]],
                 };
                 series.push(tempData);
@@ -160,6 +165,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                 yAxis: [
                     {
                         id: 0,
+                        max: this.yVal,
                         name: this.yAxisLabel,
                         type: 'value',
                         axisLine: {
