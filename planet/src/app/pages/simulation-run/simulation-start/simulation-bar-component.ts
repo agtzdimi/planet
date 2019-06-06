@@ -13,7 +13,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
     @Input() data;
     @Input() yRightAxisLabel;
     @Input() yAxisLabel;
-    @Input() yVal = null;
+    @Input() yVal;
 
     ngOnChanges(changes: SimpleChanges) {
         this.afterDataRecieved(changes.data.currentValue);

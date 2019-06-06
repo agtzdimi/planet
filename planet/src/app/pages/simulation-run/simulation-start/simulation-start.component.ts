@@ -29,6 +29,7 @@ export class SimulationStartComponent {
   formName = 'Select Saved Simulation';
   showVal: boolean;
   expanded = false;
+  yVal: number = 0;
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
@@ -277,14 +278,14 @@ export class SimulationStartComponent {
     maxYValueArr.push(this.barChart[2]);
     maxYValueArr.push(this.barChart[3]);
     maxYValueArr.push(this.barChart[4]);
-    let yVal = Math.max.apply(Math, maxYValueArr.map(function (o) {
+    this.yVal = Math.max.apply(Math, maxYValueArr.map(function (o) {
       let max = 0;
       for (let arr = 0; arr < o['data'].length; arr++) {
         max = +o['data'][arr][1] + max;
       }
       return max;
     }));
-    yVal = Math.ceil((yVal + 1) / 10) * 10;
+    this.yVal = Math.ceil((this.yVal + 1) / 10) * 10;
     this.showBar = true;
   }
 
