@@ -11,6 +11,7 @@ import { NbThemeService } from '@nebular/theme';
 export class SimulationsLineComponent implements OnDestroy, OnChanges {
 
     @Input() data;
+    markArea;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.data.currentValue) {
@@ -22,6 +23,32 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
     themeSubscription: any;
 
     constructor(private theme: NbThemeService) {
+        this.markArea = {
+            silent: true,
+            data: [
+                [
+                    {
+                        yAxis: 0,
+                        label: {
+                            show: true,
+                            position: ['50%', '50%'],
+                            formatter: 'Electricity imported from external grid',
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: 'rgba(231, 76, 60, 1)',
+                                borderColor: '#CE1C08',
+                                borderWidth: 1,
+                                borderType: 'dotted',
+                            },
+                        },
+                    },
+                    {
+                        yAxis: 'max',
+                    },
+                ],
+            ],
+        };
     }
 
     afterDataRecieved(data) {
@@ -61,12 +88,39 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                             type: 'line',
                             smooth: true,
                             data: csvData[index],
+                            markArea: this.markArea,
                         };
                         series.push(tempData);
                         break;
                 }
             }
 
+            series[series.length - 1]['markArea'] = {
+                silent: true,
+                data: [
+                    [
+                        {
+                            yAxis: -0,
+                            label: {
+                                show: true,
+                                position: ['50%', '50%'],
+                                formatter: 'Reverse power flow',
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgba(38, 194, 129, 1)',
+                                    borderColor: '#CE1C08',
+                                    borderWidth: 1,
+                                    borderType: 'dotted',
+                                },
+                            },
+                        },
+                        {
+                            yAxis: 'min',
+                        },
+                    ],
+                ],
+            };
             this.options = {
                 backgroundColor: echarts.bg,
                 color: [colors.warningLight, colors.infoLight, colors.dangerLight,

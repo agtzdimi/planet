@@ -204,23 +204,26 @@ app.get("/simulation", (req, res) => {
 });
 
 app.get("/multi_simulation", (req, res) => {
-    shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi1Results1' " + "\"" + req.query.formName1 + "\"");
-    shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi1Results2' " + "\"" + req.query.formName1 + "\"");
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi1Results1.csv`);
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi1Results2.csv`);
-    results1 = shell.exec("cat " + `${__dirname}/../public/files/multi1Results1.csv`);
-    shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi2Results1' " + "\"" + req.query.formName2 + "\"");
-    shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi2Results2' " + "\"" + req.query.formName2 + "\"");
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi2Results1.csv`);
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi2Results2.csv`);
-    results2 = shell.exec("cat " + `${__dirname}/../public/files/multi2Results1.csv`);
-    finalResults = {
-        'results1': results1.stdout,
-        'results2': results2.stdout
+    try {
+        let results = [];
+        let finalResults = {};
+        for (let i = 0; i < Object.keys(req.query).length; i++) {
+            const formName = 'formName' + (i + 1);
+            shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi'" + (i + 1) + "'Results1' " + "\"" + req.query[formName] + "\"");
+            shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi'" + (i + 1) + "'Results2' " + "\"" + req.query[formName] + "\"");
+            shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi` + (i + 1) + `Results1.csv`);
+            shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi` + (i + 1) + `Results2.csv`);
+            results[i] = shell.exec("cat " + `${__dirname}/../public/files/multi` + (i + 1) + `Results1.csv`);
+            const finalResultsString = 'results' + (i + 1);
+            finalResults[finalResultsString] = results[i].stdout;
+        }
+        res.send(finalResults);
+        if (results1.stderr === '' && results2.stderr === '') {
+            shell.exec("rm -rf " + `${__dirname}/../public/files/*`);
+        }
     }
-    res.send(finalResults);
-    if (results1.stderr === '' && results2.stderr === '') {
-        shell.exec("rm -rf " + `${__dirname}/../public/files/*`);
+    catch (error) {
+        console.log(error)
     }
 });
 

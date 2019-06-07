@@ -41,19 +41,23 @@ export class ComparisonStartComponent {
     this.initializeCharts();
     const interval = setInterval(() => {
       this.forms = this.selectedForms.split('  -  ');
+      const params = {};
+      for (let i = 0; i < this.forms.length; i++) {
+        const tempString = 'formName' + (i + 1);
+        params[tempString] = this.forms[i];
+      }
       const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/multi_simulation';
       this.httpClient.get(url, {
-        params: {
-          'formName1': this.forms[0],
-          'formName2': this.forms[1],
-        },
+        params: params,
       })
         .subscribe(
           data => {
             // console.log('GET Request is successful ');
-            if (data['results1'] && data['results2']) {
-              this.getCurtailment(data['results1'], 1);
-              this.getCurtailment(data['results2'], 2);
+            if (data) {
+              for (let i = 0; i < Object.keys(data).length; i++) {
+                const resultString = 'results' + (i + 1);
+                this.getCurtailment(data[resultString], i + 1);
+              }
               clearInterval(interval);
             }
           },
@@ -79,16 +83,12 @@ export class ComparisonStartComponent {
         case 'Electric_grid_power_flow':
           this.count++;
           this.lineChart[0].data.push(this.getColumnData(lines, index));
-          if (id === 2) {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = this.forms[1];
-          } else {
-            this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = this.forms[0];
-          }
+          this.lineChart[0].data[this.lineChart[0].data.length - 1][0] = this.forms[(id - 1)];
           break;
       }
     }
 
-    if (this.count === 2) {
+    if (this.count === 3) {
       if (this.timers[0]['time'] !== this.timers[1]['time']) {
         this.status = 'error';
         this.textMessage = 'These scenarios have different horizon!';

@@ -57,8 +57,7 @@ export class DialogSelectMultipleFormPromptComponent {
   disabled = false;
   selectedOptions: String[] = [];
   formReady: Boolean = false;
-  firstForm: String;
-  secondForm: String;
+  scenarioNames: String[] = [];
   errorMessage: String = '';
 
   constructor(protected dialogRef: NbDialogRef<DialogSelectMultipleFormPromptComponent>,
@@ -84,12 +83,18 @@ export class DialogSelectMultipleFormPromptComponent {
   }
 
   handleClick() {
-    this.firstForm = this.selectedOptions[0];
-    this.secondForm = this.selectedOptions[1];
-    if (this.firstForm && this.secondForm && this.selectedOptions.length === 2) {
-      this.submit(this.firstForm + '  -  ' + this.secondForm);
+    for (let i = 0; i < this.selectedOptions.length; i++) {
+      this.scenarioNames.push(this.selectedOptions[i]);
+    }
+
+    if (this.scenarioNames.length >= 2 && this.scenarioNames.length <= 5) {
+      let tempString = this.scenarioNames[0];
+      for (let i = 1; i < this.scenarioNames.length; i++) {
+        tempString = tempString + '  -  ' + this.scenarioNames[i];
+      }
+      this.submit(tempString);
     } else {
-      this.errorMessage = 'Please Select 2 Scenarios';
+      this.errorMessage = 'Please Select at most 5 Scenarios';
     }
   }
 
