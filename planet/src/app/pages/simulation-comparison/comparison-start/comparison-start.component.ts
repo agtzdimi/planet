@@ -73,7 +73,7 @@ export class ComparisonStartComponent {
     const headers = lines[0].split(',');
     for (let index = 0; index < headers.length; index++) {
       switch (headers[index]) {
-        case 'Time':
+        case 'Hours':
           this.timers.push({
             id: id,
             time: this.getColumnData(lines, index).length,

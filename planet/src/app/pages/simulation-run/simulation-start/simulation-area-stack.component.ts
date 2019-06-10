@@ -40,7 +40,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                             },
                             itemStyle: {
                                 normal: {
-                                    color: 'rgba(231, 76, 60, 1)',
+                                    color: 'rgba(135,206,250,1)',
                                     borderColor: '#CE1C08',
                                     borderWidth: 1,
                                     borderType: 'dotted',

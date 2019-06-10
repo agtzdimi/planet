@@ -23,37 +23,10 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
     themeSubscription: any;
 
     constructor(private theme: NbThemeService) {
-        this.markArea = {
-            silent: true,
-            data: [
-                [
-                    {
-                        yAxis: 0,
-                        label: {
-                            show: true,
-                            position: ['50%', '50%'],
-                            formatter: 'Electricity imported from external grid',
-                        },
-                        itemStyle: {
-                            normal: {
-                                color: 'rgba(231, 76, 60, 1)',
-                                borderColor: '#CE1C08',
-                                borderWidth: 1,
-                                borderType: 'dotted',
-                            },
-                        },
-                    },
-                    {
-                        yAxis: 'max',
-                    },
-                ],
-            ],
-        };
     }
 
     afterDataRecieved(data) {
         this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
             const colors: any = config.variables;
             const echarts: any = config.variables.echarts;
             const csvData = data;
@@ -77,7 +50,7 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
             for (let index = 0; index < headers.length; index++) {
                 let tempData;
                 switch (headers[index]) {
-                    case 'Time':
+                    case 'Hours':
                         time = csvData[index];
                         time.splice(-1, 1);
                         break;
@@ -88,39 +61,35 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                             type: 'line',
                             smooth: true,
                             data: csvData[index],
-                            markArea: this.markArea,
                         };
                         series.push(tempData);
                         break;
                 }
             }
 
-            series[series.length - 1]['markArea'] = {
-                silent: true,
-                data: [
-                    [
-                        {
-                            yAxis: -0,
-                            label: {
-                                show: true,
-                                position: ['50%', '50%'],
-                                formatter: 'Reverse power flow',
-                            },
-                            itemStyle: {
-                                normal: {
-                                    color: 'rgba(38, 194, 129, 1)',
-                                    borderColor: '#CE1C08',
-                                    borderWidth: 1,
-                                    borderType: 'dotted',
-                                },
-                            },
-                        },
-                        {
-                            yAxis: 'min',
-                        },
-                    ],
-                ],
-            };
+            const maxValue = Math.max.apply(Math, series.map(function (arrVal) {
+                let max = Number.MIN_VALUE;
+                for (let arr = 0; arr < arrVal['data'].length; arr++) {
+                    if (+arrVal['data'][arr] > max) {
+                        max = +arrVal['data'][arr];
+                    }
+                }
+                return max;
+            }));
+
+            const minValue = Math.min.apply(Math, series.map(function (arrVal) {
+                let min = Number.MAX_VALUE;
+                for (let arr = 0; arr < arrVal['data'].length; arr++) {
+                    if (+arrVal['data'][arr] < min) {
+                        min = +arrVal['data'][arr];
+                    }
+                }
+                return min;
+            }));
+
+            series.push(this.calculateMarkArea(minValue, true));
+            series.push(this.calculateMarkArea(maxValue, false));
+
             this.options = {
                 backgroundColor: echarts.bg,
                 color: [colors.warningLight, colors.infoLight, colors.dangerLight,
@@ -229,4 +198,69 @@ v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H
         this.themeSubscription.unsubscribe();
     }
 
+    calculateMarkArea(value, aboveZero) {
+        if (aboveZero) {
+            return {
+                type: 'line',
+                smooth: true,
+                markArea: {
+                    silent: true,
+                    data: [
+                        [
+                            {
+                                yAxis: -0,
+                                label: {
+                                    show: true,
+                                    position: ['50%', '50%'],
+                                    formatter: 'Reverse power flow',
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        color: 'rgba(38, 194, 129, 1)',
+                                        borderColor: '#CE1C08',
+                                        borderWidth: 1,
+                                        borderType: 'dotted',
+                                    },
+                                },
+                            },
+                            {
+                                yAxis: value,
+                            },
+                        ],
+                    ]
+                }
+            };
+        } else {
+            return {
+                type: 'line',
+                smooth: true,
+                markArea: {
+                    silent: true,
+                    data: [
+                        [
+                            {
+                                yAxis: 0,
+                                label: {
+                                    show: true,
+                                    position: ['50%', '50%'],
+                                    formatter: 'Electricity imported from external grid',
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        color: 'rgba(231, 76, 60, 1)',
+                                        borderColor: '#CE1C08',
+                                        borderWidth: 1,
+                                        borderType: 'dotted',
+                                    },
+                                },
+                            },
+                            {
+                                yAxis: value,
+                            },
+                        ],
+                    ]
+                }
+            };
+        }
+    }
 }
