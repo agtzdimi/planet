@@ -12,6 +12,7 @@ import { NgxCreateAccountComponent } from './components/auth/register/create-acc
 import { NbLogoutComponent } from './components/auth/logout/logout.component';
 import { NbAuthComponent } from './components/auth/auth.component';
 import { TechInputFieldComponent } from './components/planet/tech-input-field.component';
+import { EightNodeElGridComponent } from './components/planet/grids/eight-node-el-grid/eight-node-el-grid.component';
 import { RouterModule } from '@angular/router';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { EnergyGridComponent } from './components/planet/grids/energy-grid/energy-grid.component';
@@ -130,6 +131,7 @@ const COMPONENTS = [
   SampleLayoutComponent,
   ToggleSettingsButtonComponent,
   TechInputFieldComponent,
+  EightNodeElGridComponent,
   TechnologiesDialogComponent,
   EnergyGridComponent,
 ];

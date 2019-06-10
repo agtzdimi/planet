@@ -43,7 +43,7 @@
 
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
 
           <!-- Selection of Location and Grid Type -->
           <div class="row">
@@ -86,7 +86,7 @@
 
           <!-- Configuration Options -->
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div *ngIf="openParams()">
 
                 <hr>
@@ -219,19 +219,22 @@
               </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-1"></div>
+            <div class="col-md-7">
               <div *ngIf="openParams()" class="col-md-12">
                 <div *ngIf="generalParams.gridImage">
-                  <img [suiTransition]="transitionController1" [src]="generalParams.gridImage">
-                  <!-- <ngx-eight-node-el-grid></ngx-eight-node-el-grid> -->
+                  <img *ngIf="generalParams.gridImage!=='assets/images/grid.png'"
+                    [suiTransition]="transitionController1" [src]="generalParams.gridImage">
+                  <ngx-eight-node-el-grid *ngIf="generalParams.gridImage==='assets/images/grid.png'">
+                  </ngx-eight-node-el-grid>
                 </div>
               </div>
             </div>
 
           </div>
         </div>
-
-        <div *ngIf="openParams()" class="col-md-8">
+        <div class="col-md-1"></div>
+        <div *ngIf="openParams()" class="col-md-5">
           <ngx-leaflet-map [load]="generalParams.showMap" [(coordinates)]="generalParams.coordinates"
             (coordChange)="setCoord($event)">
           </ngx-leaflet-map>
