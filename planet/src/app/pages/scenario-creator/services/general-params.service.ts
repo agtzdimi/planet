@@ -9,9 +9,7 @@ export class GeneralParamsService {
     formName: string;
     formDescription: string;
     areaPicked: boolean = false;
-    timeStep: Object;
     dateRangeClicked: boolean = false;
-    simulationTime: Object;
     options: UploaderOptions;
     errorMessage: String = '';
     gridImage: string;
@@ -28,9 +26,7 @@ export class GeneralParamsService {
     formNameUpdated = new EventEmitter<string>();
     formDescriptionUpdated = new EventEmitter<string>();
     areaPickedUpdate = new EventEmitter<boolean>();
-    timeStepUpdate = new EventEmitter<Object>();
     dateRangeUpdate = new EventEmitter<boolean>();
-    simulationTimeUpdate = new EventEmitter<Object>();
     errorMessageUpdate = new EventEmitter<String>();
     gridImageUpdate = new EventEmitter<string>();
     showMapUpdate = new EventEmitter<boolean>();
@@ -51,14 +47,6 @@ export class GeneralParamsService {
         this.files = [];
         this.formName = '';
         this.formDescription = '';
-        this.timeStep = {
-            'mins': false,
-            'hours': true,
-        };
-        this.simulationTime = {
-            'days': false,
-            'hours': true,
-        };
         this.startingDate = new Date(2016, 1, 1);
         this.endingDate = new Date(2016, 12, 31);
         this.selectedModel = {
@@ -83,19 +71,9 @@ export class GeneralParamsService {
         this.areaPickedUpdate.emit(this.areaPicked);
     }
 
-    updateTimestep(timeStep: Object) {
-        this.timeStep = timeStep;
-        this.timeStepUpdate.emit(this.timeStep);
-    }
-
     updateDateRange(dateRange: boolean) {
         this.dateRangeClicked = dateRange;
         this.dateRangeUpdate.emit(this.dateRangeClicked);
-    }
-
-    updateSimulationTime(simulationTime: Object) {
-        this.simulationTime = simulationTime;
-        this.simulationTimeUpdate.emit(this.simulationTime);
     }
 
     updateErrorMessage(errorMessage: String) {

@@ -97,14 +97,6 @@ export class NewSimulationFilesComponent {
             (data) => this.generalParams.formDescription = data,
         );
 
-        this.generalParams.simulationTimeUpdate.subscribe(
-            (data) => this.generalParams.simulationTime = data,
-        );
-
-        this.generalParams.timeStepUpdate.subscribe(
-            (data) => this.generalParams.timeStep = data,
-        );
-
         this.generalParams.filesUpdate.subscribe(
             (data) => this.generalParams.files = data,
         );
@@ -135,24 +127,12 @@ export class NewSimulationFilesComponent {
 
         const originalTimestep = this.paramInit['payload']['simulation']['time.step'];
         const originalHorizon = this.paramInit['payload']['simulation']['simulation.time'];
-        if (this.generalParams.timeStep['mins']) {
-            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
-        }
-        if (this.generalParams.simulationTime['days']) {
-            this.paramInit['payload']['simulation']['simulation.time'] =
-                Math.round(this.paramInit['payload']['simulation']['simulation.time']
-                    * 24 / this.paramInit['payload']['simulation']['time.step']);
-        } else if (this.generalParams.simulationTime['hours']) {
-            this.paramInit['payload']['simulation']['simulation.time'] =
-                Math.round(this.paramInit['payload']['simulation']['simulation.time']
-                    / this.paramInit['payload']['simulation']['time.step']);
-        }
+        this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
+        this.paramInit['payload']['simulation']['simulation.time'] =
+            Math.round(this.paramInit['payload']['simulation']['simulation.time']
+                / this.paramInit['payload']['simulation']['time.step']);
 
         // Update Parameters in case the user will save another scenario in the same instance
-        this.generalParams.simulationTime['days'] = false;
-        this.generalParams.simulationTime['hours'] = true;
-        this.generalParams.timeStep['mins'] = false;
-        this.generalParams.timeStep['hours'] = true;
         const startDate = this.generalParams.startingDate.getFullYear().toString() +
             '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
             '-' + this.generalParams.startingDate.getDate().toString();
@@ -165,8 +145,6 @@ export class NewSimulationFilesComponent {
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
         this.updateModel();
-        this.generalParams.updateTimestep(this.generalParams.timeStep);
-        this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
         this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
         this.updateControlFile();

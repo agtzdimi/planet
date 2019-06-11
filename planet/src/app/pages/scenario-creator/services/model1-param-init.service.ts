@@ -10,7 +10,7 @@ export class Model1ParamInitService {
         'payload': {
 
             'simulation': {
-                'time.step': 0.25,
+                'time.step': 15,
                 'simulation.time': 24,
             },
 

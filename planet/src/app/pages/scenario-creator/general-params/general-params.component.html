@@ -92,99 +92,38 @@
                 <hr>
 
                 <div class="form-group row">
-                  <div class="col-sm-2"></div>
-                  <label for="dt" class="startingLabels col-sm-6 col-form-label">Time Step</label>
+                  <label for="dt" class="col-sm-6 col-form-label" [ngStyle]="{'line-height': '31px'}">Time Step</label>
                   <div class="col-sm-12">
                     <div class="row">
                       <div class="col-md-8">
-                        <input type="number" class="form-control" id="dt"
-                          [ngModel]="paramInit['payload']['simulation']['time.step']"
-                          (ngModelChange)="changeTimeStepByUser($event)">
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-md-5 checkBoxMove">
-                        <div class="ui form">
-                          <div class="grouped fields">
-                            <div class="field">
-                              <sui-checkbox [ngModel]="generalParams.timeStep['mins']"
-                                [isReadonly]="generalParams.timeStep['mins']"
-                                (ngModelChange)="handleTimeStep($event,'mins')">
-                                Mins
-                              </sui-checkbox>
-                            </div>
+                        <div class="row">
+                          <div class="col-md-9">
+                            <input type="number" class="form-control" id="dt"
+                              [(ngModel)]="paramInit['payload']['simulation']['time.step']">
+                          </div>
+                          <div class="col-md-1">
+                            <label [ngStyle]="{'margin-left': '0px','margin-top':'0.43rem'}">Mins</label>
                           </div>
                         </div>
                       </div>
-
-                      <div class="col-md-3 checkBoxMove">
-                        <div class="ui form">
-                          <div class="grouped fields">
-                            <div class="field">
-                              <sui-checkbox [ngModel]="generalParams.timeStep['hours']"
-                                [isReadonly]="generalParams.timeStep['hours']"
-                                (ngModelChange)="handleTimeStep($event,'hours')">
-                                Hours</sui-checkbox>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
                     </div>
                   </div>
                 </div>
 
                 <div class="form-group row">
-                  <div class="col-sm-1"></div>
-                  <label for="simulation-time" class="startingLabels col-sm-6 col-form-label m-1">Simulation
+                  <label for="simulation-time" class="col-sm-6 col-form-label m-1"
+                    [ngStyle]="{'line-height': '31px'}">Simulation
                     Horizon</label>
-                  <div class="row">
-                    <div class="ui icon input datePickerButton">
+                  <div class=" row">
+                    <div class="ui icon input datePickerButton" [ngStyle]="{'width':'100%'}">
                       <input nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
                         (click)="dateRangeChange()" [ngModel]="generalParams.loadRangeDate">
                       <i class="calendar alternate outline icon"></i>
                     </div>
-                    <nb-rangepicker (rangeChange)="handleDateChange($event)" #formpicker>
-                    </nb-rangepicker>
-                  </div>
 
-                  <div class="col-sm-12">
-                    <div class="row">
-                      <div class="col-md-8">
-                        <input type="number" class="form-control" id="simulation-time"
-                          [ngModel]="paramInit['payload']['simulation']['simulation.time']"
-                          (ngModelChange)="changeSimulationTimeByUser($event)">
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-md-5 checkBoxMove">
-                        <div class="ui form">
-                          <div class="grouped fields">
-                            <div class="field">
-                              <sui-checkbox [ngModel]="generalParams.simulationTime.days"
-                                [isReadonly]="generalParams.simulationTime.days"
-                                (ngModelChange)="handleSimulationTime($event,'days')" #checkbox2>
-                                Days</sui-checkbox>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 checkBoxMove">
-                        <div class="ui form">
-                          <div class="grouped fields">
-                            <div class="field">
-                              <sui-checkbox [ngModel]="generalParams.simulationTime.hours"
-                                [isReadonly]="generalParams.simulationTime.hours"
-                                (ngModelChange)="handleSimulationTime($event,'hours')">
-                                Hours</sui-checkbox>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
+                    <div class="col-md-12">
+                      <nb-rangepicker (rangeChange)="handleDateChange($event)" #formpicker>
+                      </nb-rangepicker>
                     </div>
                   </div>
                 </div>

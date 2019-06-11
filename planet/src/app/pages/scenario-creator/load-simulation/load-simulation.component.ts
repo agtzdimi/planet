@@ -92,14 +92,6 @@ export class LoadSimulationFilesComponent implements OnInit {
             (data) => this.generalParams.formDescription = data,
         );
 
-        this.generalParams.simulationTimeUpdate.subscribe(
-            (data) => this.generalParams.simulationTime = data,
-        );
-
-        this.generalParams.timeStepUpdate.subscribe(
-            (data) => this.generalParams.timeStep = data,
-        );
-
         this.generalParams.modelUpdate.subscribe(
             (data) => this.generalParams.model = data,
         );
@@ -139,6 +131,8 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 this.paramInit = temp;
                                 this.paramInit['payload']['simulation']['simulation.time'] =
                                     this.paramInit['payload']['simulation']['simulation.time'] *
+                                    this.paramInit['payload']['simulation']['time.step'];
+                                this.paramInit['payload']['simulation']['time.step'] = 60 *
                                     this.paramInit['payload']['simulation']['time.step'];
                                 this.generalParams.updateModel(this.paramInit['payload']['model']);
                                 temp = JSON.parse(data['econEnv']);
@@ -186,31 +180,17 @@ export class LoadSimulationFilesComponent implements OnInit {
             const file: File = this.generalParams.files[i];
             formData.append('file', file, file.name);
         }
-        if (this.generalParams.timeStep['mins']) {
-            this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
-        }
-        if (this.generalParams.simulationTime['days']) {
-            this.paramInit['payload']['simulation']['simulation.time'] =
-                Math.round(this.paramInit['payload']['simulation']['simulation.time']
-                    * 24 / this.paramInit['payload']['simulation']['time.step']);
-        } else if (this.generalParams.simulationTime['hours']) {
-            this.paramInit['payload']['simulation']['simulation.time'] =
-                Math.round(this.paramInit['payload']['simulation']['simulation.time']
-                    / this.paramInit['payload']['simulation']['time.step']);
-        }
+        this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
+        this.paramInit['payload']['simulation']['simulation.time'] =
+            Math.round(this.paramInit['payload']['simulation']['simulation.time']
+                / this.paramInit['payload']['simulation']['time.step']);
         // Update values in case current instance will be used to save another scenario
-        this.generalParams.simulationTime['days'] = false;
-        this.generalParams.simulationTime['hours'] = true;
-        this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
-        this.generalParams.timeStep['mins'] = false;
-        this.generalParams.timeStep['hours'] = true;
         const startDate = this.generalParams.startingDate.getFullYear().toString() +
             '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
             '-' + this.generalParams.startingDate.getDate().toString();
         const endDate = this.generalParams.endingDate.getFullYear().toString() +
             '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
             '-' + this.generalParams.endingDate.getDate().toString();
-        this.generalParams.updateTimestep(this.generalParams.timeStep);
         delete this.paramInit['_id'];
         this.paramInit['payload']['formName'] = this.generalParams.formName;
         this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
@@ -218,8 +198,6 @@ export class LoadSimulationFilesComponent implements OnInit {
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
         this.updateModel();
-        this.generalParams.updateTimestep(this.generalParams.timeStep);
-        this.generalParams.updateSimulationTime(this.generalParams.simulationTime);
 
         delete this.controlSystem['_id'];
         this.controlSystem['payload']['formName'] = this.generalParams.formName;
