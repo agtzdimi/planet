@@ -1,0 +1,26 @@
+<div *ngIf="mode === 'edit'">
+    <div class="form-group row">
+        <label for="'unitDescr'" class="col-md-3 formDescr">Unit Description</label>
+        <div class="col-md-6">
+            <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'"
+                [(ngModel)]="p2hParams['description']"></textarea>
+        </div>
+    </div>
+
+    <hr class="m-4">
+</div>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'MW<sub>th</sub>'"
+    (valChange)="onChange(['nominal.heat.power'],+$event)"
+    [(val)]="p2hParams['payload']['parameters']['configuration']['nominal.heat.power']"
+    [compId]="'p2h_nominal.heat.power'" [inputHtmlLabel1]="'P<sub>Nominal</sub>'">
+</ngx-input-field>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="onChange(['cop'],+$event)"
+    [(val)]="p2hParams['payload']['parameters']['configuration']['cop']" [compId]="'p2h_cop'" [inputHtmlLabel1]="'Cop'">
+</ngx-input-field>
+
+<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="onChange(['cos_phi'],+$event)"
+    [(val)]="p2hParams['payload']['parameters']['configuration']['cos_phi']" [compId]="'p2h_cos_phi'"
+    [inputHtmlLabel1]="'cos(phi)'">
+</ngx-input-field>

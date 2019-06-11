@@ -21,8 +21,8 @@ import { EGUnitComponent } from './unit-types/eg-unit/eg-unit.component';
 import { WTUnitComponent } from './unit-types/wt-unit/wt-unit.component';
 import { DHGUnitComponent } from './unit-types/dhg-unit/dhg-unit.component';
 import { G2HUnitComponent } from './unit-types/g2h-unit/g2h-unit.component';
-import { P2HHeatPumpUnitComponent } from './unit-types/p2h-heat-pump-unit/p2h-heat-pump-unit.component';
-import { P2HElectricHeatUnitComponent } from './unit-types/p2h-electric-heat-unit/p2h-electric-heat-unit.component';
+import { P2HUnitComponent } from './unit-types/p2h-unit/p2h-unit.component';
+import { VESUnitComponent } from './unit-types/ves-unit/ves-unit.component';
 import { UnitModelsComponent } from './unit-edit/unit-models.component';
 import { DialogDeleteComponent } from './unit-delete/dialog-delete.component';
 import { NbDialogModule } from '@nebular/theme';
@@ -41,8 +41,8 @@ const COMPONENTS = [
   EGUnitComponent,
   GGUnitComponent,
   CHPUnitComponent,
-  P2HHeatPumpUnitComponent,
-  P2HElectricHeatUnitComponent,
+  P2HUnitComponent,
+  VESUnitComponent,
   UnitModelsComponent,
   DialogDeleteComponent,
 ];

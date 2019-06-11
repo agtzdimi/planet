@@ -21,8 +21,8 @@ export class UnitAddComponent implements OnInit {
   jwtToken: any;
   message: string;
   p2gUnit: Object;
-  hpUnit: Object;
-  ehUnit: Object;
+  p2hUnit: Object;
+  vesUnit: Object;
   flexUnits = [{}];
   grids = [{}];
   nodes = [{}];
@@ -160,12 +160,12 @@ export class UnitAddComponent implements OnInit {
       label: 'Power 2 Gas',
     },
     {
-      id: 'HP',
-      label: 'Heat Pump',
+      id: 'P2H',
+      label: 'Power 2 Heat',
     },
     {
-      id: 'EH',
-      label: 'Electric Heater',
+      id: 'VES',
+      label: 'Virtual Energy Storage',
     },
     {
       id: 'Sim',
@@ -207,11 +207,11 @@ export class UnitAddComponent implements OnInit {
       case 'P2G':
         metadata = JSON.stringify(this.p2gUnit['payload']['parameters']['configuration']);
         break;
-      case 'EH':
-        metadata = JSON.stringify(this.ehUnit['payload']['parameters']['configuration']);
+      case 'VES':
+        metadata = JSON.stringify(this.vesUnit['payload']['parameters']['configuration']);
         break;
-      case 'HP':
-        metadata = JSON.stringify(this.hpUnit['payload']['parameters']['configuration']);
+      case 'P2H':
+        metadata = JSON.stringify(this.p2hUnit['payload']['parameters']['configuration']);
         break;
       case 'Sim':
         const simData = this.selectedOptions;

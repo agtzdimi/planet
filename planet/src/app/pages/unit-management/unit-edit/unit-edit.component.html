@@ -61,13 +61,13 @@
             (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
         </div>
 
-        <div class="col-md-12" *ngSwitchCase="'HP'">
-          <ngx-unit-models [loading]="loading" [models]="hpUnit" [modelType]="activeModel"
+        <div class="col-md-12" *ngSwitchCase="'P2H'">
+          <ngx-unit-models [loading]="loading" [models]="p2hUnit" [modelType]="activeModel"
             (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
         </div>
 
-        <div class="col-md-12" *ngSwitchCase="'EH'">
-          <ngx-unit-models [loading]="loading" [models]="ehUnit" [modelType]="activeModel"
+        <div class="col-md-12" *ngSwitchCase="'VES'">
+          <ngx-unit-models [loading]="loading" [models]="vesUnit" [modelType]="activeModel"
             (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
         </div>
 
@@ -100,8 +100,8 @@
             <nb-card-front>
               <nb-card size="large" status="success" accent="active">
                 <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit</nb-card-header>
-                <nb-card-header *ngSwitchCase="'EH'">Electric Heater Unit</nb-card-header>
-                <nb-card-header *ngSwitchCase="'HP'">Heat Pump Unit</nb-card-header>
+                <nb-card-header *ngSwitchCase="'VES'">Virtual Energy Storage</nb-card-header>
+                <nb-card-header *ngSwitchCase="'P2H'">Power 2 Heat Unit</nb-card-header>
                 <nb-card-header *ngSwitchCase="'Sim'">Simulator Unit</nb-card-header>
                 <nb-card-body>
                   <b>Unit Description: </b> <i> {{selectedModel['comments']}}</i>
@@ -136,12 +136,11 @@
                       <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="selectedModel=$event" [p2gInput]="selectedModel"
                         [mode]="'edit'">
                       </ngx-p2g-unit>
-                      <ngx-p2h-heat-pump-unit *ngSwitchCase="'HP'" (p2hHeatPump)="selectedModel=$event"
-                        [hpInput]="selectedModel" [mode]="'edit'">
-                      </ngx-p2h-heat-pump-unit>
-                      <ngx-p2h-electric-heat-unit *ngSwitchCase="'EH'" (p2hElectricHeat)="selectedModel=$event"
-                        [ehInput]="selectedModel" [mode]="'edit'">
-                      </ngx-p2h-electric-heat-unit>
+                      <ngx-p2h-unit *ngSwitchCase="'P2H'" (p2h)="selectedModel=$event" [p2hInput]="selectedModel"
+                        [mode]="'edit'">
+                      </ngx-p2h-unit>
+                      <ngx-ves-unit *ngSwitchCase="'VES'" (ves)="selectedModel=$event" [vesInput]="selectedModel"
+                        [mode]="'edit'"></ngx-ves-unit>
 
                       <div class="form-group row" *ngSwitchCase="'Sim'">
 

@@ -40,9 +40,9 @@
 
     <div *ngIf="activeModel" [suiTransition]="transitionController">
       <nb-card [ngSwitch]="activeModel" accent="active">
-        <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit Parameters</nb-card-header>
-        <nb-card-header *ngSwitchCase="'EH'">Electric Heater Unit Parameters</nb-card-header>
-        <nb-card-header *ngSwitchCase="'HP'">Heat Pump Unit Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'VES'">Virtual Energy Storage Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'P2H'">Power 2 Heat Parameters</nb-card-header>
         <nb-card-header *ngSwitchCase="'Sim'">Simulator Parameters</nb-card-header>
         <nb-card-body>
 
@@ -111,9 +111,8 @@
           <div class="row">
             <div class="col-md-6">
               <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="p2gUnit=$event"></ngx-p2g-unit>
-              <ngx-p2h-heat-pump-unit *ngSwitchCase="'HP'" (p2hHeatPump)="hpUnit=$event"></ngx-p2h-heat-pump-unit>
-              <ngx-p2h-electric-heat-unit *ngSwitchCase="'EH'" (p2hElectricHeat)="ehUnit=$event">
-              </ngx-p2h-electric-heat-unit>
+              <ngx-p2h-unit *ngSwitchCase="'P2H'" (p2h)="p2hUnit=$event"></ngx-p2h-unit>
+              <ngx-ves-unit *ngSwitchCase="'VES'" (ves)="vesUnit=$event"></ngx-ves-unit>
             </div>
 
             <!-- <div class="col-md-6">

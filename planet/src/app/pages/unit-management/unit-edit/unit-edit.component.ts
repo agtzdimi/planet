@@ -22,8 +22,8 @@ export class UnitEditComponent implements OnInit {
   message: string;
   jwtToken: any;
   p2gUnit: Object = [{}];
-  ehUnit: Object = [{}];
-  hpUnit: Object = [{}];
+  vesUnit: Object = [{}];
+  p2hUnit: Object = [{}];
   simUnit: Object = [{}];
   flexUnits: Object;
   activeModel: string = '';
@@ -51,12 +51,12 @@ export class UnitEditComponent implements OnInit {
       label: 'Power 2 Gas',
     },
     {
-      id: 'HP',
-      label: 'Heat Pump',
+      id: 'P2H',
+      label: 'Power 2 Heat',
     },
     {
-      id: 'EH',
-      label: 'Electric Heater',
+      id: 'VES',
+      label: 'Virtual Energy Storage',
     },
     {
       id: 'Sim',
@@ -79,11 +79,11 @@ export class UnitEditComponent implements OnInit {
               case 'P2G':
                 this.p2gUnit = devices['results'];
                 break;
-              case 'EH':
-                this.ehUnit = devices['results'];
+              case 'VES':
+                this.vesUnit = devices['results'];
                 break;
-              case 'HP':
-                this.hpUnit = devices['results'];
+              case 'P2H':
+                this.p2hUnit = devices['results'];
                 break;
               case 'Sim':
                 this.simUnit = devices['results'];

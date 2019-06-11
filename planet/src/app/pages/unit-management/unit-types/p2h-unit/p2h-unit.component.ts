@@ -1,19 +1,19 @@
 import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
-  selector: 'ngx-p2h-heat-pump-unit',
-  styleUrls: ['./p2h-heat-pump-unit.component.scss'],
-  templateUrl: './p2h-heat-pump-unit.component.html',
+  selector: 'ngx-p2h-unit',
+  styleUrls: ['./p2h-unit.component.scss'],
+  templateUrl: './p2h-unit.component.html',
 })
-export class P2HHeatPumpUnitComponent implements OnChanges {
+export class P2HUnitComponent implements OnChanges {
 
-  p2hHeatPumpParams: Object;
-  @Input() hpInput: Object;
+  p2hParams: Object;
+  @Input() p2hInput: Object;
   @Input() mode: string;
-  @Output() p2hHeatPump: EventEmitter<Object>;
+  @Output() p2h: EventEmitter<Object>;
 
   constructor() {
-    this.p2hHeatPumpParams = {
+    this.p2hParams = {
       'hardwareId': 'HP1',
       'topic': 'HP/1',
       'payload': {
@@ -35,27 +35,26 @@ export class P2HHeatPumpUnitComponent implements OnChanges {
       },
       'description': '',
     };
-
-    this.p2hHeatPump = new EventEmitter<Object>();
+    this.p2h = new EventEmitter<Object>();
 
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['hpInput']['currentValue']) {
-      let metadata = JSON.stringify(changes['hpInput']['currentValue']['metadata']);
+    if (changes['p2hInput']['currentValue']) {
+      let metadata = JSON.stringify(changes['p2hInput']['currentValue']['metadata']);
       if (metadata) {
         metadata = metadata.replace(/_/g, '.');
         metadata = metadata.replace(/cos\.phi/, 'cos_phi');
         metadata = JSON.parse(metadata);
-        this.p2hHeatPumpParams['payload']['parameters']['configuration'] = metadata;
-        this.p2hHeatPumpParams['description'] = changes['hpInput']['currentValue']['comments'];
+        this.p2hParams['payload']['parameters']['configuration'] = metadata;
+        this.p2hParams['description'] = changes['p2hInput']['currentValue']['comments'];
       }
     }
   }
 
   onChange(attribute, event) {
-    this.p2hHeatPumpParams['payload']['parameters']['configuration'][attribute] = event;
-    this.p2hHeatPump.emit(this.p2hHeatPumpParams);
+    this.p2hParams['payload']['parameters']['configuration'][attribute] = event;
+    this.p2h.emit(this.p2hParams);
   }
 
 }
