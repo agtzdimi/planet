@@ -15,6 +15,7 @@ export class ComparisonStartComponent {
   showLine: boolean = false;
   loading = false;
   count = 0;
+  selectedScenariosCount = 0;
   forms: string[] = [];
   results1Data: any;
   timers = [];
@@ -39,14 +40,16 @@ export class ComparisonStartComponent {
     this.toggleLoadingAnimation();
     this.showLine = false;
     this.initializeCharts();
+    this.forms = this.selectedForms.split('  -  ');
+    this.selectedScenariosCount = this.forms.length;
+    const params = {};
+    for (let i = 0; i < this.forms.length; i++) {
+      const tempString = 'formName' + (i + 1);
+      params[tempString] = this.forms[i];
+    }
+    const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/multi_simulation';
+
     const interval = setInterval(() => {
-      this.forms = this.selectedForms.split('  -  ');
-      const params = {};
-      for (let i = 0; i < this.forms.length; i++) {
-        const tempString = 'formName' + (i + 1);
-        params[tempString] = this.forms[i];
-      }
-      const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/multi_simulation';
       this.httpClient.get(url, {
         params: params,
       })
@@ -88,7 +91,7 @@ export class ComparisonStartComponent {
       }
     }
 
-    if (this.count === 3) {
+    if (this.count === this.selectedScenariosCount) {
       if (this.timers[0]['time'] !== this.timers[1]['time']) {
         this.status = 'error';
         this.textMessage = 'These scenarios have different horizon!';

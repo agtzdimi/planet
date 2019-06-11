@@ -175,6 +175,7 @@ export class ThemeSettingsComponent {
   layouts = [];
   sidebars = [];
   scenarioName: string;
+  scenarioDescr: string;
   paramInit: Object = {
     'payload': {
       'model': '',
@@ -214,6 +215,7 @@ export class ThemeSettingsComponent {
               this.controlData = [];
               let temp = JSON.parse(res['paramInit']);
               this.paramInit = temp;
+              this.scenarioDescr = this.paramInit['payload']['formDescription'];
               temp = JSON.parse(res['econEnv']);
               this.econEnv = temp;
               temp = JSON.parse(res['controlSystem']);
