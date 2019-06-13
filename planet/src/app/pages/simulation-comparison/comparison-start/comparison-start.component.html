@@ -39,5 +39,14 @@
       </nb-card>
     </div>
 
+    <div *ngIf="showBar">
+      <nb-card *ngFor="let barCh of barChart" accent="active">
+        <nb-card-header>{{barCh.title}}</nb-card-header>
+        <nb-card-body>
+          <ngx-comparison-bars [data]="barCh.data"></ngx-comparison-bars>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
   </div>
 </div>

@@ -190,12 +190,17 @@ app.get("/multi_simulation", (req, res) => {
         for (let i = 0; i < Object.keys(req.query).length; i++) {
             const formName = 'formName' + (i + 1);
             shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi'" + (i + 1) + "'Results1' " + "\"" + req.query[formName] + "\"");
-            shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'multi'" + (i + 1) + "'Results2' " + "\"" + req.query[formName] + "\"");
+            shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'Results2' " + "\"" + req.query[formName] + "\"");
+            shell.exec(`mv ${__dirname}/../public/files/Results2.csv ${__dirname}/../public/files/` + "'multi'" + (i + 1) + "'Results2.csv'");
             shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi` + (i + 1) + `Results1.csv`);
             shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/multi` + (i + 1) + `Results2.csv`);
-            results[i] = shell.exec("cat " + `${__dirname}/../public/files/multi` + (i + 1) + `Results1.csv`);
+            results1 = shell.exec("cat " + `${__dirname}/../public/files/multi` + (i + 1) + `Results1.csv`);
+            results2 = shell.exec("cat " + `${__dirname}/../public/files/multi` + (i + 1) + `Results2.csv`);
             const finalResultsString = 'results' + (i + 1);
-            finalResults[finalResultsString] = results[i].stdout;
+            finalResults[finalResultsString] = {
+                "results1": results1.stdout,
+                "results2": results2.stdout,
+            }
         }
         res.send(finalResults);
         if (results1.stderr === '' && results2.stderr === '') {

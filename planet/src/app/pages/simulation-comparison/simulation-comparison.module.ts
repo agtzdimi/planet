@@ -14,12 +14,14 @@ import { ComparisonStartComponent } from './comparison-start/comparison-start.co
 import { NbDialogModule } from '@nebular/theme';
 import { DialogSelectMultipleFormPromptComponent } from './comparison-start/dialog-prompt/select-multiple-form.component';
 import { SimulationsLineComponent } from './comparison-start/simulation-line.component';
+import { ComparisonBarsComponent } from './comparison-start/comparison-bars.component';
 
 const COMPONENTS = [
   SimulationComparisonComponent,
   ComparisonStartComponent,
   DialogSelectMultipleFormPromptComponent,
   SimulationsLineComponent,
+  ComparisonBarsComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -27,6 +29,7 @@ const ENTRY_COMPONENTS = [
   ComparisonStartComponent,
   DialogSelectMultipleFormPromptComponent,
   SimulationsLineComponent,
+  ComparisonBarsComponent,
 ];
 
 

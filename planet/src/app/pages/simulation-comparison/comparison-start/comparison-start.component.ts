@@ -19,8 +19,12 @@ export class ComparisonStartComponent {
   forms: string[] = [];
   results1Data: any;
   timers = [];
+  barChart = [];
+  yVal: number;
+  showBar = false;
   status = '';
   textMessage = '';
+  BARS_TOTAL = 5;
 
   options: any = {};
   themeSubscription: any;
@@ -59,7 +63,8 @@ export class ComparisonStartComponent {
             if (data) {
               for (let i = 0; i < Object.keys(data).length; i++) {
                 const resultString = 'results' + (i + 1);
-                this.getCurtailment(data[resultString], i + 1);
+                this.getCurtailment(data[resultString]['results1'], i + 1);
+                this.getBarCharts(data[resultString]['results2'], i + 1);
               }
               clearInterval(interval);
             }
@@ -106,6 +111,116 @@ export class ComparisonStartComponent {
     }
   }
 
+  getBarCharts(data, id) {
+
+    const lines = data.split('\n');
+    let directUtil = 0;
+    for (let index = 0; index < lines.length; index++) {
+      const keyVal = lines[index].split(',');
+      switch (keyVal[0]) {
+        case 'Total technologies annual cost':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'CO2 emissions cost':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'Revenue for heat production':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'NG expenditure':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'Revenue for SNG':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'LCOE':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'CHP el production':
+          this.barChart[3].data.push(keyVal);
+          break;
+        case 'G2H CO2 emissions':
+          this.barChart[1].data.push(keyVal);
+          break;
+        case 'P2G CO2 savings':
+          this.barChart[1].data.push(keyVal);
+          break;
+        case 'CHP CO2 emissions':
+          this.barChart[1].data.push(keyVal);
+          break;
+        case 'Total CO2 emissions':
+          this.barChart[1].data.push(keyVal);
+          break;
+        case 'RES curtailment':
+          this.barChart[2].data.push(keyVal);
+          break;
+        case 'RES to P2G':
+          this.barChart[2].data.push(keyVal);
+          break;
+        case 'RES to EB':
+          // this.barChart[2].data.push(keyVal);
+          break;
+        case 'RES to P2H':
+          this.barChart[2].data.push(keyVal);
+          break;
+        case 'RES direct utilization':
+          if (directUtil === 0) {
+            this.barChart[2].data.push(keyVal);
+            this.barChart[3].data.push(keyVal);
+            directUtil += 1;
+          }
+          break;
+        case 'Imported electricity cost':
+          this.barChart[0].data.push(keyVal);
+          break;
+        case 'Imported electricity':
+          this.barChart[3].data.push(keyVal);
+          break;
+        case 'RES producibility':
+          // this.barChart[2].data.push(keyVal);
+          break;
+        case 'P2G heat':
+          this.barChart[4].data.push(keyVal);
+          break;
+        case 'G2H heat':
+          this.barChart[4].data.push(keyVal);
+          break;
+        case 'CHP heat':
+          this.barChart[4].data.push(keyVal);
+          break;
+        case 'P2H heat':
+          this.barChart[4].data.push(keyVal);
+          break;
+        default:
+          break;
+      }
+    }
+    this.barChart[0].title = 'LCOE and economic resultsYearly CO2 emissions ';
+    this.barChart[0].yAxisLabel = 'Expenses and Revenues M€/y';
+    this.barChart[0].yRightAxisLabel = 'LCOE €/MWh';
+    this.barChart[1].title = 'Yearly CO' + '\u2082' + ' emissions';
+    this.barChart[1].yAxisLabel = 'CO' + '\u2082' + ' emissions 10' + '\u00B3' + ' t/y';
+    this.barChart[2].title = 'Yearly RES producibility dispatch';
+    this.barChart[2].yAxisLabel = 'RES producibility MWh/y';
+    this.barChart[3].title = 'Electric Demand Fulfilment';
+    this.barChart[3].yAxisLabel = 'Electric Demand MWh/y';
+    this.barChart[4].title = 'Thermal Demand Fulfilment';
+    this.barChart[4].yAxisLabel = 'Thermal Demand MWh/y';
+    const maxYValueArr = [];
+    maxYValueArr.push(this.barChart[2]);
+    maxYValueArr.push(this.barChart[3]);
+    maxYValueArr.push(this.barChart[4]);
+    this.yVal = Math.max.apply(Math, maxYValueArr.map(function (o) {
+      let max = 0;
+      for (let arr = 0; arr < o['data'].length; arr++) {
+        max = +o['data'][arr][1] + max;
+      }
+      return max;
+    }));
+    this.yVal = Math.ceil((this.yVal + 1) / 10) * 10;
+    this.showBar = true;
+  }
+
   getColumnData(lines, column: number) {
     const result = lines.map(val => {
       const value = val.split(',');
@@ -130,6 +245,11 @@ export class ComparisonStartComponent {
     this.lineChart[0] = {
       data: [],
     };
+    for (let i = 0; i < this.BARS_TOTAL; i++) {
+      this.barChart[i] = {
+        data: [],
+      };
+    }
     this.timers = [];
   }
 
