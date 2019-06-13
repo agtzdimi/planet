@@ -25,43 +25,12 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
     }
 
     setData(type, name, data) {
-        let markArea = null;
-        if (name === 'Electric grid power flow') {
-            markArea = {
-                silent: true,
-                data: [
-                    [
-                        {
-                            yAxis: 0,
-                            label: {
-                                show: true,
-                                position: ['50%', '50%'],
-                                formatter: 'Electricity imported from external grid',
-                            },
-                            itemStyle: {
-                                normal: {
-                                    color: 'rgba(135,206,250,1)',
-                                    borderColor: '#CE1C08',
-                                    borderWidth: 1,
-                                    borderType: 'dotted',
-                                },
-                            },
-                        },
-                        {
-                            yAxis: 'max',
-                        },
-                    ],
-                ],
-            };
-            name = 'Electricity imported from external grid';
-        }
         if (type === 'line') {
             return {
                 name: name,
                 type: 'line',
                 data: data,
                 hoverAnimation: false,
-                markArea: markArea,
             };
         } else {
             return {
@@ -112,39 +81,20 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                         break;
                     case 'Electric_grid_power_flow':
                         name = 'Electric grid power flow';
+                        let max = +csvData[index][1];
+                        let min = +csvData[index][1];
                         for (let val = 0; val < csvData[index].length; val++) {
                             csvData[index][val] = parseFloat(csvData[index][val]).toFixed(6);
+                            if (max < +csvData[index][val]) {
+                                max = +csvData[index][val];
+                            }
+                            if (min > +csvData[index][val]) {
+                                min = +csvData[index][val];
+                            }
                         }
                         tempData = this.setData('line', name, csvData[index]);
-                        const gridPowerFlow = { ...tempData };
-                        series.push(gridPowerFlow);
-                        tempData['markArea'] = {
-                            silent: true,
-                            data: [
-                                [
-                                    {
-                                        yAxis: -0,
-                                        label: {
-                                            show: true,
-                                            position: ['50%', '50%'],
-                                            formatter: 'Reverse power flow',
-                                        },
-                                        itemStyle: {
-                                            normal: {
-                                                color: 'rgba(38, 194, 129, 1)',
-                                                borderColor: '#CE1C08',
-                                                borderWidth: 1,
-                                                borderType: 'dotted',
-                                            },
-                                        },
-                                    },
-                                    {
-                                        yAxis: 'min',
-                                    },
-                                ],
-                            ],
-                        };
-                        tempData['name'] = 'Reverse power flow';
+                        series.push(this.calculateMarkArea(min, true));
+                        series.push(this.calculateMarkArea(max, false));
                         break;
                     case 'Total_heat_demand':
                         name = 'Total heat demand';
@@ -308,6 +258,78 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
 
     ngOnDestroy(): void {
         this.themeSubscription.unsubscribe();
+    }
+
+    calculateMarkArea(value, aboveZero) {
+        if (aboveZero) {
+            if (value > 0) {
+                value = 0;
+            }
+            return {
+                type: 'line',
+                smooth: true,
+                markArea: {
+                    silent: true,
+                    data: [
+                        [
+                            {
+                                yAxis: -0,
+                                label: {
+                                    show: true,
+                                    position: ['50%', '50%'],
+                                    formatter: 'Reverse power flow',
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        color: 'rgba(38, 194, 129, 1)',
+                                        borderColor: '#CE1C08',
+                                        borderWidth: 1,
+                                        borderType: 'dotted',
+                                    },
+                                },
+                            },
+                            {
+                                yAxis: value,
+                            },
+                        ],
+                    ],
+                },
+            };
+        } else {
+            if (value < 0) {
+                value = 0;
+            }
+            return {
+                type: 'line',
+                smooth: true,
+                markArea: {
+                    silent: true,
+                    data: [
+                        [
+                            {
+                                yAxis: 0,
+                                label: {
+                                    show: true,
+                                    position: ['50%', '50%'],
+                                    formatter: 'Electricity imported from external grid',
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        color: 'rgba(231, 76, 60, 1)',
+                                        borderColor: '#CE1C08',
+                                        borderWidth: 1,
+                                        borderType: 'dotted',
+                                    },
+                                },
+                            },
+                            {
+                                yAxis: value,
+                            },
+                        ],
+                    ],
+                },
+            };
+        }
     }
 
 }

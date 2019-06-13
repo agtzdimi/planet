@@ -1,5 +1,4 @@
 import { Component, AfterViewInit, Output, EventEmitter, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
-import { UploaderOptions, UploadOutput } from 'ngx-uploader';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
@@ -15,11 +14,9 @@ import { DialogNamePromptComponent } from '../dialog-prompt/dialog-prompt.compon
 export class GeneralParamsComponent implements AfterViewInit, OnInit {
 
   paramInit: Object;
-  options: UploaderOptions;
   transitionController1 = new TransitionController();
   times = 1;
   currentTab = 'Electric Grid';
-  fileName: string[] = [];
   dataLoaded = false;
   loadedSelections = {
     'elec': '',
@@ -39,11 +36,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     private model2: Model2ParamInitService,
     public generalParams: GeneralParamsService,
     private dialogService: NbDialogService) {
-
-    this.options = this.generalParams.options;
-    for (let i = 0; i < 7; i++) {
-      this.fileName.push('Upload File');
-    }
 
     // Subscribe to events
     this.generalParams.formDescriptionUpdated.subscribe(
@@ -204,37 +196,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
 
   }
 
-  onUploadOutput(output: UploadOutput, id): void {
-    switch (output.type) {
-      case 'rejected':
-        if (typeof output.file !== 'undefined') {
-          this.generalParams.files = [];
-          this.generalParams.files.push(output.file.nativeFile);
-          this.updateFilename(id, output);
-        }
-        break;
-      case 'addedToQueue':
-        if (typeof output.file !== 'undefined') {
-          if (output.file.name === this.fileName[id]) {
-            this.generalParams.files[id] = output.file.nativeFile;
-          } else {
-            this.generalParams.files[id] = output.file.nativeFile;
-          }
-          this.updateFilename(id, output);
-        }
-        break;
-    }
-    this.generalParams.updateFiles(this.generalParams.files);
-  }
-
-  updateFilename(id, output) {
-    this.fileName[id] = output.file.name;
-  }
-
-  getFileName(id) {
-    return this.fileName[id];
-  }
-
   updateSelectedModel(event, modelType) {
     this.generalParams.selectedModel[modelType] = event;
     this.generalParams.updateSelectedModel(this.generalParams.selectedModel);
@@ -253,10 +214,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     if (this.generalParams.formDescription === '' || this.generalParams.formName === '' ||
       this.generalParams.formName.includes('  -  ') || this.generalParams.formName.includes('|')) {
       this.generalParams.updateErrorMessage('Please fill in/correct the Simulation Name and Description');
-    } else if (this.getFileName(0) !== 'Electricity.xlsx' && !this.isLoadModule) {
-      this.generalParams.updateErrorMessage('Please upload Electricity.xlsx');
-    } else if (this.getFileName(1) !== 'Heat.xlsx' && !this.isLoadModule) {
-      this.generalParams.updateErrorMessage('Please upload Heat.xlsx');
     } else if (!Number(+this.paramInit['payload']['simulation']['time.step'])) {
       this.generalParams.updateErrorMessage('Please give a number for time.step');
     } else if (+this.paramInit['payload']['simulation']['time.step'] !== 15 &&
@@ -264,7 +221,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       this.generalParams.updateErrorMessage('Time Step can only be 15Mins or 60Mins');
     } else if (!this.checkGrids()) {
       this.generalParams.updateErrorMessage('Please Specify the Electricity / District Heating / Gas Grid');
-    } else if (!this.formpicker['queue']) {
+    } else if (this.formpicker && !this.formpicker['queue']) {
       this.generalParams.updateErrorMessage('Please Specify the period of the simulation');
     } else {
       status = true;

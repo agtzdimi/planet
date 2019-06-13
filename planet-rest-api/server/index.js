@@ -75,26 +75,6 @@ app.post("/upload", (req, res, next) => {
     res.json({
         file: `$(req.files.file)`
     });
-    if ((req.body.method === 'LOAD' || req.body.method === 'NEW') && req.files) {
-        console.log("Start File uploading...")
-        for (const fil of Object.keys(req.files.file)) {
-            let uploadFile = req.files.file[fil];
-            const fileName = req.files.file[fil].name;
-            uploadFile.mv(`${__dirname}/../public/files/${fileName}`, function (err) {
-                if (err) {
-                    console.log(err)
-                    return res.status(500).send(err);
-                }
-            });
-        }
-    }
-    else {
-        console.log("Generate Timeseries...")
-        shell.exec("echo -e " + req.body.param4).to(`${__dirname}/../public/files/Electricity.csv`);
-        shell.exec("sed -i '$ d' " + `${__dirname}/../public/files/Electricity.csv`);
-        shell.exec("echo -e " + req.body.param5).to(`${__dirname}/../public/files/Heat.csv`);
-        shell.exec("sed -i '$ d' " + `${__dirname}/../public/files/Heat.csv`);
-    }
 });
 
 app.post("/save_data", (req, res, next) => {

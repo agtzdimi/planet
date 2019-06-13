@@ -47,12 +47,12 @@ function replicateColumns {
 
 awk -v id="$1" -v count=$2 'BEGIN {FS=OFS=","} {
    if(NR==1) {
-      line=id"_node"1
-      for(i=2;i<=count;i++) {
-         line=line FS id"_node"i
+         line=id"_node"1
+         for(i=2;i<=count;i++) {
+            line=line FS id"_node"i
+         }
+         print line
       }
-      print line
-   } 
    else {
       val=$0
       for(i=1;i<count;i++) {
@@ -117,22 +117,71 @@ fi
 timeStep=$(cat ./public/files/Parameters_initialization.txt | python ./server/pythonScripts/getAttribute.py --time.step true)
 steps=$(awk -v step="$timeStep" 'BEGIN {print (1/step)}')
 
+hourStart=$(awk -v start=$pvStartYear 'BEGIN {
+   split(start,startDate,"-")
+   dayHour = startDate[3]*24
+   for (mon=1;mon<startDate[2];mon++) {
+      if(mon == 4 || mon == 6 || mon == 9 || mon == 11) {
+         monthHour = monthHour + 720
+      }
+      else if(mon == 1 || mon == 3 || mon == 5 || mon == 7 || mon == 8 || mon == 10 || mon == 12) {
+         monthHour = monthHour + 744
+      }
+      else {
+         monthHour = monthHour + 672
+      }
+   }
+   print (monthHour + dayHour - 23 + 1)
+}'
+)
+hourEnd=$(awk -v end=$pvEndYear 'BEGIN {
+   split(end,endDate,"-")
+   dayHour = endDate[3]*24
+   for (mon=1;mon<endDate[2];mon++) {
+      if(mon == 4 || mon == 6 || mon == 9 || mon == 11) {
+         monthHour = monthHour + 720
+      }
+      else if(mon == 1 || mon == 3 || mon == 5 || mon == 7 || mon == 8 || mon == 10 || mon == 12) {
+         monthHour = monthHour + 744
+      }
+      else {
+         monthHour = monthHour + 672
+      }
+   }
+   print (monthHour + dayHour + 1)
+}')
+
+head -n1 ./public/staticFiles/Electricity.csv | cut -d , -f1-$((NODES_COUNT*2)) > nodeFiles/Electricity
+head -n1 ./public/staticFiles/Heat.csv > nodeFiles/Heat
+sed -n "$hourStart"','"$hourEnd"'p' ./public/staticFiles/Electricity.csv | cut -d , -f1-$((NODES_COUNT*2)) >> nodeFiles/Electricity
+sed -n "$hourStart"','"$hourEnd"'p' ./public/staticFiles/Heat.csv >> nodeFiles/Heat
+
 if [[ $steps > "1" ]]; then
    genFilesLessHour "PV1" "$steps"
    genFilesLessHour "Wind1" "$steps"
+   eval ' for node in {1..'"$((NODES_COUNT*2))"'}; do cut -d , -f"$node" nodeFiles/Electricity > nodeFiles/Electricity"$node"; genFilesLessHour "Electricity$node" "$steps" ;done'
+   rm nodeFiles/Electricity
+   paste -d , nodeFiles/Electricity* > ./public/files/Electricity.csv
+   for node in {1..2}; do
+      cut -d , -f$node nodeFiles/Heat > nodeFiles/Heat$node
+      genFilesLessHour "Heat$node" "$steps"
+   done
+   rm nodeFiles/Heat
+   paste -d , nodeFiles/Heat* > ./public/files/Heat.csv
 elif [[ $steps < "1" ]]; then
    stepToIncrease=$(awk -v step="$timeStep" 'BEGIN{print (step - 1)}')
    genFilesMoreHour "PV1" "$stepToIncrease"
    genFilesMoreHour "Wind1" "$stepToIncrease"
+   genFilesMoreHour "Heat1" "$stepToIncrease"
+   genFilesMoreHour "Electricity1" "$stepToIncrease"
+else
+   mv nodeFiles/Electricity ./public/files/Electricity.csv
+   mv nodeFiles/Heat ./public/files/Heat.csv
 fi
 
 replicateColumns "PV" "$NODES_COUNT"
 replicateColumns "Wind" "$NODES_COUNT"
 
-if [[ -s ./public/files/Electricity.xlsx || -s ./public/files/Heat.xlsx ]]; then
-   python ./server/pythonScripts/csvToExcel.py --source ./public/files/Electricity.xlsx --dest ./public/files/Electricity.csv --type csv
-   python ./server/pythonScripts/csvToExcel.py --source ./public/files/Heat.xlsx --dest ./public/files/Heat.csv --type csv
-fi
 rm -rf nodeFiles
 
 for file in $(ls ./public/files/*.csv); do

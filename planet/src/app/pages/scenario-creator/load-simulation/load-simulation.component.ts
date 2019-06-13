@@ -176,10 +176,6 @@ export class LoadSimulationFilesComponent implements OnInit {
         const originalTimestep = this.paramInit['payload']['simulation']['time.step'];
         const originalHorizon = this.paramInit['payload']['simulation']['simulation.time'];
 
-        for (let i = 0; i < this.generalParams.files.length; i++) {
-            const file: File = this.generalParams.files[i];
-            formData.append('file', file, file.name);
-        }
         this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         this.paramInit['payload']['simulation']['simulation.time'] =
             Math.round(this.paramInit['payload']['simulation']['simulation.time']

@@ -129,27 +129,6 @@
                 </div>
 
                 <div class="row">
-                  <h6>Upload Electricity Timeseries</h6>
-                </div>
-                <div class="row">
-                  <label class="upload-button m-2">
-                    <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,0)"
-                      [uploadInput]="uploadInput" multiple class="btn btn-primary">
-                    <span class="btn btn-primary m-2">{{getFileName(0)}}</span>
-                  </label>
-                </div>
-                <div class="row">
-                  <h6>Upload Heat Timeseries </h6>
-                </div>
-                <div class="row">
-                  <label class="upload-button m-2">
-                    <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event,1)"
-                      [uploadInput]="uploadInput" multiple class="btn btn-primary">
-                    <span class="btn btn-primary m-2">{{getFileName(1)}}</span>
-                  </label>
-                </div>
-
-                <div class="row">
                   <button *ngIf="checkDefaultData() && !isLoadModule" nbButton hero class="m-3" status="info"
                     shape="round" (click)="animateInfo()">Continue</button>
                   <div *ngIf="!checkDefaultData() && !isLoadModule" class="requiredField">

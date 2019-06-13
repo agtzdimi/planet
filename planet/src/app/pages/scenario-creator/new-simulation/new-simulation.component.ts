@@ -97,10 +97,6 @@ export class NewSimulationFilesComponent {
             (data) => this.generalParams.formDescription = data,
         );
 
-        this.generalParams.filesUpdate.subscribe(
-            (data) => this.generalParams.files = data,
-        );
-
         this.generalParams.modelUpdate.subscribe(
             (data) => this.generalParams.model = data,
         );
@@ -120,10 +116,6 @@ export class NewSimulationFilesComponent {
         const formData: FormData = new FormData();
 
         // Add files to formData and transform the time step to the form that the model works
-        for (let i = 0; i < this.generalParams.files.length; i++) {
-            const file: File = this.generalParams.files[i];
-            formData.append('file', file, file.name);
-        }
 
         const originalTimestep = this.paramInit['payload']['simulation']['time.step'];
         const originalHorizon = this.paramInit['payload']['simulation']['simulation.time'];

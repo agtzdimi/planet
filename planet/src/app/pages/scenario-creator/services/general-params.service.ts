@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter, Input } from '@angular/core';
-import { UploaderOptions } from 'ngx-uploader';
 import { NbCalendarRange } from '@nebular/theme';
 
 @Injectable()
@@ -10,12 +9,10 @@ export class GeneralParamsService {
     formDescription: string;
     areaPicked: boolean = false;
     dateRangeClicked: boolean = false;
-    options: UploaderOptions;
     errorMessage: String = '';
     gridImage: string;
     showMap = false;
     coordinates: number[] = [7.6825, 45.0678];
-    files: File[];
     startingDate: Date;
     endingDate: Date;
     isDefault: boolean = false;
@@ -30,7 +27,6 @@ export class GeneralParamsService {
     errorMessageUpdate = new EventEmitter<String>();
     gridImageUpdate = new EventEmitter<string>();
     showMapUpdate = new EventEmitter<boolean>();
-    filesUpdate = new EventEmitter<File[]>();
     startingDateUpdate = new EventEmitter<Date>();
     endingDateUpdate = new EventEmitter<Date>();
     updateIsDefault = new EventEmitter<boolean>();
@@ -40,11 +36,6 @@ export class GeneralParamsService {
 
 
     constructor() {
-        this.options = {
-            concurrency: 1,
-            maxUploads: Number.MAX_SAFE_INTEGER,
-        };
-        this.files = [];
         this.formName = '';
         this.formDescription = '';
         this.startingDate = new Date(2016, 1, 1);
@@ -91,11 +82,6 @@ export class GeneralParamsService {
             this.showMap = flag;
             this.showMapUpdate.emit(this.showMap);
         }, 500);
-    }
-
-    updateFiles(files) {
-        this.files = files;
-        this.filesUpdate.emit(this.files);
     }
 
     updateStartDate(startDate: Date) {
