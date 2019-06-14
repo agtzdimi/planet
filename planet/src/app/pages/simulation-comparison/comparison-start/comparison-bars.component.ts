@@ -76,23 +76,45 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
             });
 
             let headers = [];
-            let stacks = [];
-            const label = null;
+            const stacks = [];
             for (const obj of Object.keys(ObjHeaders)) {
                 headers = [...headers, ObjHeaders[obj][0]];
             }
+            let yAxis;
+            let color = '';
+            let check = -1;
 
             for (let index = 0; index < headers.length; index++) {
                 switch (headers[index]) {
                     case 'Total CO2 emissions':
                         type = 'scatter';
                         yIndex = 0;
-                        barGap = '30%';
+                        barGap = '0%';
+                        yAxis = csvData[index][2];
+                        if (!stacks.includes(yAxis)) {
+                            stacks.push(yAxis);
+                        }
+                        check = series.findIndex(x => x.name === headers[index]);
+                        if (check !== -1) {
+                            color = series[check]['itemStyle']['normal']['color'];
+                        } else {
+                            color = colorList[index];
+                        }
                         break;
                     case 'LCOE':
                         type = 'scatter';
                         yIndex = 1;
-                        barGap = '30%';
+                        barGap = '0%';
+                        yAxis = csvData[index][2];
+                        if (!stacks.includes(yAxis)) {
+                            stacks.push(yAxis);
+                        }
+                        check = series.findIndex(x => x.name === headers[index]);
+                        if (check !== -1) {
+                            color = series[check]['itemStyle']['normal']['color'];
+                        } else {
+                            color = colorList[index];
+                        }
                         break;
                     case 'RES curtailment':
                     case 'RES to P2H':
@@ -106,50 +128,64 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
                     case 'CHP heat':
                         barGap = '30%';
                         stack = csvData[index][2];
-                        stacks.push(stack);
+                        if (!stacks.includes(stack)) {
+                            stacks.push(stack);
+                        }
+                        check = series.findIndex(x => x.name === headers[index]);
+                        if (check !== -1) {
+                            color = series[check]['itemStyle']['normal']['color'];
+                        } else {
+                            color = colorList[index];
+                        }
                         break;
                     default:
                         type = 'bar';
                         yIndex = 0;
+                        barGap = '0%';
+                        yAxis = csvData[index][2];
+                        if (!stacks.includes(yAxis)) {
+                            stacks.push(yAxis);
+                        }
+                        check = series.findIndex(x => x.name === headers[index]);
+                        if (check !== -1) {
+                            color = series[check]['itemStyle']['normal']['color'];
+                        } else {
+                            color = colorList[index];
+                        }
                         break;
                 }
                 const tempData = {
                     itemStyle: {
                         normal: {
-                            color: colorList[index],
+                            color: color,
                         },
                     },
                     name: headers[index],
                     type: type,
-                    label: label,
                     barWidth: barWidth,
                     barGap: barGap,
                     yAxisIndex: yIndex,
                     symbolSize: [40, 40],
                     stack: stack,
-                    data: [csvData[index][1], csvData[index][0]],
                 };
-                series.push(tempData);
-            }
-            if (stacks.length !== 0) {
-                stacks = stacks.filter((value, index, self) => {
-                    return self.indexOf(value) === index;
-                });
-                const indexes = [];
-                for (let i = 0; i < stacks.length; i++) {
-                    for (let j = series.length - 1; j >= 0; j--) {
-                        if (series[j]['stack'] === stacks[i]) {
-                            indexes.push(j);
-                            break;
-                        }
-                    }
-                    series[indexes[i]]['label'] = {
-                        show: true,
-                        position: 'top',
-                        color: 'black',
-                        formatter: stacks[i],
-                    };
+                let axisLabel;
+                if (stack) {
+                    tempData['barGap'] = '-100%';
+                    axisLabel = stack;
+                } else {
+                    axisLabel = yAxis;
                 }
+                const tempIndex = stacks.indexOf(axisLabel);
+                tempData['data'] = [];
+                for (let i = 0; i < stacks.length; i++) {
+                    if (i === tempIndex) {
+                        tempData['data'].push(csvData[index][1]);
+                        tempData['data'].push(csvData[index][0]);
+                    } else {
+                        tempData['data'].push(null);
+                    }
+                }
+                series.push(tempData);
             }
             this.options = {
                 backgroundColor: echarts.bg,
@@ -157,6 +193,20 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
                 colors.successLight, colors.primaryLight],
                 tooltip: {
                     trigger: 'axis',
+                    formatter: (params) => {
+                        const colorSpan = itemColor =>
+                            '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:'
+                            + itemColor + '"></span>';
+                        let rez = '<p>' + params[0].axisValue + '</p>';
+                        params.forEach(item => {
+                            if (item.seriesName !== item.data && item.data) {
+                                const xx = '<p>' + colorSpan(item.itemColor) + ' ' + item.seriesName + ': ' + item.data + '</p>';
+                                rez += xx;
+                            }
+                        });
+
+                        return rez;
+                    },
                     axisPointer: {
                         type: 'cross',
                         label: {
@@ -194,7 +244,7 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
                         axisTick: {
                             show: false,
                         },
-                        data: [''],
+                        data: stacks,
                     },
                 ],
                 yAxis: [
