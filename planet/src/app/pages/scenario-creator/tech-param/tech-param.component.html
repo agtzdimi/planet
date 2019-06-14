@@ -148,11 +148,11 @@
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['nominal.electric.power']"
                 [compId]="'techParamCheckInput3.1'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck3.checked" [label1]="'Effieciency Electric'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck3.checked" [label1]="'Effieciency Electric'" [label2]="'%'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.electric']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.electric']"
                 [compId]="'techParamCheckInput3.2'"></ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck3.checked" [label1]="'Effieciency Thermal'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck3.checked" [label1]="'Effieciency Thermal'" [label2]="'%'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']"
                 [compId]="'techParamCheckInput3.3'"></ngx-input-field>
@@ -179,7 +179,7 @@
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['nominal.heat.power']"
                 [compId]="'techParamCheckInput4.1'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.HP.Cop'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.HP.Cop'" [label2]="''"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['cop']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['cop']"
                 [compId]="'techParamCheckInput4.2'"></ngx-input-field>
@@ -188,7 +188,7 @@
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['nominal.heat.power']"
                 [compId]="'techParamCheckInput4.3'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.EH.Efficiency Thermal'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'DH.EH.Efficiency Thermal'" [label2]="'%'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['efficiency.thermal']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['efficiency.thermal']"
                 [compId]="'techParamCheckInput4.4'">
@@ -199,7 +199,7 @@
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['nominal.heat.power']"
                 [compId]="'techParamCheckInput4.5'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.HP.Cop'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.HP.Cop'" [label2]="''"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['cop']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['cop']"
                 [compId]="'techParamCheckInput4.6'"></ngx-input-field>
@@ -209,8 +209,7 @@
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['nominal.heat.power']"
                 [compId]="'techParamCheckInput4.7'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.EH.Efficiency Thermal'"
-                [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck4.checked" [label1]="'LHD.EH.Efficiency Thermal'" [label2]="'%'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['efficiency.thermal']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['efficiency.thermal']"
                 [compId]="'techParamCheckInput4.8'">
@@ -238,17 +237,17 @@
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['nominal.electric.power']"
                 [compId]="'techParamCheckInput5.1'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Electrolysis'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Electrolysis'" [label2]="'%'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']"
                 [compId]="'techParamCheckInput5.2'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Methanation'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Methanation'" [label2]="'%'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']"
                 [compId]="'techParamCheckInput5.3'">
             </ngx-input-field>
-            <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Thermal'" [label2]="'MW'"
+            <ngx-input-field [isChecked]="techParamCheck5.checked" [label1]="'Effieciency Thermal'" [label2]="'%'"
                 (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']=+$event"
                 [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']"
                 [compId]="'techParamCheckInput5.4'"></ngx-input-field>
