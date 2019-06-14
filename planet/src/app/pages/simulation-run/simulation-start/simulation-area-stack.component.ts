@@ -95,6 +95,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                         tempData = this.setData('line', name, csvData[index]);
                         series.push(this.calculateMarkArea(min, true));
                         series.push(this.calculateMarkArea(max, false));
+                        name = '';
                         break;
                     case 'Total_heat_demand':
                         name = 'Total heat demand';

@@ -174,6 +174,7 @@ export class SimulationStartComponent {
     this.areaChart[0].title = 'Electric demand, RES producibility, dispatch of the electric surplus';
     this.areaChart[1].title = 'Fulfilment of the Electric Demand';
     this.areaChart[2].title = 'Fulfilment of the Heat Demand (both DH and LHD)';
+    this.areaChart[3].title = 'Electric grid power flow';
     this.showArea = true;
     this.loading = false;
     this.showVal = true;
