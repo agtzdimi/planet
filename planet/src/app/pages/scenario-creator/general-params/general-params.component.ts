@@ -170,6 +170,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     } else {
       this.generalParams.updateGridImage('assets/images/singleNodeDistrictHeating.png');
     }
+    this.generalParams.updateShowMap(false);
+    this.generalParams.updateShowMap(true);
   }
 
   updateModel() {
