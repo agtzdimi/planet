@@ -66,17 +66,18 @@
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (stringValChange)="simulationMachine=$event" [(val)]="simulationMachine" [compId]="'simulationMachine'"
-              [inputHtmlLabel1]="'Simulations\' Machine IP'" [type]="'string'">
+              [inputHtmlLabel1]="'Simulations\' Machine IP'" [type]="'string'" [isReadOnly]="true">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (valChange)="simulationMachinePort=+$event" [(val)]="simulationMachinePort"
-              [compId]="'simulationMachinePort'" [inputHtmlLabel1]="'Simulation\'s Port'">
+              [compId]="'simulationMachinePort'" [inputHtmlLabel1]="'Simulation\'s Port'" [isReadOnly]="true">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (stringValChange)="simulationMachineTopic=$event" [(val)]="simulationMachineTopic"
-              [compId]="'simulationMachineTopic'" [inputHtmlLabel1]="'Simulations\' Machine Topic'" [type]="'string'">
+              [compId]="'simulationMachineTopic'" [inputHtmlLabel1]="'Simulations\' Machine Topic'" [type]="'string'"
+              [isReadOnly]="true">
             </ngx-input-field>
 
             <div *ngIf="loaded">
@@ -84,7 +85,9 @@
                 <div class="col-md-3" *ngFor="let simulator of simUnit; let i = index">
                   <div class="imageCard">
 
-                    <nb-card [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge" accent="active">
+                    <nb-card [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge" [ngClass]="{
+                      'selectedSim': checkSimulator(simulator)
+                    }">
                       <nb-card-body (click)="handleUnit(simulator)">
                         <div *ngIf="simulator['metadata']['Simulink'] === 'true'">
                           <img class="component-icon" src="assets/images/Simulink.jpg"

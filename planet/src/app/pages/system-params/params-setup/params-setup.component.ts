@@ -93,4 +93,12 @@ export class ParamsSetupComponent {
     this.simulationMachineTopic = simulator['metadata']['Topic'];
   }
 
+  checkSimulator(simulator) {
+    if (simulator['metadata']['Topic'] === this.simulationMachineTopic) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }

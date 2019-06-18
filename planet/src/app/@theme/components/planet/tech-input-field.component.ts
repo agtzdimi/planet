@@ -11,6 +11,7 @@ export class TechInputFieldComponent {
     @Input() label1;
     @Input() label2;
     @Input() compId;
+    @Input() isReadOnly;
     @Input() val: Number;
     @Input() type: string;
     @Input() inputType: string;

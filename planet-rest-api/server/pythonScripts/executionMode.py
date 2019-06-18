@@ -73,7 +73,9 @@ def createExcelFile(fileName,finalFileName):
       for value in content:
          if value != '':
             f.write("%s\n" % value)
-   pd.read_csv(fileName).to_excel(finalFileName, index=False)
+   finalFile = pd.read_csv(fileName)
+   finalFile = finalFile.drop(labels='Time', axis=1)
+   finalFile.to_excel(finalFileName, index=False)
 
 def executeMode(message):
    """ Function to be called when the user sends a message to execute a specific mode

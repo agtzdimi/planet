@@ -38,8 +38,8 @@ export class GeneralParamsService {
     constructor() {
         this.formName = '';
         this.formDescription = '';
-        this.startingDate = new Date(2016, 1, 1);
-        this.endingDate = new Date(2016, 12, 31);
+        this.startingDate = new Date(2016, 0, 1);
+        this.endingDate = new Date(2016, 11, 31);
         this.selectedModel = {
             'elec': '',
             'dh': '',

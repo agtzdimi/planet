@@ -23,6 +23,19 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     'dh': '',
     'gas': '',
   };
+  min: Date;
+  max: Date;
+  timeStep = {
+    'min15': true,
+    'min60': false,
+  };
+  nodesSelected = {
+    '8 node el': false,
+    '1 node el': false,
+    '1 node dh': false,
+    '1 node gas': false,
+    '3 node dh': false,
+  };
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
@@ -36,6 +49,9 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     private model2: Model2ParamInitService,
     public generalParams: GeneralParamsService,
     private dialogService: NbDialogService) {
+
+    this.min = new Date(2016, 0, 1);
+    this.max = new Date(2016, 11, 31);
 
     // Subscribe to events
     this.generalParams.formDescriptionUpdated.subscribe(
@@ -156,19 +172,44 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       this.times++;
     }
     this.currentTab = event.tabTitle;
+
+    if (event['tabTitle'] === 'Electric Grid') {
+      if (this.nodesSelected['8 node el']) {
+        this.generalParams.updateGridImage('assets/images/grid.png');
+      } else {
+        this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
+      }
+    } else if (event['tabTitle'] === 'District Heating') {
+      if (this.nodesSelected['3 node dh']) {
+        this.generalParams.updateGridImage('assets/images/3NodeDH.png');
+      } else {
+        this.generalParams.updateGridImage('assets/images/singleNodeDistrictHeating.png');
+      }
+    } else {
+      this.generalParams.updateGridImage('assets/images/singleNodeGas.png');
+    }
   }
 
   onRadioButtonClicked(event) {
     if (event['target']['textContent'] === '8 Node') {
       this.generalParams.updateGridImage('assets/images/grid.png');
+      this.nodesSelected['8 node el'] = true;
+      this.nodesSelected['1 node el'] = false;
     } else if (event['target']['textContent'] === '3 Node') {
       this.generalParams.updateGridImage('assets/images/3NodeDH.png');
+      this.nodesSelected['3 node dh'] = true;
+      this.nodesSelected['1 node dh'] = false;
     } else if (this.currentTab === 'Electric Grid') {
       this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
+      this.nodesSelected['1 node el'] = true;
+      this.nodesSelected['8 node el'] = false;
     } else if (this.currentTab === 'Gas Network') {
       this.generalParams.updateGridImage('assets/images/singleNodeGas.png');
+      this.nodesSelected['1 node gas'] = true;
     } else {
       this.generalParams.updateGridImage('assets/images/singleNodeDistrictHeating.png');
+      this.nodesSelected['1 node dh'] = true;
+      this.nodesSelected['8 node dh'] = false;
     }
     this.generalParams.updateShowMap(false);
     this.generalParams.updateShowMap(true);
@@ -271,6 +312,27 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
         this.paramInit = this.model2.paramInit;
         this.model2.paramUpdated.emit(this.paramInit);
       }
+    }
+  }
+
+  calculateDateInput() {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'];
+    return monthNames[(this.generalParams.loadRangeDate.start.getMonth())] + ' ' + this.generalParams.loadRangeDate.start.getDay()
+      + ', ' + this.generalParams.loadRangeDate.start.getFullYear() + ' - ' +
+      monthNames[(this.generalParams.loadRangeDate.end.getMonth())] + ' ' + this.generalParams.loadRangeDate.end.getDay()
+      + ', ' + this.generalParams.loadRangeDate.end.getFullYear();
+  }
+
+  handleTimeStep(event, checkBox) {
+    if (checkBox === 'min15') {
+      this.paramInit['payload']['simulation']['time.step'] = 15;
+      this.timeStep['min15'] = true;
+      this.timeStep['min60'] = false;
+    } else if (checkBox === 'min60') {
+      this.paramInit['payload']['simulation']['time.step'] = 60;
+      this.timeStep['min60'] = true;
+      this.timeStep['min15'] = false;
     }
   }
 

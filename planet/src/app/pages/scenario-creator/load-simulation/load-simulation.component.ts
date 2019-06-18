@@ -260,14 +260,14 @@ export class LoadSimulationFilesComponent implements OnInit {
 
     get dateStart(): Date {
         if (!this.generalParams.startingDate) {
-            this.generalParams.startingDate = new Date(2016, 1, 1);
+            this.generalParams.startingDate = new Date(2016, 0, 1);
         }
         return new Date(this.generalParams.startingDate);
     }
 
     get dateEnd(): Date {
         if (!this.generalParams.endingDate) {
-            this.generalParams.endingDate = new Date(2016, 12, 31);
+            this.generalParams.endingDate = new Date(2016, 11, 31);
         }
         return new Date(this.generalParams.endingDate);
     }

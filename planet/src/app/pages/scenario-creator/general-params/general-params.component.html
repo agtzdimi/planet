@@ -92,17 +92,20 @@
                 <hr>
 
                 <div class="form-group row">
-                  <label for="dt" class="col-sm-6 col-form-label" [ngStyle]="{'line-height': '31px'}">Time Step</label>
+                  <label for="dt" class="col-sm-6 col-form-label" [ngStyle]="{'line-height': '31px'}">Time Step
+                    (Minutes)</label>
                   <div class="col-sm-12">
                     <div class="row">
                       <div class="col-md-8">
                         <div class="row">
-                          <div class="col-md-9">
-                            <input type="number" class="form-control" id="dt"
-                              [(ngModel)]="paramInit['payload']['simulation']['time.step']">
+                          <div class="col-md-1"></div>
+                          <div class="col-md-4">
+                            <sui-checkbox [ngModel]="timeStep['min15']" [isReadonly]="timeStep['min15']"
+                              (ngModelChange)="handleTimeStep($event,'min15')">15</sui-checkbox>
                           </div>
-                          <div class="col-md-1">
-                            <label [ngStyle]="{'margin-left': '0px','margin-top':'0.43rem'}">Mins</label>
+                          <div class="col-md-5">
+                            <sui-checkbox [ngModel]="timeStep['min60']" [isReadonly]="timeStep['min60']"
+                              (ngModelChange)="handleTimeStep($event,'min60')">60</sui-checkbox>
                           </div>
                         </div>
                       </div>
@@ -116,13 +119,15 @@
                     Horizon</label>
                   <div class=" row">
                     <div class="ui icon input datePickerButton" [ngStyle]="{'width':'100%'}">
-                      <input nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
-                        (click)="dateRangeChange()" [ngModel]="generalParams.loadRangeDate">
+                      <input *ngIf="isLoadModule" nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
+                        (click)="dateRangeChange()" [value]="calculateDateInput()">
+                      <input *ngIf="!isLoadModule" nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
+                        (click)="dateRangeChange()">
                       <i class="calendar alternate outline icon"></i>
                     </div>
 
                     <div class="col-md-12">
-                      <nb-rangepicker (rangeChange)="handleDateChange($event)" #formpicker>
+                      <nb-rangepicker (rangeChange)="handleDateChange($event)" [min]="min" [max]="max" #formpicker>
                       </nb-rangepicker>
                     </div>
                   </div>
