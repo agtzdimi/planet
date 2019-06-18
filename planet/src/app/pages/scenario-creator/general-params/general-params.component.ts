@@ -97,6 +97,10 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
           this.generalParams.updateFormName(data['payload']['formName']);
           this.generalParams.updateFormDescription(data['payload']['formDescription']);
           this.paramInit = data;
+          if (this.paramInit['payload']['simulation']['time.step'] === 60) {
+            this.timeStep['min60'] = true;
+            this.timeStep['min15'] = false;
+          }
         }
       },
     );
@@ -108,6 +112,10 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
           this.generalParams.updateFormName(data['payload']['formName']);
           this.generalParams.updateFormDescription(data['payload']['formDescription']);
           this.paramInit = data;
+          if (this.paramInit['payload']['simulation']['time.step'] === 60) {
+            this.timeStep['min60'] = true;
+            this.timeStep['min15'] = false;
+          }
         }
       },
     );
