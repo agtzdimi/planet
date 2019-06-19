@@ -36,6 +36,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
     '1 node gas': false,
     '3 node dh': false,
   };
+  waitLoad = false;
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
@@ -97,10 +98,19 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
           this.generalParams.updateFormName(data['payload']['formName']);
           this.generalParams.updateFormDescription(data['payload']['formDescription']);
           this.paramInit = data;
+          this.nodesSelected = {
+            '8 node el': false,
+            '1 node el': true,
+            '1 node dh': true,
+            '1 node gas': true,
+            '3 node dh': false,
+          };
+          this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
           if (this.paramInit['payload']['simulation']['time.step'] === 60) {
             this.timeStep['min60'] = true;
             this.timeStep['min15'] = false;
           }
+          this.waitLoad = true;
         }
       },
     );
@@ -112,10 +122,19 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
           this.generalParams.updateFormName(data['payload']['formName']);
           this.generalParams.updateFormDescription(data['payload']['formDescription']);
           this.paramInit = data;
+          this.nodesSelected = {
+            '8 node el': true,
+            '1 node el': false,
+            '1 node dh': true,
+            '1 node gas': true,
+            '3 node dh': false,
+          };
+          this.generalParams.updateGridImage('assets/images/grid.png');
           if (this.paramInit['payload']['simulation']['time.step'] === 60) {
             this.timeStep['min60'] = true;
             this.timeStep['min15'] = false;
           }
+          this.waitLoad = true;
         }
       },
     );
@@ -326,9 +345,9 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
   calculateDateInput() {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'];
-    return monthNames[(this.generalParams.loadRangeDate.start.getMonth())] + ' ' + this.generalParams.loadRangeDate.start.getDay()
+    return monthNames[(this.generalParams.loadRangeDate.start.getMonth())] + ' ' + this.generalParams.loadRangeDate.start.getDate()
       + ', ' + this.generalParams.loadRangeDate.start.getFullYear() + ' - ' +
-      monthNames[(this.generalParams.loadRangeDate.end.getMonth())] + ' ' + this.generalParams.loadRangeDate.end.getDay()
+      monthNames[(this.generalParams.loadRangeDate.end.getMonth())] + ' ' + this.generalParams.loadRangeDate.end.getDate()
       + ', ' + this.generalParams.loadRangeDate.end.getFullYear();
   }
 
@@ -342,6 +361,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       this.timeStep['min60'] = true;
       this.timeStep['min15'] = false;
     }
+    this.updateModel();
   }
 
 }
