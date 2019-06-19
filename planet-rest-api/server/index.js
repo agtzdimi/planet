@@ -227,6 +227,27 @@ app.post("/update_IPs", (req, res) => {
     }
 });
 
+app.post("/delete_scenario", (req, res, next) => {
+    formName = req.body.formName;
+    status = [];
+    msg = 'Scenario deleted successfully';
+    status[0] = shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+        " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+        " planet --eval \"db.files.remove({'payload.formName': '" + formName + "'})\"");
+    status[1] = shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+        " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+        " planet --eval \"db.files.remove({'formName': '" + formName + "'})\"");
+    status[2] = shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
+        " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
+        " planet --eval \"db.results.remove({'formName': '" + formName + "'})\"");
+    for (let i = 0; i < 3; i++) {
+        if (status[i].stderr) {
+            msg = status[i].stderr
+        }
+    }
+    res.send(msg)
+});
+
 app.post("/create_user", api.create_user);
 app.post("/update_user", api.update_user);
 app.post("/login_with_email_password", api.login_with_email_password);

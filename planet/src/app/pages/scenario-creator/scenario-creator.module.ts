@@ -24,6 +24,10 @@ import { NbDialogModule } from '@nebular/theme';
 import { HighlDirective } from './dialog-prompt/highlight.directive';
 import { GeneralParamsComponent } from './general-params/general-params.component';
 import { TechControlComponent } from './tech-control/tech-control.component';
+import { DeleteScenarioComponent } from './delete-scenario/delete-scenario.component';
+import { DeleteHighlightDirective } from './delete-scenario/dialog-prompt/delete-highlight.directive';
+import { DialogDeleteFormPromptComponent } from './delete-scenario/dialog-prompt/delete-form.component';
+import { DeleteScenarioDialogComponent } from './delete-scenario/dialog-prompt/delete-scenario-dialog.component';
 
 
 const COMPONENTS = [
@@ -39,6 +43,9 @@ const COMPONENTS = [
   DialogEconomyPromptComponent,
   DialogSelFormPromptComponent,
   HighlDirective,
+  DeleteHighlightDirective,
+  DialogDeleteFormPromptComponent,
+  DeleteScenarioDialogComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -49,6 +56,8 @@ const ENTRY_COMPONENTS = [
   DialogControlSystemPromptComponent,
   DialogEconomyPromptComponent,
   DialogSelFormPromptComponent,
+  DialogDeleteFormPromptComponent,
+  DeleteScenarioDialogComponent,
 ];
 
 
@@ -72,6 +81,7 @@ const ENTRY_COMPONENTS = [
     ...COMPONENTS,
     GeneralParamsComponent,
     TechControlComponent,
+    DeleteScenarioComponent,
   ],
   entryComponents: [
     ...ENTRY_COMPONENTS,

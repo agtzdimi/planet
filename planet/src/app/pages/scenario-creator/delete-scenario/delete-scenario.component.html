@@ -1,0 +1,28 @@
+<nb-card accent="active">
+  <nb-card-header>Delete Scenario</nb-card-header>
+  <nb-card-body>
+
+    <div class="row">
+      <div class="col-md-4">
+        <button nbButton hero status="info" (click)="openDialogBox()">{{formName}}</button>
+      </div>
+      <div class="col-md-2">
+        <button *ngIf="formName !== 'Select a Scenario'" nbButton type="button" [nbSpinner]="loading"
+          nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
+          class="start-upload-btn" (click)="deleteScenario()">
+          Delete Scenario
+        </button>
+      </div>
+      <div class="col-md-3">
+        <div *ngIf="status">
+          <div [ngClass]="{
+          'errorTextarea': !status.includes('Scenario deleted successfully'),
+          'successTextarea': status.includes('Scenario deleted successfully')}">
+            {{status}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nb-card-body>
+</nb-card>

@@ -209,17 +209,14 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       } else {
         this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
       }
-      this.resizeMap();
     } else if (event['tabTitle'] === 'District Heating') {
       if (this.nodesSelected['3 node dh']) {
         this.generalParams.updateGridImage('assets/images/3NodeDH.png');
       } else {
         this.generalParams.updateGridImage('assets/images/singleNodeDistrictHeating.png');
       }
-      this.resizeMap();
     } else {
       this.generalParams.updateGridImage('assets/images/singleNodeGas.png');
-      this.resizeMap();
     }
   }
 

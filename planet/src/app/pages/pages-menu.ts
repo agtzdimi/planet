@@ -14,7 +14,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/system-params',
   },
   {
-    title: 'Scenario Creator',
+    title: 'Scenario Manager',
     icon: 'nb-compose',
     children: [
       {
@@ -24,6 +24,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Load Scenario',
         link: '/pages/scenario-creator/load-simulation',
+      },
+      {
+        title: 'Delete Scenario',
+        link: '/pages/scenario-creator/delete-scenario',
       },
     ],
   },
