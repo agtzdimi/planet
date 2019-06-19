@@ -100,7 +100,7 @@ app.post("/save_data", (req, res, next) => {
                 if (code === 1) {
                     return res.send("Error: Not all data are loaded to the DB!");
                 } else {
-                    return res.send("Successfully Loaded Data");
+                    return res.send("Data successfully saved to Database!");
                 }
             });
         } else {
@@ -112,7 +112,7 @@ app.post("/save_data", (req, res, next) => {
             if (code === 1) {
                 return res.send("Error: Not all data are loaded to the DB!");
             } else {
-                return res.send("Successfully Loaded Data");
+                return res.send("Data successfully saved to Database!");
             }
         });
     }

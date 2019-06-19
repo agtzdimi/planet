@@ -18,18 +18,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'nb-compose',
     children: [
       {
-        title: 'Create New Simulation',
+        title: 'Create New Scenario',
         link: '/pages/scenario-creator/new-simulation',
       },
       {
-        title: 'Load Simulation',
+        title: 'Load Scenario',
         link: '/pages/scenario-creator/load-simulation',
       },
     ],
   },
   {
     title: 'Simulation Run',
-    icon: 'nb-bar-chart',
+    icon: 'nb-shuffle',
     link: '/pages/simulation-run',
   },
   {

@@ -26,7 +26,7 @@ export class SimulationStartComponent {
   options: any = {};
   status: String = '';
   themeSubscription: any;
-  formName = 'Select Saved Simulation';
+  formName = 'Select Saved Scenario';
   showVal: boolean;
   expanded = false;
   yVal: number = 0;

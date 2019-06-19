@@ -83,8 +83,8 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
             let yAxis;
             let color = '';
             let check = -1;
-
             for (let index = 0; index < headers.length; index++) {
+                csvData[index][1] = parseFloat(csvData[index][1]).toFixed(2);
                 switch (headers[index]) {
                     case 'Total CO2 emissions':
                         type = 'scatter';
@@ -200,11 +200,10 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
                         let rez = '<p>' + params[0].axisValue + '</p>';
                         params.forEach(item => {
                             if (item.seriesName !== item.data && item.data) {
-                                const xx = '<p>' + colorSpan(item.itemColor) + ' ' + item.seriesName + ': ' + item.data + '</p>';
+                                const xx = '<p>' + colorSpan(item.color) + ' ' + item.seriesName + ': ' + item.data + '</p>';
                                 rez += xx;
                             }
                         });
-
                         return rez;
                     },
                     axisPointer: {

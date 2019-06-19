@@ -83,6 +83,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
             }
 
             for (let index = 0; index < headers.length; index++) {
+                csvData[index][1] = parseFloat(csvData[index][1]).toFixed(2);
                 switch (headers[index]) {
                     case 'Total CO2 emissions':
                         type = 'scatter';

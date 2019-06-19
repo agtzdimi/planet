@@ -16,8 +16,8 @@ import { takeWhile } from 'rxjs/operators';
     <nb-layout>
       <nb-layout-column>
         <nb-card accent="active">
-          <nb-card-header>
-            <a href="#" (click)="back()"><img src="assets/images/planet.png"></a>
+          <nb-card-header [ngStyle]="{'margin':'0 auto'}">
+            <a href="https://www.h2020-planet.eu/" target="_blank"><img src="assets/images/planet.png"></a>
           </nb-card-header>
           <nb-card-body>
             <div class="flex-centered col-xl-4 col-lg-6 col-md-8 col-sm-12">

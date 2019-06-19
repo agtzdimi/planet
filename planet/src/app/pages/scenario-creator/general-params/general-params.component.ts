@@ -147,8 +147,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.generalParams.updateShowMap(false);
-    this.generalParams.updateShowMap(true);
+    this.resizeMap();
     if (this.isLoadModule) {
       switch (this.generalParams.model) {
         case 1:
@@ -192,10 +191,14 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       .onClose.subscribe(value => { });
   }
 
+  resizeMap() {
+    this.generalParams.updateShowMap(false);
+    this.generalParams.updateShowMap(true);
+  }
+
   changeTab(event) {
     if (this.times === 1 && !this.isLoadModule) {
-      this.generalParams.updateShowMap(false);
-      this.generalParams.updateShowMap(true);
+      this.resizeMap();
       this.times++;
     }
     this.currentTab = event.tabTitle;
@@ -206,14 +209,17 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       } else {
         this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
       }
+      this.resizeMap();
     } else if (event['tabTitle'] === 'District Heating') {
       if (this.nodesSelected['3 node dh']) {
         this.generalParams.updateGridImage('assets/images/3NodeDH.png');
       } else {
         this.generalParams.updateGridImage('assets/images/singleNodeDistrictHeating.png');
       }
+      this.resizeMap();
     } else {
       this.generalParams.updateGridImage('assets/images/singleNodeGas.png');
+      this.resizeMap();
     }
   }
 
@@ -238,8 +244,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
       this.nodesSelected['1 node dh'] = true;
       this.nodesSelected['8 node dh'] = false;
     }
-    this.generalParams.updateShowMap(false);
-    this.generalParams.updateShowMap(true);
+    this.resizeMap();
   }
 
   updateModel() {

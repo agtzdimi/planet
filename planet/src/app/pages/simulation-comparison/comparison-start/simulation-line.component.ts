@@ -48,6 +48,9 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
             let time;
 
             for (let index = 0; index < headers.length; index++) {
+                for (let val = 0; val < csvData[index].length; val++) {
+                    csvData[index][val] = parseFloat(csvData[index][val]).toFixed(2);
+                }
                 let tempData;
                 switch (headers[index]) {
                     case 'Hours':
@@ -249,7 +252,7 @@ v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H
                                 label: {
                                     show: true,
                                     position: ['50%', '50%'],
-                                    formatter: 'Electricity imported from external grid',
+                                    formatter: 'Power imported from the grid',
                                 },
                                 itemStyle: {
                                     normal: {

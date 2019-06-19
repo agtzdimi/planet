@@ -28,7 +28,8 @@ export class ComparisonStartComponent {
 
   options: any = {};
   themeSubscription: any;
-  selectedForms = 'Select Saved Simulations';
+  selectedForms = 'Select Saved Scenarios';
+  buttonText = 'Select Saved Scenarios';
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
@@ -235,6 +236,7 @@ export class ComparisonStartComponent {
       .onClose.subscribe(name => {
         if (name) {
           this.selectedForms = name;
+          this.buttonText = 'Compared Scenarios';
         }
       });
   }

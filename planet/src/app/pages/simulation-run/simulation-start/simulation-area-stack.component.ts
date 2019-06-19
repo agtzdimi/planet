@@ -66,6 +66,9 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
             let name: string;
 
             for (let index = 0; index < headers.length; index++) {
+                for (let val = 0; val < csvData[index].length; val++) {
+                    csvData[index][val] = parseFloat(csvData[index][val]).toFixed(2);
+                }
                 let tempData;
                 switch (headers[index]) {
                     case 'Hours':
@@ -84,7 +87,6 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                         let max = +csvData[index][1];
                         let min = +csvData[index][1];
                         for (let val = 0; val < csvData[index].length; val++) {
-                            csvData[index][val] = parseFloat(csvData[index][val]).toFixed(6);
                             if (max < +csvData[index][val]) {
                                 max = +csvData[index][val];
                             }
@@ -312,7 +314,7 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                                 label: {
                                     show: true,
                                     position: ['50%', '50%'],
-                                    formatter: 'Electricity imported from external grid',
+                                    formatter: 'Power imported from the grid',
                                 },
                                 itemStyle: {
                                     normal: {
