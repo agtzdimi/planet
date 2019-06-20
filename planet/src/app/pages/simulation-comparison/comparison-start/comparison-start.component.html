@@ -12,7 +12,7 @@
               nbPopoverPlacement="bottom">{{buttonText}}</button>
           </div>
           <div class="col-md-2">
-            <button *ngIf="selectedForms !== 'Select Saved Simulations'" nbButton type="button" [nbSpinner]="loading"
+            <button *ngIf="selectedForms !== 'Select Saved Scenarios'" nbButton type="button" [nbSpinner]="loading"
               nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
               class="start-upload-btn" (click)="startComparison()">
               Comparison Start
@@ -47,7 +47,8 @@
           *ngIf="barCh.title!== 'LCOE and economic resultsYearly CO2 emissions' && ! barCh.title.includes('Yearly CO')">
           <nb-card-header>{{barCh.title}}</nb-card-header>
           <nb-card-body>
-            <ngx-comparison-bars [data]="barCh.data">
+            <ngx-comparison-bars [data]="barCh.data" [yAxisLabel]="barCh.yAxisLabel"
+              [yRightAxisLabel]="barCh.yRightAxisLabel">
             </ngx-comparison-bars>
           </nb-card-body>
         </nb-card>

@@ -6,7 +6,7 @@ import { EnvService } from '../../../../env.service';
 @Component({
   selector: 'nb-select-multiple-form-prompt',
   template: `
-    <nb-card size="medium" *ngIf="formReady" accent="active">
+    <nb-card [ngStyle]="{'width': '35vw','height':'60vh'}" *ngIf="formReady" accent="active">
       <nb-card-header>Select two of the following simulations</nb-card-header>
       <nb-card-body>
       <div class="row">
@@ -83,6 +83,7 @@ export class DialogSelectMultipleFormPromptComponent {
   }
 
   handleClick() {
+    this.scenarioNames = [];
     for (let i = 0; i < this.selectedOptions.length; i++) {
       this.scenarioNames.push(this.selectedOptions[i]);
     }
