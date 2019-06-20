@@ -10,6 +10,8 @@ import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
 import { ControlFileService } from '../services/control-file.service';
 import { EconomyFileService } from '../services/economy-file.service';
+import { Router } from '@angular/router';
+import { NbMenuService } from '@nebular/theme';
 
 @Component({
     selector: 'ngx-load-simulation',
@@ -63,7 +65,20 @@ export class LoadSimulationFilesComponent implements OnInit {
         private model1: Model1ParamInitService,
         private dateService: NbDateService<Date>,
         private controlFileService: ControlFileService,
-        private economyFileService: EconomyFileService) {
+        private economyFileService: EconomyFileService,
+        protected router: Router,
+        protected menuService: NbMenuService) {
+        this.menuService.onItemClick().subscribe(item => {
+            if (item['item']['title'] === 'Load Scenario') {
+                setTimeout(() => {
+                    return this.router.navigateByUrl('/pages/scenario-creator');
+                }, 2000);
+                setTimeout(() => {
+                    return this.router.navigateByUrl('/pages/scenario-creator/load-simulation');
+                }, 2000);
+            }
+        });
+
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
 
@@ -164,6 +179,8 @@ export class LoadSimulationFilesComponent implements OnInit {
                                 // console.log('Error', error);
                             },
                         );
+                } else {
+                    this.router.navigateByUrl('/pages/scenario-creator');
                 }
             },
             );

@@ -11,10 +11,10 @@ import { NbDialogRef } from '@nebular/theme';
         <div class="col-md-2">
         </div>
         <div class="col-md-4">
-          <button nbButton hero status="danget" (click)="cancel()">No</button>
+          <button nbButton hero status="success" (click)="submit()">Yes</button>
         </div>
         <div class="col-md-4">
-          <button nbButton hero status="success" (click)="submit()">Yes</button>
+          <button nbButton hero status="danger" (click)="cancel()">No</button>
         </div>
       </div>
       </nb-card-footer>

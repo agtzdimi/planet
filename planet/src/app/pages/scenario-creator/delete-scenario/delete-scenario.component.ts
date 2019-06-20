@@ -33,6 +33,7 @@ export class DeleteScenarioComponent implements OnInit {
   }
 
   deleteScenario() {
+    this.status = '';
     this.dialogService.open(DeleteScenarioDialogComponent)
       .onClose.subscribe(value => {
         if (value) {
@@ -46,10 +47,12 @@ export class DeleteScenarioComponent implements OnInit {
               data => {
                 this.status = data['text'];
                 this.loading = false;
+                this.formName = 'Select a Scenario';
               },
               error => {
                 this.status = error.error['text'];
                 this.loading = false;
+                this.formName = 'Select a Scenario';
               },
             );
 
