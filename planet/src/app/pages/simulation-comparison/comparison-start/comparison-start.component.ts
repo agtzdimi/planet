@@ -196,7 +196,7 @@ export class ComparisonStartComponent {
           break;
       }
     }
-    this.barChart[0].title = 'LCOE and economic results CO2 emissions ';
+    this.barChart[0].title = 'LCOE and economic results CO' + '\u2082' + ' emissions ';
     this.barChart[0].yAxisLabel = 'Expenses and Revenues M€';
     this.barChart[0].yRightAxisLabel = 'LCOE €/MWh';
     this.barChart[1].title = 'CO' + '\u2082' + ' emissions';

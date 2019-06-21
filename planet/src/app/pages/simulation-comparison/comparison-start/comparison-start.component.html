@@ -44,7 +44,7 @@
     <div *ngIf="showBar">
       <div *ngFor="let barCh of barChart">
         <nb-card accent="active"
-          *ngIf="barCh.title!== 'LCOE and economic resultsYearly CO2 emissions' && ! barCh.title.includes('Yearly CO')">
+          *ngIf="! barCh.title.includes('LCOE and economic results CO') && ! barCh.yAxisLabel.includes('emissions 10')">
           <nb-card-header>{{barCh.title}}</nb-card-header>
           <nb-card-body>
             <ngx-comparison-bars [data]="barCh.data" [yAxisLabel]="barCh.yAxisLabel"
