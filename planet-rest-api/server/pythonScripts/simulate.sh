@@ -53,4 +53,6 @@ lines=$(mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO
    --authenticationDatabase $MONGO_AUTH_DB --db planet -q '{"formName": "'"$form"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName | wc -l)
 if (( lines == 1 )); then
    sendFiles "$(echo $form | sed 's/ $//')" "single" "$mode"
+else
+   echo "Simulation finished successfully" > ./public/files/simulationStatus.txt
 fi

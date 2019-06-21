@@ -30,6 +30,7 @@ export class SimulationStartComponent {
   showVal: boolean;
   expanded = false;
   yVal: number = 0;
+  changingValue = 0;
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
@@ -66,12 +67,31 @@ export class SimulationStartComponent {
       })
       .subscribe(
         data => {
-          // console.log('POST Request is successful ', data);
+          this.changingValue = 50;
         },
         error => {
-          // console.log('Error', error);
+          this.changingValue = 50;
         },
       );
+    const barData = setInterval(() => {
+      url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/simulation_status';
+      this.httpClient.get(url, {
+        params: {
+          'formName': this.formName,
+        },
+      })
+        .subscribe(
+          data => {
+            // console.log('GET Request is successful ');
+            if (data['value']) {
+              this.changingValue = data['value'];
+            }
+          },
+          error => {
+            // console.log('Error', error);
+          },
+        );
+    }, 10000);
     const interval = setInterval(() => {
       url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/simulation';
       this.httpClient.get(url, {
@@ -87,6 +107,7 @@ export class SimulationStartComponent {
               this.results1Data = data['results1'];
               this.results2Data = data['results2'];
               clearInterval(interval);
+              clearInterval(barData);
               this.spreadValuesToCharts(this.results1Data);
               this.spreadValuesToCharts2(this.results2Data);
             } else if (data['status'] && !data['status'].includes('Simulation finished successfully')) {
@@ -96,6 +117,7 @@ export class SimulationStartComponent {
                 this.status = 'Error: ' + this.status;
               }
               clearInterval(interval);
+              clearInterval(barData);
               this.loading = false;
               this.showVal = true;
             }
@@ -264,17 +286,17 @@ export class SimulationStartComponent {
           break;
       }
     }
-    this.barChart[0].title = 'LCOE and economic resultsYearly CO2 emissions ';
-    this.barChart[0].yAxisLabel = 'Expenses and Revenues M€/y';
+    this.barChart[0].title = 'LCOE and economic results CO2 emissions ';
+    this.barChart[0].yAxisLabel = 'Expenses and Revenues M€';
     this.barChart[0].yRightAxisLabel = 'LCOE €/MWh';
-    this.barChart[1].title = 'Yearly CO' + '\u2082' + ' emissions';
-    this.barChart[1].yAxisLabel = 'CO' + '\u2082' + ' emissions 10' + '\u00B3' + ' t/y';
-    this.barChart[2].title = 'Yearly RES producibility dispatch';
-    this.barChart[2].yAxisLabel = 'RES producibility MWh/y';
+    this.barChart[1].title = 'CO' + '\u2082' + ' emissions';
+    this.barChart[1].yAxisLabel = 'CO' + '\u2082' + ' emissions 10' + '\u00B3' + ' t';
+    this.barChart[2].title = 'RES producibility dispatch';
+    this.barChart[2].yAxisLabel = 'RES producibility MWh';
     this.barChart[3].title = 'Electric Demand Fulfilment';
-    this.barChart[3].yAxisLabel = 'Electric Demand MWh/y';
+    this.barChart[3].yAxisLabel = 'Electric Demand MWh';
     this.barChart[4].title = 'Thermal Demand Fulfilment';
-    this.barChart[4].yAxisLabel = 'Thermal Demand MWh/y';
+    this.barChart[4].yAxisLabel = 'Thermal Demand MWh';
     const maxYValueArr = [];
     maxYValueArr.push(this.barChart[2]);
     maxYValueArr.push(this.barChart[3]);

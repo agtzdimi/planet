@@ -15,6 +15,7 @@ import { SimulationsBarComponent } from './simulation-start/simulation-bar-compo
 import { DialogSelectFormPromptComponent } from './simulation-start/dialog-prompt/select-form.component';
 import { NbDialogModule } from '@nebular/theme';
 import { HighlightDirective } from './simulation-start/dialog-prompt/highlight.directive';
+import { SuiModule } from 'ng2-semantic-ui';
 
 const COMPONENTS = [
   SimulationRunComponent,
@@ -44,6 +45,7 @@ const ENTRY_COMPONENTS = [
     NgxChartsModule,
     ChartModule,
     NgxEchartsModule,
+    SuiModule,
   ],
   declarations: [
     ...COMPONENTS,

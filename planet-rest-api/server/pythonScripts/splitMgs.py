@@ -52,6 +52,8 @@ for file in sendMesg:
    file = file.replace('\n','\\n').replace('"','\\"')
    ret = client1.publish("SiteWhere/planet/input/json", '{"deviceToken": "'+args.device+'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'+args.mode+'", "eventDate": "'+args.date+'", "metadata": {"message": "'+file+'"}}}')
    i+=1
+   with open (os.path.join(os.getcwd(),'./public/files','barStatus.txt'), 'w') as f:
+      f.write("%s\n" % i)
    time.sleep(2.5)
 
 ret = client1.publish("SiteWhere/planet/input/json", '{"deviceToken": "'+args.device+'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'+args.mode+'", "eventDate": "'+args.date+'", "metadata": {"message": "END OF SIM"}}}')

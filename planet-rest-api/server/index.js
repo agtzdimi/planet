@@ -137,7 +137,9 @@ app.get("/get_form_names", (req, res) => {
 
 app.post("/transfer", (req, res) => {
     shell.exec(`${__dirname}/pythonScripts/simulate.sh ` + "\"" + req.body.formName + "\" " + req.body.mode);
-    return res.send("Transfer Completed");
+    return res.send({
+        'status': 'Transfer Completed',
+    });
 });
 
 app.get("/load_data", (req, res) => {
@@ -210,6 +212,14 @@ app.get("/multi_simulation", (req, res) => {
     catch (error) {
         console.log(error)
     }
+});
+
+app.get("/simulation_status", (req, res) => {
+    results = shell.exec("cat " + `${__dirname}/../public/files/barStatus.txt`);
+    finalResults = {
+        'value': results.stdout,
+    }
+    res.send(finalResults);
 });
 
 app.post("/update_IPs", (req, res) => {

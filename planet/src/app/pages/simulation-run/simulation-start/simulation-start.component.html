@@ -17,6 +17,9 @@
             </button>
           </div>
           <div class="col-md-3">
+            <sui-progress *ngIf="!status && formName !== 'Select Saved Scenario'" class="active indicating"
+              [value]="changingValue" [ngStyle]="{'margin-top': '10px', 'height': '42%'}" [autoSuccess]="true">
+            </sui-progress>
             <div *ngIf="status">
               <div [ngClass]="{
             'errorTextarea': !status.includes('Simulation finished successfully'),
