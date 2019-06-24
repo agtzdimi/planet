@@ -21,43 +21,42 @@
           <nb-step [label]="'Middleware Params'">
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (stringValChange)="sitewhereIP=$event" [(val)]="sitewhereIP" [compId]="'sitewhereIP'"
-              [inputHtmlLabel1]="'Sitewhere Installation IP'" [type]="'string'">
+              [inputHtmlLabel1]="'Middleware IP'" [type]="'string'">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="sitewhereUIPort=+$event"
-              [(val)]="sitewhereUIPort" [compId]="'sitewhereUIPort'"
-              [inputHtmlLabel1]="'Sitewhere Installation UI Port'">
+              [(val)]="sitewhereUIPort" [compId]="'sitewhereUIPort'" [inputHtmlLabel1]="'Middleware UI Port'">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (valChange)="sitewhereMQTTPort=+$event" [(val)]="sitewhereMQTTPort" [compId]="'sitewhereMQTTPort'"
-              [inputHtmlLabel1]="'Sitewhere Installation MQTT Port'">
+              [inputHtmlLabel1]="'Middleware MQTT Port'">
             </ngx-input-field>
             <button nbButton nbStepperPrevious>Previous</button>
             <button nbButton nbStepperNext>Next</button>
           </nb-step>
-          <nb-step [label]="'MongoDB Params'">
+          <nb-step [label]="'Database Params'">
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoIP=$event"
-              [(val)]="mongoIP" [compId]="'mongoIP'" [inputHtmlLabel1]="'MongoDB\'s IP'" [type]="'string'">
+              [(val)]="mongoIP" [compId]="'mongoIP'" [inputHtmlLabel1]="'Database\'s IP'" [type]="'string'">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="mongoPort=+$event"
-              [(val)]="mongoPort" [compId]="'mongoPort'" [inputHtmlLabel1]="'MongoDB\'s Port'">
+              [(val)]="mongoPort" [compId]="'mongoPort'" [inputHtmlLabel1]="'Database\'s Port'">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoUser=$event"
-              [(val)]="mongoUser" [compId]="'mongoUser'" [inputHtmlLabel1]="'MongoDB PLANET UserName'"
+              [(val)]="mongoUser" [compId]="'mongoUser'" [inputHtmlLabel1]="'PLANET\'s Database UserName'"
               [type]="'string'">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [inputType]="'password'" [isChecked]="true" [inputHtmlLabel2]="''"
               (stringValChange)="mongoPassword=$event" [(val)]="mongoPassword" [compId]="'mongoPassword'"
-              [inputHtmlLabel1]="'MongoDB Password'" [type]="'string'">
+              [inputHtmlLabel1]="'Database Password'" [type]="'string'">
             </ngx-input-field>
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (stringValChange)="mongoAuthDB=$event" [(val)]="mongoAuthDB" [compId]="'mongoAuthDB'"
-              [inputHtmlLabel1]="'MongoDB Authentication DB'" [type]="'string'">
+              [inputHtmlLabel1]="'Database Authentication DB'" [type]="'string'">
             </ngx-input-field>
             <button nbButton nbStepperPrevious>Previous</button>
             <button nbButton nbStepperNext>Next</button>

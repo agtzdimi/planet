@@ -48,8 +48,8 @@
     <div *ngIf="showBar">
       <div class="row">
         <div *ngFor="let barCh of barChart" [ngClass]="{
-          'col-md-12': barCh.title.includes('LCOE and economic resultsYearly CO2 emissions'),
-          'col-md-6': !barCh.title.includes('LCOE and economic resultsYearly CO2 emissions')
+          'col-md-12': barCh.title.includes('LCOE and economic results CO'),
+          'col-md-6': !barCh.title.includes('LCOE and economic results CO')
         }">
           <nb-card accent="active">
             <nb-card-header>{{barCh.title}}</nb-card-header>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { UploadInput, humanizeBytes } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController } from 'ng2-semantic-ui';
@@ -12,6 +12,7 @@ import { ControlFileService } from '../services/control-file.service';
 import { EconomyFileService } from '../services/economy-file.service';
 import { Router } from '@angular/router';
 import { NbMenuService } from '@nebular/theme';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
     selector: 'ngx-load-simulation',
@@ -23,7 +24,7 @@ import { NbMenuService } from '@nebular/theme';
         EconomyFileService],
     templateUrl: './load-simulation.component.html',
 })
-export class LoadSimulationFilesComponent implements OnInit {
+export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
 
     loadPage: boolean = false;
     revealed = false;
@@ -34,6 +35,7 @@ export class LoadSimulationFilesComponent implements OnInit {
     humanizeBytes: Function;
     elecParam: any;
     heatParam: any;
+    private alive = true;
     transitionController1 = new TransitionController();
     loading: boolean = false;
 
@@ -68,16 +70,20 @@ export class LoadSimulationFilesComponent implements OnInit {
         private economyFileService: EconomyFileService,
         protected router: Router,
         protected menuService: NbMenuService) {
-        this.menuService.onItemClick().subscribe(item => {
-            if (item['item']['title'] === 'Load Scenario') {
-                setTimeout(() => {
-                    return this.router.navigateByUrl('/pages/scenario-creator');
-                }, 2000);
-                setTimeout(() => {
-                    return this.router.navigateByUrl('/pages/scenario-creator/load-simulation');
-                }, 2000);
-            }
-        });
+        this.menuService.onItemClick()
+            .pipe(
+                takeWhile(() => this.alive),
+            )
+            .subscribe(item => {
+                if (item['item']['title'] === 'Load Scenario') {
+                    setTimeout(() => {
+                        return this.router.navigateByUrl('/pages/scenario-creator');
+                    }, 2000);
+                    setTimeout(() => {
+                        return this.router.navigateByUrl('/pages/scenario-creator/load-simulation');
+                    }, 2000);
+                }
+            });
 
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
@@ -308,5 +314,9 @@ export class LoadSimulationFilesComponent implements OnInit {
 
     updateEconomyFile() {
         this.economyFileService.economyFileUpdated.emit(this.econEnv);
+    }
+
+    ngOnDestroy() {
+        this.alive = false;
     }
 }

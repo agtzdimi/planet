@@ -49,7 +49,9 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
 
             for (let index = 0; index < headers.length; index++) {
                 for (let val = 0; val < csvData[index].length; val++) {
-                    csvData[index][val] = parseFloat(csvData[index][val]).toFixed(2);
+                    if (headers[index] !== 'Hours') {
+                        csvData[index][val] = parseFloat(csvData[index][val]).toFixed(2);
+                    }
                 }
                 let tempData;
                 switch (headers[index]) {

@@ -286,10 +286,10 @@ export class SimulationStartComponent {
           break;
       }
     }
-    this.barChart[0].title = 'LCOE and economic results CO2 emissions ';
+    this.barChart[0].title = 'LCOE and economic results CO' + '\u2082' + ' emissions cost';
     this.barChart[0].yAxisLabel = 'Expenses and Revenues M€';
     this.barChart[0].yRightAxisLabel = 'LCOE €/MWh';
-    this.barChart[1].title = 'CO' + '\u2082' + ' emissions';
+    this.barChart[1].title = 'CO' + '\u2082' + ' emissions cost';
     this.barChart[1].yAxisLabel = 'CO' + '\u2082' + ' emissions 10' + '\u00B3' + ' t';
     this.barChart[2].title = 'RES producibility dispatch';
     this.barChart[2].yAxisLabel = 'RES producibility MWh';
