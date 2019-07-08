@@ -1,18 +1,16 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EnvService } from '../../env.service';
 
 @Injectable()
 export class UserProfileService {
     message: string = '';
 
-    constructor(private httpClient: HttpClient,
-        private env: EnvService) {
+    constructor(private httpClient: HttpClient) {
     }
 
     public uploadImage(image, email, name): Promise<any> {
         return new Promise(resolve => {
-            const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/update_user';
+            const url = '/planet/rest/update_user';
             this.httpClient.post<HttpResponse<Object>>(url, {
                 image: image,
                 email: email,

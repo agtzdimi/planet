@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { TransitionController } from 'ng2-semantic-ui';
 import { NbDialogService, NbDateService } from '@nebular/theme';
 import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
-import { EnvService } from '../../../env.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
@@ -61,7 +60,6 @@ export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
 
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
-        private env: EnvService,
         public generalParams: GeneralParamsService,
         private model2: Model2ParamInitService,
         private model1: Model1ParamInitService,
@@ -137,7 +135,7 @@ export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
                     this.generalParams.formDescription = name['formDescription'];
                     this.generalParams.updateFormDescription(this.generalParams.formDescription);
                     this.generalParams.updateFormName(this.generalParams.formName);
-                    const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/load_data';
+                    const url = '/planet/rest/load_data';
                     this.httpClient.get(url, {
                         params: {
                             'formName': finalFormName,
@@ -232,7 +230,7 @@ export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
         formData.append('param4', JSON.stringify(this.elecParam));
         formData.append('param5', JSON.stringify(this.heatParam));
         formData.append('method', 'LOAD');
-        let url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/upload';
+        let url = '/planet/rest/upload';
         this.httpClient.post(url, formData,
         )
             .subscribe(
@@ -247,7 +245,7 @@ export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
                     this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
                     this.pvParam['payload']['startDate'] = startDate;
                     this.pvParam['payload']['endDate'] = endDate;
-                    url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/save_data';
+                    url = '/planet/rest/save_data';
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),

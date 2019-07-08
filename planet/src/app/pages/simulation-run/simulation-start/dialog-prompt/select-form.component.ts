@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
-import { EnvService } from '../../../../env.service';
 
 @Component({
   selector: 'nb-select-form-prompt',
@@ -35,9 +34,8 @@ export class DialogSelectFormPromptComponent {
   finalForm: Object = {};
 
   constructor(protected dialogRef: NbDialogRef<DialogSelectFormPromptComponent>,
-    private httpClient: HttpClient,
-    private env: EnvService) {
-    const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/get_form_names';
+    private httpClient: HttpClient) {
+    const url = '/planet/rest/get_form_names';
     this.httpClient.get(url, {
       params: {
         'executed': 'false',

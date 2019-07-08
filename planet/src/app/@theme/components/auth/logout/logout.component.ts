@@ -10,7 +10,6 @@ import { NB_AUTH_OPTIONS } from '@nebular/auth/auth.options';
 import { getDeepFromObject } from '@nebular/auth/helpers';
 import { NbAuthService } from '@nebular/auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { EnvService } from '../../../../env.service';
 
 @Component({
   selector: 'nb-logout',
@@ -27,8 +26,7 @@ export class NbLogoutComponent implements OnChanges {
   constructor(protected service: NbAuthService,
     private httpClient: HttpClient,
     @Inject(NB_AUTH_OPTIONS) protected options = {},
-    protected router: Router,
-    private env: EnvService) {
+    protected router: Router) {
     this.redirectDelay = this.getConfigValue('forms.logout.redirectDelay');
     this.strategy = this.getConfigValue('forms.logout.strategy');
   }
@@ -39,7 +37,7 @@ export class NbLogoutComponent implements OnChanges {
 
   logout(strategy: string): void {
 
-    this.httpClient.post('http://' + this.env.planet + ':' + this.env.planetRESTPort + '/logout', {
+    this.httpClient.post('/planet/rest/logout', {
       login_token: this.token,
     },
     )

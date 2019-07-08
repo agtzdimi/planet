@@ -39,11 +39,11 @@ export const NB_CORE_PROVIDERS = [
           class: NbAuthJWTToken,
         },
         refreshToken: {
-          endpoint: '/refresh',
+          endpoint: '/planet/rest/refresh',
         },
         baseEndpoint: 'http://' + window['__env'].planet + ':' + window['__env'].planetRESTPort,
         login: {
-          endpoint: '/login_with_email_password',
+          endpoint: '/planet/rest/login_with_email_password',
           method: 'post',
           redirect: {
             success: 'pages/welcome-screen',
@@ -53,11 +53,11 @@ export const NB_CORE_PROVIDERS = [
           defaultMessages: ['You have been successfully logged in. Redirecting...'],
         },
         requestPass: {
-          endpoint: '/forgot',
+          endpoint: '/planet/rest/forgot',
           method: 'post',
         },
         resetPass: {
-          endpoint: '/reset',
+          endpoint: '/planet/rest/reset',
         },
       }),
     ],

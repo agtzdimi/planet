@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SendScenarioService } from '../../../pages/simulation-run/simulation-start/sendScenarioName.service';
 import { StateService } from '../../../@core/utils';
-import { EnvService } from '../../../env.service';
 import { HttpClient } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
 
@@ -192,7 +191,6 @@ export class ThemeSettingsComponent {
 
   constructor(protected stateService: StateService,
     private sendScenarioService: SendScenarioService,
-    private env: EnvService,
     private httpClient: HttpClient) {
     this.stateService.getLayoutStates()
       .subscribe((layouts: any[]) => this.layouts = layouts);
@@ -201,7 +199,7 @@ export class ThemeSettingsComponent {
       (data) => {
         this.scenarioName = data;
 
-        const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/load_data';
+        const url = '/planet/rest/load_data';
         this.httpClient.get(url, {
           params: {
             'formName': this.scenarioName,

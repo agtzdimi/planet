@@ -146,10 +146,7 @@ export class UnitAddComponent implements OnInit {
     ],
   };
 
-  constructor(private getJWTService: GetJWTService,
-    private createDeviceService: CreateDeviceService,
-    private getAreaGridsService: GetAreaGridsService,
-    private addOutboundConnService: AddOutboundConnService) {
+  constructor(private createDeviceService: CreateDeviceService) {
     this.data = {};
     this.selectRoom('2');
   }
@@ -178,22 +175,6 @@ export class UnitAddComponent implements OnInit {
     this.activeModel = id;
     controller.animate(
       new Transition(transitionName, 1500, TransitionDirection.In));
-    this.getJWTService.getToken()
-      .then((data: any) => {
-        this.jwtToken = data;
-        this.getAreaGridsService.getAreaGrids(this.jwtToken, 'true')
-          .then(results => {
-            this.grids = results['results'];
-            this.getAreaGridsService.getAreaGrids(this.jwtToken, 'false')
-              .then(nodes => {
-                this.nodes = nodes['results'];
-                this.nodes = this.nodes.filter(area => {
-                  return area['parentAreaId'] !== undefined;
-                });
-              });
-          });
-      },
-      );
   }
 
   gridSelected(event) {
@@ -224,35 +205,10 @@ export class UnitAddComponent implements OnInit {
     metadata = metadata.replace('}{', ',');
     metadata = metadata.replace(/\./g, '_');
     metadata = JSON.parse(metadata);
-    this.getJWTService.getToken()
-      .then((data: any) => {
-        this.jwtToken = data;
-        this.data = {
-          'comments': this.unitDescr,
-          'deviceElementMappings': [
-          ],
-          'deviceTypeToken': this.activeModel + 'Token',
-          metadata,
-          'parentDeviceToken': this.activeModel + 'Token',
-          'removeParentHardwareId': true,
-          'status': '',
-          'token': this.unitName,
-        };
-        this.createDeviceService.createNewDevice(this.data, this.jwtToken)
-          .then(results => {
-            this.message = JSON.stringify(results);
-          });
-        this.addOutboundConnService.addOutBoundConnector(
-          {
-            'ip': this.unitIP,
-            'port': this.unitPort,
-            'token': this.unitName,
-            'isSimulator': (this.activeModel === 'Sim'),
-          },
-          this.jwtToken)
-          .then(results => {
-            // console.log(results);
-          });
+
+    this.createDeviceService.createNewDevice(metadata, this.unitName, this.unitDescr, this.activeModel)
+      .then(results => {
+        this.message = JSON.stringify(results);
       });
   }
 

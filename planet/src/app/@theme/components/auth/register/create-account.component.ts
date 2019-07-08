@@ -1,7 +1,6 @@
 import { Component, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { EnvService } from '../../../../env.service';
 
 @Component({
     selector: 'ngx-create-acc',
@@ -19,8 +18,7 @@ export class NgxCreateAccountComponent implements OnChanges {
         Accept: 'application/json',
     };
 
-    constructor(private httpClient: HttpClient, protected router: Router,
-        private env: EnvService) {
+    constructor(private httpClient: HttpClient, protected router: Router) {
         this.message = new EventEmitter<Object>();
     }
 
@@ -32,7 +30,7 @@ export class NgxCreateAccountComponent implements OnChanges {
         // console.log('HERE', this.isAdmin)
         this.finalParameters = { ...this.params, isAdmin: this.isAdmin };
         // this.finalParameters.push({ isAdmin: this.isAdmin })
-        this.httpClient.post('http://' + this.env.planet + ':' + this.env.planetRESTPort + '/create_user',
+        this.httpClient.post('/planet/rest/create_user',
             {
                 method: 'POST',
                 headers: {

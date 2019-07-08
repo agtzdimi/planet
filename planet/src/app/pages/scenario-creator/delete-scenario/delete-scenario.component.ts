@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { DialogDeleteFormPromptComponent } from './dialog-prompt/delete-form.component';
-import { EnvService } from '../../../env.service';
 import { HttpClient } from '@angular/common/http';
 import { DeleteScenarioDialogComponent } from './dialog-prompt/delete-scenario-dialog.component';
 
@@ -16,8 +15,7 @@ export class DeleteScenarioComponent implements OnInit {
   status = '';
   loading = false;
 
-  constructor(private dialogService: NbDialogService,
-    private env: EnvService,
+  constructor(private dialogService: NbDialogService
     private httpClient: HttpClient) { }
 
   ngOnInit() {
@@ -38,7 +36,7 @@ export class DeleteScenarioComponent implements OnInit {
       .onClose.subscribe(value => {
         if (value) {
           this.loading = true;
-          const url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/delete_scenario';
+          const url = '/planet/rest/delete_scenario';
           this.httpClient.post(url,
             {
               'formName': this.formName,

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectFormPromptComponent } from './dialog-prompt/select-form.component';
 import { NbDialogService } from '@nebular/theme';
-import { EnvService } from '../../../env.service';
 import { SendScenarioService } from './sendScenarioName.service';
 import { NbSidebarService } from '@nebular/theme';
 
@@ -34,7 +33,6 @@ export class SimulationStartComponent {
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
-    private env: EnvService,
     private sendScenarioService: SendScenarioService,
     private sidebarService: NbSidebarService) {
     this.sidebarService.onToggle()
@@ -59,7 +57,7 @@ export class SimulationStartComponent {
     this.showVal = false;
     this.initializeCharts();
     this.status = '';
-    let url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/transfer';
+    let url = '/planet/rest/transfer';
     this.httpClient.post(url,
       {
         'formName': this.formName,
@@ -74,7 +72,7 @@ export class SimulationStartComponent {
         },
       );
     const barData = setInterval(() => {
-      url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/simulation_status';
+      url = '/planet/rest/simulation_status';
       this.httpClient.get(url, {
         params: {
           'formName': this.formName,
@@ -93,7 +91,7 @@ export class SimulationStartComponent {
         );
     }, 10000);
     const interval = setInterval(() => {
-      url = 'http://' + this.env.planet + ':' + this.env.planetRESTPort + '/simulation';
+      url = '/planet/rest/simulation';
       this.httpClient.get(url, {
         params: {
           'formName': this.formName,

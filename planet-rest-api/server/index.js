@@ -68,7 +68,7 @@ app.use(fileUpload({}));
 
 app.use("/public", express.static("`${__dirname}/../public/files"));
 
-app.post("/upload", (req, res, next) => {
+app.post("/planet/rest/upload", (req, res, next) => {
     shell.echo(req.body.param1).to(`${__dirname}/../public/files/Parameters_initialization.txt`);
     shell.echo(req.body.param2).to(`${__dirname}/../public/files/Control_initialization.txt`);
     shell.echo(req.body.param3).to(`${__dirname}/../public/files/Economy_environment_initialization.txt`);
@@ -77,7 +77,7 @@ app.post("/upload", (req, res, next) => {
     });
 });
 
-app.post("/save_data", (req, res, next) => {
+app.post("/planet/rest/save_data", (req, res, next) => {
     formName = JSON.parse(shell.exec("mongo -u " + mongoUser + " -p " + mongoPass + " --port " + mongoPort +
         " --host " + mongoIP + " --authenticationDatabase " + mongoAuthDb +
         " planet --quiet --eval 'db.files.distinct(\"formName\");'"));
@@ -119,7 +119,7 @@ app.post("/save_data", (req, res, next) => {
 
 });
 
-app.get("/get_form_names", (req, res) => {
+app.get("/planet/rest/get_form_names", (req, res) => {
     let collection = ""
     if (req.query.executed === "true") {
         collection = "results"
@@ -135,14 +135,14 @@ app.get("/get_form_names", (req, res) => {
     res.send({ "formName": formName, "formDescription": formDescr });
 });
 
-app.post("/transfer", (req, res) => {
+app.post("/planet/rest/transfer", (req, res) => {
     shell.exec(`${__dirname}/pythonScripts/simulate.sh ` + "\"" + req.body.formName + "\" " + req.body.mode);
     return res.send({
         'status': 'Transfer Completed',
     });
 });
 
-app.get("/load_data", (req, res) => {
+app.get("/planet/rest/load_data", (req, res) => {
     shell.exec(`${__dirname}/pythonScripts/load_data.sh ` + "\"" + req.query.formName + "\"");
     paramInitParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/Parameters_initialization.txt`);
     econEnvParam = shell.exec("cat " + `${__dirname}/../public/files/loadData/Economy_environment_initialization.txt`);
@@ -166,7 +166,7 @@ app.get("/load_data", (req, res) => {
     shell.exec("rm -rf " + `${__dirname}/../public/files/loadData`);
 });
 
-app.get("/simulation", (req, res) => {
+app.get("/planet/rest/simulation", (req, res) => {
     shell.exec(`${__dirname}/pythonScripts/save_results.sh ` + "'Results1' " + "\"" + req.query.formName + "\"");
     shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../public/files/Results1.csv`);
     results1 = shell.exec("cat " + `${__dirname}/../public/files/Results1.csv`);
@@ -185,7 +185,7 @@ app.get("/simulation", (req, res) => {
     }
 });
 
-app.get("/multi_simulation", (req, res) => {
+app.get("/planet/rest/multi_simulation", (req, res) => {
     try {
         let results = [];
         let finalResults = {};
@@ -214,7 +214,7 @@ app.get("/multi_simulation", (req, res) => {
     }
 });
 
-app.get("/simulation_status", (req, res) => {
+app.get("/planet/rest/simulation_status", (req, res) => {
     results = shell.exec("cat " + `${__dirname}/../public/files/barStatus.txt`);
     finalResults = {
         'value': results.stdout,
@@ -222,7 +222,7 @@ app.get("/simulation_status", (req, res) => {
     res.send(finalResults);
 });
 
-app.post("/update_IPs", (req, res) => {
+app.post("/planet/rest/update_IPs", (req, res) => {
     update = shell.exec(`${__dirname}/pythonScripts/updateParams.sh ` + req.body.planet + " " + req.body.sitewhere + " " +
         req.body.planetRESTPort + " " + req.body.sitewhereUIPort + " " + req.body.sitewhereMQTTPort + " " +
         req.body.mongoIP + " " + req.body.mongoPort + " " + req.body.mongoUser + " " + req.body.mongoPassword + " " +
@@ -237,7 +237,7 @@ app.post("/update_IPs", (req, res) => {
     }
 });
 
-app.post("/delete_scenario", (req, res, next) => {
+app.post("/planet/rest/delete_scenario", (req, res, next) => {
     formName = req.body.formName;
     status = [];
     msg = 'Scenario deleted successfully';
@@ -258,16 +258,27 @@ app.post("/delete_scenario", (req, res, next) => {
     res.send(msg)
 });
 
-app.post("/create_user", api.create_user);
-app.post("/update_user", api.update_user);
-app.post("/login_with_email_password", api.login_with_email_password);
-app.post("/login_with_token", api.login_with_token);
-app.post("/logout", api.logout);
-app.post("/get_user_list", api.get_user_list);
-app.post("/remove_user", api.remove_user);
-app.post("/forgot", api.forgot);
-app.post("/reset", api.reset);
-app.post("/refresh", api.refresh);
+app.post("/planet/rest/add_device", (req, res, next) => {
+    results = JSON.parse(shell.exec("cat " + `${__dirname}/../../linksmart/conf/devices/mqtt-switch.json`).stdout);
+    results['resources'].push(req.body)
+    shell.exec("mosquitto_pub -t \"middleware_restart\" -m \"Start\"")
+    status = shell.exec("mosquitto_pub -t \"middleware_restart\" -m \'" + JSON.stringify(results) + "\'")
+    shell.exec("mosquitto_pub -t \"middleware_restart\" -m \"End\"")
+    if (!status.stderr) {
+        res.send({ 'response': 'Success' })
+    }
+});
+
+app.post("/planet/rest/create_user", api.create_user);
+app.post("/planet/rest/update_user", api.update_user);
+app.post("/planet/rest/login_with_email_password", api.login_with_email_password);
+app.post("/planet/rest/login_with_token", api.login_with_token);
+app.post("/planet/rest/logout", api.logout);
+app.post("/planet/rest/get_user_list", api.get_user_list);
+app.post("/planet/rest/remove_user", api.remove_user);
+app.post("/planet/rest/forgot", api.forgot);
+app.post("/planet/rest/reset", api.reset);
+app.post("/planet/rest/refresh", api.refresh);
 
 
 // catch 404 and forward to error handler

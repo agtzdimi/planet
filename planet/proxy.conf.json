@@ -1,6 +1,6 @@
 {
-  "/": {
-    "target": "http://160.40.49.244:8000/planet/rest/",
+  "/planet/rest": {
+    "target": "http://160.40.49.244:8000",
     "secure": false,
     "changeOrigin": true
   }
