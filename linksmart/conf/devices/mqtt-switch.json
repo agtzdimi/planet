@@ -1,0 +1,43 @@
+{
+  "name": "MQTTSwitch",
+  "description": "MQTT switch service",
+  "meta": {},
+  "ttl": 120,
+  "resources": [
+    {
+      "type": "Resource",
+      "name": "Switch",
+      "agent": {
+        "type": "service",
+        "dir": null,
+        "exec": "agent-examples/mqtt-switch/switch.sh"
+      },
+      "representation": {},
+      "protocols": [
+        {
+          "type": "MQTT",
+          "methods": [
+            "PUB",
+            "SUB"
+          ],
+          "content-types": [
+            "text/plain"
+          ],
+          "pub_topic": "SendSimulator",
+          "sub_topic": "/planet/GetData"
+        },
+        {
+          "type": "REST",
+          "methods": [
+            "GET",
+            "POST",
+            "PUT"
+          ],
+          "content-types": [
+            "text/plain"
+          ]
+        }
+      ]
+    }
+  ]
+}

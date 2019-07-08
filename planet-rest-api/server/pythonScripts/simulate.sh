@@ -43,7 +43,7 @@ sleep 1
 
 simTopic="$(echo ""$SIMULATION_TOPIC"" | sed 's/^Send//')"
 
-python ./server/pythonScripts/splitMgs.py --ip "$SITEWHERE_IP" --device "$simTopic" --date "$eventDate" --mode "$mode"
+python ./server/pythonScripts/splitMgs.py
 }
 
 form="$1"

@@ -6,19 +6,10 @@ import time
 import pandas as pd
 import shutil
 import subprocess
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument('--ip', help='Sitewhere IP')
-parser.add_argument('--device', help='Current Device Token')
-parser.add_argument('--mode', help='Current Mode')
-parser.add_argument('--date', help='Current Date')
-
-args = parser.parse_args()
 
 path = './public/files/single/*'
 files = glob.glob(path)
-broker=args.ip
+broker='localhost'
 port=1883
 
 client1 = paho.Client("control1")                           #create client object
@@ -49,11 +40,10 @@ for name in files:
 
 i=0
 for file in sendMesg:
-   file = file.replace('\n','\\n').replace('"','\\"')
-   ret = client1.publish("SiteWhere/planet/input/json", '{"deviceToken": "'+args.device+'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'+args.mode+'", "eventDate": "'+args.date+'", "metadata": {"message": "'+file+'"}}}')
+   ret = client1.publish("/planet/GetData", file)
    i+=1
    with open (os.path.join(os.getcwd(),'./public/files','barStatus.txt'), 'w') as f:
       f.write("%s\n" % i)
-   time.sleep(2.5)
+   time.sleep(1)
 
-ret = client1.publish("SiteWhere/planet/input/json", '{"deviceToken": "'+args.device+'","type": "DeviceMeasurement","originator": "device", "request": {"name": "Status","value": "'+args.mode+'", "eventDate": "'+args.date+'", "metadata": {"message": "END OF SIM"}}}')
+ret = client1.publish("/planet/GetData", "END OF SIM")
