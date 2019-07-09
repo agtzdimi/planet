@@ -43,11 +43,9 @@ export class VESUnitComponent implements OnChanges {
     if (changes['vesInput']['currentValue']) {
       let metadata = JSON.stringify(changes['vesInput']['currentValue']['metadata']);
       if (metadata) {
-        metadata = metadata.replace(/_/g, '.');
-        metadata = metadata.replace(/cos\.phi/, 'cos_phi');
         metadata = JSON.parse(metadata);
         this.vesParams['payload']['parameters']['configuration'] = metadata;
-        this.vesParams['description'] = changes['vesInput']['currentValue']['comments'];
+        this.vesParams['description'] = changes['vesInput']['currentValue']['description'];
       }
     }
   }

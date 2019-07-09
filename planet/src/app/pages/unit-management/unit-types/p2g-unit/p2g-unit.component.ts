@@ -47,11 +47,9 @@ export class P2GUnitComponent implements OnChanges {
     if (changes['p2gInput']['currentValue']) {
       let metadata = JSON.stringify(changes['p2gInput']['currentValue']['metadata']);
       if (metadata) {
-        metadata = metadata.replace(/_/g, '.');
-        metadata = metadata.replace(/cos\.phi/, 'cos_phi');
         metadata = JSON.parse(metadata);
         this.p2gParams['payload']['parameters']['configuration'] = metadata;
-        this.p2gParams['description'] = changes['p2gInput']['currentValue']['comments'];
+        this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
       }
     }
   }

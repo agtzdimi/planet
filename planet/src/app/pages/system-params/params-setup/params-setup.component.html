@@ -81,22 +81,22 @@
 
             <div *ngIf="loaded">
               <div class="row">
-                <div class="col-md-3" *ngFor="let simulator of simUnit; let i = index">
+                <div class="col-md-3" *ngFor="let simulator of simUnit">
                   <div class="imageCard">
 
                     <nb-card [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge" [ngClass]="{
                       'selectedSim': checkSimulator(simulator)
                     }">
                       <nb-card-body (click)="handleUnit(simulator)">
-                        <div *ngIf="simulator['metadata']['Simulink'] === 'true'">
+                        <div *ngIf="simulator['metadata']['Simulink']">
                           <img class="component-icon" src="assets/images/Simulink.jpg"
                             [ngStyle]="{'width': '100px', 'height': '80px'}">
                         </div>
-                        <div *ngIf="simulator['metadata']['OpalRT'] === 'true'">
+                        <div *ngIf="simulator['metadata']['OpalRT']">
                           <img class="component-icon" src="assets/images/Sim.jpg"
                             [ngStyle]="{'width': '100px', 'height': '80px'}">
                         </div>
-                        <label class="component-name">{{simUnit[i]['comments']}}</label>
+                        <label class="component-name">{{simulator['description']}}</label>
                       </nb-card-body>
                     </nb-card>
 

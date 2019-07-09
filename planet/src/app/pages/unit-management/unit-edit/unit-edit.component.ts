@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { GetJWTService } from '../services/get-jwt.service';
 import { GetDeviceByTypeService } from '../services/get-deviceByType.service';
 import { EditDeviceService } from '../services/edit-device.service';
-import { GetOutboundConnService } from '../services/get-outbound-connector';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
-import { EditOutboundConnService } from '../services/edit-outbound-connector';
 
 @Component({
   selector: 'ngx-unit-edit',
   styleUrls: ['./unit-edit.component.scss'],
-  providers: [GetJWTService, GetDeviceByTypeService,
-    EditDeviceService, EditOutboundConnService,
-    GetOutboundConnService],
+  providers: [GetDeviceByTypeService, EditDeviceService],
   templateUrl: './unit-edit.component.html',
 })
 export class UnitEditComponent implements OnInit {
@@ -25,6 +20,7 @@ export class UnitEditComponent implements OnInit {
   vesUnit: Object = [{}];
   p2hUnit: Object = [{}];
   simUnit: Object = [{}];
+  devices: Object = {};
   flexUnits: Object;
   activeModel: string = '';
   phase: string;
@@ -37,11 +33,8 @@ export class UnitEditComponent implements OnInit {
       'OpalRT': '',
     };
 
-  constructor(private getJWTService: GetJWTService,
-    private getDeviceByType: GetDeviceByTypeService,
-    private editDevice: EditDeviceService,
-    private getOutboundConnService: GetOutboundConnService,
-    private editOutboundConnService: EditOutboundConnService) {
+  constructor(private getDeviceByType: GetDeviceByTypeService,
+    private editDevice: EditDeviceService) {
     this.data = {};
   }
 
@@ -70,28 +63,44 @@ export class UnitEditComponent implements OnInit {
     this.phase = '2';
     this.loading = true;
     this.activeModel = id;
-    this.getJWTService.getToken()
-      .then((data: any) => {
-        this.jwtToken = data;
-        this.getDeviceByType.getDeviceByType(this.jwtToken, id + 'Token')
-          .then(devices => {
-            switch (id) {
-              case 'P2G':
-                this.p2gUnit = devices['results'];
-                break;
-              case 'VES':
-                this.vesUnit = devices['results'];
-                break;
-              case 'P2H':
-                this.p2hUnit = devices['results'];
-                break;
-              case 'Sim':
-                this.simUnit = devices['results'];
-                break;
-            }
-            this.loading = false;
-          });
-
+    this.getDeviceByType.getDeviceByType()
+      .then(devices => {
+        this.devices = devices;
+        switch (id) {
+          case 'P2G':
+            devices = devices['results']['resources'].filter((record) => {
+              if (record) {
+                return record['unitType'] === id;
+              }
+            });
+            this.p2gUnit = devices;
+            break;
+          case 'VES':
+            devices = devices['results']['resources'].filter((record) => {
+              if (record) {
+                return record['unitType'] === id;
+              }
+            });
+            this.vesUnit = devices;
+            break;
+          case 'P2H':
+            devices = devices['results']['resources'].filter((record) => {
+              if (record) {
+                return record['unitType'] === id;
+              }
+            });
+            this.p2hUnit = devices;
+            break;
+          case 'Sim':
+            devices = devices['results']['resources'].filter((record) => {
+              if (record) {
+                return record['unitType'] === id;
+              }
+            });
+            this.simUnit = devices;
+            break;
+        }
+        this.loading = false;
       });
   }
 
@@ -107,65 +116,21 @@ export class UnitEditComponent implements OnInit {
         metadata = JSON.stringify(this.selectedModel['payload']['parameters']['configuration']);
       }
       metadata = metadata.replace('}{', ',');
-      metadata = metadata.replace(/\./g, '_');
       metadata = JSON.parse(metadata);
-      this.getJWTService.getToken()
-        .then((data: any) => {
-          this.jwtToken = data;
-          this.data = {
-            'comments': this.selectedModel['description'],
-            metadata,
-          };
-          this.editDevice.editDevice(this.jwtToken, this.data, this.unitName)
-            .then(results => {
-              this.message = JSON.stringify(results);
-            });
-
-          this.editConnector(this.unitName);
-
+      this.editDevice.editDevice(this.devices, metadata, this.unitName, this.selectedModel['description'], this.unitIP, this.unitPort)
+        .then(results => {
+          this.message = JSON.stringify(results);
         });
     }
-  }
-
-  editConnector(name) {
-    this.editOutboundConnService.editOutBoundConnector({
-      'ip': this.unitIP,
-      'port': this.unitPort,
-      'token': name,
-      'isSimulator': (this.activeModel === 'Sim'),
-    }, this.jwtToken)
-      .then(results => {
-        this.message = JSON.stringify(results);
-      });
   }
 
   handleSelectedModel(event, controller, transitionName: string = 'fade down') {
     controller.animate(
       new Transition(transitionName, 1500, TransitionDirection.In));
-    this.unitName = event['token'];
+    this.unitName = event['name'];
+    this.unitIP = event['IP'];
+    this.unitPort = event['Port'];
     this.selectedModel = event;
-    if (this.activeModel === 'Sim') {
-      this.selectedModel['metadata']['Simulink'] = JSON.parse(this.selectedModel['metadata']['Simulink']);
-      this.selectedModel['metadata']['OpalRT'] = JSON.parse(this.selectedModel['metadata']['OpalRT']);
-      this.unitName = this.selectedModel['metadata']['Topic'];
-    }
-
-    this.getJWTService.getToken()
-      .then((data: any) => {
-        this.jwtToken = data;
-        this.getOutboundConnService.getOutBoundConnector(this.unitName, this.jwtToken)
-          .then(connectors => {
-            for (const attr of connectors['attributes']) {
-              if (attr['name'] === 'hostname') {
-                this.unitIP = attr['value'];
-              } else if (attr['name'] === 'port') {
-                this.unitPort = attr['value'];
-              }
-            }
-            this.unitName = this.unitName.replace(/^Send/, '').replace(/^Get/, '');
-          });
-      });
-
     this.phase = '3';
   }
 

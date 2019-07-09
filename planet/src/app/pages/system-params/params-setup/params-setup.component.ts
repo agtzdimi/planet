@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../../../env.service';
-import { GetJWTService } from '../../unit-management/services/get-jwt.service';
 import { GetDeviceByTypeService } from '../../unit-management/services/get-deviceByType.service';
 
 @Component({
   selector: 'ngx-params-setup',
   styleUrls: ['./params-setup.component.scss'],
   templateUrl: './params-setup.component.html',
-  providers: [GetJWTService, GetDeviceByTypeService],
+  providers: [GetDeviceByTypeService],
 })
 export class ParamsSetupComponent {
 
@@ -34,7 +33,6 @@ export class ParamsSetupComponent {
 
   constructor(private httpClient: HttpClient,
     env: EnvService,
-    private getJWTService: GetJWTService,
     private getDeviceByType: GetDeviceByTypeService) {
     this.sitewhereIP = env.sitewhere;
     this.planetRestIP = env.planet;
@@ -51,14 +49,12 @@ export class ParamsSetupComponent {
     this.simulationMachinePort = env.simulationMachinePort;
     this.simulationMachineTopic = env.simulationMachineTopic;
 
-    this.getJWTService.getToken()
-      .then((data: any) => {
-        this.jwtToken = data;
-        this.getDeviceByType.getDeviceByType(this.jwtToken, 'SimToken')
-          .then(devices => {
-            this.simUnit = devices['results'];
-            this.loaded = true;
-          });
+    this.getDeviceByType.getDeviceByType()
+      .then(devices => {
+        this.simUnit = devices['results']['resources'].filter((record) => {
+          return record['unitType'] === 'Sim';
+        });
+        this.loaded = true;
       });
   }
 
@@ -88,7 +84,7 @@ export class ParamsSetupComponent {
   }
 
   handleUnit(simulator) {
-    this.simulationMachine = simulator['metadata']['IP'].replace(/_/g, '.');
+    this.simulationMachine = simulator['metadata']['IP'];
     this.simulationMachinePort = simulator['metadata']['Port'];
     this.simulationMachineTopic = simulator['metadata']['Topic'];
   }

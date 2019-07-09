@@ -15,7 +15,7 @@ export class DeleteScenarioComponent implements OnInit {
   status = '';
   loading = false;
 
-  constructor(private dialogService: NbDialogService
+  constructor(private dialogService: NbDialogService,
     private httpClient: HttpClient) { }
 
   ngOnInit() {

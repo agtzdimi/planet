@@ -269,6 +269,49 @@ app.post("/planet/rest/add_device", (req, res, next) => {
     }
 });
 
+app.get("/planet/rest/get_devices", (req, res, next) => {
+    results = JSON.parse(shell.exec("cat " + `${__dirname}/../../linksmart/conf/devices/mqtt-switch.json`).stdout);
+    res.send({ 'results': results })
+});
+
+app.post("/planet/rest/edit_device", (req, res, next) => {
+    results = JSON.parse(shell.exec("cat " + `${__dirname}/../../linksmart/conf/devices/mqtt-switch.json`).stdout);
+    results['resources'] = results['resources'].map((val) => {
+        if (val['name'] === req.body[0].name) {
+            val['description'] = req.body[0].description;
+            val['IP'] = req.body[0].IP;
+            val['Port'] = req.body[0].Port;
+            val['metadata'] = req.body[0].metadata;
+            return val;
+        } else {
+            return val;
+        }
+    })
+
+    shell.exec("mosquitto_pub -t \"middleware_restart\" -m \"Start\"")
+    status = shell.exec("mosquitto_pub -t \"middleware_restart\" -m \'" + JSON.stringify(results) + "\'")
+    shell.exec("mosquitto_pub -t \"middleware_restart\" -m \"End\"")
+    if (!status.stderr) {
+        res.send({ 'response': 'Success' })
+    }
+});
+
+app.post("/planet/rest/delete_device", (req, res, next) => {
+    results = JSON.parse(shell.exec("cat " + `${__dirname}/../../linksmart/conf/devices/mqtt-switch.json`).stdout);
+    results['resources'] = results['resources'].filter((val) => {
+        if (val['name'] !== req.body.name) {
+            return val;
+        }
+    })
+
+    shell.exec("mosquitto_pub -t \"middleware_restart\" -m \"Start\"")
+    status = shell.exec("mosquitto_pub -t \"middleware_restart\" -m \'" + JSON.stringify(results) + "\'")
+    shell.exec("mosquitto_pub -t \"middleware_restart\" -m \"End\"")
+    if (!status.stderr) {
+        res.send({ 'response': 'Success' })
+    }
+});
+
 app.post("/planet/rest/create_user", api.create_user);
 app.post("/planet/rest/update_user", api.update_user);
 app.post("/planet/rest/login_with_email_password", api.login_with_email_password);

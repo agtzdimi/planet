@@ -43,11 +43,9 @@ export class P2HUnitComponent implements OnChanges {
     if (changes['p2hInput']['currentValue']) {
       let metadata = JSON.stringify(changes['p2hInput']['currentValue']['metadata']);
       if (metadata) {
-        metadata = metadata.replace(/_/g, '.');
-        metadata = metadata.replace(/cos\.phi/, 'cos_phi');
         metadata = JSON.parse(metadata);
         this.p2hParams['payload']['parameters']['configuration'] = metadata;
-        this.p2hParams['description'] = changes['p2hInput']['currentValue']['comments'];
+        this.p2hParams['description'] = changes['p2hInput']['currentValue']['description'];
       }
     }
   }

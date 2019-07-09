@@ -12,7 +12,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         <nb-card-body (click)="handleUnit(model)">
           <img class="component-icon" src="assets/images/{{modelType}}.jpg"
             [ngStyle]="{'width': '120px', 'height': '100px'}">
-          <label class="component-name">{{models[i]['comments']}}</label>
+          <label class="component-name">{{models[i]['name']}}</label>
         </nb-card-body>
       </nb-card>
 

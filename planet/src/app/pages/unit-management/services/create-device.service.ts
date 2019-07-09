@@ -6,14 +6,22 @@ export class CreateDeviceService {
 
     constructor(private httpClient: HttpClient) { }
 
-    public createNewDevice(metadata: Object, name, description, model) {
+    public createNewDevice(metadata: Object, name, description, model, ip, port) {
 
         return new Promise(resolve => {
             const url = '/planet/rest/add_device';
+            let subTopic = name;
+            if (model === 'Sim') {
+                subTopic = '/planet/GetData';
+            } else {
+                subTopic = '/planet/Get' + name;
+            }
             const data = {
                 'type': 'Resource',
                 'unitType': model,
                 'name': name,
+                'IP': ip,
+                'Port': port,
                 'description': description,
                 metadata,
                 'agent': {
@@ -33,7 +41,7 @@ export class CreateDeviceService {
                             'text/plain',
                         ],
                         'pub_topic': name,
-                        'sub_topic': '/planet/GetData',
+                        'sub_topic': subTopic,
                     },
                     {
                         'type': 'REST',

@@ -1,34 +1,23 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EnvService } from '../../../env.service';
 
 @Injectable()
 export class EditDeviceService {
 
-    constructor(private httpClient: HttpClient,
-        private env: EnvService) { }
+    constructor(private httpClient: HttpClient) { }
 
 
-    public editDevice(jwtToken: string, data, token) {
-
+    public editDevice(devices, data, name, descr, ip, port) {
+        devices = devices['results']['resources'].filter((val) => {
+            return val['name'] === name;
+        });
+        devices[0]['metadata'] = data;
+        devices[0]['IP'] = ip;
+        devices[0]['Port'] = port;
+        devices[0]['description'] = descr;
         return new Promise(resolve => {
-            const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/api/devices/' + token;
-            this.httpClient.put(url, data, {
-                headers: new HttpHeaders({
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + jwtToken,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-SiteWhere-Tenant-Id': 'Planet',
-                    'X-SiteWhere-Tenant-Auth': 'Planet1234',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-                    'Access-Control-Allow-Headers': 'Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization',
-                    'Access-Control-Allow-Credentials': 'true',
-                }),
-                params: {
-                    'deviceToken': token,
-                },
-            })
+            const url = '/planet/rest/edit_device';
+            this.httpClient.post(url, devices)
                 .subscribe(
                     res => {
                         resolve('Device Successfully Updated!');
