@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbButtonModule } from '@nebular/theme/components/button/button.module';
+import { NbButtonModule, NbCardModule, NbActionsModule, NbSpinnerModule } from '@nebular/theme';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ChartModule } from 'angular2-chartjs';
@@ -26,6 +26,7 @@ import { VESUnitComponent } from './unit-types/ves-unit/ves-unit.component';
 import { UnitModelsComponent } from './unit-edit/unit-models.component';
 import { DialogDeleteComponent } from './unit-delete/dialog-delete.component';
 import { NbDialogModule } from '@nebular/theme';
+import { FormsModule } from '@angular/forms';
 
 
 const COMPONENTS = [
@@ -58,6 +59,10 @@ const ENTRY_COMPONENTS = [
     ThemeModule,
     UnitManagementRoutingModule,
     NbButtonModule,
+    NbCardModule,
+    FormsModule,
+    NbActionsModule,
+    NbSpinnerModule,
     NbDialogModule.forRoot(),
     HttpClientModule,
     NgxChartsModule,

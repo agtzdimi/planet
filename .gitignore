@@ -1,2 +1,2 @@
-planet-rest-api/.env
-planet/src/env.js
+planet/node_modules
+planet-rest-api/node_modules

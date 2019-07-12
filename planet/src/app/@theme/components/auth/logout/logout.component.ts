@@ -6,29 +6,29 @@
 import { Component, Inject, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NB_AUTH_OPTIONS } from '@nebular/auth/auth.options';
-import { getDeepFromObject } from '@nebular/auth/helpers';
-import { NbAuthService } from '@nebular/auth/services/auth.service';
+import * as NB_AUTH from '@nebular/auth';
 import { HttpClient } from '@angular/common/http';
+import { NbLogoutComponent } from '@nebular/auth';
 
 @Component({
-  selector: 'nb-logout',
+  selector: 'ngx-logout',
   template: `
     <div>Logging out, please wait...</div>
   `,
 })
-export class NbLogoutComponent implements OnChanges {
+export class NgxLogoutComponent extends NbLogoutComponent implements OnChanges {
   @Input() token;
 
   redirectDelay: number = 0;
   strategy: string = '';
 
-  constructor(protected service: NbAuthService,
+  constructor(protected service: NB_AUTH.NbAuthService,
     private httpClient: HttpClient,
-    @Inject(NB_AUTH_OPTIONS) protected options = {},
+    @Inject(NB_AUTH.NB_AUTH_OPTIONS) protected options = {},
     protected router: Router) {
-    this.redirectDelay = this.getConfigValue('forms.logout.redirectDelay');
-    this.strategy = this.getConfigValue('forms.logout.strategy');
+    super(service, options, router);
+    this.redirectDelay = super.getConfigValue('forms.logout.redirectDelay');
+    this.strategy = super.getConfigValue('forms.logout.strategy');
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,9 +50,5 @@ export class NbLogoutComponent implements OnChanges {
         error => {
         },
       );
-  }
-
-  getConfigValue(key: string): any {
-    return getDeepFromObject(this.options, key, null);
   }
 }

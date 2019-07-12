@@ -1,25 +1,24 @@
 import { ExtraOptions, RouterModule, Routes, UrlSegment, UrlMatchResult } from '@angular/router';
-import { NgModule } from '@angular/core';
 import { AuthGuard } from './auth-guard.service';
-import {
-  NbLogoutComponent,
-} from '@nebular/auth';
+import { NgModule } from '@angular/core';
 
 import { NgxLoginComponent } from './@theme/components/auth/login/login.component';
-import { NbAuthComponent } from './@theme/components/auth/auth.component';
+import { NgxAuthComponent } from './@theme/components/auth/auth.component';
 import { NgxRegisterComponent } from './@theme/components/auth/register/register.component';
 import { NgxRequestPasswordComponent } from './@theme/components/auth/request-password/request-password.component';
 import { NgxResetPasswordComponent } from './@theme/components/auth/reset-password/reset-password.component';
+import { NgxLogoutComponent } from './@theme/components/auth/logout/logout.component';
 
 const routes: Routes = [
   {
     path: 'pages',
-    canActivate: [AuthGuard], // here we tell Angular to check the access with our AuthGuard
-    loadChildren: 'app/pages/pages.module#PagesModule',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('app/pages/pages.module')
+      .then(m => m.PagesModule),
   },
   {
     path: 'auth',
-    component: NbAuthComponent,
+    component: NgxAuthComponent,
     children: [
       {
         path: '',
@@ -35,7 +34,7 @@ const routes: Routes = [
       },
       {
         path: 'logout',
-        component: NbLogoutComponent,
+        component: NgxLogoutComponent,
       },
       {
         path: 'request-password',
@@ -72,6 +71,7 @@ export function ResetMatcher(url: UrlSegment[]): UrlMatchResult {
     );
   } return null;
 }
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, config)],

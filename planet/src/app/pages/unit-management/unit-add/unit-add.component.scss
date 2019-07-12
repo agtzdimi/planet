@@ -2,50 +2,50 @@
 
 .imageCard {
 
-    .component-card-wrapper {
-      width: 100%;
+  .component-card-wrapper {
+    width: 100%;
+  }
+
+  .component-icon {
+    margin-bottom: 1rem;
+  }
+
+  .component-name {
+    color: #8994a3;
+    font-weight: 500;
+  }
+
+  .component-navigate-link {
+    text-decoration: none;
+  }
+
+  nb-card {
+    box-shadow: 0 4px 27px 0 rgba(230, 234, 240, 0.2);
+    transition: transform 0.25s ease;
+
+    > nb-card-body {
+      height: 200px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    .component-icon {
-      margin-bottom: 1rem;
-    }
-
-    .component-name {
-      color: nb-theme(color-fg-heading-light);
-      font-weight: nb-theme(font-weight-bolder);
-    }
-
-    .component-navigate-link {
-      text-decoration: none;
-    }
-
-    nb-card {
-      box-shadow: 0 4px 27px 0 rgba(230, 234, 240, 0.2);
-      transition: transform 0.25s ease;
-
-      > nb-card-body {
-        height: 200px;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-
-      &:hover {
-        box-shadow: 0 15px 37px 0 #dbe2eb;
-        transform: translateY(-1rem);
-        cursor: pointer;
-        .component-name {
-          color: nb-theme(color-fg);
-        }
+    &:hover {
+      box-shadow: 0 15px 37px 0 #dbe2eb;
+      transform: translateY(-1rem);
+      cursor: pointer;
+      .component-name {
+        color: rgba(0, 230, 64, 1);
       }
     }
   }
+}
 
   h2 {
     flex: 1 1 100%;
-    color: nb-theme(color-fg-heading-light);
+    color: #8994a3;
     margin: 1rem 0 2rem;
     text-align: center;
   }
@@ -125,14 +125,14 @@ svg {
   cursor: pointer;
   user-select: none;
   pointer-events: none;
-  fill: nb-theme(color-fg);
+  fill: #494949;
 }
 
 .selected-room {
   z-index: 40;
 
   .room-text {
-    fill: nb-theme(color-fg-heading);
+    fill: #494949;
     font-weight: nb-theme(font-weight-bolder);
   }
   .room-border {

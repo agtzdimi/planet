@@ -5,21 +5,12 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
-import { DataModule } from './data/data.module';
 import {
   AnalyticsService,
   LayoutService,
   PlayerService,
   StateService,
 } from './utils';
-
-export class NbSimpleRoleProvider extends NbRoleProvider {
-
-  getRole() {
-    // here you could provide any role based on any auth flow
-    return observableOf('guest');
-  }
-}
 
 const formSetting: any = {
   redirectDelay: 0,
@@ -28,8 +19,14 @@ const formSetting: any = {
   },
 };
 
+export class NbSimpleRoleProvider extends NbRoleProvider {
+  getRole() {
+    // here you could provide any role based on any auth flow
+    return observableOf('guest');
+  }
+}
+
 export const NB_CORE_PROVIDERS = [
-  ...DataModule.forRoot().providers,
   ...NbAuthModule.forRoot({
 
     strategies: [

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbButtonModule } from '@nebular/theme/components/button/button.module';
+import { NbButtonModule, NbCardModule, NbStepperModule, NbSpinnerModule } from '@nebular/theme';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ChartModule } from 'angular2-chartjs';
@@ -29,6 +29,9 @@ const ENTRY_COMPONENTS = [
     ThemeModule,
     SystemParamsRoutingModule,
     NbButtonModule,
+    NbCardModule,
+    NbSpinnerModule,
+    NbStepperModule,
     NbDialogModule.forRoot(),
     HttpClientModule,
     NgxChartsModule,

@@ -18,6 +18,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
   times = 1;
   currentTab = 'Electric Grid';
   dataLoaded = false;
+  showButton = false;
   loadedSelections = {
     'elec': '',
     'dh': '',
@@ -40,11 +41,11 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
-  @ViewChild('elecRadio') elecRadio: ElementRef;
-  @ViewChild('dhRadio') dhRadio: ElementRef;
-  @ViewChild('gasRadio') gasRadio: ElementRef;
-  @ViewChild('formpicker') formpicker: ElementRef;
-  @ViewChild('checkbox2') checkbox2: ElementRef;
+  @ViewChild('elecRadio', { 'static': false }) elecRadio: ElementRef;
+  @ViewChild('dhRadio', { 'static': false }) dhRadio: ElementRef;
+  @ViewChild('gasRadio', { 'static': false }) gasRadio: ElementRef;
+  @ViewChild('formpicker', { 'static': false }) formpicker: ElementRef;
+  @ViewChild('checkbox2', { 'static': false }) checkbox2: ElementRef;
 
   constructor(private model1: Model1ParamInitService,
     private model2: Model2ParamInitService,
@@ -138,6 +139,10 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit {
         }
       },
     );
+  }
+
+  ngAfterContentChecked() {
+    this.showButton = this.checkDefaultData();
   }
 
   ngOnInit() {

@@ -87,12 +87,15 @@
             <label for="'unitName'" class="col-md-1 formLabel">Simulator Type</label>
             <div class="col-md-1">
               <sui-checkbox [ngModel]="selectedOptions.Simulink" [isReadonly]="selectedOptions.Simulink"
-                (ngModelChange)="handleSimulator($event,'Simulink')" [ngStyle]="{'margin-top': '13px'}">Simulink
+                (ngModelChange)="handleSimulator($event,'Simulink')" [ngStyle]="{'margin-top': '13px'}"
+                class="formLabel">
+                <p class="formLabel" [ngStyle]="{'color': 'white'}">Simulink</p>
               </sui-checkbox>
             </div>
             <div class=" col-md-1">
               <sui-checkbox [ngModel]="selectedOptions.OpalRT" [isReadonly]="selectedOptions.OpalRT"
-                (ngModelChange)="handleSimulator($event,'OpalRT')" [ngStyle]="{'margin-top': '13px'}">OpalRT
+                (ngModelChange)="handleSimulator($event,'OpalRT')" [ngStyle]="{'margin-top': '13px'}" class="formLabel">
+                <p class="formLabel" [ngStyle]="{'color': 'white'}">OpalRT</p>
               </sui-checkbox>
             </div>
           </div>

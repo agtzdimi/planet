@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbButtonModule } from '@nebular/theme/components/button/button.module';
+import { NbButtonModule, NbCardModule, NbSpinnerModule, NbTabsetModule, NbSelectModule, NbListModule, NbRadioModule, NbDatepickerModule, NbPopoverModule } from '@nebular/theme';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 
@@ -28,7 +28,6 @@ import { DeleteScenarioComponent } from './delete-scenario/delete-scenario.compo
 import { DeleteHighlightDirective } from './delete-scenario/dialog-prompt/delete-highlight.directive';
 import { DialogDeleteFormPromptComponent } from './delete-scenario/dialog-prompt/delete-form.component';
 import { DeleteScenarioDialogComponent } from './delete-scenario/dialog-prompt/delete-scenario-dialog.component';
-
 
 const COMPONENTS = [
   ScenarioCreatorComponent,
@@ -66,6 +65,14 @@ const ENTRY_COMPONENTS = [
     ThemeModule,
     ScenarioCreatorRoutingModule,
     NbButtonModule,
+    NbCardModule,
+    NbSpinnerModule,
+    NbTabsetModule,
+    NbSelectModule,
+    NbListModule,
+    NbRadioModule,
+    NbDatepickerModule,
+    NbPopoverModule,
     NbDialogModule.forRoot(),
     NgxUploaderModule,
     FormsModule,

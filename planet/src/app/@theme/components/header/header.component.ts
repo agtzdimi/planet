@@ -1,12 +1,12 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, HostListener } from '@angular/core';
+import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import { NbMenuService, NbSidebarService } from '@nebular/theme';
-import { AnalyticsService } from '../../../@core/utils';
-import { NbAuthService, NbAuthJWTToken, NbAuthResult } from '@nebular/auth';
 import { LayoutService } from '../../../@core/utils';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserProfileService } from '../../../pages/user-profile/user-profile.service';
+import { NbAuthService, NbAuthJWTToken, NbAuthResult } from '@nebular/auth';
 
 @Component({
   selector: 'ngx-header',
@@ -14,7 +14,7 @@ import { UserProfileService } from '../../../pages/user-profile/user-profile.ser
   templateUrl: './header.component.html',
   providers: [UserProfileService],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   @Input() position = 'normal';
 
@@ -32,12 +32,38 @@ export class HeaderComponent implements OnInit {
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
 
+  private destroy$: Subject<void> = new Subject<void>();
+  userPictureOnly: boolean = false;
+
+  themes = [
+    {
+      value: 'default',
+      name: 'Light',
+    },
+    {
+      value: 'dark',
+      name: 'Dark',
+    },
+    {
+      value: 'cosmic',
+      name: 'Cosmic',
+    },
+    {
+      value: 'corporate',
+      name: 'Corporate',
+    },
+  ];
+
+  currentTheme = 'dark';
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
-    private analyticsService: AnalyticsService,
+    private themeService: NbThemeService,
     private layoutService: LayoutService,
+    private breakpointService: NbMediaBreakpointsService,
     private authService: NbAuthService,
     protected router: Router) {
+
     this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
@@ -51,6 +77,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.currentTheme = this.themeService.currentTheme;
     this.menuService.onItemClick()
       .pipe(
         filter(({ tag }) => tag === 'userProfile'),
@@ -67,6 +94,15 @@ export class HeaderComponent implements OnInit {
       });
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  changeTheme(themeName: string) {
+    this.themeService.changeTheme(themeName);
+  }
+
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
     this.layoutService.changeLayoutSize();
@@ -80,11 +116,8 @@ export class HeaderComponent implements OnInit {
     return false;
   }
 
-  goToHome() {
+  navigateHome() {
     this.menuService.navigateHome();
-  }
-
-  startSearch() {
-    this.analyticsService.trackEvent('startSearch');
+    return false;
   }
 }

@@ -45,7 +45,7 @@
       <div class="row">
         <div class="col-md-1">
           <nb-actions size="large">
-            <nb-action icon="nb-arrow-thin-left" (click)="phase=phase - 1; message=''"></nb-action>
+            <nb-action icon="arrow-back" (click)="phase=phase - 1; message=''"></nb-action>
           </nb-actions>
         </div>
         <div class="col-md-10">
@@ -84,7 +84,7 @@
       <div class="row">
         <div class="col-md-1">
           <nb-actions size="large">
-            <nb-action icon="nb-arrow-thin-left" (click)="phase=phase - 1; message=''"></nb-action>
+            <nb-action icon="arrow-back" (click)="phase=phase - 1; message=''"></nb-action>
           </nb-actions>
         </div>
         <div class="col-md-10">
@@ -148,14 +148,15 @@
                         <div class="col-md-2">
                           <sui-checkbox [ngModel]="selectedModel['metadata']['Simulink']"
                             [isReadonly]="selectedModel['metadata']['Simulink']"
-                            (ngModelChange)="handleSimulator($event,'Simulink')" [ngStyle]="{'margin-top': '13px'}">
-                            Simulink
+                            (ngModelChange)="handleSimulator($event,'Simulink')">
+                            <p class="formLabel" [ngStyle]="{'color': 'white'}">Simulink</p>
                           </sui-checkbox>
                         </div>
                         <div class=" col-md-2">
                           <sui-checkbox [ngModel]="selectedModel['metadata']['OpalRT']"
                             [isReadonly]="selectedModel['metadata']['OpalRT']"
-                            (ngModelChange)="handleSimulator($event,'OpalRT')" [ngStyle]="{'margin-top': '13px'}">OpalRT
+                            (ngModelChange)="handleSimulator($event,'OpalRT')">
+                            <p class="formLabel" [ngStyle]="{'color': 'white'}">OpalRT</p>
                           </sui-checkbox>
                         </div>
                       </div>

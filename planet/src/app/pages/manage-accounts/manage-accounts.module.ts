@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbButtonModule } from '@nebular/theme/components/button/button.module';
+import { NbButtonModule, NbCardModule } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 import { FormsModule } from '@angular/forms';
 
@@ -23,6 +23,7 @@ const ENTRY_COMPONENTS = [
     ManageAccountsRoutingModule,
     NbButtonModule,
     FormsModule,
+    NbCardModule,
     MatSlideToggleModule,
   ],
   declarations: [

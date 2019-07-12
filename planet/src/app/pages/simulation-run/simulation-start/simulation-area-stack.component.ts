@@ -225,12 +225,12 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                         },
                         axisLine: {
                             lineStyle: {
-                                color: echarts.axisLineColor,
+                                color: 'white',
                             },
                         },
                         axisLabel: {
                             textStyle: {
-                                color: echarts.textColor,
+                                color: 'white',
                             },
                         },
                     },

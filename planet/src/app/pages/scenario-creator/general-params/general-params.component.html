@@ -10,10 +10,11 @@
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-5">
-          <div class="row">
+          <div class="row" [ngStyle]="{'margin-bottom':'2rem'}">
             <div class="col-md-6">
               <input class="m-2" type="text" nbInput fullWidth fieldSize="small" placeholder="Simulation Name"
-                [ngModel]="generalParams.formName" (ngModelChange)="formNameChange($event)">
+                [ngModel]="generalParams.formName" (ngModelChange)="formNameChange($event)"
+                [ngStyle]="{'width':'100%','height':'80%'}">
             </div>
             <div class="col-md-6">
               <div *ngIf="generalParams.formName === ''" class="requiredField"> Simulation Name is
@@ -28,7 +29,8 @@
           <div class="row">
             <div class="col-md-6">
               <textarea class="m-2" nbInput fullWidth shape="round" (change)="handleDescriptionChange($event)"
-                placeholder="Simulation Description">{{generalParams.formDescription}}</textarea>
+                placeholder="Simulation Description"
+                [ngStyle]="{'width':'100%'}">{{generalParams.formDescription}}</textarea>
             </div>
             <div class="col-md-6">
               <div *ngIf="generalParams.formDescription === ''" class="requiredTextarea"> Simulation Description is
@@ -48,8 +50,8 @@
           <!-- Selection of Location and Grid Type -->
           <div class="row">
             <div class="col-md-6">
-              <nb-select class="m-2" placeholder="Select grid"
-                (selectedChange)="animateImage('transitionName1',$event)">
+              <nb-select class="m-2" placeholder="Select grid" (selectedChange)="animateImage('transitionName1',$event)"
+                [status]="'info'" [shape]="'semi-round'">
                 <nb-option value="Turin">Turin</nb-option>
                 <nb-option value="Athens" disabled>Athens</nb-option>
               </nb-select>
@@ -101,11 +103,15 @@
                           <div class="col-md-1"></div>
                           <div class="col-md-4">
                             <sui-checkbox [ngModel]="timeStep['min15']" [isReadonly]="timeStep['min15']"
-                              (ngModelChange)="handleTimeStep($event,'min15')">15</sui-checkbox>
+                              (ngModelChange)="handleTimeStep($event,'min15')">
+                              <p [ngStyle]="{'color':'white'}">15</p>
+                            </sui-checkbox>
                           </div>
                           <div class="col-md-5">
                             <sui-checkbox [ngModel]="timeStep['min60']" [isReadonly]="timeStep['min60']"
-                              (ngModelChange)="handleTimeStep($event,'min60')">60</sui-checkbox>
+                              (ngModelChange)="handleTimeStep($event,'min60')">
+                              <p [ngStyle]="{'color':'white'}">60</p>
+                            </sui-checkbox>
                           </div>
                         </div>
                       </div>
@@ -134,9 +140,9 @@
                 </div>
 
                 <div class="row">
-                  <button *ngIf="checkDefaultData() && !isLoadModule" nbButton hero class="m-3" status="info"
-                    shape="round" (click)="animateInfo()">Continue</button>
-                  <div *ngIf="!checkDefaultData() && !isLoadModule" class="requiredField">
+                  <button *ngIf="showButton && !isLoadModule" nbButton hero class="m-3" status="info" shape="round"
+                    (click)="animateInfo()">Continue</button>
+                  <div *ngIf="!showButton && !isLoadModule" class="requiredField">
                     {{generalParams.errorMessage}}</div>
                 </div>
               </div>

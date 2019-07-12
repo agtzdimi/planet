@@ -244,6 +244,14 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
                             show: false,
                         },
                         data: stacks,
+                        axisLabel: {
+                            color: 'white',
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: 'white',
+                            }
+                        },
                     },
                 ],
                 yAxis: [

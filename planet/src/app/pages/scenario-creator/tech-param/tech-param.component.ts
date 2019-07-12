@@ -21,6 +21,8 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     nodePvParam: Object = {};
     displayingNode: string;
     nodes = [];
+    currentNodes = [];
+    checkBoxStatus = {}
     CHECKBOX_COUNT = 6;
     hubHeight = 80;
     turbineModels = [];
@@ -73,6 +75,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
                     this.getNodesNames(true);
                     this.paramInit = data;
                     this.initializeValues();
+                    this.checkBoxStatus = { ...this.checkVal };
                     this.currentModel = 2;
                 }
             },
@@ -84,6 +87,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
                     this.getNodesNames(true);
                     this.paramInit = data;
                     this.initializeValues();
+                    this.checkBoxStatus = { ...this.checkVal };
                     this.currentModel = 1;
                 }
             },
@@ -126,6 +130,11 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
 
     ngAfterViewChecked() {
         this.initializeValues();
+        this.checkBoxStatus = this.checkVal;
+    }
+
+    ngAfterContentChecked() {
+        this.currentNodes = this.nodes;
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -306,6 +315,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     }
 
     changeTab(event) {
+        console.log(this.nodes, this.currentNodes)
         this.currentTab = event.tabTitle;
     }
 

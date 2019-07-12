@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbButtonModule } from '@nebular/theme/components/button/button.module';
+import { NbButtonModule, NbCardModule, NbPopoverModule, NbSpinnerModule } from '@nebular/theme';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ChartModule } from 'angular2-chartjs';
@@ -15,6 +15,7 @@ import { NbDialogModule } from '@nebular/theme';
 import { DialogSelectMultipleFormPromptComponent } from './comparison-start/dialog-prompt/select-multiple-form.component';
 import { SimulationsLineComponent } from './comparison-start/simulation-line.component';
 import { ComparisonBarsComponent } from './comparison-start/comparison-bars.component';
+import { FormsModule } from '@angular/forms';
 
 const COMPONENTS = [
   SimulationComparisonComponent,
@@ -38,12 +39,16 @@ const ENTRY_COMPONENTS = [
     ThemeModule,
     SimulationComparisonRoutingModule,
     NbButtonModule,
+    NbCardModule,
+    NbPopoverModule,
+    FormsModule,
+    NbSpinnerModule,
+    SuiModule,
     NbDialogModule.forRoot(),
     HttpClientModule,
     NgxChartsModule,
     ChartModule,
     NgxEchartsModule,
-    SuiModule,
   ],
   declarations: [
     ...COMPONENTS,

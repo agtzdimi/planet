@@ -1,7 +1,4 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxLoginComponent } from './components/auth/login/login.component';
 import { NgxAuthBlockComponent } from './components/auth/auth-block/auth-block.component';
 import { NgxResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
@@ -9,61 +6,42 @@ import { NgxRequestPasswordComponent } from './components/auth/request-password/
 import { NgxRegisterComponent } from './components/auth/register/register.component';
 import { NgxSendResetRequestComponent } from './components/auth/reset-password/send-reset-request';
 import { NgxCreateAccountComponent } from './components/auth/register/create-account.component';
-import { NbLogoutComponent } from './components/auth/logout/logout.component';
-import { NbAuthComponent } from './components/auth/auth.component';
+import { NgxLogoutComponent } from './components/auth/logout/logout.component';
+import { NgxAuthComponent } from './components/auth/auth.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TechInputFieldComponent } from './components/planet/tech-input-field.component';
 import { EightNodeElGridComponent } from './components/planet/grids/eight-node-el-grid/eight-node-el-grid.component';
-import { RouterModule } from '@angular/router';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { EnergyGridComponent } from './components/planet/grids/energy-grid/energy-grid.component';
 import { TechnologiesDialogComponent } from './components/planet/grids/energy-grid/energy-grid.tech.component';
-
 import {
   NbActionsModule,
-  NbCardModule,
   NbLayoutModule,
   NbMenuModule,
-  NbRouteTabsetModule,
   NbSearchModule,
-  NbSidebarModule,
-  NbTabsetModule,
-  NbThemeModule,
-  NbUserModule,
-  NbCheckboxModule,
-  NbPopoverModule,
-  NbContextMenuModule,
-  NbProgressBarModule,
-  NbCalendarModule,
-  NbCalendarRangeModule,
-  NbStepperModule,
-  NbButtonModule,
   NbInputModule,
-  NbAccordionModule,
-  NbDatepickerModule,
-  NbDialogModule,
-  NbWindowModule,
-  NbListModule,
-  NbToastrModule,
+  NbSidebarModule,
   NbAlertModule,
-  NbSpinnerModule,
-  NbRadioModule,
+  NbCheckboxModule,
+  NbCardModule,
+  NbUserModule,
+  NbContextMenuModule,
+  NbButtonModule,
   NbSelectModule,
-  NbChatModule,
-  NbTooltipModule,
-  NbCalendarKitModule,
+  NbIconModule,
+  NbThemeModule,
+  NbTabsetModule,
 } from '@nebular/theme';
-
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
 
 import {
   FooterComponent,
   HeaderComponent,
   SearchInputComponent,
-  ThemeSettingsComponent,
-  SwitcherComponent,
-  LayoutDirectionSwitcherComponent,
-  ThemeSwitcherComponent,
-  ThemeSwitcherListComponent,
+  TinyMCEComponent,
   ToggleSettingsButtonComponent,
 } from './components';
 import {
@@ -72,115 +50,88 @@ import {
   RoundPipe,
   TimingPipe,
   NumberWithCommasPipe,
-  EvaIconsPipe,
 } from './pipes';
 import {
-  SampleLayoutComponent,
+  OneColumnLayoutComponent,
 } from './layouts';
+import { WindowModeBlockScrollService } from './services/window-mode-block-scroll.service';
 import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
-
-const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
+import { DARK_THEME } from './styles/theme.dark';
+import { ThemeSettingsComponent } from './components/theme-settings/theme-settings.component';
 
 const NB_MODULES = [
-  NbCardModule,
   NbLayoutModule,
-  NbTabsetModule,
-  NbRouteTabsetModule,
   NbMenuModule,
   NbUserModule,
   NbActionsModule,
+  NbCardModule,
+  NbInputModule,
   NbSearchModule,
   NbSidebarModule,
-  NbCheckboxModule,
-  NbPopoverModule,
-  NbContextMenuModule,
-  NgbModule,
-  NbSecurityModule, // *nbIsGranted directive,
-  NbProgressBarModule,
-  NbCalendarModule,
-  NbCalendarRangeModule,
-  NbStepperModule,
-  NbButtonModule,
-  NbListModule,
-  NbToastrModule,
-  NbInputModule,
-  NbAccordionModule,
-  NbDatepickerModule,
-  NbDialogModule,
-  NbWindowModule,
   NbAlertModule,
-  NbSpinnerModule,
-  NbRadioModule,
+  NbTabsetModule,
+  NbContextMenuModule,
+  NbSecurityModule,
+  NbCheckboxModule,
+  NbButtonModule,
   NbSelectModule,
-  NbChatModule,
-  NbTooltipModule,
-  NbCalendarKitModule,
+  NbIconModule,
+  NbEvaIconsModule,
 ];
-
 const COMPONENTS = [
-  SwitcherComponent,
-  LayoutDirectionSwitcherComponent,
-  ThemeSwitcherComponent,
-  ThemeSwitcherListComponent,
   HeaderComponent,
   FooterComponent,
   SearchInputComponent,
-  ThemeSettingsComponent,
-  SampleLayoutComponent,
-  ToggleSettingsButtonComponent,
-  TechInputFieldComponent,
+  TinyMCEComponent,
+  OneColumnLayoutComponent,
+  NgxAuthBlockComponent,
   EightNodeElGridComponent,
-  TechnologiesDialogComponent,
+  TechInputFieldComponent,
+  NgxLoginComponent,
+  NgxAuthComponent,
   EnergyGridComponent,
+  NgxRegisterComponent,
+  ThemeSettingsComponent,
+  NgxSendResetRequestComponent,
+  NgxResetPasswordComponent,
+  NgxRequestPasswordComponent,
+  NgxCreateAccountComponent,
+  TechnologiesDialogComponent,
+  NgxLogoutComponent,
+  ToggleSettingsButtonComponent,
 ];
-
 const ENTRY_COMPONENTS = [
-  ThemeSwitcherListComponent,
   TechnologiesDialogComponent,
 ];
-
 const PIPES = [
   CapitalizePipe,
   PluralPipe,
   RoundPipe,
   TimingPipe,
   NumberWithCommasPipe,
-  EvaIconsPipe,
-];
-
-const NB_THEME_PROVIDERS = [
-  ...NbThemeModule.forRoot(
-    {
-      name: 'corporate',
-    },
-    [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME],
-  ).providers,
-  ...NbSidebarModule.forRoot().providers,
-  ...NbMenuModule.forRoot().providers,
-  ...NbDatepickerModule.forRoot().providers,
-  ...NbDialogModule.forRoot().providers,
-  ...NbWindowModule.forRoot().providers,
-  ...NbToastrModule.forRoot().providers,
-  ...NbChatModule.forRoot({
-    messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
-  }).providers,
 ];
 
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES, RouterModule, Ng2SmartTableModule],
-  exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES],
-  declarations: [...COMPONENTS, ...PIPES, NgxAuthBlockComponent, NgxLoginComponent,
-    NbAuthComponent, NgxRegisterComponent, NgxSendResetRequestComponent, NgxResetPasswordComponent, NgxRequestPasswordComponent,
-    NgxCreateAccountComponent, NbLogoutComponent],
+  imports: [CommonModule, ...NB_MODULES, FormsModule, ReactiveFormsModule, RouterModule, Ng2SmartTableModule],
+  exports: [CommonModule, ...PIPES, ...COMPONENTS],
+  declarations: [...COMPONENTS, ...PIPES],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders {
     return <ModuleWithProviders>{
       ngModule: ThemeModule,
-      providers: [...NB_THEME_PROVIDERS],
+      providers: [
+        ...NbThemeModule.forRoot(
+          {
+            name: 'dark',
+          },
+          [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME],
+        ).providers,
+        WindowModeBlockScrollService,
+      ],
     };
   }
 }

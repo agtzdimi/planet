@@ -3,19 +3,19 @@ import { NbMenuItem } from '@nebular/theme';
 export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Welcome Screen',
-    icon: 'nb-gear',
+    icon: 'settings-2-outline',
     link: '/pages/welcome-screen',
     hidden: true,
     home: true,
   },
   {
     title: 'System Parameters',
-    icon: 'nb-gear',
+    icon: 'settings-2-outline',
     link: '/pages/system-params',
   },
   {
     title: 'Scenario Manager',
-    icon: 'nb-compose',
+    icon: 'file-text',
     children: [
       {
         title: 'Create New Scenario',
@@ -33,17 +33,17 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Simulation Run',
-    icon: 'nb-shuffle',
+    icon: 'activity',
     link: '/pages/simulation-run',
   },
   {
     title: 'Simulation Comparison',
-    icon: 'nb-bar-chart',
+    icon: 'pie-chart-2',
     link: '/pages/simulation-comparison',
   },
   {
     title: 'Unit Management',
-    icon: 'nb-grid-a-outline',
+    icon: 'grid-outline',
     children: [
       {
         title: 'Add',

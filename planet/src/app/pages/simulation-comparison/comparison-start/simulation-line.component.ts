@@ -167,8 +167,9 @@ v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H
                             },
                         },
                         axisLabel: {
+                            color: 'white',
                             textStyle: {
-                                color: echarts.textColor,
+                                color: 'white',
                             },
                         },
                     },
@@ -188,8 +189,9 @@ v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H
                             },
                         },
                         axisLabel: {
+                            color: 'white',
                             textStyle: {
-                                color: echarts.textColor,
+                                color: 'white',
                             },
                         },
                     },
