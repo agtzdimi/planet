@@ -1,4 +1,4 @@
-<nb-card size="large" accent="active">
+<nb-card size="large" accent="primary">
     <nb-card-header>
 
         <!--    Tabs  and Dropdown with Nodes-->
@@ -51,10 +51,13 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-3">
-                    <nb-select *ngIf="checkBoxStatus[displayingNode][0]" class="m-2" placeholder="Tracking"
+                <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
+                    <nb-select *ngIf="checkBoxStatus[displayingNode][0]" class="m-2" [placeholder]="'Tracking'"
                         [ngModel]="nodePvParam[displayingNode]['tracking']"
-                        (ngModelChange)="updateWindPVParams('PV','tracking',$event)">
+                        (ngModelChange)="updateWindPVParams('PV','tracking',$event)" [ngStyle]="{'align-items': 'center',
+                            'display': 'flex',
+                            'width': '61.2%',
+                        'text-align-last':'center'}">
                         <nb-option value="None">None</nb-option>
                         <nb-option value="1">1-axis (azimuth)</nb-option>
                         <nb-option value="2">2-axis (tilt & azimuth)</nb-option>
@@ -101,15 +104,18 @@
                     <ul class="listItem">
                         <li>
                             <div class="form-group row">
-                                <label for="input1" class="col-sm-2 col-form-label">Turbine Model</label>
+                                <label for="input1" class="col-sm-12 col-form-label">Turbine Model</label>
                             </div>
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
                     <nb-select class="m-2" placeholder="Turbine Model"
                         [ngModel]="nodeWindParam[displayingNode]['turbine.model']"
-                        (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)">
+                        (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)" [ngStyle]="{'align-items': 'center',
+                        'display': 'flex',
+                        'width': '61.2%',
+                    'text-align-last':'center'}">
                         <nb-option *ngFor="let turbine of turbineModels" [value]="turbine">{{turbine}}</nb-option>
                     </nb-select>
                 </div>

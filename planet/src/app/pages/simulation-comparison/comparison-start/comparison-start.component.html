@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col">
 
-    <nb-card accent="active">
+    <nb-card accent="primary">
       <nb-card-header>Simulation Comparison</nb-card-header>
       <nb-card-body>
 
@@ -33,7 +33,7 @@
     </nb-card>
 
     <div *ngIf="showLine">
-      <nb-card *ngFor="let lineCh of lineChart" accent="active">
+      <nb-card *ngFor="let lineCh of lineChart" accent="primary">
         <nb-card-header>{{lineCh.title}}</nb-card-header>
         <nb-card-body>
           <ngx-simulation-line [data]="lineCh.data"></ngx-simulation-line>
@@ -43,7 +43,7 @@
 
     <div *ngIf="showBar">
       <div *ngFor="let barCh of barChart">
-        <nb-card accent="active"
+        <nb-card accent="primary"
           *ngIf="! barCh.title.includes('LCOE and economic results CO') && ! barCh.yAxisLabel.includes('emissions 10')">
           <nb-card-header>{{barCh.title}}</nb-card-header>
           <nb-card-body>

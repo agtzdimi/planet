@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'nb-select-form-prompt',
   template: `
-    <nb-card *ngIf="formReady" accent="active">
+    <nb-card *ngIf="formReady" accent="primary">
       <nb-card-header>Select one of the following simulations</nb-card-header>
       <nb-card-body>
       <nb-list>

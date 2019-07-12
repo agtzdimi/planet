@@ -8,7 +8,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   <div class="col-md-4" *ngFor="let model of models; let i = index">
     <div class=" imageCard">
 
-      <nb-card [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge" accent="active">
+      <nb-card [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge" accent="primary">
         <nb-card-body (click)="handleUnit(model)">
           <img class="component-icon" src="assets/images/{{modelType}}.jpg"
             [ngStyle]="{'width': '120px', 'height': '100px'}">

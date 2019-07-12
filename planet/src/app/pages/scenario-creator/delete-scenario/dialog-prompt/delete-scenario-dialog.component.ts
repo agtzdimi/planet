@@ -4,7 +4,7 @@ import { NbDialogRef } from '@nebular/theme';
 @Component({
   selector: 'ngx-delete-scenario-dialog',
   template: `
-    <nb-card accent="active">
+    <nb-card accent="primary">
       <nb-card-header>Are you sure you Want to Delete this Scenario?</nb-card-header>
       <nb-card-footer>
       <div class="row">

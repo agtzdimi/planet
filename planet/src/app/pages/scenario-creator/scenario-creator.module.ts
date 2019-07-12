@@ -1,5 +1,15 @@
 import { NgModule } from '@angular/core';
-import { NbButtonModule, NbCardModule, NbSpinnerModule, NbTabsetModule, NbSelectModule, NbListModule, NbRadioModule, NbDatepickerModule, NbPopoverModule } from '@nebular/theme';
+import {
+  NbButtonModule,
+  NbCardModule,
+  NbSpinnerModule,
+  NbTabsetModule,
+  NbSelectModule,
+  NbListModule,
+  NbRadioModule,
+  NbDatepickerModule,
+  NbPopoverModule,
+} from '@nebular/theme';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 

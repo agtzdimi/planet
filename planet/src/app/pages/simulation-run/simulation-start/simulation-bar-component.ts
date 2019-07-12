@@ -167,7 +167,7 @@ export class SimulationsBarComponent implements OnDestroy, OnChanges {
                         axisLine: {
                             lineStyle: {
                                 color: 'white',
-                            }
+                            },
                         },
                     },
                 ],

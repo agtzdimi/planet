@@ -4,7 +4,7 @@ import { NbDialogRef } from '@nebular/theme';
 @Component({
   selector: 'nb-name-prompt',
   template: `
-    <nb-card accent="active">
+    <nb-card accent="primary">
       <nb-card-header>{{node}} Technologies</nb-card-header>
       <nb-card-footer>
       <div class="row">

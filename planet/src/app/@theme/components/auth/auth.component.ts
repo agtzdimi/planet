@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NbAuthComponent } from '@nebular/auth'
+import { NbAuthComponent } from '@nebular/auth';
 
 @Component({
   selector: 'ngx-auth',
@@ -7,7 +7,7 @@ import { NbAuthComponent } from '@nebular/auth'
   template: `
   <nb-layout>
   <nb-layout-column>
-    <nb-card accent="active">
+    <nb-card accent="primary">
       <nb-card-header [ngStyle]="{'margin':'0 auto'}">
         <a href="https://www.h2020-planet.eu/" target="_blank"><img src="assets/images/planet.png"></a>
       </nb-card-header>

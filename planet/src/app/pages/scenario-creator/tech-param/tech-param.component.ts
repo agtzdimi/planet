@@ -1,4 +1,14 @@
-import { Component, Input, EventEmitter, Output, SimpleChanges, OnChanges, AfterViewChecked, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    EventEmitter,
+    Output,
+    SimpleChanges,
+    OnChanges,
+    AfterViewChecked,
+    OnInit,
+    AfterContentChecked,
+} from '@angular/core';
 import { Model1ParamInitService } from '../services/model1-param-init.service';
 import { Model2ParamInitService } from '../services/model2-param-init.service';
 import { GeneralParamsService } from '../services/general-params.service';
@@ -8,7 +18,7 @@ import { GeneralParamsService } from '../services/general-params.service';
     styleUrls: ['./tech-param.component.scss'],
     templateUrl: './tech-param.component.html',
 })
-export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
+export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, AfterContentChecked {
 
     checkVal: Object = {};
     @Input() pvParam: Object;
@@ -22,7 +32,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     displayingNode: string;
     nodes = [];
     currentNodes = [];
-    checkBoxStatus = {}
+    checkBoxStatus = {};
     CHECKBOX_COUNT = 6;
     hubHeight = 80;
     turbineModels = [];
@@ -315,7 +325,6 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit {
     }
 
     changeTab(event) {
-        console.log(this.nodes, this.currentNodes)
         this.currentTab = event.tabTitle;
     }
 

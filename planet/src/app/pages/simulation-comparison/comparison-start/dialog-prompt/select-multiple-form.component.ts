@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'nb-select-multiple-form-prompt',
   template: `
-    <nb-card [ngStyle]="{'width': '35vw','height':'60vh'}" *ngIf="formReady" accent="active">
+    <nb-card [ngStyle]="{'width': '35vw','height':'60vh'}" *ngIf="formReady" accent="primary">
       <nb-card-header>Select two of the following simulations</nb-card-header>
       <nb-card-body>
       <div class="row">

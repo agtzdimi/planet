@@ -250,7 +250,7 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
                         axisLine: {
                             lineStyle: {
                                 color: 'white',
-                            }
+                            },
                         },
                     },
                 ],

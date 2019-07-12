@@ -1,4 +1,4 @@
-<nb-card accent="active">
+<nb-card accent="primary">
   <nb-card-header>Control System</nb-card-header>
   <nb-card-body>
     <div class="form-group row">
@@ -33,11 +33,12 @@
             <div class="field">
               <sui-checkbox [ngModel]="resProd['yes']" [isReadonly]="resProd['yes']"
                 (ngModelChange)="handleResProd($event,'yes')" [ngStyle]="{'margin-right':'10px'}">
-                Yes
+                <p [ngStyle]="{'color':'white'}">Yes</p>
               </sui-checkbox>
               <sui-checkbox [ngModel]="resProd['no']" [isReadonly]="resProd['no']"
                 (ngModelChange)="handleResProd($event,'no')">
-                No</sui-checkbox>
+                <p [ngStyle]="{'color':'white'}">No</p>
+              </sui-checkbox>
             </div>
           </div>
         </div>

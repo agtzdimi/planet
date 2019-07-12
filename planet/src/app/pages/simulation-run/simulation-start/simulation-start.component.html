@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col">
 
-    <nb-card accent="active">
+    <nb-card accent="primary">
       <nb-card-header>Start Simulation</nb-card-header>
       <nb-card-body>
 
@@ -37,7 +37,7 @@
     </nb-card>
 
     <div *ngIf="showArea">
-      <nb-card *ngFor="let areaCh of areaChart" accent="active" size="large">
+      <nb-card *ngFor="let areaCh of areaChart" accent="primary" size="large">
         <nb-card-header>{{areaCh.title}}</nb-card-header>
         <nb-card-body>
           <ngx-simulation-area-stack [data]="areaCh.data"></ngx-simulation-area-stack>
@@ -51,7 +51,7 @@
           'col-md-12': barCh.title.includes('LCOE and economic results CO'),
           'col-md-6': !barCh.title.includes('LCOE and economic results CO')
         }">
-          <nb-card accent="active">
+          <nb-card accent="primary">
             <nb-card-header>{{barCh.title}}</nb-card-header>
             <nb-card-body>
               <ngx-simulation-bar [yAxisLabel]="barCh.yAxisLabel" [yRightAxisLabel]="barCh.yRightAxisLabel"
