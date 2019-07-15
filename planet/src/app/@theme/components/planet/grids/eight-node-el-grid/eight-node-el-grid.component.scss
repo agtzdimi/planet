@@ -26,7 +26,7 @@
 }
 
 .room-bg {
-  fill: nb-theme(card-bg);
+  fill: #bdc4cd;
   stroke: transparent;
   cursor: pointer;
   stroke-width: 4px;
@@ -43,19 +43,19 @@
   font-size: 1.2rem;
   user-select: none;
   pointer-events: none;
-  fill: nb-theme(color-fg);
+  fill: #bdc4cd;
 }
 
 .selected-room {
   z-index: 40;
 
   .room-text {
-    fill: nb-theme(color-success);
+    fill: #3366ff;
     font-size: 1.2rem;
-    font-weight: nb-theme(font-weight-bolder);
+    font-weight: nb-theme(text-label-font-weight);
   }
   .room-border {
-    stroke: nb-theme(color-success);
+    stroke: #3366ff;
   }
 }
 

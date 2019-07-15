@@ -30,6 +30,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     nodeWindParam: Object = {};
     nodePvParam: Object = {};
     displayingNode: string;
+    displayContent: boolean = false;
     nodes = [];
     currentNodes = [];
     checkBoxStatus = {};
@@ -145,6 +146,9 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
 
     ngAfterContentChecked() {
         this.currentNodes = this.nodes;
+        if (this.checkBoxStatus['node.1'] !== undefined) {
+            this.displayContent = true;
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {

@@ -109,7 +109,7 @@ svg {
 }
 
 .room-bg {
-  fill: nb-theme(card-bg);
+  fill: nb-theme(background-basic-color-1);
   stroke: transparent;
   cursor: pointer;
   stroke-width: 4px;
@@ -133,10 +133,10 @@ svg {
 
   .room-text {
     fill: #494949;
-    font-weight: nb-theme(font-weight-bolder);
+    font-weight: nb-theme(text-label-font-weight);
   }
   .room-border {
-    stroke: nb-theme(color-success);
+    stroke: nb-theme(color-success-600);
   }
 }
 

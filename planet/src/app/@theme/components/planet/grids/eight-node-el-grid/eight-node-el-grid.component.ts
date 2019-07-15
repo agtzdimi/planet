@@ -21,7 +21,7 @@ export class EightNodeElGridComponent implements OnInit {
         rooms: [
             {
                 id: '0',
-                name: { text: '', x: 15, y: 32.5 },
+                name: { text: '', x: 20, y: 32.5 },
                 number: {
                     text: '', x: 415, y: 20.1,
                     text2: '', x2: 435, y2: 4.1,
@@ -35,7 +35,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '1',
-                name: { text: 'Node 1', x: 15, y: 32.5 },
+                name: { text: 'Node 1', x: 20, y: 32.5 },
                 number: {
                     text: '', x: 415, y: 20.1,
                     text2: '', x2: 435, y2: 4.1,
@@ -49,7 +49,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '2',
-                name: { text: 'Node 2', x: 15, y: 110 },
+                name: { text: 'Node 2', x: 20, y: 110 },
                 number: { text: '', x: 415, y: 99 },
                 area: {
                     d: `M 280,25 V 105 M 365,105 V118 a 13,11 0 1,0 1,0 M 365,130 a 13,11 0 1,0 1,0Z
@@ -60,7 +60,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '3',
-                name: { text: 'Node 2', x: 15, y: 110 },
+                name: { text: 'Node 2', x: 20, y: 110 },
                 number: { text: '', x: 415, y: 99 },
                 area: {
                     d: `M 200,105 L 420,105`,
@@ -71,7 +71,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '4',
-                name: { text: 'Node 3', x: 15, y: 190 },
+                name: { text: 'Node 3', x: 20, y: 190 },
                 number: { text: '', x: 415, y: 141.1 },
                 area: {
                     d: `M 280,105 V 185 M 365,185 V198 a 13,11 0 1,0 1,0 M 365,210 a 13,11 0 1,0 1,0Z
@@ -83,7 +83,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '5',
-                name: { text: 'Node 3', x: 15, y: 190 },
+                name: { text: 'Node 3', x: 20, y: 190 },
                 number: { text: '', x: 415, y: 141.1 },
                 area: {
                     d: `M 200,185 L 420,185`,
@@ -94,7 +94,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '6',
-                name: { text: 'Node 4', x: 15, y: 270 },
+                name: { text: 'Node 4', x: 20, y: 270 },
                 number: { text: '', x: 415, y: 203.1 },
                 area: {
                     d: `M 280,185 V 265 M 365,265 V278 a 13,11 0 1,0 1,0 M 365,290 a 13,11 0 1,0 1,0Z
@@ -105,7 +105,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '7',
-                name: { text: 'Node 4', x: 15, y: 270 },
+                name: { text: 'Node 4', x: 20, y: 270 },
                 number: { text: '', x: 415, y: 203.1 },
                 area: {
                     d: `M 200,265 L 420,265`,
@@ -116,7 +116,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '8',
-                name: { text: 'Node 5', x: 15, y: 350 },
+                name: { text: 'Node 5', x: 20, y: 350 },
                 number: { text: '', x: 415, y: 265.1 },
                 area: {
                     d: `M 280,265 V 345 M 365,345 V358 a 13,11 0 1,0 1,0 M 365,370 a 13,11 0 1,0 1,0Z
@@ -127,7 +127,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '9',
-                name: { text: 'Node 5', x: 15, y: 350 },
+                name: { text: 'Node 5', x: 20, y: 350 },
                 number: { text: '', x: 415, y: 265.1 },
                 area: {
                     d: `M 200,345 L 420,345`,
@@ -138,7 +138,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '10',
-                name: { text: 'Node 6', x: 15, y: 430 },
+                name: { text: 'Node 6', x: 20, y: 430 },
                 number: { text: '', x: 415, y: 327.1 },
                 area: {
                     d: `M 280,345 V 425 M 365,425 V438 a 13,11 0 1,0 1,0 M 365,450 a 13,11 0 1,0 1,0Z
@@ -149,7 +149,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '11',
-                name: { text: 'Node 6', x: 15, y: 430 },
+                name: { text: 'Node 6', x: 20, y: 430 },
                 number: { text: '', x: 415, y: 327.1 },
                 area: {
                     d: `M 150,425 L 420,425`,
@@ -160,7 +160,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '12',
-                name: { text: 'Node 7', x: 15, y: 510 },
+                name: { text: 'Node 7', x: 20, y: 510 },
                 number: { text: '', x: 415, y: 389.1 },
                 area: {
                     d: `M 280,425 V 505 M 365,505 V518 a 13,11 0 1,0 1,0 M 365,530 a 13,11 0 1,0 1,0Z
@@ -171,7 +171,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '13',
-                name: { text: 'Node 7', x: 15, y: 510 },
+                name: { text: 'Node 7', x: 20, y: 510 },
                 number: { text: '', x: 415, y: 389.1 },
                 area: {
                     d: `M 200,505 L 420,505`,
@@ -182,7 +182,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '14',
-                name: { text: 'Node 8', x: 15, y: 590 },
+                name: { text: 'Node 8', x: 20, y: 590 },
                 number: { text: '', x: 415, y: 451.1 },
                 area: {
                     d: `M 280,505 V 585 M 365,585 V598 a 13,11 0 1,0 1,0 M 365,610 a 13,11 0 1,0 1,0Z
@@ -193,7 +193,7 @@ export class EightNodeElGridComponent implements OnInit {
             },
             {
                 id: '15',
-                name: { text: 'Node 8', x: 15, y: 590 },
+                name: { text: 'Node 8', x: 20, y: 590 },
                 number: { text: '', x: 415, y: 451.1 },
                 area: {
                     d: `M 200,585 L 420,585`,

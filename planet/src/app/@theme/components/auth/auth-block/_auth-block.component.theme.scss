@@ -8,12 +8,12 @@
   nb-auth-block {
 
     .form-text a {
-      color: nb-theme(color-fg);
+      color: nb-theme(color-primary-400);
     }
 
     .accept-group {
       nb-checkbox .custom-control-description {
-        color: nb-theme(color-fg);
+        color: nb-theme(color-primary-400);
       }
 
       a {

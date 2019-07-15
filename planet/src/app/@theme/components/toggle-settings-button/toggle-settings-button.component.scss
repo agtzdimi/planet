@@ -14,31 +14,31 @@
     z-index: 998;
 
     @include nb-ltr() {
-      border-top-left-radius: nb-theme(radius);
-      border-bottom-left-radius: nb-theme(radius);
+      border-top-left-radius: nb-theme(border-radius);
+      border-bottom-left-radius: nb-theme(border-radius);
       right: 0;
 
       &.sidebarEnd {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         right: auto;
-        border-top-right-radius: nb-theme(radius);
-        border-bottom-right-radius: nb-theme(radius);
+        border-top-right-radius: nb-theme(border-radius);
+        border-bottom-right-radius: nb-theme(border-radius);
         left: 0;
       }
     }
 
     @include nb-rtl() {
-      border-top-right-radius: nb-theme(radius);
-      border-bottom-right-radius: nb-theme(radius);
+      border-top-right-radius: nb-theme(border-radius);
+      border-bottom-right-radius: nb-theme(border-radius);
       left: 0;
 
       &.sidebarEnd {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         left: auto;
-        border-top-left-radius: nb-theme(radius);
-        border-bottom-left-radius: nb-theme(radius);
+        border-top-left-radius: nb-theme(border-radius);
+        border-bottom-left-radius: nb-theme(border-radius);
         right: 0;
       }
     }
@@ -71,7 +71,7 @@
     @include nb-for-theme(corporate) {
       border: 1px solid #d5dbe0;
       box-shadow: 0 8px 24px 0 rgba(48, 59, 67, 0.15);
-      color: nb-theme(color-danger);
+      color: nb-theme(color-danger-500);
       background-color: #ffffff;
     }
 
@@ -80,11 +80,11 @@
       color: #ffffff;
 
       @include nb-for-theme(default) {
-        color: nb-theme(color-danger);
+        color: nb-theme(color-danger-500);
       }
 
       @include nb-for-theme(corporate) {
-        color: nb-theme(color-warning);
+        color: nb-theme(color-warning-400);
       }
     }
   }

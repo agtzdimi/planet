@@ -30,7 +30,7 @@
             <div class="col-md-6">
               <textarea class="m-2" nbInput fullWidth shape="round" (change)="handleDescriptionChange($event)"
                 placeholder="Simulation Description"
-                [ngStyle]="{'width':'100%'}">{{generalParams.formDescription}}</textarea>
+                [ngStyle]="{'width':'100%','padding-left': '1rem'}">{{generalParams.formDescription}}</textarea>
             </div>
             <div class="col-md-6">
               <div *ngIf="generalParams.formDescription === ''" class="requiredTextarea"> Simulation Description is

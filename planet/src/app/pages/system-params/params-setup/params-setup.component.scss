@@ -10,7 +10,7 @@
 
   h2 {
     flex: 1 1 100%;
-    color: nb-theme(color-fg-heading-light);
+    color: nb-theme(color-primary-300-light);
     text-align: center;
     margin: 0;
   }
@@ -52,8 +52,8 @@
     }
 
     .component-name {
-      color: nb-theme(color-fg-heading-light);
-      font-weight: nb-theme(font-weight-bolder);
+      color: nb-theme(color-primary-300-light);
+      font-weight: nb-theme(text-label-font-weight);
     }
 
     .component-navigate-link {
@@ -78,7 +78,7 @@
         transform: translateY(-1rem);
         cursor: pointer;
         .component-name {
-          color: nb-theme(color-fg);
+          color: nb-theme(color-primary-400);
         }
       }
     }

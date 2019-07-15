@@ -21,266 +21,274 @@
 
     <nb-card-body *ngIf="currentTab === 'Electric Grid'">
 
-        <!--    PV switcher   -->
+        <div *ngIf="displayContent">
+            <!--    PV switcher   -->
 
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>PV</label>
-            </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[displayingNode][0]" (change)="changeCheckBoxVal(0)"
-                        id="techParamCheck1" #techParamCheck1>
-                    <label class="label" for="techParamCheck1"></label>
-                </section>
-            </div>
-        </div>
-
-        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'System Loss'" [label2]="'%'"
-                (valChange)="updateWindPVParams('PV','system.loss',+$event)"
-                [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
-            </ngx-input-field>
-            <div class="row" *ngIf="checkBoxStatus[displayingNode][0]">
-                <div class="col-md-2">
-                    <ul class="listItem">
-                        <li>
-                            <div class="form-group row">
-                                <label for="input1" class="col-sm-2 col-form-label">Tracking</label>
-                            </div>
-                        </li>
-                    </ul>
+            <div class="row p-2">
+                <div class="col-md-1">
+                    <label>PV</label>
                 </div>
-                <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
-                    <nb-select *ngIf="checkBoxStatus[displayingNode][0]" class="m-2" [placeholder]="'Tracking'"
-                        [ngModel]="nodePvParam[displayingNode]['tracking']"
-                        (ngModelChange)="updateWindPVParams('PV','tracking',$event)" [ngStyle]="{'align-items': 'center',
+                <div class="col-md-2">
+                    <section class="slider-checkbox">
+                        <input type="checkbox" [checked]="checkBoxStatus[displayingNode][0]"
+                            (change)="changeCheckBoxVal(0)" id="techParamCheck1" #techParamCheck1>
+                        <label class="label" for="techParamCheck1"></label>
+                    </section>
+                </div>
+            </div>
+
+
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'System Loss'" [label2]="'%'"
+                    (valChange)="updateWindPVParams('PV','system.loss',+$event)"
+                    [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
+                </ngx-input-field>
+                <div class="row" *ngIf="checkBoxStatus[displayingNode][0]">
+                    <div class="col-md-2">
+                        <ul class="listItem">
+                            <li>
+                                <div class="form-group row">
+                                    <label for="input1" class="col-sm-2 col-form-label">Tracking</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
+                        <nb-select *ngIf="checkBoxStatus[displayingNode][0]" class="m-2" [placeholder]="'Tracking'"
+                            [ngModel]="nodePvParam[displayingNode]['tracking']"
+                            (ngModelChange)="updateWindPVParams('PV','tracking',$event)" [ngStyle]="{'align-items': 'center',
                             'display': 'flex',
                             'width': '61.2%',
                         'text-align-last':'center'}">
-                        <nb-option value="None">None</nb-option>
-                        <nb-option value="1">1-axis (azimuth)</nb-option>
-                        <nb-option value="2">2-axis (tilt & azimuth)</nb-option>
-                    </nb-select>
+                            <nb-option value="None">None</nb-option>
+                            <nb-option value="1">1-axis (azimuth)</nb-option>
+                            <nb-option value="2">2-axis (tilt & azimuth)</nb-option>
+                        </nb-select>
+                    </div>
                 </div>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Tilt'" [label2]="'°'"
+                    (valChange)="updateWindPVParams('PV','tilt',+$event)" [(val)]="nodePvParam[displayingNode]['tilt']"
+                    [compId]="'techParamCheckInput1.2'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Azimuth'" [label2]="'°'"
+                    (valChange)="updateWindPVParams('PV','azimuth',+$event)"
+                    [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Nominal Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']"
+                    [compId]="'techParamCheckInput1.4'">
+                </ngx-input-field>
             </div>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Tilt'" [label2]="'°'"
-                (valChange)="updateWindPVParams('PV','tilt',+$event)" [(val)]="nodePvParam[displayingNode]['tilt']"
-                [compId]="'techParamCheckInput1.2'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Azimuth'" [label2]="'°'"
-                (valChange)="updateWindPVParams('PV','azimuth',+$event)"
-                [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'"></ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Nominal Power'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']"
-                [compId]="'techParamCheckInput1.4'">
-            </ngx-input-field>
-        </div>
 
-        <!--    WT switcher   -->
+            <!--    WT switcher   -->
 
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>WT</label>
-            </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[displayingNode][1]" (change)="changeCheckBoxVal(1)"
-                        id="techParamCheck2" #techParamCheck2>
-                    <label class="label" for="techParamCheck2"></label>
-                </section>
-            </div>
-        </div>
-
-        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][1]" [label1]="'Hub Height'" [label2]="'m'"
-                (valChange)="updateWindPVParams('Wind','hub.height',+$event)"
-                [(val)]="nodeWindParam[displayingNode]['hub.height']" [compId]="'techParamCheckInput2.1'">
-            </ngx-input-field>
-            <div class="row" *ngIf="checkBoxStatus[displayingNode][1]">
+            <div class="row p-2">
+                <div class="col-md-1">
+                    <label>WT</label>
+                </div>
                 <div class="col-md-2">
-                    <ul class="listItem">
-                        <li>
-                            <div class="form-group row">
-                                <label for="input1" class="col-sm-12 col-form-label">Turbine Model</label>
-                            </div>
-                        </li>
-                    </ul>
+                    <section class="slider-checkbox">
+                        <input type="checkbox" [checked]="checkVal[displayingNode][1]" (change)="changeCheckBoxVal(1)"
+                            id="techParamCheck2" #techParamCheck2>
+                        <label class="label" for="techParamCheck2"></label>
+                    </section>
                 </div>
-                <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
-                    <nb-select class="m-2" placeholder="Turbine Model"
-                        [ngModel]="nodeWindParam[displayingNode]['turbine.model']"
-                        (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)" [ngStyle]="{'align-items': 'center',
+            </div>
+
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
+
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][1]" [label1]="'Hub Height'" [label2]="'m'"
+                    (valChange)="updateWindPVParams('Wind','hub.height',+$event)"
+                    [(val)]="nodeWindParam[displayingNode]['hub.height']" [compId]="'techParamCheckInput2.1'">
+                </ngx-input-field>
+                <div class="row" *ngIf="checkBoxStatus[displayingNode][1]">
+                    <div class="col-md-2">
+                        <ul class="listItem">
+                            <li>
+                                <div class="form-group row">
+                                    <label for="input1" class="col-sm-12 col-form-label">Turbine Model</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
+                        <nb-select class="m-2" placeholder="Turbine Model"
+                            [ngModel]="nodeWindParam[displayingNode]['turbine.model']"
+                            (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)" [ngStyle]="{'align-items': 'center',
                         'display': 'flex',
                         'width': '61.2%',
                     'text-align-last':'center'}">
-                        <nb-option *ngFor="let turbine of turbineModels" [value]="turbine">{{turbine}}</nb-option>
-                    </nb-select>
+                            <nb-option *ngFor="let turbine of turbineModels" [value]="turbine">{{turbine}}</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][1]" [label1]="'Nominal Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']"
+                    [compId]="'techParamCheckInput2.2'">
+                </ngx-input-field>
+            </div>
+
+            <!--    CHP switcher   -->
+
+            <div class="row p-2">
+                <div class="col-md-1">
+                    <label>CHP</label>
+                </div>
+                <div class="col-md-2">
+                    <section class="slider-checkbox">
+                        <input type="checkbox" [checked]="checkVal[displayingNode][2]" (change)="changeCheckBoxVal(2)"
+                            id="techParamCheck3" #techParamCheck3>
+                        <label class="label" for="techParamCheck3"></label>
+                    </section>
                 </div>
             </div>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][1]" [label1]="'Nominal Power'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']"
-                [compId]="'techParamCheckInput2.2'">
-            </ngx-input-field>
-        </div>
 
-        <!--    CHP switcher   -->
-
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>CHP</label>
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][2]" [label1]="'Nominal Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['nominal.electric.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['nominal.electric.power']"
+                    [compId]="'techParamCheckInput3.1'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][2]" [label1]="'Effieciency Electric'"
+                    [label2]="'%'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.electric']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.electric']"
+                    [compId]="'techParamCheckInput3.2'"></ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][2]" [label1]="'Effieciency Thermal'"
+                    [label2]="'%'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']"
+                    [compId]="'techParamCheckInput3.3'"></ngx-input-field>
             </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[displayingNode][2]" (change)="changeCheckBoxVal(2)"
-                        id="techParamCheck3" #techParamCheck3>
-                    <label class="label" for="techParamCheck3"></label>
-                </section>
+
+            <!--    P2H switcher   -->
+
+            <div class="row p-2">
+                <div class="col-md-1">
+                    <label>P2H</label>
+                </div>
+                <div class="col-md-2">
+                    <section class="slider-checkbox">
+                        <input type="checkbox" [checked]="checkVal[displayingNode][3]" (change)="changeCheckBoxVal(3)"
+                            id="techParamCheck4" #techParamCheck4>
+                        <label class="label" for="techParamCheck4"></label>
+                    </section>
+                </div>
             </div>
-        </div>
 
-        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][2]" [label1]="'Nominal Power'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['nominal.electric.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['nominal.electric.power']"
-                [compId]="'techParamCheckInput3.1'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][2]" [label1]="'Effieciency Electric'"
-                [label2]="'%'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.electric']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.electric']"
-                [compId]="'techParamCheckInput3.2'"></ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][2]" [label1]="'Effieciency Thermal'"
-                [label2]="'%'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']"
-                [compId]="'techParamCheckInput3.3'"></ngx-input-field>
-        </div>
-
-        <!--    P2H switcher   -->
-
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>P2H</label>
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.HP.Nominal Heat Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['nominal.heat.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['nominal.heat.power']"
+                    [compId]="'techParamCheckInput4.1'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.HP.Cop'" [label2]="''"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['cop']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['cop']"
+                    [compId]="'techParamCheckInput4.2'"></ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.EH.Nominal Heat Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['nominal.heat.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['nominal.heat.power']"
+                    [compId]="'techParamCheckInput4.3'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.EH.Efficiency Thermal'"
+                    [label2]="'%'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['efficiency.thermal']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['efficiency.thermal']"
+                    [compId]="'techParamCheckInput4.4'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.HP.Nominal Heat Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['nominal.heat.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['nominal.heat.power']"
+                    [compId]="'techParamCheckInput4.5'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.HP.Cop'" [label2]="''"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['cop']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['cop']"
+                    [compId]="'techParamCheckInput4.6'"></ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.EH.Nominal Heat Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['nominal.heat.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['nominal.heat.power']"
+                    [compId]="'techParamCheckInput4.7'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.EH.Efficiency Thermal'"
+                    [label2]="'%'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['efficiency.thermal']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['efficiency.thermal']"
+                    [compId]="'techParamCheckInput4.8'">
+                </ngx-input-field>
             </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[displayingNode][3]" (change)="changeCheckBoxVal(3)"
-                        id="techParamCheck4" #techParamCheck4>
-                    <label class="label" for="techParamCheck4"></label>
-                </section>
+
+            <!--    P2G switcher   -->
+
+            <div class="row p-2">
+                <div class="col-md-1">
+                    <label>P2G</label>
+                </div>
+                <div class="col-md-2">
+                    <section class="slider-checkbox">
+                        <input type="checkbox" [checked]="checkVal[displayingNode][4]" (change)="changeCheckBoxVal(4)"
+                            id="techParamCheck5" #techParamCheck5>
+                        <label class="label" for="techParamCheck5"></label>
+                    </section>
+                </div>
             </div>
-        </div>
 
-        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.HP.Nominal Heat Power'"
-                [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['nominal.heat.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['nominal.heat.power']"
-                [compId]="'techParamCheckInput4.1'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.HP.Cop'" [label2]="''"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['cop']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.HP['cop']"
-                [compId]="'techParamCheckInput4.2'"></ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.EH.Nominal Heat Power'"
-                [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['nominal.heat.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['nominal.heat.power']"
-                [compId]="'techParamCheckInput4.3'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'DH.EH.Efficiency Thermal'"
-                [label2]="'%'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['efficiency.thermal']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.DH.EH['efficiency.thermal']"
-                [compId]="'techParamCheckInput4.4'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.HP.Nominal Heat Power'"
-                [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['nominal.heat.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['nominal.heat.power']"
-                [compId]="'techParamCheckInput4.5'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.HP.Cop'" [label2]="''"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['cop']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.HP['cop']"
-                [compId]="'techParamCheckInput4.6'"></ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.EH.Nominal Heat Power'"
-                [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['nominal.heat.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['nominal.heat.power']"
-                [compId]="'techParamCheckInput4.7'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][3]" [label1]="'LHD.EH.Efficiency Thermal'"
-                [label2]="'%'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['efficiency.thermal']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['efficiency.thermal']"
-                [compId]="'techParamCheckInput4.8'">
-            </ngx-input-field>
-        </div>
-
-        <!--    P2G switcher   -->
-
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>P2G</label>
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Nominal Power'"
+                    [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['nominal.electric.power']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['nominal.electric.power']"
+                    [compId]="'techParamCheckInput5.1'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Electrolysis'"
+                    [label2]="'%'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']"
+                    [compId]="'techParamCheckInput5.2'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Methanation'"
+                    [label2]="'%'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']"
+                    [compId]="'techParamCheckInput5.3'">
+                </ngx-input-field>
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Thermal'"
+                    [label2]="'%'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']"
+                    [compId]="'techParamCheckInput5.4'"></ngx-input-field>
             </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[displayingNode][4]" (change)="changeCheckBoxVal(4)"
-                        id="techParamCheck5" #techParamCheck5>
-                    <label class="label" for="techParamCheck5"></label>
-                </section>
-            </div>
-        </div>
 
-        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Nominal Power'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['nominal.electric.power']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['nominal.electric.power']"
-                [compId]="'techParamCheckInput5.1'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Electrolysis'"
-                [label2]="'%'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']"
-                [compId]="'techParamCheckInput5.2'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Methanation'"
-                [label2]="'%'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']"
-                [compId]="'techParamCheckInput5.3'">
-            </ngx-input-field>
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Thermal'"
-                [label2]="'%'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']"
-                [compId]="'techParamCheckInput5.4'"></ngx-input-field>
-        </div>
-
-        <div class="row p-2">
-            <div class="col-md-1">
-                <label>Electric Load</label>
+            <div class="row p-2">
+                <div class="col-md-1">
+                    <label>Electric Load</label>
+                </div>
+                <div class="col-md-2">
+                    <section class="slider-checkbox">
+                        <input type="checkbox" [checked]="checkVal[displayingNode][5]" (change)="changeCheckBoxVal(5)"
+                            id="techParamCheck6" #techParamCheck6>
+                        <label class="label" for="techParamCheck6"></label>
+                    </section>
+                </div>
             </div>
-            <div class="col-md-2">
-                <section class="slider-checkbox">
-                    <input type="checkbox" [checked]="checkVal[displayingNode][5]" (change)="changeCheckBoxVal(5)"
-                        id="techParamCheck6" #techParamCheck6>
-                    <label class="label" for="techParamCheck6"></label>
-                </section>
-            </div>
-        </div>
 
-        <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-            <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][5]" [label1]="'Peak Load'" [label2]="'MW'"
-                (valChange)="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']=+$event"
-                [(val)]="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']"
-                [compId]="'techParamCheckInput6.1'">
-            </ngx-input-field>
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][5]" [label1]="'Peak Load'" [label2]="'MW'"
+                    (valChange)="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']=+$event"
+                    [(val)]="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']"
+                    [compId]="'techParamCheckInput6.1'">
+                </ngx-input-field>
+            </div>
         </div>
 
     </nb-card-body>
