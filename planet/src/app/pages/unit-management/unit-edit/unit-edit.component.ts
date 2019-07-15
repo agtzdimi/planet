@@ -106,22 +106,20 @@ export class UnitEditComponent implements OnInit {
 
   handleClick() {
 
-    if (this.selectedModel['payload'] || this.activeModel === 'Sim') {
-      let metadata: string;
-      if (this.activeModel === 'Sim') {
-        this.selectedModel['metadata']['IP'] = this.unitIP;
-        this.selectedModel['metadata']['Port'] = this.unitPort;
-        metadata = JSON.stringify(this.selectedModel['metadata']);
-      } else {
-        metadata = JSON.stringify(this.selectedModel['payload']['parameters']['configuration']);
-      }
-      metadata = metadata.replace('}{', ',');
-      metadata = JSON.parse(metadata);
-      this.editDevice.editDevice(this.devices, metadata, this.unitName, this.selectedModel['description'], this.unitIP, this.unitPort)
-        .then(results => {
-          this.message = JSON.stringify(results);
-        });
+    let metadata: string;
+    if (this.activeModel === 'Sim') {
+      this.selectedModel['metadata']['IP'] = this.unitIP;
+      this.selectedModel['metadata']['Port'] = this.unitPort;
+      metadata = JSON.stringify(this.selectedModel['metadata']);
+    } else {
+      metadata = JSON.stringify(this.selectedModel['payload']['parameters']['configuration']);
     }
+    metadata = metadata.replace('}{', ',');
+    metadata = JSON.parse(metadata);
+    this.editDevice.editDevice(this.devices, metadata, this.unitName, this.selectedModel['description'], this.unitIP, this.unitPort)
+      .then(results => {
+        this.message = JSON.stringify(results);
+      });
   }
 
   handleSelectedModel(event, controller, transitionName: string = 'fade down') {

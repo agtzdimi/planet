@@ -50,6 +50,7 @@ export class P2GUnitComponent implements OnChanges {
         metadata = JSON.parse(metadata);
         this.p2gParams['payload']['parameters']['configuration'] = metadata;
         this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
+        this.p2g.emit(this.p2gParams);
       }
     }
   }

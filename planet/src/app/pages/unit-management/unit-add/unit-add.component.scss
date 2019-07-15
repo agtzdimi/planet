@@ -71,11 +71,13 @@ input[type=file] {
 }
 
 .errorTextarea {
-  color: red;
+  color: #ff4c4c;
+  margin-top: 2.5%;
 }
 
 .successTextarea {
-  color: green;
+  color: lightgreen;
+  margin-top: 2.5%;
 }
 
 @import '../../../@theme/styles/themes';
