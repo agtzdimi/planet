@@ -10,7 +10,7 @@ import { StateService } from '../../../@core/utils';
             (click)="toggleSettings()"
             [class.expanded]="expanded"
             [class.sidebarEnd]="sidebarEnd">
-      <i class="file alternate icon"></i>
+            <nb-icon icon="file-text" [status]="'primary'" [ngStyle]="{'height': '100%','width': '100%'}"></nb-icon>
     </button>
   `,
 })

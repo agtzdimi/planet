@@ -177,6 +177,9 @@ export class SimulationsAreaStackComponent implements OnDestroy, OnChanges {
                     },
                 },
                 toolbox: {
+                    iconStyle: {
+                        color: '#f2f6ff',
+                    },
                     feature: {
                         dataView: {
                             show: true,

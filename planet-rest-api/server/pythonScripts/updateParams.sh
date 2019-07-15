@@ -12,8 +12,8 @@ mongoPassword="$9"
 mongoAuthDB="${10}"
 simulationMachine="${11}"
 planetUIPort="${12}"
-simulationMachinePort="${13}"
-simulationMachineTopic="${14}"
+simulationMachinePort="${14}"
+simulationMachineTopic="${13}"
 
 sed -i "s/PLANET = .*/PLANET = '"$planet"'/" ./.env
 sed -i "s/PLANET_PORT = .*/PLANET_PORT = '"$planetUIPort"'/" ./.env

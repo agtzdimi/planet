@@ -60,7 +60,7 @@ export class ParamsSetupComponent {
 
   startUpload() {
     this.loading = true;
-    const url = 'http://' + this.planetRestIP + ':' + this.planetRestPort + '/update_IPs';
+    const url = '/planet/rest/update_IPs';
     this.httpClient.post(url, {
       'planet': this.planetRestIP,
       'sitewhere': this.sitewhereIP,

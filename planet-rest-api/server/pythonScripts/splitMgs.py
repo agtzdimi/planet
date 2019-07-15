@@ -44,6 +44,6 @@ for file in sendMesg:
    i+=1
    with open (os.path.join(os.getcwd(),'./public/files','barStatus.txt'), 'w') as f:
       f.write("%s\n" % i)
-   time.sleep(1)
+   time.sleep(2)
 
 ret = client1.publish("/planet/GetData", "END OF SIM")
