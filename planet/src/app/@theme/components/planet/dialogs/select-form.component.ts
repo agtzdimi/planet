@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
       <nb-card-header>Select one of the following simulations</nb-card-header>
       <nb-card-body>
       <nb-list>
-        <nb-list-item [appHighlight]="'lightblue'" *ngFor="let form of forms" (click)="handleClick($event)">
+        <nb-list-item [appHighlight]="color" *ngFor="let form of forms" (click)="handleClick($event)">
           {{ form }}
         </nb-list-item>
       </nb-list>
@@ -45,6 +45,7 @@ export class DialogSelectFormPromptComponent {
         data => {
           this.forms = data['formName'];
           this.formsDescr = data['formDescription'];
+          this.formsDescr.splice(-1, 1);
           this.formReady = true;
         },
         error => {

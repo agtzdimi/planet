@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 
 @Component({
-  selector: 'nb-name-prompt',
+  selector: 'nb-submit-prompt',
   template: `
     <nb-card accent="primary">
-      <nb-card-header>Initialize with default simulation values?</nb-card-header>
+      <nb-card-header>{{title}}</nb-card-header>
       <nb-card-footer>
       <div class="row">
         <div class="col-md-2">
@@ -26,8 +26,8 @@ import { NbDialogRef } from '@nebular/theme';
     }
   `],
 })
-export class DialogNamePromptComponent {
-  constructor(protected dialogRef: NbDialogRef<DialogNamePromptComponent>) {
+export class DialogSubmitPromptComponent {
+  constructor(protected dialogRef: NbDialogRef<DialogSubmitPromptComponent>) {
   }
 
   cancel() {

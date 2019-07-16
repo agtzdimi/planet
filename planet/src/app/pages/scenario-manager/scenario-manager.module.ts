@@ -18,31 +18,31 @@ import { NgxUploaderModule } from 'ngx-uploader';
 import { ThemeModule } from '../../@theme/theme.module';
 import { DeleteScenarioComponent } from './delete-scenario/delete-scenario.component';
 import { GeneralParamsComponent } from './general-params/general-params.component';
-import { LoadSimulationFilesComponent } from './load-simulation/load-simulation.component';
-import { NewSimulationFilesComponent } from './new-simulation/new-simulation.component';
-import { ScenarioCreatorRoutingModule } from './scenario-creator-routing.module';
-import { ScenarioCreatorComponent } from './scenario-creator.component';
+import { LoadScenarioComponent } from './load-scenario/load-scenario.component';
+import { CreateScenarioComponent } from './create-scenario/create-scenario.component';
+import { ScenarioManagerRoutingModule } from './scenario-manager-routing.module';
+import { ScenarioManagerComponent } from './scenario-manager.component';
 import { TechControlComponent } from './tech-control/tech-control.component';
 import { TechCostComponent } from './tech-cost/tech-cost.component';
 import { TechParamComponent } from './tech-param/tech-param.component';
 
 const COMPONENTS = [
-  ScenarioCreatorComponent,
-  NewSimulationFilesComponent,
-  LoadSimulationFilesComponent,
+  ScenarioManagerComponent,
+  CreateScenarioComponent,
+  LoadScenarioComponent,
   TechParamComponent,
   TechCostComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  NewSimulationFilesComponent,
-  LoadSimulationFilesComponent,
+  CreateScenarioComponent,
+  LoadScenarioComponent,
 ];
 
 @NgModule({
   imports: [
     ThemeModule,
-    ScenarioCreatorRoutingModule,
+    ScenarioManagerRoutingModule,
     NbButtonModule,
     NbCardModule,
     NbSpinnerModule,
@@ -68,4 +68,4 @@ const ENTRY_COMPONENTS = [
     ...ENTRY_COMPONENTS,
   ],
 })
-export class ScenarioCreatorModule { }
+export class ScenarioManagerModule { }

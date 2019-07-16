@@ -101,16 +101,11 @@ import { DEFAULT_THEME } from './styles/theme.default';
 
 /* Dialog Components */
 import {
-  DialogTechParamPromptComponent,
-  DeleteScenarioDialogComponent,
-  DialogDeleteFormPromptComponent,
+  DialogInfoPromptComponent,
   DialogSelectFormPromptComponent,
   HighlightDirective,
   DialogSelectMultipleFormPromptComponent,
-  DeleteHighlightDirective,
-  DialogNamePromptComponent,
-  DialogControlSystemPromptComponent,
-  DialogEconomyPromptComponent,
+  DialogSubmitPromptComponent,
 } from './components';
 
 const NB_MODULES = [
@@ -172,13 +167,8 @@ const COMPONENTS = [
   SimulationsLineComponent,
   ComparisonBarsComponent,
   LeafletMapComponent,
-  DialogNamePromptComponent,
-  DialogTechParamPromptComponent,
-  DialogControlSystemPromptComponent,
-  DialogEconomyPromptComponent,
-  DeleteHighlightDirective,
-  DialogDeleteFormPromptComponent,
-  DeleteScenarioDialogComponent,
+  DialogSubmitPromptComponent,
+  DialogInfoPromptComponent,
 ];
 const ENTRY_COMPONENTS = [
   TechnologiesDialogComponent,
@@ -188,12 +178,8 @@ const ENTRY_COMPONENTS = [
   DialogSelectMultipleFormPromptComponent,
   SimulationsLineComponent,
   ComparisonBarsComponent,
-  DialogNamePromptComponent,
-  DialogTechParamPromptComponent,
-  DialogControlSystemPromptComponent,
-  DialogEconomyPromptComponent,
-  DialogDeleteFormPromptComponent,
-  DeleteScenarioDialogComponent,
+  DialogSubmitPromptComponent,
+  DialogInfoPromptComponent,
 ];
 const PIPES = [
   CapitalizePipe,

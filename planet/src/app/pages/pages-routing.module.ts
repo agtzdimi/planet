@@ -20,9 +20,9 @@ const routes: Routes = [{
     path: 'system-params',
     component: SystemParamsComponent,
   }, {
-    path: 'scenario-creator',
-    loadChildren: () => import('./scenario-creator/scenario-creator.module')
-      .then(m => m.ScenarioCreatorModule),
+    path: 'scenario-manager',
+    loadChildren: () => import('./scenario-manager/scenario-manager.module')
+      .then(m => m.ScenarioManagerModule),
   }, {
     path: 'simulation-run',
     component: SimulationRunComponent,
@@ -46,10 +46,6 @@ const routes: Routes = [{
     component: WelcomeScreenComponent,
   },
   {
-    path: '',
-    redirectTo: 'scenario-creator',
-    pathMatch: 'full',
-  }, {
     path: '**',
     component: NotFoundComponent,
   },

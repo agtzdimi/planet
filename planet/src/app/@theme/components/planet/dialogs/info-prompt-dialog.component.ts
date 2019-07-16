@@ -2,25 +2,21 @@ import { Component } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 
 @Component({
-  selector: 'nb-tech-param-prompt',
+  selector: 'nb-info-prompt',
   template: `
     <nb-card accent="primary">
-      <nb-card-header>Enter the control mode</nb-card-header>
+      <nb-card-header>{{title}}</nb-card-header>
       <nb-card-footer>
-        <div class="row">
-            <div class="col-sm-3">
-            </div>
-            <div class="col-sm-2">
+        <div class="row" [ngStyle]="{'display': 'flex','justify-content': 'center'}">
                 <button nbButton hero status="danger" (click)="submit()">OK</button>
-            </div>
         </div>
       </nb-card-footer>
     </nb-card>
   `,
   styles: [``],
 })
-export class DialogControlSystemPromptComponent {
-  constructor(protected dialogRef: NbDialogRef<DialogControlSystemPromptComponent>) {
+export class DialogInfoPromptComponent {
+  constructor(protected dialogRef: NbDialogRef<DialogInfoPromptComponent>) {
   }
 
   submit() {

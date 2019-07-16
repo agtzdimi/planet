@@ -19,15 +19,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Create New Scenario',
-        link: '/pages/scenario-creator/new-simulation',
+        link: '/pages/scenario-manager/create-scenario',
       },
       {
         title: 'Load Scenario',
-        link: '/pages/scenario-creator/load-simulation',
+        link: '/pages/scenario-manager/load-scenario',
       },
       {
         title: 'Delete Scenario',
-        link: '/pages/scenario-creator/delete-scenario',
+        link: '/pages/scenario-manager/delete-scenario',
       },
     ],
   },

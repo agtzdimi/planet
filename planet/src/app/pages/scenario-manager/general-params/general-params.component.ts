@@ -3,8 +3,8 @@ import { Model1ParamInitService } from '../../../@theme/services/scenario-manage
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
-import { NbDialogService } from '@nebular/theme';
-import { DialogNamePromptComponent } from '../../../@theme/components/planet/dialogs/dialog-prompt.component';
+import { NbDialogService, NbDialogConfig } from '@nebular/theme';
+import { DialogSubmitPromptComponent } from '../../../@theme/components/planet/dialogs/dialog-submit.component';
 
 @Component({
   selector: 'ngx-general-params',
@@ -174,10 +174,15 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   animateImage(transitionName: string = 'scale', event) {
+    const context = {
+      context: {
+        title: 'Initialize with default simulation values?',
+      },
+    } as Partial<NbDialogConfig<string | Partial<DialogSubmitPromptComponent>>>;
     this.generalParams.updateAreaPicked(true);
     this.transitionController1.animate(
       new Transition(transitionName, 2000, TransitionDirection.In));
-    this.dialogService.open(DialogNamePromptComponent)
+    this.dialogService.open(DialogSubmitPromptComponent, context)
       .onClose.subscribe(status => {
         this.generalParams.isDefault = status;
         this.generalParams.isDefaultUpdate(status);
@@ -189,11 +194,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
   animateInfo() {
     this.phaseOutput.emit(true);
-  }
-
-  openDialogBox(component) {
-    this.dialogService.open(component)
-      .onClose.subscribe(value => { });
   }
 
   resizeMap() {

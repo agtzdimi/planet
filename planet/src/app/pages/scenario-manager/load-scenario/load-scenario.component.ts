@@ -14,16 +14,16 @@ import { NbMenuService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators';
 
 @Component({
-    selector: 'ngx-load-simulation',
-    styleUrls: ['./load-simulation.component.scss'],
+    selector: 'ngx-load-scenario',
+    styleUrls: ['./load-scenario.component.scss'],
     providers: [Model2ParamInitService,
         GeneralParamsService,
         Model1ParamInitService,
         ControlFileService,
         EconomyFileService],
-    templateUrl: './load-simulation.component.html',
+    templateUrl: './load-scenario.component.html',
 })
-export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
+export class LoadScenarioComponent implements OnInit, OnDestroy {
 
     loadPage: boolean = false;
     revealed = false;
@@ -75,10 +75,10 @@ export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
             .subscribe(item => {
                 if (item['item']['title'] === 'Load Scenario') {
                     setTimeout(() => {
-                        return this.router.navigateByUrl('/pages/scenario-creator');
+                        return this.router.navigateByUrl('/pages/scenario-manager');
                     }, 2000);
                     setTimeout(() => {
-                        return this.router.navigateByUrl('/pages/scenario-creator/load-simulation');
+                        return this.router.navigateByUrl('/pages/scenario-manager/load-scenario');
                     }, 2000);
                 }
             });
@@ -184,7 +184,7 @@ export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
                             },
                         );
                 } else {
-                    this.router.navigateByUrl('/pages/scenario-creator');
+                    this.router.navigateByUrl('/pages/scenario-manager');
                 }
             },
             );

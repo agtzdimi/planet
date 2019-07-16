@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-simulation',
+  selector: 'ngx-scenario-manager',
   template: `
   <router-outlet></router-outlet>
   `,
 })
-export class ScenarioCreatorComponent {
+export class ScenarioManagerComponent {
 }

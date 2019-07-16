@@ -3,9 +3,7 @@ import { UploadInput, humanizeBytes } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService } from '@nebular/theme';
-import { DialogControlSystemPromptComponent } from '../../../@theme/components/planet/dialogs/control-system-dialog.component';
-import { DialogTechParamPromptComponent } from '../../../@theme/components/planet/dialogs/tech-param-dialog.component';
-import { DialogEconomyPromptComponent } from '../../../@theme/components/planet/dialogs/economy-dialog.component';
+import { DialogInfoPromptComponent } from '../../../@theme/components/planet/dialogs/info-prompt-dialog.component';
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
@@ -13,16 +11,16 @@ import { ControlFileService } from '../../../@theme/services/scenario-manager-se
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 
 @Component({
-    selector: 'ngx-new-simulation',
-    styleUrls: ['./new-simulation.component.scss'],
+    selector: 'ngx-create-scenario',
+    styleUrls: ['./create-scenario.component.scss'],
     providers: [GeneralParamsService,
         Model2ParamInitService,
         Model1ParamInitService,
         ControlFileService,
         EconomyFileService],
-    templateUrl: './new-simulation.component.html',
+    templateUrl: './create-scenario.component.html',
 })
-export class NewSimulationFilesComponent {
+export class CreateScenarioComponent {
 
     formData: FormData;
     uploadInput: EventEmitter<UploadInput>;
@@ -190,9 +188,9 @@ export class NewSimulationFilesComponent {
             );
     }
 
-    openDialogBox(component) {
+    openDialogBox(context) {
         // Function to open a new dialog box given its corresponding component
-        this.dialogService.open(component)
+        this.dialogService.open(DialogInfoPromptComponent, context)
             .onClose.subscribe(value => { });
     }
 
@@ -211,18 +209,26 @@ export class NewSimulationFilesComponent {
 
     public animateInfo(controller, transitionName: string = 'slide down', id) {
         // Switcher to call the correct dialog component based on the phase of configuration
+        const context = {
+            context: {
+                title: 'This is a title passed to the dialog component',
+            },
+        };
         switch (id) {
             case 2:
-                this.openDialogBox(DialogTechParamPromptComponent);
+                context['context']['title'] = 'Enter the technologies and their parameters for each of the nodes';
+                this.openDialogBox(context);
                 break;
             case 3:
                 this.phase3 = true;
-                this.openDialogBox(DialogControlSystemPromptComponent);
+                context['context']['title'] = 'Enter the control mode';
+                this.openDialogBox(context);
                 break;
             case 4:
                 this.phase4 = true;
+                context['context']['title'] = 'Enter the economy and cost parameters';
                 if (controller === this.transitionController4) {
-                    this.openDialogBox(DialogEconomyPromptComponent);
+                    this.openDialogBox(context);
                 }
                 break;
             case 5:
