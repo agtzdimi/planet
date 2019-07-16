@@ -116,7 +116,12 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                 },
                 toolbox: {
                     iconStyle: {
-                        color: '#f2f6ff',
+                        color: '#d9e4ff',
+                    },
+                    emphasis: {
+                        iconStyle: {
+                            color: '#598bff',
+                        },
                     },
                     feature: {
                         dataView: {
