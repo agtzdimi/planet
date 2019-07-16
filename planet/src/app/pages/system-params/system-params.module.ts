@@ -1,17 +1,14 @@
-import { NgModule } from '@angular/core';
-import { NbButtonModule, NbCardModule, NbStepperModule, NbSpinnerModule } from '@nebular/theme';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { NgxEchartsModule } from 'ngx-echarts';
-import { ChartModule } from 'angular2-chartjs';
 import { HttpClientModule } from '@angular/common/http';
-
-import { ThemeModule } from '../../@theme/theme.module';
+import { NgModule } from '@angular/core';
+import { NbButtonModule, NbCardModule, NbDialogModule, NbSpinnerModule, NbStepperModule } from '@nebular/theme';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ChartModule } from 'angular2-chartjs';
 import { SuiModule } from 'ng2-semantic-ui';
-
+import { NgxEchartsModule } from 'ngx-echarts';
+import { ThemeModule } from '../../@theme/theme.module';
+import { ParamsSetupComponent } from './params-setup/params-setup.component';
 import { SystemParamsRoutingModule } from './system-params-routing.module';
 import { SystemParamsComponent } from './system-params.component';
-import { ParamsSetupComponent } from './params-setup/params-setup.component';
-import { NbDialogModule } from '@nebular/theme';
 
 const COMPONENTS = [
   SystemParamsComponent,
@@ -22,7 +19,6 @@ const ENTRY_COMPONENTS = [
   SystemParamsComponent,
   ParamsSetupComponent,
 ];
-
 
 @NgModule({
   imports: [

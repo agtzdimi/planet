@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { CreateDeviceService } from '../services/create-device.service';
-import { GetAreaGridsService } from '../services/get-area-grids.service';
+import { CreateDeviceService } from '../../../@theme/services/unit-management-services/create-device.service';
+import { GetAreaGridsService } from '../../../@theme/services/unit-management-services/get-area-grids.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 
 @Component({

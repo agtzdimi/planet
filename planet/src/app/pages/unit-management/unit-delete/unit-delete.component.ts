@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GetDeviceByTypeService } from '../services/get-deviceByType.service';
-import { DeleteDeviceService } from '../services/delete-device.service';
+import { GetDeviceByTypeService } from '../../../@theme/services/unit-management-services/get-deviceByType.service';
+import { DeleteDeviceService } from '../../../@theme/services/unit-management-services/delete-device.service';
 import { NbDialogService } from '@nebular/theme';
 import { DialogDeleteComponent } from './dialog-delete.component';
 

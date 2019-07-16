@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../../../env.service';
-import { GetDeviceByTypeService } from '../../unit-management/services/get-deviceByType.service';
+import { GetDeviceByTypeService } from '../../../@theme/services/unit-management-services/get-deviceByType.service';
 
 @Component({
   selector: 'ngx-params-setup',

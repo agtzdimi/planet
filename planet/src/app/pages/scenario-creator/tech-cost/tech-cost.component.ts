@@ -1,5 +1,5 @@
 import { Component, OnChanges, EventEmitter, Input, Output } from '@angular/core';
-import { EconomyFileService } from '../services/economy-file.service';
+import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 
 @Component({
     selector: 'ngx-tech-cost',

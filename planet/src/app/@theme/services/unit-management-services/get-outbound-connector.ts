@@ -9,7 +9,6 @@ export class GetOutboundConnService {
     constructor(private httpClient: HttpClient,
         private env: EnvService) { }
 
-
     public getOutBoundConnector(unitName: Object, jwtToken: string) {
 
         return new Promise(resolve => {

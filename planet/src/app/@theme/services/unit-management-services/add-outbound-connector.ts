@@ -10,7 +10,6 @@ export class AddOutboundConnService {
     constructor(private httpClient: HttpClient,
         private env: EnvService) { }
 
-
     public addOutBoundConnector(data: Object, jwtToken: string) {
 
         return new Promise(resolve => {

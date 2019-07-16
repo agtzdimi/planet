@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
-import { DialogDeleteFormPromptComponent } from './dialog-prompt/delete-form.component';
+import { DialogDeleteFormPromptComponent } from '../../../@theme/components/planet/dialogs/delete-form.component';
 import { HttpClient } from '@angular/common/http';
-import { DeleteScenarioDialogComponent } from './dialog-prompt/delete-scenario-dialog.component';
+import { DeleteScenarioDialogComponent } from '../../../@theme/components/planet/dialogs/delete-scenario-dialog.component';
 
 @Component({
   selector: 'ngx-delete-scenario',

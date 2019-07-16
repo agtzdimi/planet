@@ -6,7 +6,6 @@ export class GetDeviceByTypeService {
 
     constructor(private httpClient: HttpClient) { }
 
-
     public getDeviceByType() {
 
         return new Promise(resolve => {

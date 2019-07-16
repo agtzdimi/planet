@@ -3,12 +3,12 @@ import { UploadInput, humanizeBytes } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController } from 'ng2-semantic-ui';
 import { NbDialogService, NbDateService } from '@nebular/theme';
-import { DialogSelFormPromptComponent } from '../dialog-prompt/select-form.component';
-import { Model2ParamInitService } from '../services/model2-param-init.service';
-import { Model1ParamInitService } from '../services/model1-param-init.service';
-import { GeneralParamsService } from '../services/general-params.service';
-import { ControlFileService } from '../services/control-file.service';
-import { EconomyFileService } from '../services/economy-file.service';
+import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
+import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
+import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
+import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
+import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
+import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 import { Router } from '@angular/router';
 import { NbMenuService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators';
@@ -125,7 +125,7 @@ export class LoadSimulationFilesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.dialogService.open(DialogSelFormPromptComponent)
+        this.dialogService.open(DialogSelectFormPromptComponent)
             .onClose.subscribe(name => {
                 if (name) {
                     // Update formName - formDescription based on user input in dialog box

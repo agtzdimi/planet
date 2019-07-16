@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { ControlFileService } from '../services/control-file.service';
+import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 
 @Component({
   selector: 'ngx-tech-control',

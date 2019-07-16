@@ -3,7 +3,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'nb-select-form-prompt',
+  selector: 'nb-sel-form-prompt',
   template: `
     <nb-card *ngIf="formReady" accent="primary">
       <nb-card-header>Select one of the following simulations</nb-card-header>
@@ -45,7 +45,6 @@ export class DialogSelectFormPromptComponent {
         data => {
           this.forms = data['formName'];
           this.formsDescr = data['formDescription'];
-          this.formsDescr.splice(-1, 1);
           this.formReady = true;
         },
         error => {

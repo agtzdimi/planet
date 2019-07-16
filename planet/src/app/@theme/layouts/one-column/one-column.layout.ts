@@ -4,7 +4,7 @@ import { NbLayoutComponent, NbSidebarService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators';
 
 import { WindowModeBlockScrollService } from '../../services/window-mode-block-scroll.service';
-import { SendScenarioService } from '../../../pages/simulation-run/simulation-start/sendScenarioName.service';
+import { SendScenarioService } from '../../services/sendScenarioName.service';
 import { StateService } from '../../../@core/utils';
 
 @Component({

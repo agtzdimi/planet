@@ -10,7 +10,6 @@ export class GetJWTService {
     constructor(private httpClient: HttpClient,
         private env: EnvService) { }
 
-
     public getToken(): Promise<any> {
         const token = btoa('admin:password');
         const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/authapi/jwt';

@@ -3,14 +3,14 @@ import { UploadInput, humanizeBytes } from 'ngx-uploader';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService } from '@nebular/theme';
-import { DialogControlSystemPromptComponent } from '../dialog-prompt/control-system-dialog.component';
-import { DialogTechParamPromptComponent } from '../dialog-prompt/tech-param-dialog.component';
-import { DialogEconomyPromptComponent } from '../dialog-prompt/economy-dialog.component';
-import { Model2ParamInitService } from '../services/model2-param-init.service';
-import { GeneralParamsService } from '../services/general-params.service';
-import { Model1ParamInitService } from '../services/model1-param-init.service';
-import { ControlFileService } from '../services/control-file.service';
-import { EconomyFileService } from '../services/economy-file.service';
+import { DialogControlSystemPromptComponent } from '../../../@theme/components/planet/dialogs/control-system-dialog.component';
+import { DialogTechParamPromptComponent } from '../../../@theme/components/planet/dialogs/tech-param-dialog.component';
+import { DialogEconomyPromptComponent } from '../../../@theme/components/planet/dialogs/economy-dialog.component';
+import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
+import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
+import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
+import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
+import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 
 @Component({
     selector: 'ngx-new-simulation',

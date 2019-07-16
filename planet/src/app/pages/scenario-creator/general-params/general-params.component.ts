@@ -1,10 +1,10 @@
 import { Component, AfterViewInit, Output, EventEmitter, Input, ViewChild, ElementRef, OnInit, AfterContentChecked } from '@angular/core';
-import { Model1ParamInitService } from '../services/model1-param-init.service';
-import { Model2ParamInitService } from '../services/model2-param-init.service';
-import { GeneralParamsService } from '../services/general-params.service';
+import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
+import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
+import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService } from '@nebular/theme';
-import { DialogNamePromptComponent } from '../dialog-prompt/dialog-prompt.component';
+import { DialogNamePromptComponent } from '../../../@theme/components/planet/dialogs/dialog-prompt.component';
 
 @Component({
   selector: 'ngx-general-params',

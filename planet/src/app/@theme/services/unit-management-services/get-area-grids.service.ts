@@ -3,16 +3,15 @@ import { Injectable } from '@angular/core';
 import { EnvService } from '../../../env.service';
 
 @Injectable()
-export class GetDeviceTypeService {
+export class GetAreaGridsService {
 
     constructor(private httpClient: HttpClient,
         private env: EnvService) { }
 
-
-    public getDeviceType(jwtToken: string, groupToken) {
+    public getAreaGrids(jwtToken: string, flag: string) {
 
         return new Promise(resolve => {
-            const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/api/devicetypes/' + groupToken;
+            const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort + '/sitewhere/api/areas';
             this.httpClient.get(url, {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',
@@ -25,6 +24,10 @@ export class GetDeviceTypeService {
                     'Access-Control-Allow-Headers': 'Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization',
                     'Access-Control-Allow-Credentials': 'true',
                 }),
+                params: {
+                    'areaTypeToken': 'GridArea',
+                    'rootOnly': flag,
+                },
             })
                 .subscribe(
                     res => {

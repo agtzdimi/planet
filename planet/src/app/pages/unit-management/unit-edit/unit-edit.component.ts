@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GetDeviceByTypeService } from '../services/get-deviceByType.service';
-import { EditDeviceService } from '../services/edit-device.service';
+import { GetDeviceByTypeService } from '../../../@theme/services/unit-management-services/get-deviceByType.service';
+import { EditDeviceService } from '../../../@theme/services/unit-management-services/edit-device.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 
 @Component({

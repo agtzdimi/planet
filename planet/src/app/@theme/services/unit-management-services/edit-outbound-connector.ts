@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { EnvService } from '../../../env.service';
 
 @Injectable()
-export class DeleteOutboundConnService {
+export class EditOutboundConnService {
 
     index: number;
     hostnameAttr: number;
@@ -13,8 +13,7 @@ export class DeleteOutboundConnService {
     constructor(private httpClient: HttpClient,
         private env: EnvService) { }
 
-
-    public deleteOutBoundConnector(data: Object, jwtToken: string) {
+    public editOutBoundConnector(data: Object, jwtToken: string) {
 
         return new Promise(resolve => {
             const url = 'http://' + this.env.sitewhere + ':' + this.env.sitewhereUIPort +
@@ -40,12 +39,12 @@ export class DeleteOutboundConnService {
                         this.connectors = res;
                         if (data['isSimulator']) {
                             this.getIndexes(res, 'Get' + data['token']);
-                            this.setConnectors();
+                            this.setConnectors(data['ip'], data['port']);
                             this.getIndexes(res, 'Send' + data['token']);
-                            this.setConnectors();
+                            this.setConnectors(data['ip'], data['port']);
                         } else {
                             this.getIndexes(res, data['token']);
-                            this.setConnectors();
+                            this.setConnectors(data['ip'], data['port']);
                         }
 
                         this.httpClient.post(url, res, {
@@ -75,12 +74,17 @@ export class DeleteOutboundConnService {
                 if (obj['attributes'][attr]['value'] === name &&
                     obj['attributes'][attr]['name'] === 'connectorId') {
                     this.index = idx;
+                } else if (obj['attributes'][attr]['name'] === 'hostname') {
+                    this.hostnameAttr = attr;
+                } else if (obj['attributes'][attr]['name'] === 'port') {
+                    this.portAttr = attr;
                 }
             }
         });
     }
 
-    setConnectors() {
-        this.connectors['children'][1]['children'].splice(this.index, 1);
+    setConnectors(ip, port) {
+        this.connectors['children'][1]['children'][this.index]['attributes'][this.hostnameAttr]['value'] = ip;
+        this.connectors['children'][1]['children'][this.index]['attributes'][this.portAttr]['value'] = port;
     }
 }

@@ -5,6 +5,9 @@
       <nb-card-body>
 
         <nb-stepper orientation="horizontal">
+
+          <!-- REST Paramaters -->
+
           <nb-step [label]="'REST Params'">
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (stringValChange)="planetRestIP=$event" [(val)]="planetRestIP" [compId]="'planetRestIP'"
@@ -18,6 +21,9 @@
             <button nbButton disabled nbStepperNext>Previous</button>
             <button nbButton nbStepperNext>Next</button>
           </nb-step>
+
+          <!-- Middleware Paramaters -->
+
           <nb-step [label]="'Middleware Params'">
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
               (stringValChange)="sitewhereIP=$event" [(val)]="sitewhereIP" [compId]="'sitewhereIP'"
@@ -35,6 +41,9 @@
             <button nbButton nbStepperPrevious>Previous</button>
             <button nbButton nbStepperNext>Next</button>
           </nb-step>
+
+          <!-- Database Paramaters -->
+
           <nb-step [label]="'Database Params'">
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoIP=$event"
               [(val)]="mongoIP" [compId]="'mongoIP'" [inputHtmlLabel1]="'Database\'s IP'" [type]="'string'">
@@ -61,6 +70,9 @@
             <button nbButton nbStepperPrevious>Previous</button>
             <button nbButton nbStepperNext>Next</button>
           </nb-step>
+
+          <!-- Simulator Paramaters -->
+
           <nb-step [label]="'Simulator'">
 
             <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
@@ -111,6 +123,8 @@
 
       </nb-card-body>
     </nb-card>
+
+    <!-- Saving the Parameters -->
 
     <div class="row">
       <div class="col-md-5"></div>

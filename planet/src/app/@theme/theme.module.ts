@@ -1,65 +1,117 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { NgxLoginComponent } from './components/auth/login/login.component';
-import { NgxAuthBlockComponent } from './components/auth/auth-block/auth-block.component';
-import { NgxResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
-import { NgxRequestPasswordComponent } from './components/auth/request-password/request-password.component';
-import { NgxRegisterComponent } from './components/auth/register/register.component';
-import { NgxSendResetRequestComponent } from './components/auth/reset-password/send-reset-request';
-import { NgxCreateAccountComponent } from './components/auth/register/create-account.component';
-import { NgxLogoutComponent } from './components/auth/logout/logout.component';
-import { NgxAuthComponent } from './components/auth/auth.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { MatSlideToggleModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { TechInputFieldComponent } from './components/planet/tech-input-field.component';
-import { EightNodeElGridComponent } from './components/planet/grids/eight-node-el-grid/eight-node-el-grid.component';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { EnergyGridComponent } from './components/planet/grids/energy-grid/energy-grid.component';
-import { TechnologiesDialogComponent } from './components/planet/grids/energy-grid/energy-grid.tech.component';
-import {
-  NbActionsModule,
-  NbLayoutModule,
-  NbMenuModule,
-  NbSearchModule,
-  NbInputModule,
-  NbSidebarModule,
-  NbAlertModule,
-  NbCheckboxModule,
-  NbCardModule,
-  NbUserModule,
-  NbContextMenuModule,
-  NbButtonModule,
-  NbSelectModule,
-  NbIconModule,
-  NbThemeModule,
-  NbTabsetModule,
-} from '@nebular/theme';
+import { SuiModule } from 'ng2-semantic-ui';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
+import {
+  NbActionsModule,
+  NbAlertModule,
+  NbButtonModule,
+  NbCardModule,
+  NbCheckboxModule,
+  NbContextMenuModule,
+  NbIconModule,
+  NbInputModule,
+  NbLayoutModule,
+  NbListModule,
+  NbMenuModule,
+  NbSearchModule,
+  NbSelectModule,
+  NbSidebarModule,
+  NbTabsetModule,
+  NbThemeModule,
+  NbUserModule,
+} from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NgxEchartsModule } from 'ngx-echarts';
 
+/* General Components */
 import {
   FooterComponent,
   HeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
+  ThemeSettingsComponent,
   ToggleSettingsButtonComponent,
 } from './components';
+
+/* Auth Components */
 import {
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-} from './pipes';
+  NgxAuthBlockComponent,
+  NgxAuthComponent,
+  NgxRequestPasswordComponent,
+  NgxSendResetRequestComponent,
+  NgxResetPasswordComponent,
+  NgxLoginComponent,
+  NgxLogoutComponent,
+  NgxCreateAccountComponent,
+  NgxRegisterComponent,
+} from './components';
+
+/* PLANET Components */
 import {
-  OneColumnLayoutComponent,
-} from './layouts';
-import { WindowModeBlockScrollService } from './services/window-mode-block-scroll.service';
-import { DEFAULT_THEME } from './styles/theme.default';
-import { COSMIC_THEME } from './styles/theme.cosmic';
+  TechInputFieldComponent,
+  P2HUnitComponent,
+  LeafletMapComponent,
+  ComparisonBarsComponent,
+  SimulationsLineComponent,
+  WTUnitComponent,
+  VESUnitComponent,
+  PVUnitComponent,
+  EGUnitComponent,
+  GGUnitComponent,
+  P2GUnitComponent,
+  G2HUnitComponent,
+  DHGUnitComponent,
+  CHPUnitComponent,
+  SimulationsBarComponent,
+  TechnologiesDialogComponent,
+  SimulationsAreaStackComponent,
+  EnergyGridComponent,
+  EightNodeElGridComponent,
+} from './components';
+import { OneColumnLayoutComponent } from './layouts';
+import { CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
+
+/* Services */
+import {
+  AddOutboundConnService,
+  DeleteDeviceService,
+  DeleteOutboundConnService,
+  EditDeviceService,
+  EditOutboundConnService,
+  GetAreaGridsService,
+  GetDeviceTypeService,
+  GetDeviceByTypeService,
+  GetJWTService,
+  WindowModeBlockScrollService,
+  UserProfileService,
+  GetOutboundConnService,
+  CreateDeviceService,
+} from './services';
+
 import { CORPORATE_THEME } from './styles/theme.corporate';
+import { COSMIC_THEME } from './styles/theme.cosmic';
 import { DARK_THEME } from './styles/theme.dark';
-import { ThemeSettingsComponent } from './components/theme-settings/theme-settings.component';
+import { DEFAULT_THEME } from './styles/theme.default';
+
+/* Dialog Components */
+import {
+  DialogTechParamPromptComponent,
+  DeleteScenarioDialogComponent,
+  DialogDeleteFormPromptComponent,
+  DialogSelectFormPromptComponent,
+  HighlightDirective,
+  DialogSelectMultipleFormPromptComponent,
+  DeleteHighlightDirective,
+  DialogNamePromptComponent,
+  DialogControlSystemPromptComponent,
+  DialogEconomyPromptComponent,
+} from './components';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -72,6 +124,7 @@ const NB_MODULES = [
   NbSidebarModule,
   NbAlertModule,
   NbTabsetModule,
+  NbListModule,
   NbContextMenuModule,
   NbSecurityModule,
   NbCheckboxModule,
@@ -101,9 +154,46 @@ const COMPONENTS = [
   TechnologiesDialogComponent,
   NgxLogoutComponent,
   ToggleSettingsButtonComponent,
+  VESUnitComponent,
+  P2HUnitComponent,
+  G2HUnitComponent,
+  DHGUnitComponent,
+  WTUnitComponent,
+  EGUnitComponent,
+  GGUnitComponent,
+  CHPUnitComponent,
+  PVUnitComponent,
+  P2GUnitComponent,
+  SimulationsAreaStackComponent,
+  SimulationsBarComponent,
+  DialogSelectFormPromptComponent,
+  HighlightDirective,
+  DialogSelectMultipleFormPromptComponent,
+  SimulationsLineComponent,
+  ComparisonBarsComponent,
+  LeafletMapComponent,
+  DialogNamePromptComponent,
+  DialogTechParamPromptComponent,
+  DialogControlSystemPromptComponent,
+  DialogEconomyPromptComponent,
+  DeleteHighlightDirective,
+  DialogDeleteFormPromptComponent,
+  DeleteScenarioDialogComponent,
 ];
 const ENTRY_COMPONENTS = [
   TechnologiesDialogComponent,
+  SimulationsAreaStackComponent,
+  SimulationsBarComponent,
+  DialogSelectFormPromptComponent,
+  DialogSelectMultipleFormPromptComponent,
+  SimulationsLineComponent,
+  ComparisonBarsComponent,
+  DialogNamePromptComponent,
+  DialogTechParamPromptComponent,
+  DialogControlSystemPromptComponent,
+  DialogEconomyPromptComponent,
+  DialogDeleteFormPromptComponent,
+  DeleteScenarioDialogComponent,
 ];
 const PIPES = [
   CapitalizePipe,
@@ -112,9 +202,38 @@ const PIPES = [
   TimingPipe,
   NumberWithCommasPipe,
 ];
+const SERVICES = [
+  UserProfileService,
+  WindowModeBlockScrollService,
+  AddOutboundConnService,
+  CreateDeviceService,
+  DeleteDeviceService,
+  DeleteOutboundConnService,
+  EditDeviceService,
+  EditOutboundConnService,
+  GetAreaGridsService,
+  GetDeviceTypeService,
+  GetDeviceByTypeService,
+  GetJWTService,
+  GetOutboundConnService,
+];
+const GENERAL_MODULES = [
+  FormsModule,
+  ReactiveFormsModule,
+  RouterModule,
+  Ng2SmartTableModule,
+  NgxEchartsModule,
+  MatSlideToggleModule,
+  SuiModule,
+  NgxMapboxGLModule.withConfig({
+    accessToken: 'pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw',
+    geocoderAccessToken:
+      'pk.eyJ1IjoiYWd0emRpbWkiLCJhIjoiY2pyaXc2OWN6MDV0cTQ0cXd1NHA0cHI1OSJ9.NQIQGDjleOWNi7bpSu_AGw',
+  }),
+];
 
 @NgModule({
-  imports: [CommonModule, ...NB_MODULES, FormsModule, ReactiveFormsModule, RouterModule, Ng2SmartTableModule],
+  imports: [CommonModule, ...NB_MODULES, GENERAL_MODULES],
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES],
   entryComponents: [...ENTRY_COMPONENTS],
@@ -130,7 +249,7 @@ export class ThemeModule {
           },
           [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME],
         ).providers,
-        WindowModeBlockScrollService,
+        SERVICES,
       ],
     };
   }

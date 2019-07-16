@@ -1,6 +1,6 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
-import { UserProfileService } from './user-profile.service';
+import { UserProfileService } from '../../@theme/services/user-profile.service';
 
 class ImageSnippet {
   pending: boolean = false;
@@ -15,7 +15,7 @@ class ImageSnippet {
   providers: [UserProfileService],
   styleUrls: ['./user-profile.component.scss'],
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent {
 
   user: Object;
   selectedFile: ImageSnippet;
@@ -26,7 +26,8 @@ export class UserProfileComponent implements OnInit {
     this.user['image'] = event;
   }
 
-  constructor(private authService: NbAuthService, private userProfileService: UserProfileService) {
+  constructor(private authService: NbAuthService,
+    private userProfileService: UserProfileService) {
     this.user = {};
     this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
@@ -37,9 +38,6 @@ export class UserProfileComponent implements OnInit {
         }
 
       });
-  }
-
-  ngOnInit() {
   }
 
   processFile(imageInput: any) {

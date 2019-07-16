@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DialogSelectMultipleFormPromptComponent } from './dialog-prompt/select-multiple-form.component';
+import { DialogSelectMultipleFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-multiple-form.component';
 import { NbDialogService } from '@nebular/theme';
 
 @Component({

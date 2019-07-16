@@ -9,9 +9,9 @@ import {
     OnInit,
     AfterContentChecked,
 } from '@angular/core';
-import { Model1ParamInitService } from '../services/model1-param-init.service';
-import { Model2ParamInitService } from '../services/model2-param-init.service';
-import { GeneralParamsService } from '../services/general-params.service';
+import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
+import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
+import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 
 @Component({
     selector: 'ngx-tech-param',

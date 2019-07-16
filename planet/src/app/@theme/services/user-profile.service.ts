@@ -9,7 +9,7 @@ export class UserProfileService {
     }
 
     public uploadImage(image, email, name): Promise<any> {
-        return new Promise(resolve => {
+        return new Promise(() => {
             const url = '/planet/rest/update_user';
             this.httpClient.post<HttpResponse<Object>>(url, {
                 image: image,

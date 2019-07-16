@@ -6,7 +6,6 @@ export class EditDeviceService {
 
     constructor(private httpClient: HttpClient) { }
 
-
     public editDevice(devices, data, name, descr, ip, port) {
         devices = devices['results']['resources'].filter((val) => {
             return val['name'] === name;

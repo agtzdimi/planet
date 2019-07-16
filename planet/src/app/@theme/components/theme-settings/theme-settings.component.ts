@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SendScenarioService } from '../../../pages/simulation-run/simulation-start/sendScenarioName.service';
+import { SendScenarioService } from '../../services/sendScenarioName.service';
 import { StateService } from '../../../@core/utils';
 import { HttpClient } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
