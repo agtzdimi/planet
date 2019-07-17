@@ -22,8 +22,6 @@ export * from './planet/general-components/input-field/tech-input-field.componen
 export * from './planet/grids/eight-node-el-grid/eight-node-el-grid.component';
 export * from './planet/grids/energy-grid/energy-grid.component';
 export * from './planet/grids/energy-grid/energy-grid.tech.component';
-export * from './planet/simulation-charts/simulation-area-stack.component';
-export * from './planet/simulation-charts/simulation-bar-component';
 export * from './planet/unit-types/chp-unit/chp-unit.component';
 export * from './planet/unit-types/dhg-unit/dhg-unit.component';
 export * from './planet/unit-types/eg-unit/eg-unit.component';
@@ -35,5 +33,5 @@ export * from './planet/unit-types/pv-unit/pv-unit.component';
 export * from './planet/unit-types/ves-unit/ves-unit.component';
 export * from './planet/unit-types/wt-unit/wt-unit.component';
 export * from './planet/simulation-charts/simulation-line.component';
-export * from './planet/simulation-charts/comparison-bars.component';
+export * from './planet/simulation-charts/simulation-bars.component';
 export * from './planet/map/map.component';

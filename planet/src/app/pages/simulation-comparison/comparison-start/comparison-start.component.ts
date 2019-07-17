@@ -41,7 +41,6 @@ export class ComparisonStartComponent {
 
   startComparison(): void {
     this.toggleLoadingAnimation();
-    this.showLine = false;
     this.initializeCharts();
     this.forms = this.selectedForms.split('  -  ');
     this.selectedScenariosCount = this.forms.length;
@@ -241,6 +240,8 @@ export class ComparisonStartComponent {
 
   initializeCharts() {
     this.status = '';
+    this.showLine = false;
+    this.showBar = false;
     this.textMessage = '';
     this.lineChart[0] = {
       data: [],

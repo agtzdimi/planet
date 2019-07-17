@@ -11,7 +11,6 @@ import { NbThemeService } from '@nebular/theme';
 export class SimulationsLineComponent implements OnDestroy, OnChanges {
 
     @Input() data;
-    markArea;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.data.currentValue) {
@@ -23,6 +22,24 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
     themeSubscription: any;
 
     constructor(private theme: NbThemeService) {
+    }
+
+    setData(type, name, data) {
+        if (type === 'line') {
+            return {
+                name: name,
+                type: 'line',
+                data: data,
+                hoverAnimation: false,
+            };
+        } else {
+            return {
+                name: name,
+                type: 'line',
+                areaStyle: { normal: { opacity: echarts.areaOpacity } },
+                data: data,
+            };
+        }
     }
 
     afterDataRecieved(data) {
@@ -46,6 +63,8 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
             }
             const series: any = [];
             let time;
+            let name: string;
+            let isDefault = false;
 
             for (let index = 0; index < headers.length; index++) {
                 for (let val = 0; val < csvData[index].length; val++) {
@@ -59,10 +78,90 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                         time = csvData[index];
                         time.splice(-1, 1);
                         break;
+                    case 'Surplus':
+                        name = 'Surplus';
+                        tempData = this.setData('line', name, csvData[index]);
+                        break;
+                    case 'Electric_demand':
+                        name = 'El. Dem';
+                        tempData = this.setData('line', name, csvData[index]);
+                        break;
+                    case 'Electric_grid_power_flow':
+                        name = 'Electric grid power flow';
+                        let max = +csvData[index][1];
+                        let min = +csvData[index][1];
+                        for (let val = 0; val < csvData[index].length; val++) {
+                            if (max < +csvData[index][val]) {
+                                max = +csvData[index][val];
+                            }
+                            if (min > +csvData[index][val]) {
+                                min = +csvData[index][val];
+                            }
+                        }
+                        tempData = this.setData('line', name, csvData[index]);
+                        series.push(this.calculateMarkArea(min, true));
+                        series.push(this.calculateMarkArea(max, false));
+                        name = '';
+                        break;
+                    case 'Total_heat_demand':
+                        name = 'Total heat demand';
+                        tempData = this.setData('line', name, csvData[index]);
+                        break;
+                    case 'RES_power':
+                        name = 'RES Producibility';
+                        tempData = this.setData('line', name, csvData[index]);
+                        break;
+                    case 'RES_direct_utilization':
+                        name = 'From RES';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'EB_output':
+                        name = 'From EB';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'P2H_heat':
+                        name = 'From P2H';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'CHP_heat':
+                        name = 'From CHP';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'P2G_heat':
+                        name = 'From P2G';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'G2H_heat':
+                        name = 'From G2H';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'CHP_el_production':
+                        name = 'From CHP';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'P2H_input':
+                        name = 'To P2H';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'EB_input':
+                        name = 'To EB';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'P2G_input':
+                        name = 'To P2G';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'RES_Curtailment':
+                        name = 'Curtailment';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    // For comparison results only, the headers will indicate the scenario name
                     default:
+                        isDefault = true;
                         csvData[index].splice(-1, 1);
+                        name = headers[index];
                         tempData = {
-                            name: headers[index],
+                            name: name,
                             type: 'line',
                             smooth: true,
                             data: csvData[index],
@@ -70,30 +169,38 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                         series.push(tempData);
                         break;
                 }
+                headers[index] = name;
+                if (tempData && !isDefault) {
+                    series.push(tempData);
+                }
+
             }
 
-            const maxValue = Math.max.apply(Math, series.map(function (arrVal) {
-                let max = Number.MIN_VALUE;
-                for (let arr = 0; arr < arrVal['data'].length; arr++) {
-                    if (+arrVal['data'][arr] > max) {
-                        max = +arrVal['data'][arr];
+            // For comparison results only
+            if (isDefault) {
+                const maxValue = Math.max.apply(Math, series.map(function (arrVal) {
+                    let max = Number.MIN_VALUE;
+                    for (let arr = 0; arr < arrVal['data'].length; arr++) {
+                        if (+arrVal['data'][arr] > max) {
+                            max = +arrVal['data'][arr];
+                        }
                     }
-                }
-                return max;
-            }));
+                    return max;
+                }));
 
-            const minValue = Math.min.apply(Math, series.map(function (arrVal) {
-                let min = Number.MAX_VALUE;
-                for (let arr = 0; arr < arrVal['data'].length; arr++) {
-                    if (+arrVal['data'][arr] < min) {
-                        min = +arrVal['data'][arr];
+                const minValue = Math.min.apply(Math, series.map(function (arrVal) {
+                    let min = Number.MAX_VALUE;
+                    for (let arr = 0; arr < arrVal['data'].length; arr++) {
+                        if (+arrVal['data'][arr] < min) {
+                            min = +arrVal['data'][arr];
+                        }
                     }
-                }
-                return min;
-            }));
+                    return min;
+                }));
 
-            series.push(this.calculateMarkArea(minValue, true));
-            series.push(this.calculateMarkArea(maxValue, false));
+                series.push(this.calculateMarkArea(minValue, true));
+                series.push(this.calculateMarkArea(maxValue, false));
+            }
 
             this.options = {
                 backgroundColor: echarts.bg,

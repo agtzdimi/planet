@@ -47,9 +47,9 @@
           *ngIf="! barCh.title.includes('LCOE and economic results CO') && ! barCh.yAxisLabel.includes('emissions 10')">
           <nb-card-header>{{barCh.title}}</nb-card-header>
           <nb-card-body>
-            <ngx-comparison-bars [data]="barCh.data" [yAxisLabel]="barCh.yAxisLabel"
+            <ngx-simulation-bars [data]="barCh.data" [yAxisLabel]="barCh.yAxisLabel"
               [yRightAxisLabel]="barCh.yRightAxisLabel">
-            </ngx-comparison-bars>
+            </ngx-simulation-bars>
           </nb-card-body>
         </nb-card>
       </div>

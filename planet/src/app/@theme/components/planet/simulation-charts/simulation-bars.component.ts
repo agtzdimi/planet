@@ -3,12 +3,12 @@ import { OnDestroy } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 
 @Component({
-    selector: 'ngx-comparison-bars',
+    selector: 'ngx-simulation-bars',
     template: `
     <div echarts [options]="options" class="echart"></div>
   `,
 })
-export class ComparisonBarsComponent implements OnDestroy, OnChanges {
+export class SimulationBarsComponent implements OnDestroy, OnChanges {
 
     @Input() data;
     @Input() yRightAxisLabel;
@@ -141,7 +141,7 @@ export class ComparisonBarsComponent implements OnDestroy, OnChanges {
                     default:
                         type = 'bar';
                         yIndex = 0;
-                        barGap = '0%';
+                        barGap = '15%';
                         yAxis = csvData[index][2];
                         if (!stacks.includes(yAxis)) {
                             stacks.push(yAxis);
