@@ -1,4 +1,4 @@
-@import '../../../@theme/styles/themes';
+@import './themes';
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/breakpoints';
 
@@ -246,12 +246,12 @@ img {
 
 .requiredField {
   color: #ff4c4c;
-  margin-top: 3.5%;
+  margin-top: 4.1%;
 }
 
 .requiredTextarea {
   color: #ff4c4c;
-  margin-top: 7.5%;
+  margin-top: 5.7%;
 }
 
 .errorTextarea {
@@ -269,6 +269,11 @@ img {
 }
 
 .datePickerButton {
-margin-bottom: 1em;
-margin-left: 15%;
+  margin-bottom: 1em;
+  margin-left: 15%;
+}
+
+.submit-button {
+  display: flex;
+  justify-content: center;
 }

@@ -35,16 +35,15 @@
     </div>
 
     <!-- Phase 5 Start Uploading -->
-    <div class="row" *ngIf="phase5">
-      <div class="col-md-4"></div>
+    <div class="row submit-button" *ngIf="phase5">
       <div class="col-md-2">
         <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"
           nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startUpload()">
           Save Scenario
         </button>
       </div>
-      <div class="col-md-2">
-        <div *ngIf="saveMessage!==''" [ngClass]="{
+      <div *ngIf="saveMessage!==''" class="col-md-2">
+        <div [ngClass]="{
           'errorTextarea': saveMessage.includes('Error'),
           'successTextarea': !saveMessage.includes('Error')
         }">

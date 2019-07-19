@@ -15,7 +15,7 @@ import { takeWhile } from 'rxjs/operators';
 
 @Component({
     selector: 'ngx-load-scenario',
-    styleUrls: ['./load-scenario.component.scss'],
+    styleUrls: ['../../../@theme/styles/scenario.component.scss'],
     providers: [Model2ParamInitService,
         GeneralParamsService,
         Model1ParamInitService,

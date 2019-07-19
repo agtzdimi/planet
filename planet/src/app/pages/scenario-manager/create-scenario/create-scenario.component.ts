@@ -12,7 +12,7 @@ import { EconomyFileService } from '../../../@theme/services/scenario-manager-se
 
 @Component({
     selector: 'ngx-create-scenario',
-    styleUrls: ['./create-scenario.component.scss'],
+    styleUrls: ['../../../@theme/styles/scenario.component.scss'],
     providers: [GeneralParamsService,
         Model2ParamInitService,
         Model1ParamInitService,

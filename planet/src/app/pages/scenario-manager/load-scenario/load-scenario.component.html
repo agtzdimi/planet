@@ -22,8 +22,7 @@
 
     </div>
 
-    <div class="row">
-      <div class="col-md-4"></div>
+    <div class="row submit-button">
       <div class="col-md-2">
         <button *ngIf="!generalParams.formName.includes('  -  ')" nbButton type="button" [nbSpinner]="loading"
           nbSpinnerStatus="primary" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="large"
@@ -31,11 +30,11 @@
           Save Scenario
         </button>
       </div>
-      <div class="col-md-2">
+      <div *ngIf="saveMessage!==''" class="col-md-2">
         <div *ngIf="generalParams.formName.includes('  -  ')" class="errorTextarea"> '[space][space]-[space][space]' is
           a
           reserved word!</div>
-        <div *ngIf="saveMessage!==''" [ngClass]="{
+        <div [ngClass]="{
           'errorTextarea': saveMessage.includes('Error'),
           'successTextarea': !saveMessage.includes('Error')
         }">
