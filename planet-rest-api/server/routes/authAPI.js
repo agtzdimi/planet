@@ -358,57 +358,6 @@ exports.logout = (req, res) => {
     });
 };
 
-// login_with_token
-exports.login_with_token = (req, res) => {
-  let login_token = req.body.parameters.login_token;
-
-  let user_info = {};
-
-  const hashed_token = crypto
-    .createHash('sha256')
-    .update(login_token)
-    .digest('base64');
-  let find_param = {
-    'services.resume.loginTokens': {
-      $elemMatch: {
-        hashedToken: hashed_token,
-      },
-    },
-  };
-
-  // find user
-  mongoDbHelper
-    .collection('users')
-    .findOne(find_param)
-    .then(results => {
-      // set user info
-
-      if (results === null) {
-        res.json({ status: 'error', detail: 'no such user' });
-        return;
-      }
-
-      user_info._id = results._id;
-      user_info.profile = results.profile;
-      user_info.isAdmin = results.isAdmin;
-      user_info.fullName = results.fullName;
-
-      // set session
-      req.session.login_token;
-
-      // return success
-      res.json({
-        status: 'success',
-        user: user_info,
-        login_token: login_token,
-      });
-    })
-    .catch(err => {
-      res.json({ status: 'error', detail: err });
-      console.log('err:', err);
-    });
-};
-
 exports.get_user_list = (req, res) => {
 
   let userList = {};
