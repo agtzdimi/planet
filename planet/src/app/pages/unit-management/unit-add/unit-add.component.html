@@ -100,16 +100,6 @@
             </div>
           </div>
 
-          <!-- <div class="row">
-            <div class="col-md-2">
-              <nb-select class="m-2" placeholder="Select grid" shape="semi-round" status="primary"
-                (selectedChange)="gridSelected($event)">
-                <nb-option value="grid['name]'" *ngFor="let grid of grids" [value]="grid">
-                  {{grid['name']}}</nb-option>
-              </nb-select>
-            </div>
-          </div> -->
-
           <hr class="m-4">
           <div class="row">
             <div class="col-md-6">
@@ -117,27 +107,6 @@
               <ngx-p2h-unit *ngSwitchCase="'P2H'" (p2h)="p2hUnit=$event"></ngx-p2h-unit>
               <ngx-ves-unit *ngSwitchCase="'VES'" (ves)="vesUnit=$event"></ngx-ves-unit>
             </div>
-
-            <!-- <div class="col-md-6">
-              <svg height="495" width="800" xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid">
-
-                <g [attr.id]="room.id" [class.selected-room]="selectedRoom == room.id" *ngFor="let room of sortedRooms">
-                  <path class="room-border" (click)="selectRoom(room.id)" [attr.d]="room.area.d"
-                    [style.filter]="isIE || isFirefox ? 'inherit': ''" />
-                  <path class="room-border" [attr.d]="room.border.d" />
-                  <path class="room-border room-border-glow" [attr.d]="room.border.d"
-                    [style.filter]="isIE || isFirefox ? 'inherit': ''" />
-                  <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.name.x"
-                    [attr.y]="room.name.y">{{room.name.text}}</text>
-                  <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.number.x"
-                    [attr.y]="room.number.y">{{room.number.text}}</text>
-                  <text *ngIf="room.number.x2" class="room-text" (click)="selectRoom(room.id)" text-anchor="middle"
-                    [attr.x]="room.number.x2" [attr.y]="room.number.y2">{{room.number.text2}}</text>
-                </g>
-
-              </svg>
-            </div> -->
           </div>
         </nb-card-body>
         <div ng-switch-default></div>

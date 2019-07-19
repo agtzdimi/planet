@@ -1,7 +1,6 @@
-
-const mongodb = require("mongodb").MongoClient;
-const assert = require('assert');
-const uuid = require("uuid");
+'use strict';
+const mongodb = require('mongodb').MongoClient;
+const uuid = require('uuid');
 
 /*
  http://mongodb.github.io/node-mongodb-native/2.0/tutorials/crud_operations/
@@ -20,7 +19,7 @@ module.exports = class MongoDbHelper {
       { useNewUrlParser: true },
       (err, db) => {
         if (err !== null) {
-          console.log(err)
+          console.log(err);
         }
         this.db = db;
         callback(db);
@@ -32,7 +31,7 @@ module.exports = class MongoDbHelper {
     let mongoDbCollection = this.db.db().collection(collectionName);
     let collection = {
       insert: model => {
-        //TODO: insert many
+        // TODO: insert many
         return new Promise((resolve, reject) => {
           model._id = uuid.v1();
           mongoDbCollection.insertOne(model, (err, result) => {
@@ -46,7 +45,7 @@ module.exports = class MongoDbHelper {
       },
 
       update: (find_param, upd_param) => {
-        //TODO: update many
+        // TODO: update many
         return new Promise((resolve, reject) => {
           mongoDbCollection.updateOne(find_param, upd_param, (err, result) => {
             if (err) {
@@ -58,7 +57,7 @@ module.exports = class MongoDbHelper {
       },
 
       find: param => {
-        //TODO: search
+        // TODO: search
         return new Promise((resolve, reject) => {
           mongoDbCollection.find(param).toArray((err, docs) => {
             if (err) {
@@ -81,7 +80,7 @@ module.exports = class MongoDbHelper {
       },
 
       delete: id => {
-        //TODO: delete many
+        // TODO: delete many
         return new Promise((resolve, reject) => {
           mongoDbCollection.removeOne({ _id: id }, (err, result) => {
             if (err) {
@@ -112,9 +111,9 @@ module.exports = class MongoDbHelper {
             resolve(doc);
           });
         });
-      }
+      },
     };
 
     return collection;
   }
-}
+};

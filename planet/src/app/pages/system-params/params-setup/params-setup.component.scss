@@ -1,3 +1,4 @@
+@import '../../../@theme/styles/themes';
 @import '../../../@theme/styles/image.card.component.scss';
 
 .errorTextarea {
@@ -12,7 +13,7 @@
 
   h2 {
     flex: 1 1 100%;
-    color: nb-theme(color-primary-300-light);
+    color: nb-theme(color-primary-200);
     text-align: center;
     margin: 0;
   }
