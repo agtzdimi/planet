@@ -1,47 +1,5 @@
 @import '../../../@theme/styles/themes';
-
-.imageCard {
-
-  .component-card-wrapper {
-    width: 100%;
-  }
-
-  .component-icon {
-    margin-bottom: 1rem;
-  }
-
-  .component-name {
-    color: #8994a3;
-    font-weight: 500;
-  }
-
-  .component-navigate-link {
-    text-decoration: none;
-  }
-
-  nb-card {
-    box-shadow: 0 4px 27px 0 rgba(230, 234, 240, 0.2);
-    transition: transform 0.25s ease;
-
-    > nb-card-body {
-      height: 200px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    &:hover {
-      box-shadow: 0 15px 37px 0 #dbe2eb;
-      transform: translateY(-1rem);
-      cursor: pointer;
-      .component-name {
-        color: rgba(0, 230, 64, 1);
-      }
-    }
-  }
-}
+@import '../../../@theme/styles/image.card.component.scss';
 
   h2 {
     flex: 1 1 100%;
