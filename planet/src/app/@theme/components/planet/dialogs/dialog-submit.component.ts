@@ -27,6 +27,7 @@ import { NbDialogRef } from '@nebular/theme';
   `],
 })
 export class DialogSubmitPromptComponent {
+  title;
   constructor(protected dialogRef: NbDialogRef<DialogSubmitPromptComponent>) {
   }
 

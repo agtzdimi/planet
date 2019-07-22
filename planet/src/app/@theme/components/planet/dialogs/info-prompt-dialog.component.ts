@@ -16,6 +16,7 @@ import { NbDialogRef } from '@nebular/theme';
   styles: [``],
 })
 export class DialogInfoPromptComponent {
+  title;
   constructor(protected dialogRef: NbDialogRef<DialogInfoPromptComponent>) {
   }
 
