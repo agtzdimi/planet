@@ -8,7 +8,8 @@ mode="$3"
 
 echo "$formName ############"
 mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
-   --authenticationDatabase $MONGO_AUTH_DB --db planet --collection files --out ./public/files/$simulationType/allDocuments.txt
+   --collection files --authenticationDatabase $MONGO_AUTH_DB --db planet --out ./public/files/$simulationType/allDocuments.txt \
+   -q '{"payload.formName": "'"$formName"'"}'
 grep '"formName":"'"$formName"'"' ./public/files/$simulationType/allDocuments.txt | grep 'Parameters_initialization' > ./public/files/$simulationType/Parameters_initialization.txt
 grep '"formName":"'"$formName"'"' ./public/files/$simulationType/allDocuments.txt | grep 'Economy_environment_initialization' > ./public/files/$simulationType/Economy_environment_initialization.txt
 grep '"formName":"'"$formName"'"' ./public/files/$simulationType/allDocuments.txt | grep 'Control_initialization' > ./public/files/$simulationType/Control_initialization.txt
