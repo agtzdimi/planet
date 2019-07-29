@@ -9,6 +9,7 @@ import { GeneralParamsService } from '../../../@theme/services/scenario-manager-
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
+import { sprintf } from 'sprintf-js';
 
 @Component({
     selector: 'ngx-create-scenario',
@@ -57,6 +58,9 @@ export class CreateScenarioComponent {
             'lon': this.generalParams.coordinates[0],
         },
     };
+    nodes: string;
+    profiles = [];
+    showProfiles: boolean = false;
 
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
@@ -176,14 +180,14 @@ export class CreateScenarioComponent {
                                 this.saveMessage = error.error.text;
                                 this.paramInit['payload']['simulation']['time.step'] = originalTimestep;
                                 this.paramInit['payload']['simulation']['simulation.time'] = originalHorizon;
-                                // console.log("2", error.error);
+                                // console.log('2', error.error);
                             },
                         );
                 },
                 error => {
                     this.loading = false;
                     this.saveMessage = '';
-                    // console.log("3", error);
+                    // console.log('3', error);
                 },
             );
     }
@@ -205,6 +209,82 @@ export class CreateScenarioComponent {
         } else {
             return false;
         }
+    }
+
+    getProfiles() {
+        const url = '/planet/rest/get_profiles';
+        const startDate = this.generalParams.startingDate.getFullYear().toString() +
+            '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
+            '-' + this.generalParams.startingDate.getDate().toString();
+        const endDate = this.generalParams.endingDate.getFullYear().toString() +
+            '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
+            '-' + this.generalParams.endingDate.getDate().toString();
+        const oldWindValue = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
+        this.windParam['payload'] = JSON.parse(oldWindValue);
+        this.windParam['payload']['formName'] = this.generalParams.formName;
+        this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
+        this.windParam['payload']['startDate'] = startDate;
+        this.windParam['payload']['endDate'] = endDate;
+        this.pvParam['payload']['formName'] = this.generalParams.formName;
+        this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
+        this.pvParam['payload']['startDate'] = startDate;
+        this.pvParam['payload']['endDate'] = endDate;
+        switch (this.generalParams.model) {
+            case 1:
+                this.nodes = '1';
+                break;
+            case 2:
+                this.nodes = '8';
+                break;
+        }
+        this.httpClient.get(url, {
+            params: {
+                'windPayload': JSON.stringify(this.windParam),
+                'pvPayload': JSON.stringify(this.pvParam),
+                'nodes': this.nodes,
+                'timeStep': String(this.paramInit['payload']['simulation']['time.step'] / 60),
+            },
+        })
+            .subscribe(
+                (res) => {
+
+                    const lines = res['electricity'].split('\n');
+                    const headers = lines[0].split(',');
+                    for (let index = 0; index < headers.length; index++) {
+                        this.profiles.push(this.getColumnData(lines, index));
+                    }
+                    const hours = ['Hours'];
+                    headers[headers.length] = 'Hours';
+                    const date = this.generalParams.startingDate;
+                    for (let i = 1; i < this.profiles[0].length; i++) {
+                        if ((this.paramInit['payload']['simulation']['time.step'] / 60) %
+                            (Math.round(24 / this.paramInit['payload']['simulation']['time.step'])) === 0) {
+                            const val = date.getFullYear().toString() +
+                                '/' + (date.getMonth() + 1).toString() +
+                                '/' + date.getDate().toString();
+                            hours.push(val);
+                        } else {
+                            const val = sprintf('%02d', date.getHours()) + ':' + sprintf('%02d', date.getMinutes());
+                            hours.push(val);
+                            date.setHours(this.paramInit['payload']['simulation']['time.step'] / 60);
+                        }
+                    }
+                    this.profiles.push(hours);
+                    this.showProfiles = true;
+                },
+            );
+    }
+
+    getColumnData(lines, column: number) {
+        let result = lines.map(val => {
+            const value = val.split(',');
+            return value[column];
+        },
+        );
+        if (result[result.length - 1] === undefined) {
+            result = result.slice(0, -1);
+        }
+        return result;
     }
 
     public animateInfo(controller, transitionName: string = 'slide down', id) {

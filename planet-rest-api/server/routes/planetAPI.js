@@ -39,7 +39,7 @@ exports.saveData = (req, res) => {
             shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
                 ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
                 " planet --eval \"db.results.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
-            shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" + req.body.pvPayload + "'",
+            shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" + req.body.pvPayload + "' true",
                 function (code, stdout, stderr) {
                     if (code === 1) {
                         return res.send('Error: Not all data are loaded to the DB!');
@@ -51,7 +51,7 @@ exports.saveData = (req, res) => {
             return res.send('Error: Simulation Name Already Exists!');
         }
     } else {
-        shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" + req.body.pvPayload + "'",
+        shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" + req.body.pvPayload + "' true",
             function (code) {
                 if (code === 1) {
                     return res.send('Error: Not all data are loaded to the DB!');
@@ -254,4 +254,28 @@ exports.deleteDevice = (req, res) => {
     if (!status.stderr) {
         res.send({ response: 'Success' });
     }
+};
+
+exports.get_profiles = (req, res) => {
+    const windPayload = req.query.windPayload;
+    const pvPayload = req.query.pvPayload;
+    shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + windPayload + "' '" + pvPayload + "' false '" +
+        req.query.nodes + "' '" + req.query.timeStep + "'",
+        function (code) {
+            if (code === 1) {
+                return res.send('Error: Not all data are loaded to the DB!');
+            } else {
+                const pv = shell.exec('cat ' + `${__dirname}/../../public/files/PV.csv`).stdout;
+                const wind = shell.exec('cat ' + `${__dirname}/../../public/files/Wind.csv`).stdout;
+                const elec = shell.exec('cat ' + `${__dirname}/../../public/files/Electricity.csv`).stdout;
+                const heat = shell.exec('cat ' + `${__dirname}/../../public/files/Heat.csv`).stdout;
+                res.send({
+                    'electricity': elec,
+                    'heat': heat,
+                    'pv': pv,
+                    'wind': wind,
+                });
+                shell.exec('rm -rf ' + `${__dirname}/../../public/files/*`);
+            }
+        });
 };

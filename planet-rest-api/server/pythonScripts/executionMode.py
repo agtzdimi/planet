@@ -111,7 +111,6 @@ def executeMode(message):
          file = line.rstrip()
       else:
          file = 'Invalid Mode'
-      
       if file != 'Invalid Mode':
          fileName = line.rstrip()
       else:

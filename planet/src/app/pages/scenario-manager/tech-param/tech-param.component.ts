@@ -201,7 +201,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
 
                 this.nodePvParam['node.' + (i + 1)] = {
                     'capacity': 1,
-                    'system.loss': 10,
+                    'system.loss': 0.1,
                     'tracking': 1,
                     'tilt': 35,
                     'azimuth': 180,

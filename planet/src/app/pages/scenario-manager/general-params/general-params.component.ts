@@ -152,7 +152,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   ngAfterViewInit() {
-    this.resizeMap();
     if (this.isLoadModule) {
       switch (this.generalParams.model) {
         case 1:
@@ -167,6 +166,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
           break;
       }
     }
+    this.resizeMap();
   }
 
   handleDescriptionChange(event) {

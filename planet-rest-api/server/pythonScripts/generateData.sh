@@ -64,13 +64,17 @@ awk -v id="$1" -v count=$2 'BEGIN {FS=OFS=","} {
 
 }
 
-
-NODES_COUNT=$(grep -o 'node\.[0-9]' ./public/files/Parameters_initialization.txt | wc -l)
 windData="$1"
 pvData="$2"
-isLoad="$3"
+echo "||||||||||||||||||||||${pvData}||||||||||||||||||||||||||||||||||||${windData}||||||||||||||||||||||||||||||||||||||||||||||$3|||||||$4|||||||$5"
+import="$3"
+if [[ $import == true ]]; then
+   NODES_COUNT=$(grep -o 'node\.[0-9]' ./public/files/Parameters_initialization.txt | wc -l)
+else
+   NODES_COUNT="$4"
+fi
+
 formName="$(echo $pvData | python ./server/pythonScripts/getAttribute.py --formName true)"
-dbError=false
 
 lat=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --lat true)
 lon=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --lon true)
@@ -114,7 +118,11 @@ if [[ "$leapYearIndexAfter" != "$leapYearIndexBefore" ]]; then
    eval ' for hour in {'"$((leapYearIndexAfter+1))"'..'"$((leapYearIndexAfter+24))"'}; do sed -i ""$hour"d" nodeFiles/PV1; sed -i ""$hour"d" nodeFiles/Wind1 ;done'
 fi
 
-timeStep=$(cat ./public/files/Parameters_initialization.txt | python ./server/pythonScripts/getAttribute.py --time.step true)
+if [[ $import == true ]]; then
+   timeStep=$(cat ./public/files/Parameters_initialization.txt | python ./server/pythonScripts/getAttribute.py --time.step true)
+else
+   timeStep="$5"
+fi
 steps=$(awk -v step="$timeStep" 'BEGIN {print (1/step)}')
 
 hourStart=$(awk -v start=$pvStartYear 'BEGIN {
@@ -184,34 +192,6 @@ replicateColumns "Wind" "$NODES_COUNT"
 
 rm -rf nodeFiles
 
-for file in $(ls ./public/files/*.csv); do
-   if [[ -s $file ]]; then
-      awk -v formName="$formName" 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="formName"} else {$(NF+1)=formName} print $0}' $file > tempFile
-      awk 'BEGIN {FS=OFS=","} {if(NR==1) {$(NF+1)="Time"} else {$(NF+1)=(NR-2)} print $0}' tempFile > $file
-      mongoimport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
-         --authenticationDatabase $MONGO_AUTH_DB --db planet --collection files --type csv --headerline --file $file
-      if (( $? != 0 )); then
-         dbError=true
-      fi
-   fi
-done
-
-echo "$windData" > ./public/files/windData.txt
-echo "$pvData" > ./public/files/pvData.txt
-
-for file in $(ls ./public/files/*.txt); do
-   if [[ -s $file ]]; then
-      mongoimport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
-         --authenticationDatabase $MONGO_AUTH_DB --db planet --collection files --file $file
-      if (( $? != 0 )); then
-         dbError=true
-      fi
-   fi
-done
-
-rm -rf ./public/files/* tempFile
-if [[ $dbError == false ]]; then
-   exit 0
-else
-   exit 1
+if [[ $import == true ]]; then
+   ./server/pythonScripts/importDataToDB.sh "$formName" "$windData" "$pvData"
 fi

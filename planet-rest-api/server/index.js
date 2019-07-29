@@ -74,6 +74,7 @@ app.post('/planet/rest/add_device', planetApi.addDevice);
 app.get('/planet/rest/get_devices', planetApi.getDevices);
 app.post('/planet/rest/edit_device', planetApi.editDevice);
 app.post('/planet/rest/delete_device', planetApi.deleteDevice);
+app.get('/planet/rest/get_profiles', planetApi.get_profiles);
 
 /* AUTH API */
 

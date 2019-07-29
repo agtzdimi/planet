@@ -66,6 +66,7 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
             let name: string;
             let isDefault = false;
 
+
             for (let index = 0; index < headers.length; index++) {
                 for (let val = 0; val < csvData[index].length; val++) {
                     if (headers[index] !== 'Hours') {
@@ -157,6 +158,7 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                         break;
                     // For comparison results only, the headers will indicate the scenario name
                     default:
+
                         isDefault = true;
                         csvData[index].splice(-1, 1);
                         name = headers[index];
