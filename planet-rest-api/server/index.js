@@ -21,6 +21,7 @@ app.use(
 );
 const authApi = require('./routes/authAPI');
 const planetApi = require('./routes/planetAPI');
+const unitManagementApi = require('./routes/unitManagementAPI');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -70,10 +71,10 @@ app.get('/planet/rest/multi_simulation', planetApi.multiSimulation);
 app.get('/planet/rest/simulation_status', planetApi.simulationStatus);
 app.post('/planet/rest/update_IPs', planetApi.updateIPs);
 app.post('/planet/rest/delete_scenario', planetApi.deleteScenario);
-app.post('/planet/rest/add_device', planetApi.addDevice);
-app.get('/planet/rest/get_devices', planetApi.getDevices);
-app.post('/planet/rest/edit_device', planetApi.editDevice);
-app.post('/planet/rest/delete_device', planetApi.deleteDevice);
+app.post('/planet/rest/add_device', unitManagementApi.addDevice);
+app.get('/planet/rest/get_devices', unitManagementApi.getDevices);
+app.post('/planet/rest/edit_device', unitManagementApi.editDevice);
+app.post('/planet/rest/delete_device', unitManagementApi.deleteDevice);
 app.get('/planet/rest/get_profiles', planetApi.get_profiles);
 
 /* AUTH API */

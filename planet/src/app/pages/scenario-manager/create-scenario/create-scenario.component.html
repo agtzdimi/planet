@@ -21,14 +21,14 @@
 
           <!-- Profiles Card -->
 
-          <nb-card size="large" accent="primary" *ngIf="!showProfiles">
+          <!--  <nb-card size="large" accent="primary" *ngIf="!showProfiles">
             <nb-card-header>Profiles Timeseries</nb-card-header>
             <div [ngStyle]="{'display': 'flex','align-items': 'center',
     'justify-content': 'center', 'width': '100%','height':'100%'}">
               <button nbButton hero status="info" shape="semi-round" (click)="getProfiles()">Generate</button>
             </div>
           </nb-card>
-          <ngx-simulation-line *ngIf="showProfiles" [data]="profiles"></ngx-simulation-line>
+          <ngx-simulation-line *ngIf="showProfiles" [data]="profiles"></ngx-simulation-line> -->
           <ngx-tech-control [isLoadModule]="false" (phase4)="animateInfo(transitionController4,transitionName4,4)">
           </ngx-tech-control>
         </div>

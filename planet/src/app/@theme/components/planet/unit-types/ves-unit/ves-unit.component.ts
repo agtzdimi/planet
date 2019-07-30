@@ -19,16 +19,16 @@ export class VESUnitComponent implements OnChanges {
       'payload': {
         'parameters': {
           'configuration': {
-            'nominal.heat.power': '',
-            'efficiency.thermal': '',
+            'nominal_heat_power': '',
+            'efficiency_thermal': '',
             'cos_phi': '',
           },
           'input': {
             'control': '',
           },
           'output': {
-            'electricity.power.active': '',
-            'electricity.power.reactive': '',
+            'electricity_power_active': '',
+            'electricity_power_reactive': '',
             'heat.power': '',
           },
         },

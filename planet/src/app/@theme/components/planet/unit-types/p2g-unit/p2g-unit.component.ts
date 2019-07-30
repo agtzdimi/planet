@@ -20,20 +20,20 @@ export class P2GUnitComponent implements OnChanges {
       'payload': {
         'parameters': {
           'configuration': {
-            'nominal.electric.power': '',
-            'efficiency.electrolysis': '',
-            'efficiency.methanation': '',
-            'efficiency.thermal': '',
+            'nominal_electric_power': '',
+            'efficiency_electrolysis': '',
+            'efficiency_methanation': '',
+            'efficiency_thermal': '',
             'cos_phi': '',
           },
           'input': {
             'control': '',
           },
           'output': {
-            'electricity.power.active': '',
-            'electricity.power.reactive': '',
-            'heat.power': '',
-            'ng.power': '',
+            'electricity_power_active': '',
+            'electricity_power_reactive': '',
+            'heat_power': '',
+            'ng_power': '',
           },
         },
       },

@@ -19,7 +19,7 @@ export class P2HUnitComponent implements OnChanges {
       'payload': {
         'parameters': {
           'configuration': {
-            'nominal.heat.power': '',
+            'nominal_heat_power': '',
             'cop': '',
             'cos_phi': '',
           },
@@ -27,9 +27,9 @@ export class P2HUnitComponent implements OnChanges {
             'control': '',
           },
           'output': {
-            'electricity.power.active': '',
-            'electricity.power.reactive': '',
-            'heat.power': '',
+            'electricity_power_active': '',
+            'electricity_power_reactive': '',
+            'heat_power': '',
           },
         },
       },

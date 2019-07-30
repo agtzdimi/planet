@@ -16,15 +16,7 @@ import { HttpClient } from '@angular/common/http';
       </nb-card-body>
     </nb-card>
   `,
-  styles: [`
-    button {
-      margin: 1rem;
-    }
-    nb-list-item { cursor: pointer; }
-    nb-list-item:hover {
-        background-color: #D3D3D3;
-      }
-  `],
+  styleUrls: ['./select-form.component.scss'],
 })
 export class DialogSelectFormPromptComponent {
   forms: String[];

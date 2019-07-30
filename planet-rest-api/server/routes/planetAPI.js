@@ -202,60 +202,6 @@ exports.deleteScenario = (req, res) => {
     res.send(msg);
 };
 
-exports.addDevice = (req, res) => {
-    let results = JSON.parse(shell.exec('cat ' + `${__dirname}/../../../linksmart/conf/devices/mqtt-switch.json`).stdout);
-    results['resources'].push(req.body);
-    shell.exec('mosquitto_pub -t "middleware_restart" -m "Start"');
-    const status = shell.exec("mosquitto_pub -t \"middleware_restart\" -m \'" + JSON.stringify(results) + "\'");
-    shell.exec('mosquitto_pub -t "middleware_restart" -m "End"');
-    if (!status.stderr) {
-        res.send({ response: 'Success' });
-    }
-};
-
-exports.getDevices = (req, res) => {
-    const results = JSON.parse(shell.exec('cat ' + `${__dirname}/../../../linksmart/conf/devices/mqtt-switch.json`).stdout);
-    res.send({ results: results });
-};
-
-exports.editDevice = (req, res) => {
-    let results = JSON.parse(shell.exec('cat ' + `${__dirname}/../../../linksmart/conf/devices/mqtt-switch.json`).stdout);
-    results['resources'] = results['resources'].map((val) => {
-        if (val['name'] === req.body[0].name) {
-            val['description'] = req.body[0].description;
-            val['IP'] = req.body[0].IP;
-            val['Port'] = req.body[0].Port;
-            val['metadata'] = req.body[0].metadata;
-            return val;
-        } else {
-            return val;
-        }
-    });
-
-    shell.exec('mosquitto_pub -t "middleware_restart" -m "Start"');
-    const status = shell.exec("mosquitto_pub -t \"middleware_restart\" -m \'" + JSON.stringify(results) + "\'");
-    shell.exec('mosquitto_pub -t "middleware_restart" -m "End"');
-    if (!status.stderr) {
-        res.send({ response: 'Success' });
-    }
-};
-
-exports.deleteDevice = (req, res) => {
-    let results = JSON.parse(shell.exec('cat ' + `${__dirname}/../../../linksmart/conf/devices/mqtt-switch.json`).stdout);
-    results['resources'] = results['resources'].filter((val) => {
-        if (val['name'] !== req.body.name) {
-            return val;
-        }
-    });
-
-    shell.exec('mosquitto_pub -t "middleware_restart" -m "Start"');
-    const status = shell.exec("mosquitto_pub -t \"middleware_restart\" -m \'" + JSON.stringify(results) + "\'");
-    shell.exec('mosquitto_pub -t "middleware_restart" -m "End"');
-    if (!status.stderr) {
-        res.send({ response: 'Success' });
-    }
-};
-
 exports.get_profiles = (req, res) => {
     const windPayload = req.query.windPayload;
     const pvPayload = req.query.pvPayload;

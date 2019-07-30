@@ -82,7 +82,7 @@ module.exports = class MongoDbHelper {
       delete: id => {
         // TODO: delete many
         return new Promise((resolve, reject) => {
-          mongoDbCollection.removeOne({ _id: id }, (err, result) => {
+          mongoDbCollection.removeOne({ name: id }, (err, result) => {
             if (err) {
               reject(err);
             }
