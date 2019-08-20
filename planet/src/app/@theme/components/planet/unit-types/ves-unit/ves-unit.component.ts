@@ -21,7 +21,6 @@ export class VESUnitComponent implements OnChanges {
           'configuration': {
             'nominal_heat_power': '',
             'efficiency_thermal': '',
-            'cos_phi': '',
           },
           'input': {
             'control': '',
@@ -46,6 +45,11 @@ export class VESUnitComponent implements OnChanges {
         metadata = JSON.parse(metadata);
         this.vesParams['payload']['parameters']['configuration'] = metadata;
         this.vesParams['description'] = changes['vesInput']['currentValue']['description'];
+        this.ves.emit(this.vesParams);
+      } else if (changes['vesInput']['currentValue']) {
+        const defaultValues = JSON.stringify(changes['vesInput']['currentValue']).replace(/\./g, '_');
+        this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+        this.ves.emit(this.vesParams);
       }
     }
   }

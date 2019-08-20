@@ -30,8 +30,3 @@
     [(val)]="p2gParams['payload']['parameters']['configuration']['efficiency_thermal']"
     [compId]="'p2g_efficiency_thermal'" [inputHtmlLabel1]="'Eff<sub>th</sub>'">
 </ngx-input-field>
-
-<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="onChange(['cos_phi'],+$event)"
-    [(val)]="p2gParams['payload']['parameters']['configuration']['cos_phi']" [compId]="'p2g_cos_phi'"
-    [inputHtmlLabel1]="'cos(phi)'">
-</ngx-input-field>

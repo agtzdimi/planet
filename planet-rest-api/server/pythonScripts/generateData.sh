@@ -66,7 +66,6 @@ awk -v id="$1" -v count=$2 'BEGIN {FS=OFS=","} {
 
 windData="$1"
 pvData="$2"
-echo "||||||||||||||||||||||${pvData}||||||||||||||||||||||||||||||||||||${windData}||||||||||||||||||||||||||||||||||||||||||||||$3|||||||$4|||||||$5"
 import="$3"
 if [[ $import == true ]]; then
    NODES_COUNT=$(grep -o 'node\.[0-9]' ./public/files/Parameters_initialization.txt | wc -l)
@@ -107,13 +106,11 @@ windStartYear="$pvStartYear"
 turbineModel=$(echo "$turbineModel" | sed 's/[[:space:]]/+/g')
 
 echo "Lat= $lat Lon = $lon StartDt = $pvStartYear EndDt = $pvEndYear Capacity = $pvCapacity Tracking = $tracking SystemLoss = $systemLoss Tilt = $tilt Azimuth = $azimuth"
-curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/pv?&lat=$lat&lon=$lon&date_from=$pvStartYear&date_to=$pvEndYear&capacity=$pvCapacity&tracking=$tracking&system_loss=$systemLoss&tilt=$tilt&azim=$azimuth&raw=false&dataset=merra2&format=csv" |
+curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/pv?&lat=$lat&lon=$lon&date_from=$pvStartYear&date_to=$pvEndYear&capacity=$pvCapacity&tracking=$tracking&system_loss=$systemLoss&tilt=$tilt&azim=$azimuth&raw=false&header=false&dataset=merra2&format=csv" |
    cut -d , -f2 > nodeFiles/PV1
-curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/wind?&lat=$lat&lon=$lon&date_from=$windStartYear&date_to=$windEndYear&capacity=$windCapacity&raw=false&dataset=merra2&height=$hubHeight&turbine=$turbineModel&format=csv" |
+curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/wind?&lat=$lat&lon=$lon&date_from=$windStartYear&date_to=$windEndYear&capacity=$windCapacity&raw=false&dataset=merra2&height=$hubHeight&turbine=$turbineModel&header=false&format=csv" |
    cut -d , -f2 > nodeFiles/Wind1
 
-sed -i '1d' nodeFiles/PV1
-sed -i '1d' nodeFiles/Wind1
 if [[ "$leapYearIndexAfter" != "$leapYearIndexBefore" ]]; then
    eval ' for hour in {'"$((leapYearIndexAfter+1))"'..'"$((leapYearIndexAfter+24))"'}; do sed -i ""$hour"d" nodeFiles/PV1; sed -i ""$hour"d" nodeFiles/Wind1 ;done'
 fi

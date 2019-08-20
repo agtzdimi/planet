@@ -1,1 +1,188 @@
-{"name":"MQTTSwitch","description":"MQTT switch service","meta":{},"ttl":120,"resources":[{"type":"Resource","unitType":"Sim","name":"SendSimulator","IP":"160.40.49.244","Port":"1883","description":"SendSimulator","metadata":{"Simulink":true,"OpalRT":false,"IP":"160.40.49.244","Port":"1883","Topic":"SendSimulator"},"agent":{"type":"service","dir":null,"exec":"agent-examples/mqtt-switch/switch.sh"},"representation":{},"protocols":[{"type":"MQTT","methods":["PUB","SUB"],"content-types":["text/plain"],"pub_topic":"SendSimulator","sub_topic":"/planet/GetData"},{"type":"REST","methods":["GET","POST","PUT"],"content-types":["text/plain"]}]},{"type":"Resource","unitType":"P2G","name":"P2G1","IP":"160.40.49.244","Port":"1883","description":"P2G1 Description Test","metadata":{"nominal.electric.power":3,"efficiency.electrolysis":2,"efficiency.methanation":2,"efficiency.thermal":22,"cos_phi":2},"agent":{"type":"service","dir":null,"exec":"agent-examples/mqtt-switch/switch.sh"},"representation":{},"protocols":[{"type":"MQTT","methods":["PUB","SUB"],"content-types":["text/plain"],"pub_topic":"P2G1","sub_topic":"/planet/GetP2G1"},{"type":"REST","methods":["GET","POST","PUT"],"content-types":["text/plain"]}]},{"type":"Resource","unitType":"P2H","name":"P2H1","IP":"160.40.49.244","Port":"1883","description":"P2H1 Description","metadata":{"nominal.heat.power":1,"cop":1,"cos_phi":1},"agent":{"type":"service","dir":null,"exec":"agent-examples/mqtt-switch/switch.sh"},"representation":{},"protocols":[{"type":"MQTT","methods":["PUB","SUB"],"content-types":["text/plain"],"pub_topic":"P2H1","sub_topic":"/planet/GetP2H1"},{"type":"REST","methods":["GET","POST","PUT"],"content-types":["text/plain"]}]}]}
+{
+    "name": "MQTTSwitch",
+    "description": "MQTT switch service",
+    "meta": {},
+    "ttl": 120,
+    "resources": [
+        {
+            "type": "Resource",
+            "unitType": "Sim",
+            "name": "SendSimulator",
+            "IP": "160.40.49.244",
+            "Port": "1883",
+            "description": "SendSimulator",
+            "metadata": {
+                "Simulink": true,
+                "OpalRT": false,
+                "IP": "160.40.49.244",
+                "Port": "1883",
+                "Topic": "SendSimulator"
+            },
+            "agent": {
+                "type": "service",
+                "dir": null,
+                "exec": "agent-examples/mqtt-switch/switch.sh"
+            },
+            "representation": {},
+            "protocols": [
+                {
+                    "type": "MQTT",
+                    "methods": [
+                        "PUB",
+                        "SUB"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ],
+                    "pub_topic": "SendSimulator",
+                    "sub_topic": "/planet/GetData"
+                },
+                {
+                    "type": "REST",
+                    "methods": [
+                        "GET",
+                        "POST",
+                        "PUT"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Resource",
+            "unitType": "P2G",
+            "name": "P2G1",
+            "IP": "160.40.49.244",
+            "Port": "1883",
+            "description": "P2G1 Description Test",
+            "metadata": {
+                "nominal.electric.power": 3,
+                "efficiency.electrolysis": 2,
+                "efficiency.methanation": 2,
+                "efficiency.thermal": 22,
+            },
+            "agent": {
+                "type": "service",
+                "dir": null,
+                "exec": "agent-examples/mqtt-switch/switch.sh"
+            },
+            "representation": {},
+            "protocols": [
+                {
+                    "type": "MQTT",
+                    "methods": [
+                        "PUB",
+                        "SUB"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ],
+                    "pub_topic": "P2G1",
+                    "sub_topic": "/planet/GetP2G1"
+                },
+                {
+                    "type": "REST",
+                    "methods": [
+                        "GET",
+                        "POST",
+                        "PUT"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Resource",
+            "unitType": "P2H",
+            "name": "P2H1",
+            "IP": "160.40.49.244",
+            "Port": "1883",
+            "description": "P2H1 Description",
+            "metadata": {
+                "nominal.heat.power": 1,
+                "cop": 1,
+            },
+            "agent": {
+                "type": "service",
+                "dir": null,
+                "exec": "agent-examples/mqtt-switch/switch.sh"
+            },
+            "representation": {},
+            "protocols": [
+                {
+                    "type": "MQTT",
+                    "methods": [
+                        "PUB",
+                        "SUB"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ],
+                    "pub_topic": "P2H1",
+                    "sub_topic": "/planet/GetP2H1"
+                },
+                {
+                    "type": "REST",
+                    "methods": [
+                        "GET",
+                        "POST",
+                        "PUT"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Resource",
+            "unitType": "P2G",
+            "name": "P2G2",
+            "IP": "160.40.49.244",
+            "Port": "1883",
+            "description": "P2G2 Description",
+            "metadata": {
+                "nominal_electric_power": 100,
+                "efficiency_electrolysis": 5,
+                "efficiency_methanation": 3,
+                "efficiency_thermal": 4,
+            },
+            "agent": {
+                "type": "service",
+                "dir": null,
+                "exec": "agent-examples/mqtt-switch/switch.sh"
+            },
+            "representation": {},
+            "protocols": [
+                {
+                    "type": "MQTT",
+                    "methods": [
+                        "PUB",
+                        "SUB"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ],
+                    "pub_topic": "P2G2",
+                    "sub_topic": "/planet/GetP2G2"
+                },
+                {
+                    "type": "REST",
+                    "methods": [
+                        "GET",
+                        "POST",
+                        "PUT"
+                    ],
+                    "content-types": [
+                        "text/plain"
+                    ]
+                }
+            ],
+            "_id": "a86300d0-c27a-11e9-b08e-8f3cd538d2eb"
+        }
+    ]
+}

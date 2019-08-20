@@ -234,39 +234,22 @@
                 <div class="col-md-1">
                     <label>P2G</label>
                 </div>
-                <div class="col-md-2">
-                    <section class="slider-checkbox">
-                        <input type="checkbox" [checked]="checkVal[displayingNode][4]" (change)="changeCheckBoxVal(4)"
-                            id="techParamCheck5" #techParamCheck5>
-                        <label class="label" for="techParamCheck5"></label>
-                    </section>
+                <div class="col-md-3">
+                    <div *ngFor="let node of nodes;let i = index">
+                        <nb-select placeholder="Available P2G Units" #P2GSelect
+                            (selectedChange)="optionSelected($event,'P2G')" *ngIf="displayingNode === ('node.' + (i+1))"
+                            [selected]="unitSelectedPerNode[displayingNode]">
+                            <nb-option *ngFor="let regP2G of registeredDevices['P2G']" [value]="regP2G['name']">
+                                {{regP2G.name}}</nb-option>
+                        </nb-select>
+                    </div>
                 </div>
             </div>
 
             <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Nominal Power'"
-                    [label2]="'MW'"
-                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['nominal.electric.power']=+$event"
-                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['nominal.electric.power']"
-                    [compId]="'techParamCheckInput5.1'">
-                </ngx-input-field>
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Electrolysis'"
-                    [label2]="'%'"
-                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']=+$event"
-                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.electrolysis']"
-                    [compId]="'techParamCheckInput5.2'">
-                </ngx-input-field>
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Methanation'"
-                    [label2]="'%'"
-                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']=+$event"
-                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.methanation']"
-                    [compId]="'techParamCheckInput5.3'">
-                </ngx-input-field>
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Effieciency Thermal'"
-                    [label2]="'%'"
-                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']=+$event"
-                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2G['efficiency.thermal']"
-                    [compId]="'techParamCheckInput5.4'"></ngx-input-field>
+                <ngx-p2g-unit (p2g)="onUnitChange($event,'P2G')" *ngIf="unitSelectedPerNode[displayingNode]"
+                    [p2gInput]="paramInit['payload']['electric.grid'][displayingNode]['P2G']">
+                </ngx-p2g-unit>
             </div>
 
             <div class="row p-2">

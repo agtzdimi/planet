@@ -24,7 +24,6 @@ export class P2GUnitComponent implements OnChanges {
             'efficiency_electrolysis': '',
             'efficiency_methanation': '',
             'efficiency_thermal': '',
-            'cos_phi': '',
           },
           'input': {
             'control': '',
@@ -50,6 +49,10 @@ export class P2GUnitComponent implements OnChanges {
         metadata = JSON.parse(metadata);
         this.p2gParams['payload']['parameters']['configuration'] = metadata;
         this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
+        this.p2g.emit(this.p2gParams);
+      } else if (changes['p2gInput']['currentValue']) {
+        const defaultValues = JSON.stringify(changes['p2gInput']['currentValue']).replace(/\./g, '_');
+        this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
         this.p2g.emit(this.p2gParams);
       }
     }

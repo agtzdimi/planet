@@ -266,7 +266,7 @@ export class CreateScenarioComponent {
                         } else {
                             const val = sprintf('%02d', date.getHours()) + ':' + sprintf('%02d', date.getMinutes());
                             hours.push(val);
-                            date.setHours(this.paramInit['payload']['simulation']['time.step'] / 60);
+                            date.setMinutes(date.getMinutes() + this.paramInit['payload']['simulation']['time.step']);
                         }
                     }
                     this.profiles.push(hours);

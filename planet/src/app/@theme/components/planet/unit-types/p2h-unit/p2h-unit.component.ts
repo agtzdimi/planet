@@ -21,7 +21,6 @@ export class P2HUnitComponent implements OnChanges {
           'configuration': {
             'nominal_heat_power': '',
             'cop': '',
-            'cos_phi': '',
           },
           'input': {
             'control': '',
@@ -46,6 +45,11 @@ export class P2HUnitComponent implements OnChanges {
         metadata = JSON.parse(metadata);
         this.p2hParams['payload']['parameters']['configuration'] = metadata;
         this.p2hParams['description'] = changes['p2hInput']['currentValue']['description'];
+        this.p2h.emit(this.p2hParams);
+      } else if (changes['p2hInput']['currentValue']) {
+        const defaultValues = JSON.stringify(changes['p2hInput']['currentValue']).replace(/\./g, '_');
+        this.p2hParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+        this.p2h.emit(this.p2hParams);
       }
     }
   }

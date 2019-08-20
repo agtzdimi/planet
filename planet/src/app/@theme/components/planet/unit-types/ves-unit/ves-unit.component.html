@@ -20,8 +20,3 @@
     [(val)]="vesParams['payload']['parameters']['configuration']['efficiency_thermal']"
     [compId]="'ves_efficiency_thermal'" [inputHtmlLabel1]="'Eff<sub>th</sub>'">
 </ngx-input-field>
-
-<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="onChange(['cos_phi'],+$event)"
-    [(val)]="vesParams['payload']['parameters']['configuration']['cos_phi']" [compId]="'ves_cos_phi'"
-    [inputHtmlLabel1]="'cos(phi)'">
-</ngx-input-field>

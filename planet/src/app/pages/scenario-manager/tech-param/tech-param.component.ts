@@ -9,9 +9,12 @@ import {
     OnInit,
     AfterContentChecked,
 } from '@angular/core';
+import { map } from 'rxjs/operators';
+
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'ngx-tech-param',
@@ -32,6 +35,8 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     displayingNode: string;
     displayContent: boolean = false;
     nodes = [];
+    registeredDevices = [];
+    unitSelectedPerNode = [];
     currentNodes = [];
     checkBoxStatus = {};
     CHECKBOX_COUNT = 6;
@@ -49,7 +54,8 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
 
     constructor(private model2: Model2ParamInitService,
         private generalParams: GeneralParamsService,
-        private model1: Model1ParamInitService) {
+        private model1: Model1ParamInitService,
+        private httpClient: HttpClient) {
         this.turbineModels = ['Vestas V90 2000', 'Vestas V47 660', 'Vestas V164 7000', 'Siemens SWT 2.3 93',
             'REpower 5M', 'GE 1.5sle', 'Enercon E82 2000', 'Enercon E126 6500', 'Acciona AW77 1500',
             'Alstom Eco 74', 'Alstom Eco 80', 'Alstom Eco 110', 'Bonus B23 150', 'Bonus B33 300',
@@ -122,6 +128,23 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     }
 
     ngOnInit() {
+        const url = '/planet/rest/get_devices';
+        this.httpClient.get(url)
+            .pipe(map((results) => {
+                return results['results']['resources'];
+            }),
+            )
+            .subscribe(
+                (devices) => {
+                    this.registeredDevices['P2G'] = devices.filter(value => value.unitType === 'P2G');
+                    this.registeredDevices['P2H'] = devices.filter(value => value.unitType === 'P2H');
+                    this.registeredDevices['VES'] = devices.filter(value => value.unitType === 'VES');
+                },
+                (error) => {
+                    // console.log(error)
+                },
+            );
+
         this.nodePvParam = this.pvParam['payload'];
         this.nodeWindParam = this.windParam['payload'];
 
@@ -313,6 +336,25 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
         } else if (this.generalParams.model === 2) {
             this.model2.updateDefaultValues(id, flag, this.displayingNode);
         }
+    }
+
+    onUnitChange(event, unitType) {
+        let arr = [];
+        arr.push(event['payload']['parameters']['configuration']);
+        arr = arr.map(value => {
+            return JSON.parse(JSON.stringify(value).replace(/_/g, '.'));
+        });
+        this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = arr[0];
+    }
+
+    optionSelected(event, unitType) {
+        this.unitSelectedPerNode[this.displayingNode] = event;
+        const optionValue = this.registeredDevices[unitType].filter(value => {
+            if (value['name'] === event) {
+                return value['metadata'];
+            }
+        });
+        this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = optionValue[0]['metadata'];
     }
 
     nextPhase() {
