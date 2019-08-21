@@ -1,9 +1,10 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class EconomyFileService {
 
-    economyFileUpdated = new EventEmitter<Object>();
+    economyFileUpdated = new Subject<Object>();
 
     economyFile = {
         'file.name': 'Economy_environment_initialization',
@@ -169,7 +170,7 @@ export class EconomyFileService {
                 },
             };
         }
-        this.economyFileUpdated.emit(this.economyFile);
+        this.economyFileUpdated.next(this.economyFile);
     }
 
     changeModel(newModel) {

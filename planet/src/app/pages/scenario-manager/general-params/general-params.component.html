@@ -13,16 +13,16 @@
           <div class="row" [ngStyle]="{'margin-bottom':'2rem'}">
             <div class="col-md-6">
               <input class="m-2" type="text" nbInput fullWidth fieldSize="small" placeholder="Simulation Name"
-                [ngModel]="generalParams.formName" (ngModelChange)="formNameChange($event)"
+                [ngModel]="genParams['formName']" (ngModelChange)="formNameChange($event)"
                 [ngStyle]="{'width':'100%','height':'80%'}">
             </div>
             <div class="col-md-6">
-              <div *ngIf="generalParams.formName === ''" class="requiredField"> Simulation Name is
+              <div *ngIf="genParams['formName'] === ''" class="requiredField"> Simulation Name is
                 required</div>
-              <div *ngIf="generalParams.formName.includes('  -  ')" class="requiredField">
+              <div *ngIf="genParams['formName'].includes('  -  ')" class="requiredField">
                 '[space][space]-[space][space]' is a
                 reserved word!</div>
-              <div *ngIf="generalParams.formName.includes('|')" class="requiredField">
+              <div *ngIf="genParams['formName'].includes('|')" class="requiredField">
                 The symbol '|' is reserved!</div>
             </div>
           </div>
@@ -30,10 +30,10 @@
             <div class="col-md-6">
               <textarea class="m-2" nbInput fullWidth shape="round" (change)="handleDescriptionChange($event)"
                 placeholder="Simulation Description"
-                [ngStyle]="{'width':'100%','padding-left': '1rem','padding-top': '0.3rem'}">{{generalParams.formDescription}}</textarea>
+                [ngStyle]="{'width':'100%','padding-left': '1rem','padding-top': '0.3rem'}">{{genParams['formDescription']}}</textarea>
             </div>
             <div class="col-md-6">
-              <div *ngIf="generalParams.formDescription === ''" class="requiredTextarea"> Simulation Description is
+              <div *ngIf="genParams['formDescription'] === ''" class="requiredTextarea"> Simulation Description is
                 required</div>
             </div>
           </div>
@@ -143,7 +143,7 @@
                   <button *ngIf="showButton && !isLoadModule" nbButton hero class="m-3" status="info" shape="round"
                     (click)="animateInfo()">Continue</button>
                   <div *ngIf="!showButton && !isLoadModule" class="requiredField">
-                    {{generalParams.errorMessage}}</div>
+                    {{genParams['errorMessage']}}</div>
                 </div>
               </div>
             </div>
@@ -151,10 +151,10 @@
             <div class="col-md-1"></div>
             <div class="col-md-7">
               <div *ngIf="openParams()" class="col-md-12">
-                <div *ngIf="generalParams.gridImage">
-                  <img *ngIf="generalParams.gridImage!=='assets/images/grid.png'"
-                    [suiTransition]="transitionController1" [src]="generalParams.gridImage">
-                  <ngx-eight-node-el-grid *ngIf="generalParams.gridImage==='assets/images/grid.png'">
+                <div *ngIf="genParams['gridImage']">
+                  <img *ngIf="genParams['gridImage']!=='assets/images/grid.png'" [suiTransition]="transitionController1"
+                    [src]="genParams['gridImage']">
+                  <ngx-eight-node-el-grid *ngIf="genParams['gridImage']==='assets/images/grid.png'">
                   </ngx-eight-node-el-grid>
                 </div>
               </div>
@@ -164,7 +164,7 @@
         </div>
         <div class="col-md-1"></div>
         <div *ngIf="openParams()" class="col-md-5">
-          <ngx-leaflet-map [load]="generalParams.showMap" [(coordinates)]="generalParams.coordinates"
+          <ngx-leaflet-map [load]="genParams['showMap']" [(coordinates)]="genParams['coordinates']"
             (coordChange)="setCoord($event)">
           </ngx-leaflet-map>
         </div>

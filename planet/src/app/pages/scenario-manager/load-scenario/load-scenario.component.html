@@ -1,4 +1,4 @@
-<div class="row" *ngIf="loadPage && generalParams.formName !== ''">
+<div class="row" *ngIf="loadPage && genParams['formName'] !== ''">
   <div class="col-xxl-12">
 
     <ngx-general-params [isLoadModule]="true"></ngx-general-params>
@@ -24,14 +24,14 @@
 
     <div class="row submit-button">
       <div class="col-md-2">
-        <button *ngIf="!generalParams.formName.includes('  -  ')" nbButton type="button" [nbSpinner]="loading"
+        <button *ngIf="!genParams['formName'].includes('  -  ')" nbButton type="button" [nbSpinner]="loading"
           nbSpinnerStatus="primary" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="large"
           class="start-upload-btn m-2" (click)="startUpload()">
           Save Scenario
         </button>
       </div>
       <div *ngIf="saveMessage!==''" class="col-md-2">
-        <div *ngIf="generalParams.formName.includes('  -  ')" class="errorTextarea"> '[space][space]-[space][space]' is
+        <div *ngIf="genParams['formName'].includes('  -  ')" class="errorTextarea"> '[space][space]-[space][space]' is
           a
           reserved word!</div>
         <div [ngClass]="{

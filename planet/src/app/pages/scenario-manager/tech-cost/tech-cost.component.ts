@@ -1,15 +1,17 @@
-import { Component, OnChanges, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy } from '@angular/core';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngx-tech-cost',
     styleUrls: ['./tech-cost.component.scss'],
     templateUrl: './tech-cost.component.html',
 })
-export class TechCostComponent implements OnChanges {
+export class TechCostComponent implements OnDestroy {
 
     checkVal: boolean[] = [];
     economyParams: Object;
+    private subscriptions: Subscription[] = [];
     CHECKBOX_COUNT = 5;
     @Output() phase5: EventEmitter<Boolean>;
     @Input() isLoadModule: Boolean;
@@ -21,21 +23,21 @@ export class TechCostComponent implements OnChanges {
         this.phase5 = new EventEmitter<Boolean>();
         this.economyParams = this.economyFileService.economyFile;
 
-        this.economyFileService.economyFileUpdated.subscribe(
+        this.subscriptions.push(this.economyFileService.economyFileUpdated.subscribe(
             (data) => this.economyParams = data,
-        );
-    }
-
-    ngOnChanges() {
-
+        ));
     }
 
     nextPhase() {
-        this.economyFileService.economyFileUpdated.emit(this.economyParams);
+        this.economyFileService.economyFileUpdated.next(this.economyParams);
         this.phase5.emit(true);
     }
 
     changeCheckBoxVal(id) {
         this.checkVal[id] = !this.checkVal[id];
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
     }
 }

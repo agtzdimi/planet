@@ -1,16 +1,18 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-tech-control',
   templateUrl: './tech-control.component.html',
   styleUrls: ['./tech-control.component.scss'],
 })
-export class TechControlComponent implements OnInit {
+export class TechControlComponent implements OnDestroy {
 
   @Output() phase4: EventEmitter<Boolean>;
   @Input() isLoadModule: Boolean;
   controlSystem: Object;
+  private subscriptions: Subscription[] = [];
   resProd = {
     'yes': false,
     'no': true,
@@ -19,17 +21,14 @@ export class TechControlComponent implements OnInit {
   constructor(private controlFileService: ControlFileService) {
     this.controlSystem = this.controlFileService.controlSystem;
     this.phase4 = new EventEmitter<Boolean>();
-    this.controlFileService.controlFileUpdated.subscribe(
+    this.subscriptions.push(this.controlFileService.controlFileUpdated.subscribe(
       (data) => this.controlSystem = data,
-    );
-  }
-
-  ngOnInit() {
+    ));
   }
 
   nextPhase() {
     if (!this.checkControlValue()) {
-      this.controlFileService.controlFileUpdated.emit(this.controlSystem);
+      this.controlFileService.controlFileUpdated.next(this.controlSystem);
       this.phase4.emit(true);
     }
 
@@ -47,5 +46,9 @@ export class TechControlComponent implements OnInit {
       this.resProd = { 'yes': false, 'no': event };
       this.controlSystem['payload']['RES.curtailment'] = 0;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

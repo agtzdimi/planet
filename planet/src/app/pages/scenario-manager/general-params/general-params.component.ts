@@ -1,22 +1,24 @@
-import { Component, AfterViewInit, Output, EventEmitter, Input, ViewChild, ElementRef, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, AfterViewInit, Output, EventEmitter, Input, ViewChild, ElementRef, OnInit, AfterContentChecked, OnDestroy } from '@angular/core';
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService, NbDialogConfig } from '@nebular/theme';
 import { DialogSubmitPromptComponent } from '../../../@theme/components/planet/dialogs/dialog-submit.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-general-params',
   templateUrl: './general-params.component.html',
   styleUrls: ['./general-params.component.scss'],
 })
-export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterContentChecked {
+export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterContentChecked, OnDestroy {
 
   paramInit: Object;
   transitionController1 = new TransitionController();
   times = 1;
   currentTab = 'Electric Grid';
+  private subscriptions: Subscription[] = [];
   dataLoaded = false;
   showButton = false;
   loadedSelections = {
@@ -38,6 +40,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
     '3 node dh': false,
   };
   waitLoad = false;
+  genParams = {};
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
@@ -54,50 +57,28 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
     this.min = new Date(2016, 0, 1);
     this.max = new Date(2016, 11, 31);
+    this.genParams = this.generalParams.parameters;
 
     // Subscribe to events
-    this.generalParams.formDescriptionUpdated.subscribe(
-      (data) => this.generalParams.formDescription = data,
-    );
-
-    this.generalParams.formNameUpdated.subscribe(
-      (data) => this.generalParams.formName = data,
-    );
-
-    this.generalParams.showMapUpdate.subscribe(
-      (data) => this.generalParams.showMap = data,
-    );
-
-    this.generalParams.areaPickedUpdate.subscribe(
-      (data) => this.generalParams.areaPicked = data,
-    );
-
-    this.generalParams.gridImageUpdate.subscribe(
-      (data) => this.generalParams.gridImage = data,
-    );
-
-    this.generalParams.errorMessageUpdate.subscribe(
-      (data) => this.generalParams.errorMessage = data,
-    );
-
-    this.generalParams.dateRangeUpdate.subscribe(
-      (data) => this.generalParams.dateRangeClicked = data,
-    );
-
-    this.generalParams.selectedModelUpdate.subscribe(
-      (data) => this.generalParams.selectedModel = data,
-    );
-
-    this.generalParams.modelUpdate.subscribe(
-      (data) => this.generalParams.model = data,
-    );
-
+    this.subscriptions.push(this.generalParams.parametersSubject.subscribe(
+      (data) => {
+        this.genParams['formDescription'] = data['formDescription'];
+        this.genParams['formName'] = data['formName'];
+        this.genParams['showMap'] = data['showMap'];
+        this.genParams['areaPicked'] = data['areaPicked'];
+        this.genParams['gridImage'] = data['gridImage'];
+        this.genParams['errorMessage'] = data['errorMessage'];
+        this.genParams['dateRangeClicked'] = data['dateRangeClicked'];
+        this.genParams['selectedModel'] = data['selectedModel'];
+        this.genParams['model'] = data['model'];
+      },
+    ));
     // In case it is loadModule we need to get generalParameters from the Database
-    this.model1.paramUpdated.subscribe(
+    this.subscriptions.push(this.model1.paramUpdated.subscribe(
       (data) => {
         if (this.isLoadModule && !this.dataLoaded) {
-          this.generalParams.updateFormName(data['payload']['formName']);
-          this.generalParams.updateFormDescription(data['payload']['formDescription']);
+          this.generalParams.updateGeneralParameters(data['payload']['formName'], 'formName');
+          this.generalParams.updateGeneralParameters(data['payload']['formDescription'], 'formDescription');
           this.paramInit = data;
           this.nodesSelected = {
             '8 node el': false,
@@ -106,7 +87,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
             '1 node gas': true,
             '3 node dh': false,
           };
-          this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
+          this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
           if (this.paramInit['payload']['simulation']['time.step'] === 60) {
             this.timeStep['min60'] = true;
             this.timeStep['min15'] = false;
@@ -114,14 +95,14 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
           this.waitLoad = true;
         }
       },
-    );
+    ));
 
-    this.model2.paramUpdated.subscribe(
+    this.subscriptions.push(this.model2.paramUpdated.subscribe(
       (data) => {
         if (this.isLoadModule && !this.dataLoaded) {
           this.dataLoaded = true;
-          this.generalParams.updateFormName(data['payload']['formName']);
-          this.generalParams.updateFormDescription(data['payload']['formDescription']);
+          this.generalParams.updateGeneralParameters(data['payload']['formName'], 'formName');
+          this.generalParams.updateGeneralParameters(data['payload']['formDescription'], 'formDescription');
           this.paramInit = data;
           this.nodesSelected = {
             '8 node el': true,
@@ -130,7 +111,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
             '1 node gas': true,
             '3 node dh': false,
           };
-          this.generalParams.updateGridImage('assets/images/grid.png');
+          this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
           if (this.paramInit['payload']['simulation']['time.step'] === 60) {
             this.timeStep['min60'] = true;
             this.timeStep['min15'] = false;
@@ -138,7 +119,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
           this.waitLoad = true;
         }
       },
-    );
+    ));
   }
 
   ngAfterContentChecked() {
@@ -153,7 +134,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
   ngAfterViewInit() {
     if (this.isLoadModule) {
-      switch (this.generalParams.model) {
+      switch (this.genParams['model']) {
         case 1:
           this.loadedSelections['elec'] = '1 Node';
           this.loadedSelections['dh'] = '1 Node';
@@ -170,7 +151,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   handleDescriptionChange(event) {
-    this.generalParams.updateFormDescription(event.target.value);
+    this.generalParams.updateGeneralParameters(event.target.value, 'formDescription');
   }
 
   animateImage(transitionName: string = 'scale', event) {
@@ -179,14 +160,14 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
         title: 'Initialize with default simulation values?',
       },
     } as Partial<NbDialogConfig<string | Partial<DialogSubmitPromptComponent>>>;
-    this.generalParams.updateAreaPicked(true);
+    this.generalParams.updateGeneralParameters(true, 'areaPicked');
     this.transitionController1.animate(
       new Transition(transitionName, 2000, TransitionDirection.In));
     this.dialogService.open(DialogSubmitPromptComponent, context)
       .onClose.subscribe(status => {
-        this.generalParams.isDefault = status;
-        this.generalParams.isDefaultUpdate(status);
-        if (this.generalParams.isDefault) {
+        this.genParams['isDefault'] = status;
+        this.generalParams.updateGeneralParameters(status, 'isDefault');
+        if (this.genParams['isDefault']) {
           // code if default values
         }
       });
@@ -197,8 +178,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   resizeMap() {
-    this.generalParams.updateShowMap(false);
-    this.generalParams.updateShowMap(true);
+    this.generalParams.updateGeneralParameters(false, 'showMap');
+    this.generalParams.updateGeneralParameters(true, 'showMap');
   }
 
   changeTab(event) {
@@ -210,39 +191,39 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
     if (event['tabTitle'] === 'Electric Grid') {
       if (this.nodesSelected['8 node el']) {
-        this.generalParams.updateGridImage('assets/images/grid.png');
+        this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
       } else {
-        this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
+        this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
       }
     } else if (event['tabTitle'] === 'District Heating') {
       if (this.nodesSelected['3 node dh']) {
-        this.generalParams.updateGridImage('assets/images/3NodeDH.png');
+        this.generalParams.updateGeneralParameters('assets/images/3NodeDH.png', 'gridImage');
       } else {
-        this.generalParams.updateGridImage('assets/images/singleNodeDistrictHeating.png');
+        this.generalParams.updateGeneralParameters('assets/images/singleNodeDistrictHeating.png', 'gridImage');
       }
     } else {
-      this.generalParams.updateGridImage('assets/images/singleNodeGas.png');
+      this.generalParams.updateGeneralParameters('assets/images/singleNodeGas.png', 'gridImage');
     }
   }
 
   onRadioButtonClicked(event) {
     if (event['target']['textContent'] === '8 Node') {
-      this.generalParams.updateGridImage('assets/images/grid.png');
+      this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
       this.nodesSelected['8 node el'] = true;
       this.nodesSelected['1 node el'] = false;
     } else if (event['target']['textContent'] === '3 Node') {
-      this.generalParams.updateGridImage('assets/images/3NodeDH.png');
+      this.generalParams.updateGeneralParameters('assets/images/3NodeDH.png', 'gridImage');
       this.nodesSelected['3 node dh'] = true;
       this.nodesSelected['1 node dh'] = false;
     } else if (this.currentTab === 'Electric Grid') {
-      this.generalParams.updateGridImage('assets/images/singleNodeElectric.png');
+      this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
       this.nodesSelected['1 node el'] = true;
       this.nodesSelected['8 node el'] = false;
     } else if (this.currentTab === 'Gas Network') {
-      this.generalParams.updateGridImage('assets/images/singleNodeGas.png');
+      this.generalParams.updateGeneralParameters('assets/images/singleNodeGas.png', 'gridImage');
       this.nodesSelected['1 node gas'] = true;
     } else {
-      this.generalParams.updateGridImage('assets/images/singleNodeDistrictHeating.png');
+      this.generalParams.updateGeneralParameters('assets/images/singleNodeDistrictHeating.png', 'gridImage');
       this.nodesSelected['1 node dh'] = true;
       this.nodesSelected['8 node dh'] = false;
     }
@@ -250,22 +231,22 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   updateModel() {
-    switch (this.generalParams.model) {
+    switch (this.genParams['model']) {
       case 1:
-        this.model1.paramUpdated.emit(this.paramInit);
+        this.model1.paramUpdated.next(this.paramInit);
         break;
       case 2:
-        this.model2.paramUpdated.emit(this.paramInit);
+        this.model2.paramUpdated.next(this.paramInit);
         break;
     }
   }
 
   handleDateChange(event) {
     if (event.end) {
-      this.generalParams.startingDate = event.start;
-      this.generalParams.endingDate = event.end;
-      this.generalParams.updateStartDate(this.generalParams.startingDate);
-      this.generalParams.updateEndDate(this.generalParams.endingDate);
+      this.genParams['startingDate'] = event.start;
+      this.genParams['endingDate'] = event.end;
+      this.generalParams.updateGeneralParameters(this.genParams['startingDate'], 'startingDate');
+      this.generalParams.updateGeneralParameters(this.genParams['endingDate'], 'endingDate');
       const daysTotal = Math.round(Math.abs((event.start.getTime() - event.end.getTime()) / (24 * 60 * 60 * 1000))) + 1;
       this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal * 24);
       this.updateModel();
@@ -274,12 +255,12 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   updateSelectedModel(event, modelType) {
-    this.generalParams.selectedModel[modelType] = event;
-    this.generalParams.updateSelectedModel(this.generalParams.selectedModel);
+    this.genParams['selectedModel'][modelType] = event;
+    this.generalParams.updateGeneralParameters(this.genParams['selectedModel'], 'selectedModel');
   }
 
   checkGrids() {
-    if (!this.generalParams.selectedModel['dh'] || !this.generalParams.selectedModel['elec'] || !this.generalParams.selectedModel['gas']) {
+    if (!this.genParams['selectedModel']['dh'] || !this.genParams['selectedModel']['elec'] || !this.genParams['selectedModel']['gas']) {
       return false;
     } else {
       return true;
@@ -288,18 +269,18 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
   checkDefaultData() {
     let status = false;
-    if (this.generalParams.formDescription === '' || this.generalParams.formName === '' ||
-      this.generalParams.formName.includes('  -  ') || this.generalParams.formName.includes('|')) {
-      this.generalParams.updateErrorMessage('Please fill in/correct the Simulation Name and Description');
+    if (this.genParams['formDescription'] === '' || this.genParams['formName'] === '' ||
+      this.genParams['formName'].includes('  -  ') || this.genParams['formName'].includes('|')) {
+      this.generalParams.updateGeneralParameters('Please fill in/correct the Simulation Name and Description', 'errorMessage');
     } else if (!Number(+this.paramInit['payload']['simulation']['time.step'])) {
-      this.generalParams.updateErrorMessage('Please give a number for time.step');
+      this.generalParams.updateGeneralParameters('Please give a number for time.step', 'errorMessage');
     } else if (+this.paramInit['payload']['simulation']['time.step'] !== 15 &&
       +this.paramInit['payload']['simulation']['time.step'] !== 60) {
-      this.generalParams.updateErrorMessage('Time Step can only be 15Mins or 60Mins');
+      this.generalParams.updateGeneralParameters('Time Step can only be 15Mins or 60Mins', 'errorMessage');
     } else if (!this.checkGrids()) {
-      this.generalParams.updateErrorMessage('Please Specify the Electricity / District Heating / Gas Grid');
+      this.generalParams.updateGeneralParameters('Please Specify the Electricity / District Heating / Gas Grid', 'errorMessage');
     } else if (this.formpicker && !this.formpicker['queue']) {
-      this.generalParams.updateErrorMessage('Please Specify the period of the simulation');
+      this.generalParams.updateGeneralParameters('Please Specify the period of the simulation', 'errorMessage');
     } else {
       status = true;
     }
@@ -307,24 +288,24 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   setCoord(event) {
-    this.generalParams.coordinates[0] = event[0];
-    this.generalParams.coordinates[1] = event[1];
+    this.genParams['coordinates'][0] = event[0];
+    this.genParams['coordinates'][1] = event[1];
   }
 
   formNameChange(event) {
-    this.generalParams.updateFormName(event);
+    this.generalParams.updateGeneralParameters(event, 'formName');
   }
 
   formDescriptionChange(event) {
-    this.generalParams.updateFormDescription(event);
+    this.generalParams.updateGeneralParameters(event, 'formDescription');
   }
 
   dateRangeChange() {
-    this.generalParams.updateDateRange(!this.generalParams.dateRangeClicked);
+    this.generalParams.updateGeneralParameters(!this.genParams['dateRangeClicked'], 'dateRangeClicked');
   }
 
   openParams() {
-    if (this.generalParams.areaPicked && this.checkGrids() || this.isLoadModule) {
+    if (this.genParams['areaPicked'] && this.checkGrids() || this.isLoadModule) {
       // Initialize model base on user input
       this.calculateModel();
       return true;
@@ -334,17 +315,17 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   calculateModel() {
-    if (this.generalParams.selectedModel['elec'] === '1 Node' && this.generalParams.selectedModel['dh'] === '1 Node') {
-      if (this.generalParams.model !== 1) {
-        this.generalParams.updateModel(1);
+    if (this.genParams['selectedModel']['elec'] === '1 Node' && this.genParams['selectedModel']['dh'] === '1 Node') {
+      if (this.genParams['model'] !== 1) {
+        this.generalParams.updateGeneralParameters(1, 'model');
         this.paramInit = this.model1.paramInit;
-        this.model1.paramUpdated.emit(this.paramInit);
+        this.model1.paramUpdated.next(this.paramInit);
       }
-    } else if (this.generalParams.selectedModel['elec'] === '8 Node' && this.generalParams.selectedModel['dh'] === '1 Node') {
-      if (this.generalParams.model !== 2) {
-        this.generalParams.updateModel(2);
+    } else if (this.genParams['selectedModel']['elec'] === '8 Node' && this.genParams['selectedModel']['dh'] === '1 Node') {
+      if (this.genParams['model'] !== 2) {
+        this.generalParams.updateGeneralParameters(2, 'model');
         this.paramInit = this.model2.paramInit;
-        this.model2.paramUpdated.emit(this.paramInit);
+        this.model2.paramUpdated.next(this.paramInit);
       }
     }
   }
@@ -352,10 +333,10 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   calculateDateInput() {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'];
-    return monthNames[(this.generalParams.loadRangeDate.start.getMonth())] + ' ' + this.generalParams.loadRangeDate.start.getDate()
-      + ', ' + this.generalParams.loadRangeDate.start.getFullYear() + ' - ' +
-      monthNames[(this.generalParams.loadRangeDate.end.getMonth())] + ' ' + this.generalParams.loadRangeDate.end.getDate()
-      + ', ' + this.generalParams.loadRangeDate.end.getFullYear();
+    return monthNames[(this.genParams['loadRangeDate'].start.getMonth())] + ' ' + this.genParams['loadRangeDate'].start.getDate()
+      + ', ' + this.genParams['loadRangeDate'].start.getFullYear() + ' - ' +
+      monthNames[(this.genParams['loadRangeDate'].end.getMonth())] + ' ' + this.genParams['loadRangeDate'].end.getDate()
+      + ', ' + this.genParams['loadRangeDate'].end.getFullYear();
   }
 
   handleTimeStep(event, checkBox) {
@@ -369,6 +350,10 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
       this.timeStep['min15'] = false;
     }
     this.updateModel();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
 }

@@ -1,5 +1,4 @@
-import { Component, EventEmitter } from '@angular/core';
-import { UploadInput, humanizeBytes } from 'ngx-uploader';
+import { Component, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService } from '@nebular/theme';
@@ -10,6 +9,7 @@ import { Model1ParamInitService } from '../../../@theme/services/scenario-manage
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 import { sprintf } from 'sprintf-js';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngx-create-scenario',
@@ -21,20 +21,16 @@ import { sprintf } from 'sprintf-js';
         EconomyFileService],
     templateUrl: './create-scenario.component.html',
 })
-export class CreateScenarioComponent {
+export class CreateScenarioComponent implements OnDestroy {
 
-    formData: FormData;
-    uploadInput: EventEmitter<UploadInput>;
-    humanizeBytes: Function;
-    dragOver: boolean;
     gotPhase2 = 0;
     paramInit = {};
+    private subscriptions: Subscription[] = [];
     phase2: boolean = false;
     phase3: boolean = false;
     phase4: boolean = false;
     phase5: boolean = false;
     loading: boolean = false;
-    revealed = false;
     saveMessage: String = '';
     transitionController2 = new TransitionController();
     transitionController3 = new TransitionController();
@@ -42,25 +38,26 @@ export class CreateScenarioComponent {
     transitionController5 = new TransitionController();
     controlSystem = {};
     econEnv = {};
+    genParams = {};
 
     windParam = {
         'file.name': 'Wind.xlsx',
         'payload': {
-            'lat': this.generalParams.coordinates[1],
-            'lon': this.generalParams.coordinates[0],
+            'lat': this.generalParams.parameters['coordinates'][1],
+            'lon': this.generalParams.parameters['coordinates'][0],
         },
     };
 
     pvParam = {
         'file.name': 'PV.xlsx',
         'payload': {
-            'lat': this.generalParams.coordinates[1],
-            'lon': this.generalParams.coordinates[0],
+            'lat': this.generalParams.parameters['coordinates'][1],
+            'lon': this.generalParams.parameters['coordinates'][0],
         },
     };
     nodes: string;
     profiles = [];
-    showProfiles: boolean = false;
+    // private showProfiles: boolean = false;
 
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
@@ -69,45 +66,34 @@ export class CreateScenarioComponent {
         private model1: Model1ParamInitService,
         private controlFileService: ControlFileService,
         private economyFileService: EconomyFileService) {
-        this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
-        this.humanizeBytes = humanizeBytes;
+        this.genParams = this.generalParams.parameters;
 
         // Subscribe to Events and get back the modified data
-        this.model1.paramUpdated.subscribe(
+        this.subscriptions.push(this.model1.paramUpdated.subscribe(
             (data) => this.paramInit = data,
-        );
+        ));
 
-        this.model2.paramUpdated.subscribe(
+        this.subscriptions.push(this.model2.paramUpdated.subscribe(
             (data) => this.paramInit = data,
-        );
+        ));
 
-        this.generalParams.formNameUpdated.subscribe(
-            (data) => this.generalParams.formName = data,
-        );
+        this.subscriptions.push(this.generalParams.parametersSubject.subscribe(
+            (data) => {
+                this.genParams['formName'] = data['formName'];
+                this.genParams['startingDate'] = data['startingDate'];
+                this.genParams['endingDate'] = data['endingDate'];
+                this.genParams['formDescription'] = data['formDescription'];
+                this.genParams['model'] = data['model'];
+            },
+        ));
 
-        this.generalParams.startingDateUpdate.subscribe(
-            (data) => this.generalParams.startingDate = data,
-        );
-
-        this.generalParams.endingDateUpdate.subscribe(
-            (data) => this.generalParams.endingDate = data,
-        );
-
-        this.generalParams.formDescriptionUpdated.subscribe(
-            (data) => this.generalParams.formDescription = data,
-        );
-
-        this.generalParams.modelUpdate.subscribe(
-            (data) => this.generalParams.model = data,
-        );
-
-        this.controlFileService.controlFileUpdated.subscribe(
+        this.subscriptions.push(this.controlFileService.controlFileUpdated.subscribe(
             (data) => this.controlSystem = data,
-        );
+        ));
 
-        this.economyFileService.economyFileUpdated.subscribe(
+        this.subscriptions.push(this.economyFileService.economyFileUpdated.subscribe(
             (data) => this.econEnv = data,
-        );
+        ));
     }
 
     startUpload(): void {
@@ -125,23 +111,23 @@ export class CreateScenarioComponent {
                 / this.paramInit['payload']['simulation']['time.step']);
 
         // Update Parameters in case the user will save another scenario in the same instance
-        const startDate = this.generalParams.startingDate.getFullYear().toString() +
-            '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
-            '-' + this.generalParams.startingDate.getDate().toString();
-        const endDate = this.generalParams.endingDate.getFullYear().toString() +
-            '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
-            '-' + this.generalParams.endingDate.getDate().toString();
-        this.paramInit['payload']['formName'] = this.generalParams.formName;
-        this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
-        this.paramInit['payload']['model'] = this.generalParams.model;
+        const startDate = this.genParams['startingDate'].getFullYear().toString() +
+            '-' + (this.genParams['startingDate'].getMonth() + 1).toString() +
+            '-' + this.genParams['startingDate'].getDate().toString();
+        const endDate = this.genParams['endingDate'].getFullYear().toString() +
+            '-' + (this.genParams['endingDate'].getMonth() + 1).toString() +
+            '-' + this.genParams['endingDate'].getDate().toString();
+        this.paramInit['payload']['formName'] = this.genParams['formName'];
+        this.paramInit['payload']['formDescription'] = this.genParams['formDescription'];
+        this.paramInit['payload']['model'] = this.genParams['model'];
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
         this.updateModel();
-        this.controlSystem['payload']['formName'] = this.generalParams.formName;
-        this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
+        this.controlSystem['payload']['formName'] = this.genParams['formName'];
+        this.controlSystem['payload']['formDescription'] = this.genParams['formDescription'];
         this.updateControlFile();
-        this.econEnv['payload']['formName'] = this.generalParams.formName;
-        this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
+        this.econEnv['payload']['formName'] = this.genParams['formName'];
+        this.econEnv['payload']['formDescription'] = this.genParams['formDescription'];
         this.updateEconomyFile();
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
@@ -154,12 +140,12 @@ export class CreateScenarioComponent {
                 () => {
                     const oldWindValue = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
                     this.windParam['payload'] = JSON.parse(oldWindValue);
-                    this.windParam['payload']['formName'] = this.generalParams.formName;
-                    this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
+                    this.windParam['payload']['formName'] = this.genParams['formName'];
+                    this.windParam['payload']['formDescription'] = this.genParams['formDescription'];
                     this.windParam['payload']['startDate'] = startDate;
                     this.windParam['payload']['endDate'] = endDate;
-                    this.pvParam['payload']['formName'] = this.generalParams.formName;
-                    this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
+                    this.pvParam['payload']['formName'] = this.genParams['formName'];
+                    this.pvParam['payload']['formDescription'] = this.genParams['formDescription'];
                     this.pvParam['payload']['startDate'] = startDate;
                     this.pvParam['payload']['endDate'] = endDate;
                     url = '/planet/rest/save_data';
@@ -213,23 +199,23 @@ export class CreateScenarioComponent {
 
     getProfiles() {
         const url = '/planet/rest/get_profiles';
-        const startDate = this.generalParams.startingDate.getFullYear().toString() +
-            '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
-            '-' + this.generalParams.startingDate.getDate().toString();
-        const endDate = this.generalParams.endingDate.getFullYear().toString() +
-            '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
-            '-' + this.generalParams.endingDate.getDate().toString();
+        const startDate = this.genParams['startingDate'].getFullYear().toString() +
+            '-' + (this.genParams['startingDate'].getMonth() + 1).toString() +
+            '-' + this.genParams['startingDate'].getDate().toString();
+        const endDate = this.genParams['endingDate'].getFullYear().toString() +
+            '-' + (this.genParams['endingDate'].getMonth() + 1).toString() +
+            '-' + this.genParams['endingDate'].getDate().toString();
         const oldWindValue = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
         this.windParam['payload'] = JSON.parse(oldWindValue);
-        this.windParam['payload']['formName'] = this.generalParams.formName;
-        this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
+        this.windParam['payload']['formName'] = this.genParams['formName'];
+        this.windParam['payload']['formDescription'] = this.genParams['formDescription'];
         this.windParam['payload']['startDate'] = startDate;
         this.windParam['payload']['endDate'] = endDate;
-        this.pvParam['payload']['formName'] = this.generalParams.formName;
-        this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
+        this.pvParam['payload']['formName'] = this.genParams['formName'];
+        this.pvParam['payload']['formDescription'] = this.genParams['formDescription'];
         this.pvParam['payload']['startDate'] = startDate;
         this.pvParam['payload']['endDate'] = endDate;
-        switch (this.generalParams.model) {
+        switch (this.genParams['model']) {
             case 1:
                 this.nodes = '1';
                 break;
@@ -255,7 +241,7 @@ export class CreateScenarioComponent {
                     }
                     const hours = ['Hours'];
                     headers[headers.length] = 'Hours';
-                    const date = this.generalParams.startingDate;
+                    const date = this.genParams['startingDate'];
                     for (let i = 1; i < this.profiles[0].length; i++) {
                         if ((this.paramInit['payload']['simulation']['time.step'] / 60) %
                             (Math.round(24 / this.paramInit['payload']['simulation']['time.step'])) === 0) {
@@ -270,7 +256,7 @@ export class CreateScenarioComponent {
                         }
                     }
                     this.profiles.push(hours);
-                    this.showProfiles = true;
+                    // this.showProfiles = true;
                 },
             );
     }
@@ -320,21 +306,25 @@ export class CreateScenarioComponent {
     }
 
     updateModel() {
-        switch (this.generalParams.model) {
+        switch (this.genParams['model']) {
             case 1:
-                this.model1.paramUpdated.emit(this.paramInit);
+                this.model1.paramUpdated.next(this.paramInit);
                 break;
             case 2:
-                this.model2.paramUpdated.emit(this.paramInit);
+                this.model2.paramUpdated.next(this.paramInit);
                 break;
         }
     }
 
     updateControlFile() {
-        this.controlFileService.controlFileUpdated.emit(this.controlSystem);
+        this.controlFileService.controlFileUpdated.next(this.controlSystem);
     }
 
     updateEconomyFile() {
-        this.economyFileService.economyFileUpdated.emit(this.econEnv);
+        this.economyFileService.economyFileUpdated.next(this.econEnv);
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
     }
 }

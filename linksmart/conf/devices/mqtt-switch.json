@@ -61,7 +61,7 @@
                 "nominal.electric.power": 3,
                 "efficiency.electrolysis": 2,
                 "efficiency.methanation": 2,
-                "efficiency.thermal": 22,
+                "efficiency.thermal": 22
             },
             "agent": {
                 "type": "service",
@@ -104,7 +104,7 @@
             "description": "P2H1 Description",
             "metadata": {
                 "nominal.heat.power": 1,
-                "cop": 1,
+                "cop": 1
             },
             "agent": {
                 "type": "service",
@@ -149,7 +149,7 @@
                 "nominal_electric_power": 100,
                 "efficiency_electrolysis": 5,
                 "efficiency_methanation": 3,
-                "efficiency_thermal": 4,
+                "efficiency_thermal": 4
             },
             "agent": {
                 "type": "service",

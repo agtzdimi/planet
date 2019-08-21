@@ -8,6 +8,7 @@ import {
     AfterViewChecked,
     OnInit,
     AfterContentChecked,
+    OnDestroy,
 } from '@angular/core';
 import { map } from 'rxjs/operators';
 
@@ -15,13 +16,18 @@ import { Model1ParamInitService } from '../../../@theme/services/scenario-manage
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngx-tech-param',
     styleUrls: ['./tech-param.component.scss'],
     templateUrl: './tech-param.component.html',
 })
-export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, AfterContentChecked {
+export class TechParamComponent implements OnChanges,
+    AfterViewChecked,
+    OnInit,
+    AfterContentChecked,
+    OnDestroy {
 
     checkVal: Object = {};
     @Input() pvParam: Object;
@@ -31,6 +37,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     @Output() windChange: EventEmitter<Object>;
     @Output() phase3: EventEmitter<Boolean>;
     nodeWindParam: Object = {};
+    private subscriptions: Subscription[] = [];
     nodePvParam: Object = {};
     displayingNode: string;
     displayContent: boolean = false;
@@ -43,6 +50,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     hubHeight = 80;
     turbineModels = [];
     currentTab = 'Electric Grid';
+    genParams = {};
     g2h = {
         'dh.connected.heat.load': true,
         'not.dh.connected.heat.load': true,
@@ -56,6 +64,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
         private generalParams: GeneralParamsService,
         private model1: Model1ParamInitService,
         private httpClient: HttpClient) {
+        this.genParams = this.generalParams.parameters;
         this.turbineModels = ['Vestas V90 2000', 'Vestas V47 660', 'Vestas V164 7000', 'Siemens SWT 2.3 93',
             'REpower 5M', 'GE 1.5sle', 'Enercon E82 2000', 'Enercon E126 6500', 'Acciona AW77 1500',
             'Alstom Eco 74', 'Alstom Eco 80', 'Alstom Eco 110', 'Bonus B23 150', 'Bonus B33 300',
@@ -86,7 +95,7 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
         this.pvChange = new EventEmitter<Object>();
         this.windChange = new EventEmitter<Object>();
         this.phase3 = new EventEmitter<Boolean>();
-        this.model2.paramUpdated.subscribe(
+        this.subscriptions.push(this.model2.paramUpdated.subscribe(
             (data) => {
                 if (this.currentModel !== 2 || this.isLoadModule) {
                     this.getNodesNames(true);
@@ -96,9 +105,9 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
                     this.currentModel = 2;
                 }
             },
-        );
+        ));
 
-        this.model1.paramUpdated.subscribe(
+        this.subscriptions.push(this.model1.paramUpdated.subscribe(
             (data) => {
                 if (this.currentModel !== 1 || this.isLoadModule) {
                     this.getNodesNames(true);
@@ -108,23 +117,16 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
                     this.currentModel = 1;
                 }
             },
-        );
+        ));
 
-        this.generalParams.startingDateUpdate.subscribe(
-            (data) => this.generalParams.startingDate = data,
-        );
-
-        this.generalParams.endingDateUpdate.subscribe(
-            (data) => this.generalParams.endingDate = data,
-        );
-
-        this.generalParams.updateIsDefault.subscribe(
-            (data) => this.generalParams.isDefault = data,
-        );
-
-        this.generalParams.modelUpdate.subscribe(
-            (data) => this.generalParams.model = data,
-        );
+        this.subscriptions.push(this.generalParams.parametersSubject.subscribe(
+            (data) => {
+                this.genParams['startingDate'] = data['startingDate'];
+                this.genParams['endingDate'] = data['endingDate'];
+                this.genParams['isDefault'] = data['isDefault'];
+                this.genParams['model'] = data['model'];
+            },
+        ));
     }
 
     ngOnInit() {
@@ -154,9 +156,9 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
             this.windParam['payload'] = this.nodeWindParam;
         }
         if (!this.paramInit['payload']) {
-            if (this.generalParams.model === 1) {
+            if (this.genParams['model'] === 1) {
                 this.paramInit = this.model1.paramInit;
-            } else if (this.generalParams.model === 2) {
+            } else if (this.genParams['model'] === 2) {
                 this.paramInit = this.model2.paramInit;
             }
         }
@@ -181,14 +183,14 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
             for (let i = 0; i < this.nodes.length; i++) {
                 this.displayingNode = 'node.' + (i + 1);
                 for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-                    if (this.generalParams.model === 1) {
-                        if (this.generalParams.isDefault) {
+                    if (this.genParams['model'] === 1) {
+                        if (this.genParams['isDefault']) {
                             this.model1.updateDefaultValues(j, true, this.displayingNode);
                         } else {
                             this.model1.updateDefaultValues(j, false, this.displayingNode);
                         }
-                    } else if (this.generalParams.model === 2) {
-                        if (this.generalParams.isDefault) {
+                    } else if (this.genParams['model'] === 2) {
+                        if (this.genParams['isDefault']) {
                             this.model2.updateDefaultValues(j, true, this.displayingNode);
                         } else {
                             this.model2.updateDefaultValues(j, false, this.displayingNode);
@@ -204,9 +206,9 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
         if (calledFromModel === false) {
             this.displayingNode = 'node.1';
         }
-        if (this.generalParams.model === 1) {
+        if (this.genParams['model'] === 1) {
             this.nodes = Object.getOwnPropertyNames(this.model1.paramInit['payload']['electric.grid']);
-        } else if (this.generalParams.model === 2) {
+        } else if (this.genParams['model'] === 2) {
             this.nodes = Object.getOwnPropertyNames(this.model2.paramInit['payload']['electric.grid']);
         }
 
@@ -325,15 +327,15 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     changeCheckBoxVal(id) {
         this.checkVal[this.displayingNode][id] = !this.checkVal[this.displayingNode][id];
         let flag: boolean;
-        if (this.checkVal[this.displayingNode][id] && this.generalParams.isDefault) {
+        if (this.checkVal[this.displayingNode][id] && this.genParams['isDefault']) {
             flag = true;
         } else {
             flag = false;
         }
 
-        if (this.generalParams.model === 1) {
+        if (this.genParams['model'] === 1) {
             this.model1.updateDefaultValues(id, flag, this.displayingNode);
-        } else if (this.generalParams.model === 2) {
+        } else if (this.genParams['model'] === 2) {
             this.model2.updateDefaultValues(id, flag, this.displayingNode);
         }
     }
@@ -358,10 +360,10 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     }
 
     nextPhase() {
-        if (this.generalParams.model === 1) {
-            this.model1.paramUpdated.emit(this.paramInit);
-        } else if (this.generalParams.model === 2) {
-            this.model2.paramUpdated.emit(this.paramInit);
+        if (this.genParams['model'] === 1) {
+            this.model1.paramUpdated.next(this.paramInit);
+        } else if (this.genParams['model'] === 2) {
+            this.model2.paramUpdated.next(this.paramInit);
         }
         this.phase3.emit(true);
     }
@@ -396,11 +398,15 @@ export class TechParamComponent implements OnChanges, AfterViewChecked, OnInit, 
     }
 
     emitG2H(id, heatType) {
-        if (this.generalParams.model === 1) {
+        if (this.genParams['model'] === 1) {
             this.model1.updateG2HValues(id, this.g2h[heatType]);
-        } else if (this.generalParams.model === 2) {
+        } else if (this.genParams['model'] === 2) {
             this.model2.updateG2HValues(id, this.g2h[heatType]);
         }
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
     }
 
 }

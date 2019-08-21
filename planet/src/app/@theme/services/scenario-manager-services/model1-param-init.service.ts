@@ -1,9 +1,10 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class Model1ParamInitService {
 
-    paramUpdated = new EventEmitter<Object>();
+    paramUpdated = new Subject<Object>();
 
     paramInit = {
         'file.name': 'Parameters_initialization',
@@ -202,7 +203,7 @@ export class Model1ParamInitService {
                 }
                 break;
         }
-        this.paramUpdated.emit(this.paramInit);
+        this.paramUpdated.next(this.paramInit);
     }
 
     updateG2HValues(id, flag) {
@@ -256,7 +257,7 @@ export class Model1ParamInitService {
                 }
                 break;
         }
-        this.paramUpdated.emit(this.paramInit);
+        this.paramUpdated.next(this.paramInit);
     }
 
     changeModel(newModel) {

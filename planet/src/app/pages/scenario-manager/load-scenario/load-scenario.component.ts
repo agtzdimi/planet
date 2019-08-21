@@ -12,6 +12,7 @@ import { EconomyFileService } from '../../../@theme/services/scenario-manager-se
 import { Router } from '@angular/router';
 import { NbMenuService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ngx-load-scenario',
@@ -33,10 +34,12 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
     elecParam: any;
+    private subscriptions: Subscription[] = [];
     heatParam: any;
     private alive = true;
     transitionController1 = new TransitionController();
     loading: boolean = false;
+    genParams = {};
 
     paramInit = {};
     controlSystem = {};
@@ -45,16 +48,16 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     windParam = {
         'file.name': 'Wind.xlsx',
         'payload': {
-            'lat': this.generalParams.coordinates[1],
-            'lon': this.generalParams.coordinates[0],
+            'lat': this.genParams['coordinates'][1],
+            'lon': this.genParams['coordinates'][0],
         },
     };
 
     pvParam = {
         'file.name': 'PV.xlsx',
         'payload': {
-            'lat': this.generalParams.coordinates[1],
-            'lon': this.generalParams.coordinates[0],
+            'lat': this.genParams['coordinates'][1],
+            'lon': this.genParams['coordinates'][0],
         },
     };
 
@@ -68,6 +71,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         private economyFileService: EconomyFileService,
         protected router: Router,
         protected menuService: NbMenuService) {
+        this.genParams = this.generalParams.parameters;
         this.menuService.onItemClick()
             .pipe(
                 takeWhile(() => this.alive),
@@ -86,42 +90,32 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         this.humanizeBytes = humanizeBytes;
 
-        this.model2.paramUpdated.subscribe(
+        this.subscriptions.push(this.model2.paramUpdated.subscribe(
             (data) => this.paramInit = data,
-        );
+        ));
 
-        this.model1.paramUpdated.subscribe(
+        this.subscriptions.push(this.model1.paramUpdated.subscribe(
             (data) => this.paramInit = data,
-        );
+        ));
 
         // Subscribe to events to get modified data
-        this.generalParams.formNameUpdated.subscribe(
-            (data) => this.generalParams.formName = data,
-        );
+        this.subscriptions.push(this.generalParams.parametersSubject.subscribe(
+            (data) => {
+                this.generalParams['formName'] = data['formName'];
+                this.generalParams['startingDate'] = data['startingDate'];
+                this.generalParams['endingDate'] = data['endingDate'];
+                this.generalParams['formDescription'] = data['formDescription'];
+                this.generalParams['model'] = data['model'];
+            },
+        ));
 
-        this.generalParams.startingDateUpdate.subscribe(
-            (data) => this.generalParams.startingDate = data,
-        );
-
-        this.generalParams.endingDateUpdate.subscribe(
-            (data) => this.generalParams.endingDate = data,
-        );
-
-        this.generalParams.formDescriptionUpdated.subscribe(
-            (data) => this.generalParams.formDescription = data,
-        );
-
-        this.generalParams.modelUpdate.subscribe(
-            (data) => this.generalParams.model = data,
-        );
-
-        this.controlFileService.controlFileUpdated.subscribe(
+        this.subscriptions.push(this.controlFileService.controlFileUpdated.subscribe(
             (data) => this.controlSystem = data,
-        );
+        ));
 
-        this.economyFileService.economyFileUpdated.subscribe(
+        this.subscriptions.push(this.economyFileService.economyFileUpdated.subscribe(
             (data) => this.econEnv = data,
-        );
+        ));
     }
 
     ngOnInit() {
@@ -129,12 +123,12 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
             .onClose.subscribe(name => {
                 if (name) {
                     // Update formName - formDescription based on user input in dialog box
-                    this.generalParams.formName = name['formName'];
+                    this.genParams['formName'] = name['formName'];
                     let finalFormName = '';
-                    finalFormName = this.generalParams.formName.toString();
-                    this.generalParams.formDescription = name['formDescription'];
-                    this.generalParams.updateFormDescription(this.generalParams.formDescription);
-                    this.generalParams.updateFormName(this.generalParams.formName);
+                    finalFormName = this.genParams['formName'].toString();
+                    this.genParams['formDescription'] = name['formDescription'];
+                    this.generalParams.updateGeneralParameters(this.genParams['formDescription'], 'formDescription');
+                    this.generalParams.updateGeneralParameters(this.genParams['formName'], 'formName');
                     const url = '/planet/rest/load_data';
                     this.httpClient.get(url, {
                         params: {
@@ -153,7 +147,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                                     this.paramInit['payload']['simulation']['time.step'];
                                 this.paramInit['payload']['simulation']['time.step'] = 60 *
                                     this.paramInit['payload']['simulation']['time.step'];
-                                this.generalParams.updateModel(this.paramInit['payload']['model']);
+                                this.generalParams.updateGeneralParameters(this.paramInit['payload']['model'], 'model');
                                 temp = JSON.parse(data['econEnv']);
                                 this.econEnv = temp;
                                 this.economyFileService.changeModel(this.econEnv);
@@ -164,15 +158,15 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                                 this.heatParam = data['heatParam'];
                                 temp = JSON.parse(data['windParam']);
                                 this.windParam['payload'] = temp['payload'];
-                                this.generalParams.startingDate = new Date(temp['payload']['startDate']);
-                                this.generalParams.endingDate = new Date(temp['payload']['endDate']);
-                                this.generalParams.updateStartDate(this.generalParams.startingDate);
-                                this.generalParams.updateEndDate(this.generalParams.endingDate);
-                                this.generalParams.loadRangeDate = {
+                                this.genParams['startingDate'] = new Date(temp['payload']['startDate']);
+                                this.genParams['endingDate'] = new Date(temp['payload']['endDate']);
+                                this.generalParams.updateGeneralParameters(this.genParams['startingDate'], 'startingDate');
+                                this.generalParams.updateGeneralParameters(this.genParams['endingDate'], 'endingDate');
+                                this.genParams['loadRangeDate'] = {
                                     start: this.dateService.addDay(this.dateStart, 0),
                                     end: this.dateService.addDay(this.dateEnd, 0),
                                 };
-                                this.generalParams.updateLoadRangeDate(this.generalParams.loadRangeDate);
+                                this.generalParams.updateGeneralParameters(this.genParams['loadRangeDate'], 'loadRangeDate');
                                 temp = JSON.parse(data['pvParam']);
                                 this.pvParam['payload'] = temp['payload'];
                                 setTimeout(() => {
@@ -202,27 +196,27 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
             Math.round(this.paramInit['payload']['simulation']['simulation.time']
                 / this.paramInit['payload']['simulation']['time.step']);
         // Update values in case current instance will be used to save another scenario
-        const startDate = this.generalParams.startingDate.getFullYear().toString() +
-            '-' + (this.generalParams.startingDate.getMonth() + 1).toString() +
-            '-' + this.generalParams.startingDate.getDate().toString();
-        const endDate = this.generalParams.endingDate.getFullYear().toString() +
-            '-' + (this.generalParams.endingDate.getMonth() + 1).toString() +
-            '-' + this.generalParams.endingDate.getDate().toString();
+        const startDate = this.genParams['startingDate'].getFullYear().toString() +
+            '-' + (this.genParams['startingDate'].getMonth() + 1).toString() +
+            '-' + this.genParams['startingDate'].getDate().toString();
+        const endDate = this.genParams['endingDate'].getFullYear().toString() +
+            '-' + (this.genParams['endingDate'].getMonth() + 1).toString() +
+            '-' + this.genParams['endingDate'].getDate().toString();
         delete this.paramInit['_id'];
-        this.paramInit['payload']['formName'] = this.generalParams.formName;
-        this.paramInit['payload']['formDescription'] = this.generalParams.formDescription;
-        this.paramInit['payload']['model'] = this.generalParams.model;
+        this.paramInit['payload']['formName'] = this.genParams['formName'];
+        this.paramInit['payload']['formDescription'] = this.genParams['formDescription'];
+        this.paramInit['payload']['model'] = this.genParams['model'];
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
         this.updateModel();
 
         delete this.controlSystem['_id'];
-        this.controlSystem['payload']['formName'] = this.generalParams.formName;
-        this.controlSystem['payload']['formDescription'] = this.generalParams.formDescription;
+        this.controlSystem['payload']['formName'] = this.genParams['formName'];
+        this.controlSystem['payload']['formDescription'] = this.genParams['formDescription'];
         this.updateControlFile();
         delete this.econEnv['_id'];
-        this.econEnv['payload']['formName'] = this.generalParams.formName;
-        this.econEnv['payload']['formDescription'] = this.generalParams.formDescription;
+        this.econEnv['payload']['formName'] = this.genParams['formName'];
+        this.econEnv['payload']['formDescription'] = this.genParams['formDescription'];
         this.updateEconomyFile();
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
@@ -237,12 +231,12 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                 () => {
                     const oldWindValue = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
                     this.windParam['payload'] = JSON.parse(oldWindValue);
-                    this.windParam['payload']['formName'] = this.generalParams.formName;
-                    this.windParam['payload']['formDescription'] = this.generalParams.formDescription;
+                    this.windParam['payload']['formName'] = this.genParams['formName'];
+                    this.windParam['payload']['formDescription'] = this.genParams['formDescription'];
                     this.windParam['payload']['startDate'] = startDate;
                     this.windParam['payload']['endDate'] = endDate;
-                    this.pvParam['payload']['formName'] = this.generalParams.formName;
-                    this.pvParam['payload']['formDescription'] = this.generalParams.formDescription;
+                    this.pvParam['payload']['formName'] = this.genParams['formName'];
+                    this.pvParam['payload']['formDescription'] = this.genParams['formDescription'];
                     this.pvParam['payload']['startDate'] = startDate;
                     this.pvParam['payload']['endDate'] = endDate;
                     url = '/planet/rest/save_data';
@@ -280,41 +274,42 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     }
 
     get dateStart(): Date {
-        if (!this.generalParams.startingDate) {
-            this.generalParams.startingDate = new Date(2016, 0, 1);
+        if (!this.genParams['startingDate']) {
+            this.genParams['startingDate'] = new Date(2016, 0, 1);
         }
-        return new Date(this.generalParams.startingDate);
+        return new Date(this.genParams['startingDate']);
     }
 
     get dateEnd(): Date {
-        if (!this.generalParams.endingDate) {
-            this.generalParams.endingDate = new Date(2016, 11, 31);
+        if (!this.genParams['endingDate']) {
+            this.genParams['endingDate'] = new Date(2016, 11, 31);
         }
-        return new Date(this.generalParams.endingDate);
+        return new Date(this.genParams['endingDate']);
     }
 
     updateModel() {
-        switch (this.generalParams.model) {
+        switch (this.genParams['model']) {
             case 1:
                 this.model1.changeModel(this.paramInit);
-                this.model1.paramUpdated.emit(this.paramInit);
+                this.model1.paramUpdated.next(this.paramInit);
                 break;
             case 2:
                 this.model2.changeModel(this.paramInit);
-                this.model2.paramUpdated.emit(this.paramInit);
+                this.model2.paramUpdated.next(this.paramInit);
                 break;
         }
     }
 
     updateControlFile() {
-        this.controlFileService.controlFileUpdated.emit(this.controlSystem);
+        this.controlFileService.controlFileUpdated.next(this.controlSystem);
     }
 
     updateEconomyFile() {
-        this.economyFileService.economyFileUpdated.emit(this.econEnv);
+        this.economyFileService.economyFileUpdated.next(this.econEnv);
     }
 
     ngOnDestroy() {
         this.alive = false;
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
     }
 }

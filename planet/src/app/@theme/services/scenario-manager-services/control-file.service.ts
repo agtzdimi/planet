@@ -1,9 +1,10 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class ControlFileService {
 
-    controlFileUpdated = new EventEmitter<Object>();
+    controlFileUpdated = new Subject<Object>();
 
     controlSystem = {
         'file.name': 'Control_initialization',
@@ -23,7 +24,7 @@ export class ControlFileService {
             this.controlSystem['payload']['control'] = 5;
             this.controlSystem['payload']['RES.curtailment'] = 0;
         }
-        this.controlFileUpdated.emit(this.controlSystem);
+        this.controlFileUpdated.next(this.controlSystem);
     }
 
     changeModel(newModel) {
