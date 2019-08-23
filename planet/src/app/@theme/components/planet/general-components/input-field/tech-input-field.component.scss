@@ -1,6 +1,9 @@
+@import '../../../../styles/themes';
+
 .listItem {
     margin-left: 2.1rem;
 }
+
 input[type=text] {
     text-align: center;
     margin-top: 0.5rem;
@@ -23,4 +26,6 @@ input[type=text] {
   label {
     margin-top: 7px;
     text-align: left;
+    font-family: Open Sans, sans-serif;
+    font-weight: nb-theme(text-label-font-weight);
   }

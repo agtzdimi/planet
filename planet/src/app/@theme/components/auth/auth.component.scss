@@ -1,3 +1,5 @@
+@import '../../styles/themes';
+
 :host /deep/ {
   $auth-layout-padding: 2.5rem;
 
@@ -17,7 +19,7 @@
         font-weight: bold;
       }
     }
-    border-bottom: 2px solid whitesmoke;
+    border-bottom: 2px solid nb-theme(color-info-400);
   }
 
   nb-card {

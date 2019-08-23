@@ -94,23 +94,23 @@
                 <hr>
 
                 <div class="form-group row">
-                  <label for="dt" class="col-sm-6 col-form-label" [ngStyle]="{'line-height': '31px'}">Time Step
+                  <label for="dt" class="col-sm-6 col-form-label"
+                    [ngStyle]="{'line-height': '31px','margin-left':'0'}">Time Step
                     (Minutes)</label>
                   <div class="col-sm-12">
                     <div class="row">
                       <div class="col-md-8">
                         <div class="row">
-                          <div class="col-md-1"></div>
                           <div class="col-md-4">
                             <sui-checkbox [ngModel]="timeStep['min15']" [isReadonly]="timeStep['min15']"
                               (ngModelChange)="handleTimeStep('min15')">
-                              <p [ngStyle]="{'color':'white'}">15</p>
+                              <p>15</p>
                             </sui-checkbox>
                           </div>
                           <div class="col-md-5">
                             <sui-checkbox [ngModel]="timeStep['min60']" [isReadonly]="timeStep['min60']"
                               (ngModelChange)="handleTimeStep('min60')">
-                              <p [ngStyle]="{'color':'white'}">60</p>
+                              <p>60</p>
                             </sui-checkbox>
                           </div>
                         </div>

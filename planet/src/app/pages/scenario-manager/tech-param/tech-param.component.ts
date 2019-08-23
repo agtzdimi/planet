@@ -46,7 +46,7 @@ export class TechParamComponent implements OnChanges,
     unitSelectedPerNode = [];
     currentNodes = [];
     checkBoxStatus = {};
-    CHECKBOX_COUNT = 6;
+    CHECKBOX_COUNT = 5;
     hubHeight = 80;
     turbineModels = [];
     currentTab = 'Electric Grid';
@@ -203,7 +203,7 @@ export class TechParamComponent implements OnChanges,
     }
 
     getNodesNames(calledFromModel: boolean) {
-        if (calledFromModel === false) {
+        if (!calledFromModel) {
             this.displayingNode = 'node.1';
         }
         if (this.genParams['model'] === 1) {
@@ -212,8 +212,10 @@ export class TechParamComponent implements OnChanges,
             this.nodes = Object.getOwnPropertyNames(this.model2.paramInit['payload']['electric.grid']);
         }
 
-        for (let i = 0; i < this.nodes.length; i++) {
-            this.checkVal['node.' + (i + 1)] = {};
+        if (!calledFromModel) {
+            for (let i = 0; i < this.nodes.length; i++) {
+                this.checkVal['node.' + (i + 1)] = {};
+            }
         }
 
         if (this.isLoadModule === false) {

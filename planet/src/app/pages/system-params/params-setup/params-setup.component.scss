@@ -2,12 +2,12 @@
 @import '../../../@theme/styles/image.card.component.scss';
 
 .errorTextarea {
-    color: red;
+    color: nb-theme(color-danger-default);
     margin-top: 7.5%;
   }
   
   .successTextarea {
-    color: green;
+    color: nb-theme(color-success-default);
     margin-top: 7.5%;
   }
 
@@ -25,6 +25,11 @@
       margin: 0.5rem;
     }
   }
+
+  label {
+    font-family: 'Open Sans, sans-serif';
+    font-weight: nb-theme(text-label-font-weight);
+  }
   
   .lorem {
     text-align: justify;
@@ -40,6 +45,10 @@
   }
 
   .selectedSim {
-    border:3px solid lightgreen;
+    border:3px solid nb-theme(color-primary-default);
+  }
+
+  nb-card-header {
+    font-size: 1.2rem;
   }
   

@@ -59,9 +59,9 @@
             "description": "P2G1 Description Test",
             "metadata": {
                 "nominal.electric.power": 3,
-                "efficiency.electrolysis": 2,
-                "efficiency.methanation": 2,
-                "efficiency.thermal": 22
+                "efficiency.electrolysis": 74,
+                "efficiency.methanation": 80,
+                "efficiency.thermal": 24
             },
             "agent": {
                 "type": "service",

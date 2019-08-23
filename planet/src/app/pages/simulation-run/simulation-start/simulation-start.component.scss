@@ -7,11 +7,15 @@ nb-select {
 }
 
 .errorTextarea {
-  color: #ff4c4c;
+  color: nb-theme(color-danger-default);
   margin-top: 2.5%;
 }
 
 .successTextarea {
-  color: lightgreen;
+  color: nb-theme(color-success-default);
   margin-top: 2.5%;
+}
+
+nb-card-header {
+  font-size: 1.2rem;
 }

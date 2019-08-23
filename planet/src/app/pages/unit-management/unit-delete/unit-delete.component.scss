@@ -3,7 +3,7 @@
 
   h2 {
     flex: 1 1 100%;
-    color: #8994a3;
+    color: nb-theme(text-hint-color);
     margin: 1rem 0 2rem;
     text-align: center;
   }
@@ -23,14 +23,14 @@ input[type=file] {
 }
 
 .errorTextarea {
-  color: #ff4c4c;
+  color: nb-theme(color-danger-default);
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
 .successTextarea {
-  color: lightgreen;
+  color: nb-theme(color-success-default);
   align-items: center;
   justify-content: center;
   text-align: center;

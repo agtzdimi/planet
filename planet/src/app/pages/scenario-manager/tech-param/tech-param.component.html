@@ -30,8 +30,8 @@
                 </div>
                 <div class="col-md-2">
                     <section class="slider-checkbox">
-                        <input type="checkbox" [checked]="checkBoxStatus[displayingNode][0]"
-                            (change)="changeCheckBoxVal(0)" id="techParamCheck1" #techParamCheck1>
+                        <input type="checkbox" [checked]="checkVal[displayingNode][0]" (change)="changeCheckBoxVal(0)"
+                            id="techParamCheck1" #techParamCheck1>
                         <label class="label" for="techParamCheck1"></label>
                     </section>
                 </div>
@@ -258,18 +258,18 @@
                 </div>
                 <div class="col-md-2">
                     <section class="slider-checkbox">
-                        <input type="checkbox" [checked]="checkVal[displayingNode][5]" (change)="changeCheckBoxVal(5)"
-                            id="techParamCheck6" #techParamCheck6>
-                        <label class="label" for="techParamCheck6"></label>
+                        <input type="checkbox" [checked]="checkVal[displayingNode][4]" (change)="changeCheckBoxVal(4)"
+                            id="techParamCheck5" #techParamCheck5>
+                        <label class="label" for="techParamCheck5"></label>
                     </section>
                 </div>
             </div>
 
             <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][5]" [label1]="'Peak Load'" [label2]="'MW'"
+                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][4]" [label1]="'Peak Load'" [label2]="'MW'"
                     (valChange)="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']=+$event"
                     [(val)]="paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load']['peak.load']"
-                    [compId]="'techParamCheckInput6.1'">
+                    [compId]="'techParamCheckInput5.1'">
                 </ngx-input-field>
             </div>
         </div>

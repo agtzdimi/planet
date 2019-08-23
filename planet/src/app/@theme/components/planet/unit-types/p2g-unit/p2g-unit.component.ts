@@ -46,11 +46,11 @@ export class P2GUnitComponent implements OnChanges {
     if (changes['p2gInput']['currentValue']) {
       let metadata = JSON.stringify(changes['p2gInput']['currentValue']['metadata']);
       if (metadata) {
-        metadata = JSON.parse(metadata);
+        metadata = JSON.parse(metadata.replace(/\./g, '_'));
         this.p2gParams['payload']['parameters']['configuration'] = metadata;
         this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
         this.p2g.emit(this.p2gParams);
-      } else if (changes['p2gInput']['currentValue']) {
+      } else if (changes['p2gInput']['currentValue']['efficiency.electrolysis']) {
         const defaultValues = JSON.stringify(changes['p2gInput']['currentValue']).replace(/\./g, '_');
         this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
         this.p2g.emit(this.p2gParams);

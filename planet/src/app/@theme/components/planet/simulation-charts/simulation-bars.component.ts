@@ -220,14 +220,6 @@ export class SimulationBarsComponent implements OnDestroy, OnChanges {
                     },
                 },
                 toolbox: {
-                    iconStyle: {
-                        color: '#d9e4ff',
-                    },
-                    emphasis: {
-                        iconStyle: {
-                            color: '#598bff',
-                        },
-                    },
                     feature: {
                         dataView: {
                             show: true,
@@ -253,11 +245,11 @@ export class SimulationBarsComponent implements OnDestroy, OnChanges {
                         },
                         data: stacks,
                         axisLabel: {
-                            color: 'white',
+                            color: 'black',
                         },
                         axisLine: {
                             lineStyle: {
-                                color: 'white',
+                                color: 'black',
                             },
                         },
                     },

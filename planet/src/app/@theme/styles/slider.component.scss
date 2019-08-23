@@ -1,5 +1,5 @@
-$checked-color: #3366ff;
-$unchecked-color: #bdc4cd;
+$checked-color: nb-theme(color-primary-default);
+$unchecked-color: nb-theme(color-basic-600);
 
 .slider-checkbox {
   position: relative;
@@ -26,7 +26,7 @@ $unchecked-color: #bdc4cd;
         padding-left: 6px;
       }
       &::after {
-        left: 21px;
+        left: 1.55rem;
       }
     }
   }
@@ -42,7 +42,7 @@ $unchecked-color: #bdc4cd;
     }
     &::before {
       content: '';
-      color: #fff;
+      color: nb-theme(color-basic-300);
       box-sizing: border-box;
       font-family: 'FontAwesome', sans-serif;
       padding-left: 23px;
@@ -51,8 +51,8 @@ $unchecked-color: #bdc4cd;
       background-color: $unchecked-color;
       left: 0;
       top: 0;
-      height: 18px;
-      width: 36px;
+      height: 1.33rem;
+      width: 2.8rem;
       -webkit-border-radius: 10px;
       -moz-border-radius: 10px;
       border-radius: 10px;
@@ -60,11 +60,11 @@ $unchecked-color: #bdc4cd;
     &::after {
       content: '';
       letter-spacing: 20px;
-      background: #fff;
+      background: nb-theme(color-basic-300);
       left: 1px;
       top: 1px;
-      height: 16.5px;
-      width: 16.5px;
+      height: 1.17rem;
+      width: 1.18rem;
     }
   }
 }

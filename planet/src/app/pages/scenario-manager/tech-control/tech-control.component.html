@@ -15,10 +15,11 @@
               <li> P2G - EB - P2H </li>
             </ol>
           </ng-template>
-          <input nbInput type="number" class="form-control" id="control-system"
-            [(ngModel)]="+controlSystem['payload'].control" [nbPopover]="popContent" nbPopoverTrigger="hover"
-            nbPopoverPlacement="right">
-          <span class="fa fa-info-circle errspan"></span>
+          <div [nbPopover]="popContent" nbPopoverTrigger="hover" nbPopoverPlacement="right">
+            <input nbInput type="number" class="form-control" id="control-system"
+              [(ngModel)]="+controlSystem['payload'].control">
+            <span class="fa fa-info-circle errspan"></span>
+          </div>
         </div>
       </div>
       <div *ngIf="checkControlValue()" class="errorTextarea col-sm-3">
@@ -34,11 +35,11 @@
             <div class="field">
               <sui-checkbox [ngModel]="resProd['yes']" [isReadonly]="resProd['yes']"
                 (ngModelChange)="handleResProd($event,'yes')" [ngStyle]="{'margin-right':'10px'}">
-                <p [ngStyle]="{'color':'white'}">Yes</p>
+                <p>Yes</p>
               </sui-checkbox>
               <sui-checkbox [ngModel]="resProd['no']" [isReadonly]="resProd['no']"
                 (ngModelChange)="handleResProd($event,'no')">
-                <p [ngStyle]="{'color':'white'}">No</p>
+                <p>No</p>
               </sui-checkbox>
             </div>
           </div>

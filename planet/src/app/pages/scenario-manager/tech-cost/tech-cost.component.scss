@@ -1,5 +1,5 @@
-@import '../../../@theme/styles/slider.component.scss';
 @import '../../../@theme/styles/themes.scss';
+@import '../../../@theme/styles/slider.component.scss';
 
 input[type=text] {
   text-align: center;
@@ -17,4 +17,37 @@ input[type=number] {
 
 input[type=number] {
   text-align: center;
+}
+
+@include nb-install-component() {
+  nb-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.675rem 4rem 0.5rem 1.25rem;
+    @include nb-rtl(padding-right, 1.25rem);
+    @include nb-rtl(padding-left, 4rem);
+  }
+
+  .dropdown {
+    min-width: 120px;
+  }
+}
+
+nb-card-header {
+  font-size: 1.2rem;
+}
+
+.listItem {
+  margin-left: 2.1rem;
+}
+
+label {
+  margin-top: 7px;
+  font-family: 'Open Sans, sans-serif';
+  font-weight: nb-theme(text-label-font-weight);
+}
+
+.form-control {
+  margin-top: 0.8rem;
 }

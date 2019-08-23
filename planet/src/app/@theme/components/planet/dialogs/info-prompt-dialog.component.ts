@@ -8,7 +8,7 @@ import { NbDialogRef } from '@nebular/theme';
       <nb-card-header>{{title}}</nb-card-header>
       <nb-card-footer>
         <div class="row" [ngStyle]="{'display': 'flex','justify-content': 'center'}">
-                <button nbButton hero status="danger" (click)="submit()">OK</button>
+                <button nbButton hero status="info" (click)="submit()">OK</button>
         </div>
       </nb-card-footer>
     </nb-card>

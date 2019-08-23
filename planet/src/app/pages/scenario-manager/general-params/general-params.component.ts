@@ -262,7 +262,9 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   */
   private resizeMap(): void {
     this.generalParams.updateGeneralParameters(false, 'showMap');
-    this.generalParams.updateGeneralParameters(true, 'showMap');
+    setTimeout(() => {
+      this.generalParams.updateGeneralParameters(true, 'showMap');
+    }, 100);
   }
 
   /**
@@ -492,12 +494,14 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
         this.generalParams.updateGeneralParameters(1, 'model');
         this.paramInit = this.model1.paramInit;
         this.model1.paramUpdated.next(this.paramInit);
+        this.resizeMap();
       }
     } else if (this.genParams['selectedModel']['elec'] === '8 Node' && this.genParams['selectedModel']['dh'] === '1 Node') {
       if (this.genParams['model'] !== 2) {
         this.generalParams.updateGeneralParameters(2, 'model');
         this.paramInit = this.model2.paramInit;
         this.model2.paramUpdated.next(this.paramInit);
+        this.resizeMap();
       }
     }
   }
