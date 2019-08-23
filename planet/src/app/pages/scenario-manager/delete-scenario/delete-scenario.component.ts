@@ -1,28 +1,47 @@
-import { Component, OnInit } from '@angular/core';
-import { NbDialogService, NbDialogConfig } from '@nebular/theme';
-import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
+import { NbDialogService, NbDialogConfig } from '@nebular/theme';
+
+import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
 import { DialogSubmitPromptComponent } from '../../../@theme/components/planet/dialogs/dialog-submit.component';
 
+/**
+ * Component responsible for the deletion of a saved scenario
+ */
 @Component({
   selector: 'ngx-delete-scenario',
   templateUrl: './delete-scenario.component.html',
   styleUrls: ['./delete-scenario.component.scss'],
 })
-export class DeleteScenarioComponent implements OnInit {
+/**
+ * @param {string} status  Private variable to check whether the phase 2 of scenario-creation reached
+ * @param {string} formName Variable that will hold the status of Saving a Scenario after user submission
+ * @param {boolean} loading Variable to animate the transition between phase 1 and phase 2
+ *
+ */
+export class DeleteScenarioComponent {
 
-  formName = 'Select a Scenario';
-  status = '';
-  loading = false;
+  public formName: string = 'Select a Scenario';
+  public status: string = '';
+  public loading: boolean = false;
 
+  /**
+  * @param {HttpClient} httpClient Angular service to make REST requests
+  */
   constructor(private dialogService: NbDialogService,
     private httpClient: HttpClient) { }
 
-  ngOnInit() {
-  }
-
-  openDialogBox() {
-    const context = {
+  /**
+  *
+  * Function responsible for Opening a dialog box over the current screen
+  * @example
+  * openDialogBox()
+  *
+  * @returns A dialog box with some information for the user
+  */
+  public openDialogBox(): void {
+    const context: Object = {
       context: {
         color: 'red',
       },
@@ -35,9 +54,17 @@ export class DeleteScenarioComponent implements OnInit {
       });
   }
 
-  deleteScenario() {
+  /**
+  *
+  * Function responsible for Opening a dialog box over the current screen to delete a scenario
+  * @example
+  * deleteScenario()
+  *
+  * @returns A dialog box with some information for the user
+  */
+  public deleteScenario() {
     this.status = '';
-    const context = {
+    const context: Object = {
       context: {
         title: 'Are you sure you Want to Delete this Scenario?',
       },
@@ -46,7 +73,7 @@ export class DeleteScenarioComponent implements OnInit {
       .onClose.subscribe(value => {
         if (value) {
           this.loading = true;
-          const url = '/planet/rest/delete_scenario';
+          const url: string = '/planet/rest/delete_scenario';
           this.httpClient.post(url,
             {
               'formName': this.formName,

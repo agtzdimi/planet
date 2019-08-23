@@ -50,7 +50,7 @@
           <!-- Selection of Location and Grid Type -->
           <div class="row">
             <div class="col-md-6">
-              <nb-select class="m-2" placeholder="Select grid" (selectedChange)="animateImage('transitionName1',$event)"
+              <nb-select class="m-2" placeholder="Select grid" (selectedChange)="animateImage('transitionName1')"
                 [status]="'info'" [shape]="'semi-round'">
                 <nb-option value="Turin">Turin</nb-option>
                 <nb-option value="Athens" disabled>Athens</nb-option>
@@ -103,13 +103,13 @@
                           <div class="col-md-1"></div>
                           <div class="col-md-4">
                             <sui-checkbox [ngModel]="timeStep['min15']" [isReadonly]="timeStep['min15']"
-                              (ngModelChange)="handleTimeStep($event,'min15')">
+                              (ngModelChange)="handleTimeStep('min15')">
                               <p [ngStyle]="{'color':'white'}">15</p>
                             </sui-checkbox>
                           </div>
                           <div class="col-md-5">
                             <sui-checkbox [ngModel]="timeStep['min60']" [isReadonly]="timeStep['min60']"
-                              (ngModelChange)="handleTimeStep($event,'min60')">
+                              (ngModelChange)="handleTimeStep('min60')">
                               <p [ngStyle]="{'color':'white'}">60</p>
                             </sui-checkbox>
                           </div>

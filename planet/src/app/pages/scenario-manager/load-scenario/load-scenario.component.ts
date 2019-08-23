@@ -1,19 +1,26 @@
-import { Component, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { UploadInput, humanizeBytes } from 'ngx-uploader';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { TransitionController } from 'ng2-semantic-ui';
-import { NbDialogService, NbDateService } from '@nebular/theme';
+import { takeWhile } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+
+import {
+    NbDialogService,
+    NbDateService,
+    NbMenuService,
+} from '@nebular/theme';
+
 import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
-import { Router } from '@angular/router';
-import { NbMenuService } from '@nebular/theme';
-import { takeWhile } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 
+
+/**
+ * Component responsible for the loading of a saved scenario
+ */
 @Component({
     selector: 'ngx-load-scenario',
     styleUrls: ['../../../@theme/styles/scenario.component.scss'],
@@ -24,43 +31,65 @@ import { Subscription } from 'rxjs';
         EconomyFileService],
     templateUrl: './load-scenario.component.html',
 })
+/**
+ * @param {boolean} loadPage  Private variable to check whether the data has retrieved from the GET request
+ * @param {string} saveMessage Variable that will hold the status of Saving a Scenario after user submission
+ * @param {Object} paramInit Private variable holding the instance of a JSON model corresponding to the user selections.
+ * @example The paramInit will hold the JSON structure of 8-node electricity grid, 3-node district heating and 1-node gas grid
+ * @param {Subscription[]} subscriptions Private variable holding the custom Observables to unsubscribe when the component will be destroyed
+ * @param {boolean} alive Variable indicating that the component exists
+ * @param {boolean} loading Variable used to define if the spinner of ```Save Scenario``` button will spin or not as a loader
+ * @param {Object} controlSystem Variable holding the JSON structure of ```Control_initialization.txt``` file
+ * @param {Object} genParams Variable that is used to shortcut the general parameters irrelevent to the grids i.e horizon / time step etc.
+ * @param {Object} econEnv Variable holding the JSON structure of ```Economy_environment_initialization.txt``` file
+ * @param {Object} elecParam Variable to hold the electricity timeseries values that was used in the loaded scenario
+ * @param {Object} heatParam Variable to hold the electricity timeseries values that was used in the loaded scenario
+ * @param {Object} windParam Variable to hold the necessary information to make a request to renewables Ninja API to retrieve Wind timeseries
+ * @param {Object} pvParam Variable to hold the necessary information to make a request to renewables Ninja API to retrieve PV timeseries
+ *
+ */
 export class LoadScenarioComponent implements OnInit, OnDestroy {
 
-    loadPage: boolean = false;
-    revealed = false;
-    errorMessage: String = '';
-    saveMessage: String = '';
-    formData: FormData;
-    uploadInput: EventEmitter<UploadInput>;
-    humanizeBytes: Function;
-    elecParam: any;
+    public loadPage: boolean = false;
+    public saveMessage: string = '';
+    private paramInit: Object = {};
     private subscriptions: Subscription[] = [];
-    heatParam: any;
-    private alive = true;
-    transitionController1 = new TransitionController();
-    loading: boolean = false;
-    genParams = {};
+    private alive: boolean = true;
+    public loading: boolean = false;
+    private controlSystem: Object = {};
+    public genParams: Object = {};
+    private econEnv: Object = {};
+    private elecParam: Object;
+    private heatParam: Object;
 
-    paramInit = {};
-    controlSystem = {};
-    econEnv = {};
-
-    windParam = {
+    public windParam: Object = {
         'file.name': 'Wind.xlsx',
         'payload': {
-            'lat': this.genParams['coordinates'][1],
-            'lon': this.genParams['coordinates'][0],
+            'lat': this.generalParams.parameters['coordinates'][1],
+            'lon': this.generalParams.parameters['coordinates'][0],
         },
     };
 
-    pvParam = {
+    public pvParam: Object = {
         'file.name': 'PV.xlsx',
         'payload': {
-            'lat': this.genParams['coordinates'][1],
-            'lon': this.genParams['coordinates'][0],
+            'lat': this.generalParams.parameters['coordinates'][1],
+            'lon': this.generalParams.parameters['coordinates'][0],
         },
     };
 
+    /**
+    * @param {HttpClient} httpClient Angular service to make REST requests
+    * @param {NbDialogService} dialogService Nebular service to open a new dialog screen over the current one
+    * @param {GeneralParamsService} generalParams Custom service responsible on holding the general parameters of the scenario e.g horizon, timestep
+    * @param {Model2ParamInitService} model2 Custom service holding the structure of model 2
+    * @param {Model1ParamInitService} model1 Custom service holding the structure of model 2
+    * @param {NbDateService<Date>} dateService Nebular date service to handle the date ranges
+    * @param {ControlFileService} controlFileService Custom service holding the structure of Control_initialization.txt
+    * @param {EconomyFileService} economyFileService Custom service holding the structure of Economy_environment_initialization.txt
+    * @param {Router} router Angular service to apply navigation
+    * @param {NbMenuService} menuService Nebular service to get access to the Menu service i.e the sidebar menu
+    */
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
         public generalParams: GeneralParamsService,
@@ -87,20 +116,17 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
-        this.humanizeBytes = humanizeBytes;
-
         this.subscriptions.push(this.model2.paramUpdated.subscribe(
-            (data) => this.paramInit = data,
+            (data: Object) => this.paramInit = data,
         ));
 
         this.subscriptions.push(this.model1.paramUpdated.subscribe(
-            (data) => this.paramInit = data,
+            (data: Object) => this.paramInit = data,
         ));
 
         // Subscribe to events to get modified data
         this.subscriptions.push(this.generalParams.parametersSubject.subscribe(
-            (data) => {
+            (data: Object) => {
                 this.generalParams['formName'] = data['formName'];
                 this.generalParams['startingDate'] = data['startingDate'];
                 this.generalParams['endingDate'] = data['endingDate'];
@@ -110,26 +136,29 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         ));
 
         this.subscriptions.push(this.controlFileService.controlFileUpdated.subscribe(
-            (data) => this.controlSystem = data,
+            (data: Object) => this.controlSystem = data,
         ));
 
         this.subscriptions.push(this.economyFileService.economyFileUpdated.subscribe(
-            (data) => this.econEnv = data,
+            (data: Object) => this.econEnv = data,
         ));
     }
 
+    /**
+  * Angular lifecycle hook used to retrive all the data from the backend and spread it to the components
+  */
     ngOnInit() {
         this.dialogService.open(DialogSelectFormPromptComponent)
             .onClose.subscribe(name => {
                 if (name) {
                     // Update formName - formDescription based on user input in dialog box
                     this.genParams['formName'] = name['formName'];
-                    let finalFormName = '';
+                    let finalFormName: string = '';
                     finalFormName = this.genParams['formName'].toString();
                     this.genParams['formDescription'] = name['formDescription'];
                     this.generalParams.updateGeneralParameters(this.genParams['formDescription'], 'formDescription');
                     this.generalParams.updateGeneralParameters(this.genParams['formName'], 'formName');
-                    const url = '/planet/rest/load_data';
+                    const url: string = '/planet/rest/load_data';
                     this.httpClient.get(url, {
                         params: {
                             'formName': finalFormName,
@@ -140,7 +169,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                                 // Load and emit the data coming from Database
 
                                 this.loadPage = true;
-                                let temp = JSON.parse(data['paramInit']);
+                                let temp: Object = JSON.parse(data['paramInit']);
                                 this.paramInit = temp;
                                 this.paramInit['payload']['simulation']['simulation.time'] =
                                     this.paramInit['payload']['simulation']['simulation.time'] *
@@ -184,22 +213,30 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
             );
     }
 
-    startUpload(): void {
+    /**
+    *
+    * Function responsible for uploading the user configuration to server and save them to the Database
+    * @example
+    * startUpload()
+    *
+    * @returns A message to the user on the screen with the outcome of the server response
+    */
+    public startUpload(): void {
         // Start spinner
         this.loading = true;
         const formData: FormData = new FormData();
-        const originalTimestep = this.paramInit['payload']['simulation']['time.step'];
-        const originalHorizon = this.paramInit['payload']['simulation']['simulation.time'];
+        const originalTimestep: number = this.paramInit['payload']['simulation']['time.step'];
+        const originalHorizon: number = this.paramInit['payload']['simulation']['simulation.time'];
 
         this.paramInit['payload']['simulation']['time.step'] = this.paramInit['payload']['simulation']['time.step'] / 60;
         this.paramInit['payload']['simulation']['simulation.time'] =
             Math.round(this.paramInit['payload']['simulation']['simulation.time']
                 / this.paramInit['payload']['simulation']['time.step']);
         // Update values in case current instance will be used to save another scenario
-        const startDate = this.genParams['startingDate'].getFullYear().toString() +
+        const startDate: string = this.genParams['startingDate'].getFullYear().toString() +
             '-' + (this.genParams['startingDate'].getMonth() + 1).toString() +
             '-' + this.genParams['startingDate'].getDate().toString();
-        const endDate = this.genParams['endingDate'].getFullYear().toString() +
+        const endDate: string = this.genParams['endingDate'].getFullYear().toString() +
             '-' + (this.genParams['endingDate'].getMonth() + 1).toString() +
             '-' + this.genParams['endingDate'].getDate().toString();
         delete this.paramInit['_id'];
@@ -224,12 +261,12 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         formData.append('param4', JSON.stringify(this.elecParam));
         formData.append('param5', JSON.stringify(this.heatParam));
         formData.append('method', 'LOAD');
-        let url = '/planet/rest/upload';
+        let url: string = '/planet/rest/upload';
         this.httpClient.post(url, formData,
         )
             .subscribe(
                 () => {
-                    const oldWindValue = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
+                    const oldWindValue: string = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
                     this.windParam['payload'] = JSON.parse(oldWindValue);
                     this.windParam['payload']['formName'] = this.genParams['formName'];
                     this.windParam['payload']['formDescription'] = this.genParams['formDescription'];
@@ -268,11 +305,29 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
             );
     }
 
+    /**
+   *
+   * Function responsible for Opening a dialog box over the current screen
+   * @example
+   * openDialogBox(context)
+   * context = { context: { title: 'This is a title passed to the dialog component'}}
+   *
+   * @param {Object} context Object holding the title for the dialog box
+   * @returns A dialog box with some information for the user
+   */
     openDialogBox(component) {
         this.dialogService.open(component)
             .onClose.subscribe();
     }
 
+    /**
+  *
+  * Function to set up a and return a new Date for starting period
+  * @example
+  * dateStart()
+  *
+  * @returns starting date [Date]
+  */
     get dateStart(): Date {
         if (!this.genParams['startingDate']) {
             this.genParams['startingDate'] = new Date(2016, 0, 1);
@@ -280,6 +335,14 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         return new Date(this.genParams['startingDate']);
     }
 
+    /**
+   *
+   * Function to set up a and return a new Date for ending period
+   * @example
+   * dateEnd()
+   *
+   * @returns ending date [Date]
+   */
     get dateEnd(): Date {
         if (!this.genParams['endingDate']) {
             this.genParams['endingDate'] = new Date(2016, 11, 31);
@@ -287,6 +350,13 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         return new Date(this.genParams['endingDate']);
     }
 
+    /**
+   *
+   * Function to update the user selected model [model1|model2]
+   * @example
+   * updateModel()
+   *
+   */
     updateModel() {
         switch (this.genParams['model']) {
             case 1:
@@ -300,14 +370,31 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+   *
+   * Function to update the Control_initialazation.txt parameters
+   * @example
+   * updateControlFile()
+   *
+   */
     updateControlFile() {
         this.controlFileService.controlFileUpdated.next(this.controlSystem);
     }
 
+    /**
+    *
+    * Function to update the Economy_environment_initialization.txt parameters
+    * @example
+    * updateEconomyFile()
+    *
+    */
     updateEconomyFile() {
         this.economyFileService.economyFileUpdated.next(this.econEnv);
     }
 
+    /**
+    * Angular lifecycle hook on Component destroyed. used to clear the Observable subscriptions
+    */
     ngOnDestroy() {
         this.alive = false;
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
