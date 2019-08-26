@@ -39,19 +39,21 @@ export class P2HUnitComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['p2hInput']['currentValue']) {
-      let metadata = JSON.stringify(changes['p2hInput']['currentValue']['metadata']);
-      if (metadata) {
-        metadata = JSON.parse(metadata);
-        this.p2hParams['payload']['parameters']['configuration'] = metadata;
-        this.p2hParams['description'] = changes['p2hInput']['currentValue']['description'];
-        this.p2h.emit(this.p2hParams);
-      } else if (changes['p2hInput']['currentValue']) {
-        const defaultValues = JSON.stringify(changes['p2hInput']['currentValue']).replace(/\./g, '_');
-        this.p2hParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
-        this.p2h.emit(this.p2hParams);
-      }
+    if (changes['p2hInput']['currentValue']['metadata']) {
+      const defaultValues = this.changeDotsToUnderScores(changes['p2hInput']['currentValue']['metadata']);
+      this.p2hParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.p2hParams['description'] = changes['p2hInput']['currentValue']['description'];
+      this.p2h.emit(this.p2hParams);
+    } else if (changes['p2hInput']['currentValue']['nominal_heat_power']) {
+      const defaultValues = this.changeDotsToUnderScores(changes['p2hInput']['currentValue']);
+      this.p2hParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.p2h.emit(this.p2hParams);
     }
+  }
+
+  changeDotsToUnderScores(p2hObject: Object): string {
+    const p2hObjectValue = JSON.stringify(p2hObject).replace('nominal.heat.power', 'nominal_heat_power');
+    return p2hObjectValue;
   }
 
   onChange(attribute, event) {

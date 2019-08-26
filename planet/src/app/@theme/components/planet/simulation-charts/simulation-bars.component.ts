@@ -193,14 +193,19 @@ export class SimulationBarsComponent implements OnDestroy, OnChanges {
                 colors.successLight, colors.primaryLight],
                 tooltip: {
                     trigger: 'axis',
+                    textStyle: {
+                        color: 'white',
+                        fontWeight: 'bold',
+                    },
                     formatter: (params) => {
                         const colorSpan = itemColor =>
                             '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:'
                             + itemColor + '"></span>';
-                        let rez = '<p>' + params[0].axisValue + '</p>';
+                        let rez = '<p style="color: white;font-weight: 800">' + params[0].axisValue + '</p>';
                         params.forEach(item => {
                             if (item.seriesName !== item.data && item.data) {
-                                const xx = '<p>' + colorSpan(item.color) + ' ' + item.seriesName + ': ' + item.data + '</p>';
+                                const xx = '<p style="color: white;font-weight: 800">' + colorSpan(item.color) + ' ' +
+                                    item.seriesName + ': ' + item.data + '</p>';
                                 rez += xx;
                             }
                         });

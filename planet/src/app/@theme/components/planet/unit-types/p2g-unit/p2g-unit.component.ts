@@ -43,19 +43,15 @@ export class P2GUnitComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['p2gInput']['currentValue']) {
-      let metadata = JSON.stringify(changes['p2gInput']['currentValue']['metadata']);
-      if (metadata) {
-        metadata = this.changeDotsToUnderScores(metadata);
-        metadata = JSON.parse(metadata);
-        this.p2gParams['payload']['parameters']['configuration'] = metadata;
-        this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
-        this.p2g.emit(this.p2gParams);
-      } else if (changes['p2gInput']['currentValue']['efficiency.electrolysis']) {
-        const defaultValues = this.changeDotsToUnderScores(changes['p2gInput']['currentValue']);
-        this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
-        this.p2g.emit(this.p2gParams);
-      }
+    if (changes['p2gInput']['currentValue']['metadata']) {
+      const defaultValues = this.changeDotsToUnderScores(changes['p2gInput']['currentValue']['metadata']);
+      this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
+      this.p2g.emit(this.p2gParams);
+    } else if (changes['p2gInput']['currentValue']['efficiency.electrolysis']) {
+      const defaultValues = this.changeDotsToUnderScores(changes['p2gInput']['currentValue']);
+      this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.p2g.emit(this.p2gParams);
     }
   }
 

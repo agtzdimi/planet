@@ -39,19 +39,22 @@ export class VESUnitComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['vesInput']['currentValue']) {
-      let metadata = JSON.stringify(changes['vesInput']['currentValue']['metadata']);
-      if (metadata) {
-        metadata = JSON.parse(metadata);
-        this.vesParams['payload']['parameters']['configuration'] = metadata;
-        this.vesParams['description'] = changes['vesInput']['currentValue']['description'];
-        this.ves.emit(this.vesParams);
-      } else if (changes['vesInput']['currentValue']) {
-        const defaultValues = JSON.stringify(changes['vesInput']['currentValue']).replace(/\./g, '_');
-        this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
-        this.ves.emit(this.vesParams);
-      }
+    if (changes['vesInput']['currentValue']['metadata']) {
+      const defaultValues = this.changeDotsToUnderScores(changes['vesInput']['currentValue']['metadata']);
+      this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.vesParams['description'] = changes['vesInput']['currentValue']['description'];
+      this.ves.emit(this.vesParams);
+    } else if (changes['vesInput']['currentValue']['nominal_heat_power']) {
+      const defaultValues = this.changeDotsToUnderScores(changes['vesInput']['currentValue']);
+      this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.ves.emit(this.vesParams);
     }
+  }
+
+  changeDotsToUnderScores(vesObject: Object): string {
+    let vesObjectValue = JSON.stringify(vesObject).replace('nominal.heat.power', 'nominal_heat_power');
+    vesObjectValue = JSON.stringify(vesObject).replace('efficiency.thermal', 'efficiency_thermal');
+    return vesObjectValue;
   }
 
   onChange(attribute, event) {
