@@ -46,16 +46,25 @@ export class P2GUnitComponent implements OnChanges {
     if (changes['p2gInput']['currentValue']) {
       let metadata = JSON.stringify(changes['p2gInput']['currentValue']['metadata']);
       if (metadata) {
-        metadata = JSON.parse(metadata.replace(/\./g, '_'));
+        metadata = this.changeDotsToUnderScores(metadata);
+        metadata = JSON.parse(metadata);
         this.p2gParams['payload']['parameters']['configuration'] = metadata;
         this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
         this.p2g.emit(this.p2gParams);
       } else if (changes['p2gInput']['currentValue']['efficiency.electrolysis']) {
-        const defaultValues = JSON.stringify(changes['p2gInput']['currentValue']).replace(/\./g, '_');
+        const defaultValues = this.changeDotsToUnderScores(changes['p2gInput']['currentValue']);
         this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
         this.p2g.emit(this.p2gParams);
       }
     }
+  }
+
+  changeDotsToUnderScores(p2gObject: Object): string {
+    let p2gObjectValue = JSON.stringify(p2gObject).replace('nominal.electric.power', 'nominal_electric_power');
+    p2gObjectValue = p2gObjectValue.replace('efficiency.electrolysis', 'efficiency_electrolysis');
+    p2gObjectValue = p2gObjectValue.replace('efficiency.methanation', 'efficiency_methanation');
+    p2gObjectValue = p2gObjectValue.replace('efficiency.thermal', 'efficiency_thermal');
+    return p2gObjectValue;
   }
 
   onChange(attribute, event) {

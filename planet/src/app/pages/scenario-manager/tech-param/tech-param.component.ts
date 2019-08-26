@@ -311,6 +311,8 @@ export class TechParamComponent implements OnChanges,
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
+                            this.unitSelectedPerNode['node.' + (i + 1)] =
+                                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2G']['name'];
                         }
                         break;
                     case 5:
@@ -359,6 +361,9 @@ export class TechParamComponent implements OnChanges,
             }
         });
         this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = optionValue[0]['metadata'];
+        this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['IP'] = optionValue[0]['IP'];
+        this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['Port'] = optionValue[0]['Port'];
+        this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['name'] = optionValue[0]['name'];
     }
 
     nextPhase() {
