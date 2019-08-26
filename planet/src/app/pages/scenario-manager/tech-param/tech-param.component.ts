@@ -46,7 +46,7 @@ export class TechParamComponent implements OnChanges,
     unitSelectedPerNode = [];
     currentNodes = [];
     checkBoxStatus = {};
-    CHECKBOX_COUNT = 5;
+    CHECKBOX_COUNT = 6;
     hubHeight = 80;
     turbineModels = [];
     currentTab = 'Electric Grid';

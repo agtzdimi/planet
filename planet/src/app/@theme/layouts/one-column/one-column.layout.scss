@@ -7,6 +7,15 @@
     padding-top: nb-theme(layout-padding-top);
   }
 
+  ::ng-deep nb-layout-header > nav.fixed {
+    background: #ffd6d9;
+  }
+
+  ::ng-deep nb-layout-footer > nav.fixed {
+      background: #fff2f2 !important;
+  }
+  
+
   nb-sidebar.settings-sidebar {
     $sidebar-width: 75rem;
 
