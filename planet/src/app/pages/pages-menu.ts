@@ -46,15 +46,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'grid-outline',
     children: [
       {
-        title: 'Add',
+        title: 'Add Unit',
         link: '/pages/unit-management/unit-add',
       },
       {
-        title: 'Edit',
+        title: 'Edit Unit',
         link: '/pages/unit-management/unit-edit',
       },
       {
-        title: 'Delete',
+        title: 'Delete Unit',
         link: '/pages/unit-management/unit-delete',
       },
     ],
