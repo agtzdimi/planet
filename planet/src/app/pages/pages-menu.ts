@@ -9,6 +9,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
+    title: 'User Administration',
+    icon: 'people-outline',
+    link: '/pages/user-administration',
+  },
+  {
     title: 'System Parameters',
     icon: 'settings-2-outline',
     link: '/pages/system-params',

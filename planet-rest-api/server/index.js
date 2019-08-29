@@ -83,7 +83,7 @@ app.post('/planet/rest/create_user', authApi.create_user);
 app.post('/planet/rest/update_user', authApi.update_user);
 app.post('/planet/rest/login_with_email_password', authApi.login_with_email_password);
 app.post('/planet/rest/logout', authApi.logout);
-app.post('/planet/rest/get_user_list', authApi.get_user_list);
+app.get('/planet/rest/get_user_list', authApi.get_user_list);
 app.post('/planet/rest/remove_user', authApi.remove_user);
 app.post('/planet/rest/forgot', authApi.forgot);
 app.post('/planet/rest/reset', authApi.reset);

@@ -240,7 +240,7 @@ exports.login_with_email_password = (req, res) => {
       };
 
       // login token
-      login_token = getJwtToken({ email: email, fullName: user_info.fullName, image: user_info.image });
+      login_token = getJwtToken({ email: email, fullName: user_info.fullName, image: user_info.image, isAdmin: user_info.isAdmin });
       const hashed_token = crypto
         .createHash('sha256')
         .update(login_token)
@@ -377,6 +377,7 @@ exports.get_user_list = (req, res) => {
           fullName: user.fullName,
           isAdmin: user.isAdmin,
           email: user.emails[0].address,
+          image: user.profile.image,
         });
       });
     })
@@ -467,6 +468,7 @@ exports.refresh = (req, res) => {
   let email = req.body.payload.email;
   let fullName = req.body.payload.fullName;
   let image = req.body.payload.image;
+  let isAdmin = req.body.payload.isAdmin;
   // find user
   mongoDbHelper
     .collection('users')
@@ -475,7 +477,7 @@ exports.refresh = (req, res) => {
       if (results === null) {
         return Promise.reject('no such user');
       }
-      const login_token = getJwtToken({ email: email, fullName: fullName, image: image });
+      const login_token = getJwtToken({ email: email, fullName: fullName, image: image, isAdmin: isAdmin });
       const hashed_token = crypto
         .createHash('sha256')
         .update(login_token)

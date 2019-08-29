@@ -1,0 +1,44 @@
+::ng-deep nb-list-item:first-child {
+  border-top: 0 !important;
+}
+
+nb-list {
+  overflow-x: hidden;
+}
+
+:host ::ng-deep .ng2-smart-sort-link {
+    font-family: 'Open Sans, sans-serif';
+    font-weight: bolder; 
+}
+
+:host ::ng-deep .ng2-smart-title {
+  font-family: 'Open Sans, sans-serif';
+  font-weight: bolder; 
+}
+
+.items {
+    display: flex;
+    align-items: center;
+}
+
+:host ::ng-deep ng2-st-tbody-edit-delete {display: flex !important;
+  height: 0 !important;
+}
+
+:host ::ng-deep .ng2-smart-actions {
+  width: 7% !important;
+}
+
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+  display: inline-block;
+  width: 50px;
+  text-align: center;
+  font-size: 1.1em !important;
+  color: #1e6bb8;
+}
+
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+  color: #5dcfe3;
+}
+
+
