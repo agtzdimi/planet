@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
                         this.authService.onTokenChange()
                             .subscribe((token: NbAuthJWTToken) => {
                                 if (token.isValid()) {
-                                    if (!token['payload']['isAdmin']) {
+                                    if (token['payload']['role'] !== 'admin') {
                                         this.router.events.subscribe((url: any) => {
                                             if (url['url'] === '/pages/system-params' || url['url'] === '/pages/user-administration') {
                                                 this.router.navigateByUrl('/pages/welcome-screen');

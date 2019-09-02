@@ -11,7 +11,7 @@ export class NgxSendResetRequestComponent implements OnChanges {
     @Input() password;
     @Output() message: EventEmitter<Object>;
 
-    finalParameters = [{ isAdmin: false }];
+    finalParameters: Object = {};
 
     headers = {
         Accept: 'application/json',

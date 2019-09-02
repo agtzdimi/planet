@@ -25,6 +25,7 @@ import {
   NbTabsetModule,
   NbThemeModule,
   NbUserModule,
+  NbRadioModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -120,6 +121,7 @@ const NB_MODULES = [
   NbListModule,
   NbContextMenuModule,
   NbSecurityModule,
+  NbRadioModule,
   NbCheckboxModule,
   NbButtonModule,
   NbSelectModule,

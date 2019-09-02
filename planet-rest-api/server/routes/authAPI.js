@@ -79,10 +79,10 @@ exports.echo = (req, res) => {
 exports.create_user = (req, res) => {
   let password = req.body.parameters.password;
   let email = req.body.parameters.email;
-  let isAdmin = req.body.parameters.isAdmin;
+  let role = req.body.parameters.role;
   let fullName = req.body.parameters.fullName;
 
-  console.log(email, password, email, isAdmin);
+  console.log(email, password, email, role);
   let user_info = {};
   let login_token;
 
@@ -145,7 +145,7 @@ exports.create_user = (req, res) => {
             verified: false,
           },
         ],
-        isAdmin: isAdmin,
+        role: role,
         fullName: fullName,
         profile: {},
       };
@@ -212,7 +212,7 @@ exports.login_with_email_password = (req, res) => {
         // set user info
         user_info._id = results._id;
         user_info.profile = results.profile;
-        user_info.isAdmin = results.isAdmin;
+        user_info.role = results.role;
         user_info.fullName = results.fullName;
         user_info.image = results.profile.image;
 
@@ -240,7 +240,7 @@ exports.login_with_email_password = (req, res) => {
       };
 
       // login token
-      login_token = getJwtToken({ email: email, fullName: user_info.fullName, image: user_info.image, isAdmin: user_info.isAdmin });
+      login_token = getJwtToken({ email: email, fullName: user_info.fullName, image: user_info.image, role: user_info.role });
       const hashed_token = crypto
         .createHash('sha256')
         .update(login_token)
@@ -375,7 +375,7 @@ exports.get_user_list = (req, res) => {
         return ({
           key: user._id,
           fullName: user.fullName,
-          isAdmin: user.isAdmin,
+          role: user.role,
           email: user.emails[0].address,
           image: user.profile.image,
         });
@@ -411,7 +411,7 @@ exports.remove_user = (req, res) => {
             return ({
               key: user._id,
               fullName: user.fullName,
-              isAdmin: user.isAdmin,
+              role: user.role,
               email: user.emails[0].address,
             });
           });
@@ -468,7 +468,7 @@ exports.refresh = (req, res) => {
   let email = req.body.payload.email;
   let fullName = req.body.payload.fullName;
   let image = req.body.payload.image;
-  let isAdmin = req.body.payload.isAdmin;
+  let role = req.body.payload.role;
   // find user
   mongoDbHelper
     .collection('users')
@@ -477,7 +477,7 @@ exports.refresh = (req, res) => {
       if (results === null) {
         return Promise.reject('no such user');
       }
-      const login_token = getJwtToken({ email: email, fullName: fullName, image: image, isAdmin: isAdmin });
+      const login_token = getJwtToken({ email: email, fullName: fullName, image: image, role: role });
       const hashed_token = crypto
         .createHash('sha256')
         .update(login_token)

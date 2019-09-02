@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
 
 export class NgxCreateAccountComponent implements OnChanges {
     @Input() params;
-    @Input() isAdmin;
+    @Input() role;
     @Output() message: EventEmitter<Object>;
 
-    finalParameters = [{ isAdmin: false }];
+    finalParameters: Object = {};
 
     headers = {
         Accept: 'application/json',
@@ -28,7 +28,7 @@ export class NgxCreateAccountComponent implements OnChanges {
 
     registerUser() {
         // console.log('HERE', this.isAdmin)
-        this.finalParameters = { ...this.params, isAdmin: this.isAdmin };
+        this.finalParameters = { ...this.params, role: this.role };
         // this.finalParameters.push({ isAdmin: this.isAdmin })
         this.httpClient.post('/planet/rest/create_user',
             {

@@ -31,9 +31,6 @@ const routes: Routes = [{
     path: 'simulation-comparison',
     component: SimulationComparisonComponent,
   }, {
-    path: 'manage-accounts',
-    loadChildren: './manage-accounts/manage-accounts.module#ManageAccountsModule',
-  }, {
     path: 'unit-management',
     loadChildren: () => import('./unit-management/unit-management.module')
       .then(m => m.UnitManagementModule),

@@ -85,17 +85,21 @@
             </small>
         </div>
 
-        <label for="input-admin">Admin</label>
+        <label for="input-admin">User Role</label>
         <br>
-        <nb-checkbox id="input-admin" (click)="checkBoxValue()"></nb-checkbox>
+        <nb-radio-group [(ngModel)]="role" [ngModelOptions]="{standalone: true}">
+            <nb-radio *ngFor="let role of roles" [value]="role.value" [ngStyle]="{'display':'initial'}">
+                {{ role.label }}
+            </nb-radio>
+        </nb-radio-group>
 
         <button nbButton status="success" fullWidth [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted"
-            (click)="registerUser()">
-            Register
+            (click)="registerUser()" [ngStyle]="{'margin-top':'2rem'}">
+            Apply for Registering
         </button>
     </form>
 
 </nb-auth-block>
 
-<ngx-create-acc *ngIf="doRegister" [params]="user" [isAdmin]="checkBoxVal" (message)="showMessage=$event">
+<ngx-create-acc *ngIf="doRegister" [params]="user" [role]="role" (message)="showMessage=$event">
 </ngx-create-acc>

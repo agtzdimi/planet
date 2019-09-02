@@ -4,49 +4,31 @@
     <nb-card accent="primary">
       <nb-card-header>Registered users</nb-card-header>
       <nb-card-body>
-        <ng2-smart-table *ngIf="users" [settings]="userSettings" [source]="userSource">
-        </ng2-smart-table>
+        <div class="row">
+          <div class="col-md-12">
+            <ng2-smart-table *ngIf="users" [settings]="userSettings" [source]="userSource"
+              (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)=validateEdit($event)>
+            </ng2-smart-table>
+          </div>
+        </div>
 
-        <!-- <nb-list *ngIf="users">
-          <nb-list-item>
-            <div class="row">
-              <div class="col-md-4">
-                <label class="header">Full Name</label>
-              </div>
-              <div class="col-md-4">
-                <label class="header">Email</label>
-              </div>
-              <div class="col-md-4">
-                <label class="header" [ngStyle]="{'margin-left': '1rem'}">Role</label>
-              </div>
-            </div>
-
-          </nb-list-item>
-          <nb-list-item class="contact" *ngFor="let user of users['userList']">
-            <div class="row">
-              <div class="col-md-4">
-                <nb-user [picture]="user.image" [name]="user.fullName" [title]="getUserRole(user.isAdmin)" size="large">
-                </nb-user>
-              </div>
-              <div class="col-md-4 items">
-                <label>{{user.email}}</label>
-              </div>
-              <div class="col-md-4 items">
-                <label>{{getUserRole(user.isAdmin)}}</label>
-              </div>
-            </div>
-
-          </nb-list-item>
-        </nb-list> -->
+        <div class="row">
+          <div class="col-md-5"></div>
+          <div class="col-md-2">
+            <button nbButton hero status="success" class="m-4">Update User
+              Table</button>
+          </div>
+        </div>
 
       </nb-card-body>
     </nb-card>
 
-    <nb-card accent="primary">
+    <nb-card accent=" primary">
       <nb-card-header>Pending Requests</nb-card-header>
       <nb-card-body>
 
       </nb-card-body>
     </nb-card>
+
   </div>
 </div>

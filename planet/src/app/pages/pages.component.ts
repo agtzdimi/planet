@@ -16,7 +16,7 @@ import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 export class PagesComponent {
 
   menu: NbMenuItem[];
-  isAdmin: boolean;
+  role: string;
   constructor(private sidebarService: NbSidebarService,
     private authService: NbAuthService) {
 
@@ -24,10 +24,10 @@ export class PagesComponent {
     this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
-          this.isAdmin = token['payload']['isAdmin'];
+          this.role = token['payload']['role'];
           this.menu = this.menu.map(val => {
             if (val['title'] === 'User Administration' || val['title'] === 'System Parameters') {
-              val['hidden'] = !this.isAdmin;
+              val['hidden'] = this.role !== 'admin';
             }
             return val;
           });

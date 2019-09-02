@@ -8,12 +8,12 @@ nb-list {
 
 :host ::ng-deep .ng2-smart-sort-link {
     font-family: 'Open Sans, sans-serif';
-    font-weight: bolder; 
+    font-weight: bolder;
 }
 
 :host ::ng-deep .ng2-smart-title {
   font-family: 'Open Sans, sans-serif';
-  font-weight: bolder; 
+  font-weight: bolder;
 }
 
 .items {
@@ -21,7 +21,8 @@ nb-list {
     align-items: center;
 }
 
-:host ::ng-deep ng2-st-tbody-edit-delete {display: flex !important;
+:host ::ng-deep ng2-st-tbody-edit-delete {
+  display: flex !important;
   height: 0 !important;
 }
 
