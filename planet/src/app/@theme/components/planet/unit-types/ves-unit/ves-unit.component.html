@@ -10,13 +10,101 @@
     <hr class="m-4">
 </div>
 
-<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'MW<sub>th</sub>'"
-    (valChange)="onChange(['nominal_heat_power'],+$event)"
-    [(val)]="vesParams['payload']['parameters']['configuration']['nominal_heat_power']"
-    [compId]="'ves_nominal_heat_power'" [inputHtmlLabel1]="'P<sub>Nominal</sub>'">
-</ngx-input-field>
+<div class="row">
 
-<ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'%'" (valChange)="onChange(['efficiency_thermal'],+$event)"
-    [(val)]="vesParams['payload']['parameters']['configuration']['efficiency_thermal']"
-    [compId]="'ves_efficiency_thermal'" [inputHtmlLabel1]="'Eff<sub>th</sub>'">
-</ngx-input-field>
+    <div [class]="parametersColumnSize">
+        <h6>Mandatory Parameters</h6>
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange(['horizon'],+$event,'parameters')"
+            [(val)]="vesParams['payload']['parameters']['horizon']" [compId]="'ves_horizon'"
+            [inputHtmlLabel1]="'VES horizon'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange(['noAssets'],+$event,'parameters')"
+            [(val)]="vesParams['payload']['parameters']['noAssets']" [compId]="'ves_noAssets'"
+            [inputHtmlLabel1]="'Number of Assets'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <div class="listItem">
+            <ul>
+                <li>
+                    <div class="form-group row">
+                        <label [for]="compId" class="col-sm-4 col-form-label'">Asset Type</label>
+                        <div class="col-sm-4 col-form-label">
+                            <nb-select placeholder="Select Showcase"
+                                (selected)="onChange(['assetType'],$event,'parameters')"
+                                [selected]="vesParams['payload']['parameters']['assetType']">
+                                <nb-option value="residential">Residential</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div [class]="parametersColumnSize">
+        <h6>Optional Parameters</h6>
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange(['conductance'],+$event,'optionalParameters','optionalParameters')"
+            [(val)]="vesParams['payload']['optionalParameters']['conductance']" [compId]="'ves_conductance'"
+            [inputHtmlLabel1]="'Conductance'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange(['capacity'],+$event,'optionalParameters')"
+            [(val)]="vesParams['payload']['optionalParameters']['capacity']" [compId]="'ves_capacity'"
+            [inputHtmlLabel1]="'Capacity'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange('[\'hvacCOP\'][\'heat\'][\'a\']',+$event,'optionalParameters')"
+            [(val)]="vesParams['payload']['optionalParameters']['hvacCOP']['heat']['a']" [compId]="'ves_hvacCOP_heat_a'"
+            [inputHtmlLabel1]="'hvacCOP heat A'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange('[\'hvacCOP\'][\'heat\'][\'b\']',+$event,'optionalParameters')"
+            [(val)]="vesParams['payload']['optionalParameters']['hvacCOP']['heat']['b']" [compId]="'ves_hvacCOP_heat_b'"
+            [inputHtmlLabel1]="'hvacCOP heat B'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange('[\'hvacCOP\'][\'cool\'][\'a\']',+$event,'optionalParameters')"
+            [(val)]="vesParams['payload']['optionalParameters']['hvacCOP']['cool']['a']" [compId]="'ves_hvacCOP_cool_a'"
+            [inputHtmlLabel1]="'hvacCOP cool A'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange('[\'hvacCOP\'][\'cool\'][\'b\']',+$event,'optionalParameters')"
+            [(val)]="vesParams['payload']['optionalParameters']['hvacCOP']['cool']['b']" [compId]="'ves_hvacCOP_cool_b'"
+            [inputHtmlLabel1]="'hvacCOP cool B'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange(['pMax'],+$event,'optionalParameters')"
+            [(val)]="vesParams['payload']['optionalParameters']['pMax']" [compId]="'ves_pMax'"
+            [inputHtmlLabel1]="'pMax'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
+        <div class="listItem">
+            <ul>
+                <li>
+                    <div class="form-group row">
+                        <label [for]="compId" class="col-sm-4 col-form-label'">Asset Type</label>
+                        <div class="col-sm-4 col-form-label">
+                            <nb-select placeholder="Select Showcase"
+                                (selected)="onChange(['mode'],$event,'optionalParameters')"
+                                [selected]="vesParams['payload']['optionalParameters']['mode']">
+                                <nb-option value="HEAT">Heat</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

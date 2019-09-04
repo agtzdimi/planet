@@ -1,16 +1,17 @@
-import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 
 @Component({
   selector: 'ngx-ves-unit',
   styleUrls: ['./ves-unit.component.scss'],
   templateUrl: './ves-unit.component.html',
 })
-export class VESUnitComponent implements OnChanges {
+export class VESUnitComponent implements OnInit, OnChanges {
 
   vesParams: Object;
   @Input() vesInput: Object;
   @Input() mode: string;
   @Output() ves: EventEmitter<Object>;
+  parametersColumnSize = 'col-md-6';
 
   constructor() {
     this.vesParams = {
@@ -18,24 +19,51 @@ export class VESUnitComponent implements OnChanges {
       'topic': 'VES/1',
       'payload': {
         'parameters': {
-          'configuration': {
-            'nominal_heat_power': '',
-            'efficiency_thermal': '',
+          'timeStamp': 1545731273,
+          'horizon': 120,
+          'timeStep': 20,
+          'timeUnit': 'MINUTES',
+          'noAssets': 100,
+          'assetType': 'residential',
+        },
+        'optionalParameters': {
+          'conductance': null,
+          'capacity': null,
+          'hvacCOP': {
+            'heat': {
+              'a': 0.0461466850663691,
+              'b': 2.90629308414889,
+            },
+            'cool': {
+              'a': -0.1082518,
+              'b': 7.10789209,
+            },
           },
-          'input': {
-            'control': '',
-          },
-          'output': {
-            'electricity_power_active': '',
-            'electricity_power_reactive': '',
-            'heat.power': '',
-          },
+          'pMax': 4000,
+          'mode': 'HEAT',
+        },
+        'inputData': {
+          'tOutForecast': [13, 13, 13, 13, 13, 13],
+        },
+        'optionalInputData': {
+          'tInInit': 21.5,
+          'tInBaseMin': [21, 21, 21, 21, 21, 21],
+          'tInBaseMax': [22, 22, 22, 22, 22, 22],
+          'tInAltMin': [20, 20, 20, 20, 20, 20],
+          'tInAltMax': [23, 23, 23, 23, 23, 23],
         },
       },
       'description': '',
     };
     this.ves = new EventEmitter<Object>();
 
+  }
+
+  ngOnInit() {
+    this.ves.emit(this.vesParams);
+    if (this.mode === 'edit') {
+      this.parametersColumnSize = 'col-md-12';
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,8 +85,8 @@ export class VESUnitComponent implements OnChanges {
     return vesObjectValue;
   }
 
-  onChange(attribute, event) {
-    this.vesParams['payload']['parameters']['configuration'][attribute] = event;
+  onChange(attribute, event, attributeType) {
+    this.vesParams['payload'][attributeType][attribute] = event;
     this.ves.emit(this.vesParams);
   }
 

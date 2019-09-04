@@ -79,7 +79,7 @@ export class UnitAddComponent implements OnInit {
         metadata = JSON.stringify(this.p2gUnit['payload']['parameters']['configuration']);
         break;
       case 'VES':
-        metadata = JSON.stringify(this.vesUnit['payload']['parameters']['configuration']);
+        metadata = JSON.stringify(this.vesUnit['payload']);
         break;
       case 'P2H':
         metadata = JSON.stringify(this.p2hUnit['payload']['parameters']['configuration']);

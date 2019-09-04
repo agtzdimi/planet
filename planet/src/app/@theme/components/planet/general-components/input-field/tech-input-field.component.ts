@@ -14,6 +14,8 @@ export class TechInputFieldComponent {
     @Input() isReadOnly;
     @Input() val: Number;
     @Input() type: string;
+    @Input() columnLength1: string = 'col-sm-2';
+    @Input() columnLength2: string = 'col-sm-1';
     @Input() inputType: string;
     @Output() valChange: EventEmitter<Number>;
     @Output() stringValChange: EventEmitter<string>;

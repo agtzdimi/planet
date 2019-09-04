@@ -98,7 +98,7 @@
         <div class="col-md-6">
           <nb-reveal-card [ngSwitch]="activeModel">
             <nb-card-front>
-              <nb-card size="large" status="success" accent="primary">
+              <nb-card size="giant" status="success" accent="primary">
                 <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit</nb-card-header>
                 <nb-card-header *ngSwitchCase="'VES'">Virtual Energy Storage</nb-card-header>
                 <nb-card-header *ngSwitchCase="'P2H'">Power 2 Heat Unit</nb-card-header>
@@ -112,7 +112,7 @@
               </nb-card>
             </nb-card-front>
             <nb-card-back>
-              <nb-card size="large" status="success" accent="primary">
+              <nb-card size="giant" status="success" accent="primary">
                 <nb-card-body>
                   <div class="row">
                     <div class="col-md-12">
@@ -126,7 +126,7 @@
 
                       <div class="form-group row">
 
-                        <label for="'unitName'" class="col-md-3 formLabel">Unit MQTT Port</label>
+                        <label for="'unitName'" class="col-md-3 formLabel">Unit REST Port</label>
                         <div class="col-md-5">
                           <input type="text" fullWidth nbInput shape="semi-round" id="'unitPort'"
                             [(ngModel)]="unitPort">

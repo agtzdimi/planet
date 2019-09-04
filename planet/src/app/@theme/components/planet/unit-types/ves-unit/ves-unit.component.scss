@@ -1,3 +1,5 @@
+@import '../../../../styles/themes';
+
 .formDescr {
     margin-top: 2.5%;
     margin-left: 2%;
@@ -6,4 +8,32 @@
   
   textarea {
     margin-top: 0.9rem;
+  }
+
+  nb-select {
+    width: 15.5rem;
+  }
+
+  ::ng-deep .select-button {
+    text-align: center !important;
+  }
+
+  nb-option {
+    display: flex;
+    justify-content: center;
+  }
+
+  .listItem {
+    margin-left: 2.1rem;
+  }
+
+  h6 {
+    margin-bottom: 2rem;
+  }
+
+  label {
+    margin-top: 14px;
+    text-align: left;
+    font-family: Open Sans, sans-serif;
+    font-weight: nb-theme(text-label-font-weight);
   }

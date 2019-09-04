@@ -75,7 +75,7 @@
           <div class="form-group row">
 
             <div class="col-md-3"></div>
-            <label for="'unitName'" class="col-md-1 formLabel">Unit MQTT Port</label>
+            <label for="'unitName'" class="col-md-1 formLabel">Unit REST Port</label>
             <div class="col-md-3">
               <input type="text" fullWidth nbInput shape="semi-round" id="'unitPort'" [(ngModel)]="unitPort">
             </div>
@@ -102,7 +102,7 @@
 
           <hr class="m-4">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="p2gUnit=$event"></ngx-p2g-unit>
               <ngx-p2h-unit *ngSwitchCase="'P2H'" (p2h)="p2hUnit=$event"></ngx-p2h-unit>
               <ngx-ves-unit *ngSwitchCase="'VES'" (ves)="vesUnit=$event"></ngx-ves-unit>

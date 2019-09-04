@@ -31,7 +31,7 @@ exports.addDevice = (req, res) => {
         .then(results => {
             return new Promise((resolve, reject) => {
                 if (results !== 0) {
-                    reject('Unit already exist!');
+                    reject('Error: Unit already exist!');
                 }
                 resolve();
             });
@@ -44,10 +44,6 @@ exports.addDevice = (req, res) => {
             return mongoDbHelper.collection('units').insert(insert_params);
         })
         .then(results => {
-            if (results === null) {
-                res.json({ status: 'error', detail: 'no such user' });
-                return;
-            }
             let result = JSON.parse(shell.exec('cat ' + `${__dirname}/../../../linksmart/conf/devices/mqtt-switch.json`).stdout);
             result['resources'].push(req.body);
             shell.exec('mosquitto_pub -t "middleware_restart" -m "Start"');
