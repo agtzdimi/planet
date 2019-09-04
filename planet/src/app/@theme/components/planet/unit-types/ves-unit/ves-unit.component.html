@@ -13,7 +13,7 @@
 <div class="row">
 
     <div [class]="parametersColumnSize">
-        <h6>Mandatory Parameters</h6>
+        <h6 *ngIf="mode !== 'scenario'">Mandatory Parameters</h6>
         <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
             (valChange)="onChange(['horizon'],+$event,'parameters')"
             [(val)]="vesParams['payload']['parameters']['horizon']" [compId]="'ves_horizon'"
@@ -45,7 +45,7 @@
 
     </div>
 
-    <div [class]="parametersColumnSize">
+    <div [class]="parametersColumnSize" *ngIf="mode !== 'scenario'">
         <h6>Optional Parameters</h6>
         <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
             (valChange)="onChange(['conductance'],+$event,'optionalParameters','optionalParameters')"

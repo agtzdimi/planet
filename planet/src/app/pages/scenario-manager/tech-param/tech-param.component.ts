@@ -5,10 +5,10 @@ import {
     Output,
     SimpleChanges,
     OnChanges,
-    AfterViewChecked,
     OnInit,
     AfterContentChecked,
     OnDestroy,
+    AfterViewInit,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
@@ -59,7 +59,7 @@ import { GeneralParamsService } from '../../../@theme/services/scenario-manager-
  * @param {Object} g2h Variable holding the configuration of G2H
  */
 export class TechParamComponent implements OnChanges,
-    AfterViewChecked,
+    AfterViewInit,
     OnInit,
     AfterContentChecked,
     OnDestroy {
@@ -81,7 +81,7 @@ export class TechParamComponent implements OnChanges,
     public unitSelectedPerNode: Object[] = [];
     public currentNodes: string[] = [];
     public checkBoxStatus: Object[] = [];
-    private CHECKBOX_COUNT: number = 6;
+    private CHECKBOX_COUNT: number = 7;
     public turbineModels: string[] = [];
     public currentTab: string = 'Electric Grid';
     private genParams: Object = {};
@@ -210,9 +210,9 @@ export class TechParamComponent implements OnChanges,
     }
 
     /**
-  * Angular lifecycle hook used initialize mandatory variables by calling the initializeValues() function
-  */
-    ngAfterViewChecked() {
+* Angular lifecycle hook used initialize mandatory variables by calling the initializeValues() function
+*/
+    ngAfterViewInit() {
         this.initializeValues();
         this.checkBoxStatus = this.checkVal;
     }
@@ -356,6 +356,7 @@ export class TechParamComponent implements OnChanges,
       */
     initializeValues() {
         for (let i = 0; i < this.nodes.length; i++) {
+            this.unitSelectedPerNode['node.' + (i + 1)] = {};
             for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
                 switch (j) {
                     case 0:
@@ -401,9 +402,10 @@ export class TechParamComponent implements OnChanges,
                         if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2G']['nominal.electric.power'] === 0
                             && this.checkVal['node.' + (i + 1)][j] !== true) {
                             this.checkVal['node.' + (i + 1)][j] = false;
+                            this.unitSelectedPerNode['node.' + (i + 1)]['P2G'] = '';
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
-                            this.unitSelectedPerNode['node.' + (i + 1)] =
+                            this.unitSelectedPerNode['node.' + (i + 1)]['P2G'] =
                                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2G']['name'];
                         }
                         break;
@@ -413,6 +415,15 @@ export class TechParamComponent implements OnChanges,
                             this.checkVal['node.' + (i + 1)][j] = false;
                         } else {
                             this.checkVal['node.' + (i + 1)][j] = true;
+                        }
+                        break;
+                    case 6:
+                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
+                            this.checkVal['node.' + (i + 1)][j] = true;
+                            this.unitSelectedPerNode['node.' + (i + 1)]['VES'] =
+                                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name'];
+                        } else {
+                            this.unitSelectedPerNode['node.' + (i + 1)]['VES'] = '';
                         }
                         break;
                 }
@@ -458,7 +469,12 @@ export class TechParamComponent implements OnChanges,
   */
     public onUnitChange(unitConfig: Object, unitType: string): void {
         let arr: Object[] = [];
-        arr.push(unitConfig['payload']['parameters']['configuration']);
+        if (unitType === 'VES') {
+            arr.push(unitConfig['payload']);
+        } else {
+            arr.push(unitConfig['payload']['parameters']['configuration']);
+        }
+
         arr = arr.map(value => {
             return JSON.parse(JSON.stringify(value).replace(/_/g, '.'));
         });
@@ -475,7 +491,7 @@ export class TechParamComponent implements OnChanges,
   *
   */
     public optionSelected(unitName: string, unitType: string): void {
-        this.unitSelectedPerNode[this.displayingNode] = unitName;
+        this.unitSelectedPerNode[this.displayingNode][unitType] = unitName;
         const optionValue = this.registeredDevices[unitType].filter(value => {
             if (value['name'] === unitName) {
                 return value['metadata'];

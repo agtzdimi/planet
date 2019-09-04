@@ -64,6 +64,43 @@ export class Model1ParamInitService {
                         'efficiency.thermal': 24,
                     },
 
+                    'VES': {
+                        'parameters': {
+                            'timeStamp': '',
+                            'horizon': 120,
+                            'timeStep': '',
+                            'timeUnit': 'MINUTES',
+                            'noAssets': 100,
+                            'assetType': 'residential',
+                        },
+                        'optionalParameters': {
+                            'conductance': null,
+                            'capacity': null,
+                            'hvacCOP': {
+                                'heat': {
+                                    'a': 0.0461466850663691,
+                                    'b': 2.90629308414889,
+                                },
+                                'cool': {
+                                    'a': -0.1082518,
+                                    'b': 7.10789209,
+                                },
+                            },
+                            'pMax': 4000,
+                            'mode': 'HEAT',
+                        },
+                        'inputData': {
+                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                        },
+                        'optionalInputData': {
+                            'tInInit': 21.5,
+                            'tInBaseMin': [21, 21, 21, 21, 21, 21],
+                            'tInBaseMax': [22, 22, 22, 22, 22, 22],
+                            'tInAltMin': [20, 20, 20, 20, 20, 20],
+                            'tInAltMax': [23, 23, 23, 23, 23, 23],
+                        },
+                    },
+
                     'EB': {
                         'storage.electric.capacity': 0,
                         'efficiency.charge': 92.1,
@@ -202,6 +239,82 @@ export class Model1ParamInitService {
                     };
                 }
                 break;
+            case 6:
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
+                        'parameters': {
+                            'timeStamp': '',
+                            'horizon': 120,
+                            'timeStep': '',
+                            'timeUnit': 'MINUTES',
+                            'noAssets': 100,
+                            'assetType': 'residential',
+                        },
+                        'optionalParameters': {
+                            'conductance': null,
+                            'capacity': null,
+                            'hvacCOP': {
+                                'heat': {
+                                    'a': 0.0461466850663691,
+                                    'b': 2.90629308414889,
+                                },
+                                'cool': {
+                                    'a': -0.1082518,
+                                    'b': 7.10789209,
+                                },
+                            },
+                            'pMax': 4000,
+                            'mode': 'HEAT',
+                        },
+                        'inputData': {
+                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                        },
+                        'optionalInputData': {
+                            'tInInit': 21.5,
+                            'tInBaseMin': [21, 21, 21, 21, 21, 21],
+                            'tInBaseMax': [22, 22, 22, 22, 22, 22],
+                            'tInAltMin': [20, 20, 20, 20, 20, 20],
+                            'tInAltMax': [23, 23, 23, 23, 23, 23],
+                        },
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
+                        'parameters': {
+                            'timeStamp': '',
+                            'horizon': 120,
+                            'timeStep': '',
+                            'timeUnit': 'MINUTES',
+                            'noAssets': 100,
+                            'assetType': 'residential',
+                        },
+                        'optionalParameters': {
+                            'conductance': null,
+                            'capacity': null,
+                            'hvacCOP': {
+                                'heat': {
+                                    'a': 0.0461466850663691,
+                                    'b': 2.90629308414889,
+                                },
+                                'cool': {
+                                    'a': -0.1082518,
+                                    'b': 7.10789209,
+                                },
+                            },
+                            'pMax': 4000,
+                            'mode': 'HEAT',
+                        },
+                        'inputData': {
+                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                        },
+                        'optionalInputData': {
+                            'tInInit': 21.5,
+                            'tInBaseMin': [21, 21, 21, 21, 21, 21],
+                            'tInBaseMax': [22, 22, 22, 22, 22, 22],
+                            'tInAltMin': [20, 20, 20, 20, 20, 20],
+                            'tInAltMax': [23, 23, 23, 23, 23, 23],
+                        },
+                    };
+                }
         }
         this.paramUpdated.next(this.paramInit);
     }

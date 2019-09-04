@@ -19,9 +19,9 @@ export class VESUnitComponent implements OnInit, OnChanges {
       'topic': 'VES/1',
       'payload': {
         'parameters': {
-          'timeStamp': 1545731273,
+          'timeStamp': '',
           'horizon': 120,
-          'timeStep': 20,
+          'timeStep': '',
           'timeUnit': 'MINUTES',
           'noAssets': 100,
           'assetType': 'residential',
@@ -60,7 +60,6 @@ export class VESUnitComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.ves.emit(this.vesParams);
     if (this.mode === 'edit') {
       this.parametersColumnSize = 'col-md-12';
     }
@@ -72,9 +71,9 @@ export class VESUnitComponent implements OnInit, OnChanges {
       this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
       this.vesParams['description'] = changes['vesInput']['currentValue']['description'];
       this.ves.emit(this.vesParams);
-    } else if (changes['vesInput']['currentValue']['nominal_heat_power']) {
+    } else if (changes['vesInput']['currentValue']['parameters']) {
       const defaultValues = this.changeDotsToUnderScores(changes['vesInput']['currentValue']);
-      this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.vesParams['payload'] = JSON.parse(defaultValues);
       this.ves.emit(this.vesParams);
     }
   }
