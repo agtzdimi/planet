@@ -7,6 +7,10 @@
     padding-top: nb-theme(layout-padding-top);
   }
 
+  ::ng-deep .scrollable-container {
+    overflow-y: visible !important;
+  }
+
   ::ng-deep nb-layout-header > nav.fixed {
     background: rgb(215, 215, 215);
   }
