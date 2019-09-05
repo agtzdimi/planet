@@ -19,6 +19,7 @@ import re
 import datetime
 import threading
 import time
+import requests
 
 class SimulationData (threading.Thread):
    def __init__(self):
@@ -41,6 +42,23 @@ class SimulationData (threading.Thread):
             data = json.load(read_file)
          model = data['payload']['model']
          startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
+         #unixTimestamp = datetime.datetime.strptime(startDate, "%Y-%m-%d").timestamp()
+         #if model == 2 or model == 4:
+         #   nodes = 8
+         #else:
+         #   nodes = 1
+         #for node in range(nodes):
+            #nodeName = 'node.' + str(node+1)
+            #for attr, value in data['payload']['electric.grid'][nodeName]['VES'].items():
+               #if attr == 'name':
+                  #vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
+                  #URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/something'
+                  #del vesData['name']
+                  #del vesData['IP']
+                  #del vesData['Port']
+                  #r = requests.post(url = URL, data = vesData)
+                  #pastebin_url = r.text 
+                  #print("The pastebin URL is:%s"%pastebin_url)
          steps = data['payload']['simulation']['time.step']
          horizonDays= round(24 /steps, 0)
          currentModel = switcher.get(model, "Invalid Model")
