@@ -42,6 +42,7 @@ class SimulationData (threading.Thread):
             data = json.load(read_file)
          model = data['payload']['model']
          startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
+         steps = data['payload']['simulation']['time.step']
          #unixTimestamp = datetime.datetime.strptime(startDate, "%Y-%m-%d").timestamp()
          #if model == 2 or model == 4:
          #   nodes = 8
@@ -56,10 +57,12 @@ class SimulationData (threading.Thread):
                   #del vesData['name']
                   #del vesData['IP']
                   #del vesData['Port']
+                  #vesData['timeStamp'] = unixTimestamp
+                  #vesData['timeStep'] = steps
                   #r = requests.post(url = URL, data = vesData)
                   #pastebin_url = r.text 
                   #print("The pastebin URL is:%s"%pastebin_url)
-         steps = data['payload']['simulation']['time.step']
+                  #vesData['timeStamp'] = unixTimestamp + steps * 60
          horizonDays= round(24 /steps, 0)
          currentModel = switcher.get(model, "Invalid Model")
          eng.run(currentModel,nargout=0)
