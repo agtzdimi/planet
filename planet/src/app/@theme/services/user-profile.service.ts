@@ -1,11 +1,19 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 
 @Injectable()
 export class UserProfileService {
-    message: string = '';
+    private email: string = '';
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private authService: NbAuthService) {
+
+        this.authService.onTokenChange()
+            .subscribe((token: NbAuthJWTToken) => {
+                if (token.isValid()) {
+                    this.email = token['payload']['email'];
+                }
+            });
     }
 
     public uploadImage(image, email, name): Promise<any> {
@@ -28,6 +36,10 @@ export class UserProfileService {
                     },
                 );
         });
+    }
+
+    public getEmail(): string {
+        return this.email;
     }
 }
 

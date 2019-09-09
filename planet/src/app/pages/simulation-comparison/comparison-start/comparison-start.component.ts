@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DialogSelectMultipleFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-multiple-form.component';
 import { NbDialogService } from '@nebular/theme';
+import { UserProfileService } from '../../../@theme/services';
 
 @Component({
   selector: 'ngx-comparison-start',
@@ -31,7 +32,8 @@ export class ComparisonStartComponent {
   buttonText = 'Select Saved Scenarios';
 
   constructor(private httpClient: HttpClient,
-    private dialogService: NbDialogService) {
+    private dialogService: NbDialogService,
+    private userProfile: UserProfileService) {
     this.initializeCharts();
   }
 
@@ -49,6 +51,7 @@ export class ComparisonStartComponent {
       const tempString = 'formName' + (i + 1);
       params[tempString] = this.forms[i];
     }
+    params['email'] = this.userProfile.getEmail();
     const url = '/planet/rest/multi_simulation';
 
     const interval = setInterval(() => {

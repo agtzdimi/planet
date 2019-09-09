@@ -16,6 +16,7 @@ import { Model1ParamInitService } from '../../../@theme/services/scenario-manage
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
+import { UserProfileService } from '../../../@theme/services';
 
 
 /**
@@ -89,6 +90,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     * @param {EconomyFileService} economyFileService Custom service holding the structure of Economy_environment_initialization.txt
     * @param {Router} router Angular service to apply navigation
     * @param {NbMenuService} menuService Nebular service to get access to the Menu service i.e the sidebar menu
+    * @param {UserProfileService} userProfile Custom service to get User's information like the email
     */
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
@@ -99,7 +101,8 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         private controlFileService: ControlFileService,
         private economyFileService: EconomyFileService,
         protected router: Router,
-        protected menuService: NbMenuService) {
+        protected menuService: NbMenuService,
+        private userProfile: UserProfileService) {
         this.genParams = this.generalParams.parameters;
         this.menuService.onItemClick()
             .pipe(
@@ -162,6 +165,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                     this.httpClient.get(url, {
                         params: {
                             'formName': finalFormName,
+                            'email': this.userProfile.getEmail(),
                         },
                     })
                         .subscribe(
@@ -260,7 +264,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         formData.append('param3', JSON.stringify(this.econEnv));
         formData.append('param4', JSON.stringify(this.elecParam));
         formData.append('param5', JSON.stringify(this.heatParam));
-        formData.append('method', 'LOAD');
+        formData.append('email', this.userProfile.getEmail());
         let url: string = '/planet/rest/upload';
         this.httpClient.post(url, formData,
         )
@@ -280,7 +284,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),
-                        'method': 'LOAD',
+                        'email': this.userProfile.getEmail(),
                     },
                     )
                         .subscribe(

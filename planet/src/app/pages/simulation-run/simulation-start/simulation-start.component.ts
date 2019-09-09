@@ -4,6 +4,7 @@ import { DialogSelectFormPromptComponent } from '../../../@theme/components/plan
 import { NbDialogService } from '@nebular/theme';
 import { SendScenarioService } from '../../../@theme/services/sendScenarioName.service';
 import { NbSidebarService } from '@nebular/theme';
+import { UserProfileService } from '../../../@theme/services';
 
 @Component({
   selector: 'ngx-simulation-start',
@@ -34,7 +35,8 @@ export class SimulationStartComponent {
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
     private sendScenarioService: SendScenarioService,
-    private sidebarService: NbSidebarService) {
+    private sidebarService: NbSidebarService,
+    private userProfile: UserProfileService) {
     this.sidebarService.onToggle()
       .subscribe((data) => {
         this.expanded = !this.expanded;
@@ -62,6 +64,7 @@ export class SimulationStartComponent {
       {
         'formName': this.formName,
         'mode': '1',
+        'email': this.userProfile.getEmail(),
       })
       .subscribe(
         data => {
@@ -76,6 +79,7 @@ export class SimulationStartComponent {
       this.httpClient.get(url, {
         params: {
           'formName': this.formName,
+          'email': this.userProfile.getEmail(),
         },
       })
         .subscribe(
@@ -95,6 +99,7 @@ export class SimulationStartComponent {
       this.httpClient.get(url, {
         params: {
           'formName': this.formName,
+          'email': this.userProfile.getEmail(),
         },
       })
         .subscribe(

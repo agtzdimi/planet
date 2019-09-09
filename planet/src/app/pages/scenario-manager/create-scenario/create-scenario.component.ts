@@ -15,6 +15,7 @@ import { GeneralParamsService } from '../../../@theme/services/scenario-manager-
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
+import { UserProfileService } from '../../../@theme/services';
 
 
 /**
@@ -98,6 +99,7 @@ export class CreateScenarioComponent implements OnDestroy {
      * @param {Model1ParamInitService} model1 Custom service holding the structure of model 2
      * @param {ControlFileService} controlFileService Custom service holding the structure of Control_initialization.txt
      * @param {EconomyFileService} economyFileService Custom service holding the structure of Economy_environment_initialization.txt
+     * @param {UserProfileService} userProfile Custom service to get User's information like the email
      */
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
@@ -105,7 +107,8 @@ export class CreateScenarioComponent implements OnDestroy {
         private model2: Model2ParamInitService,
         private model1: Model1ParamInitService,
         private controlFileService: ControlFileService,
-        private economyFileService: EconomyFileService) {
+        private economyFileService: EconomyFileService,
+        private userProfile: UserProfileService) {
         this.genParams = this.generalParams.parameters;
 
         // Subscribe to Events and get back the modified data
@@ -180,7 +183,7 @@ export class CreateScenarioComponent implements OnDestroy {
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
-        formData.append('method', 'NEW');
+        formData.append('email', this.userProfile.getEmail());
         let url: string = '/planet/rest/upload';
         this.httpClient.post(url, formData,
         )
@@ -200,6 +203,7 @@ export class CreateScenarioComponent implements OnDestroy {
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),
+                        'email': this.userProfile.getEmail(),
                     },
                     )
                         .subscribe(

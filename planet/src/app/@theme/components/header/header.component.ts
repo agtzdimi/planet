@@ -5,14 +5,12 @@ import { LayoutService } from '../../../@core/utils';
 import { filter, map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { UserProfileService } from '../../services/user-profile.service';
 import { NbAuthService, NbAuthJWTToken, NbAuthResult } from '@nebular/auth';
 
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
   templateUrl: './header.component.html',
-  providers: [UserProfileService],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
