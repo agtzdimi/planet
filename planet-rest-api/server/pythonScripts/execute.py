@@ -53,16 +53,30 @@ class SimulationData (threading.Thread):
             #for attr, value in data['payload']['electric.grid'][nodeName]['VES'].items():
                #if attr == 'name':
                   #vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
-                  #URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/something'
+                  #URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/requestFlexibility'
                   #del vesData['name']
                   #del vesData['IP']
                   #del vesData['Port']
-                  #vesData['timeStamp'] = unixTimestamp
-                  #vesData['timeStep'] = steps
-                  #r = requests.post(url = URL, data = vesData)
-                  #pastebin_url = r.text 
-                  #print("The pastebin URL is:%s"%pastebin_url)
-                  #vesData['timeStamp'] = unixTimestamp + steps * 60
+                  #times = vesData['horizon'] / steps * 60
+                  #for i in range(times):
+                     #vesData['timeStamp'] = unixTimestamp
+                     #vesData['timeStep'] = steps * 60
+                     #r = requests.post(url = URL, data = vesData)
+                     #pastebin_url = r.text
+                     #print("The pastebin URL is:%s"%pastebin_url)
+                     #consumptionData = `{
+                     #   "timeStamp": unixTimestamp,
+                     #   "timeStep": steps,
+                     #   "timeUnit": "MINUTES",
+                     #   "powerUnit": "Watt",
+                     #   "powerModification": -11010,
+                     #   "externalTemperature": 13
+                     #}`
+                     #URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/requestConsumption'
+                     #r = requests.post(url = URL, data = consumptionData)
+                     #pastebin_url = r.text
+                     #print("The pastebin URL is:%s"%pastebin_url)
+                     #unixTimestamp = unixTimestamp + steps * 3600
          horizonDays= round(24 /steps, 0)
          currentModel = switcher.get(model, "Invalid Model")
          eng.run(currentModel,nargout=0)
