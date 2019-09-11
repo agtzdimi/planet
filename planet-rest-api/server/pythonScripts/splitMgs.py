@@ -6,8 +6,15 @@ import time
 import pandas as pd
 import shutil
 import subprocess
+import argparse
+from pathlib import Path
 
-path = './public/files/single/*'
+parser = argparse.ArgumentParser()
+parser.add_argument("--path", required=True,
+   help="path directory")
+args = vars(parser.parse_args())
+
+path = args["path"] + '/single/*'
 files = glob.glob(path)
 broker='localhost'
 port=1883
@@ -38,12 +45,16 @@ for name in files:
       if exc.errno != errno.EISDIR:
          raise
 
-i=0
-for file in sendMesg:
-   ret = client1.publish("/planet/GetData", file)
-   i+=1
-   with open (os.path.join(os.getcwd(),'./public/files','barStatus.txt'), 'w') as f:
-      f.write("%s\n" % i)
+my_file = Path("sendMesg.lock")
+while my_file.is_file():
    time.sleep(2)
 
-ret = client1.publish("/planet/GetData", "END OF SIM")
+with open("sendMesg.lock","w") as f:
+   pass
+
+for file in sendMesg:
+   ret = client1.publish("/planet/GetData", file)
+   time.sleep(2)
+
+ret = client1.publish("/planet/GetData", "END OF SIM:" + args['path'])
+os.remove("sendMesg.lock")

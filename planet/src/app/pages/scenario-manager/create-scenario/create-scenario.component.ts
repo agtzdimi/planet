@@ -183,12 +183,13 @@ export class CreateScenarioComponent implements OnDestroy {
         formData.append('param1', JSON.stringify(this.paramInit));
         formData.append('param2', JSON.stringify(this.controlSystem));
         formData.append('param3', JSON.stringify(this.econEnv));
+        formData.append('method', 'NEW');
         formData.append('email', this.userProfile.getEmail());
         let url: string = '/planet/rest/upload';
         this.httpClient.post(url, formData,
         )
             .subscribe(
-                () => {
+                (timeStamp) => {
                     const oldWindValue: string = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
                     this.windParam['payload'] = JSON.parse(oldWindValue);
                     this.windParam['payload']['formName'] = this.genParams['formName'];
@@ -204,6 +205,7 @@ export class CreateScenarioComponent implements OnDestroy {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),
                         'email': this.userProfile.getEmail(),
+                        'timeStamp': timeStamp['timeStamp'],
                     },
                     )
                         .subscribe(
@@ -301,6 +303,7 @@ export class CreateScenarioComponent implements OnDestroy {
                 'pvPayload': JSON.stringify(this.pvParam),
                 'nodes': this.nodes,
                 'timeStep': String(this.paramInit['payload']['simulation']['time.step'] / 60),
+                'email': this.userProfile.getEmail(),
             },
         })
             .subscribe(

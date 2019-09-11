@@ -33,11 +33,11 @@ def load():
    """
    subprocess.Popen(['python','load.py'])
 
-def execute(filesMessage):
+def execute(filesMessage,fPath):
    """ Function to be called when a user wants to execute a simulink model
        This function will run the corresponding python script for executing a simulink model
    """
-   p1 = subprocess.Popen(['python','execute.py'])
+   p1 = subprocess.Popen(['python','execute.py','--path',fPath])
    p1.wait()
 
 def reset():
@@ -77,7 +77,7 @@ def createExcelFile(fileName,finalFileName):
    finalFile = finalFile.drop(labels='Time', axis=1)
    finalFile.to_excel(finalFileName, index=False)
 
-def executeMode(message):
+def executeMode(message,filePath):
    """ Function to be called when the user sends a message to execute a specific mode
        This function will initiate the process given in the recieved message
    """
@@ -129,7 +129,7 @@ def executeMode(message):
    filesDest = [f for f in os.listdir(destPath)]
    time.sleep(2)
    os.chdir(destPath)
-   execute(message)
+   execute(message,filePath)
    os.chdir("..")
    time.sleep(15)
    #shutil.rmtree(destPath, ignore_errors=True)
@@ -144,5 +144,6 @@ if __name__ == "__main__":
       if "END OF SIM" not in msg:
          message = message + msg
       else:
-         executeMode(message)
+         path=msg.split(":")[1]
+         executeMode(message,path)
          message = ""

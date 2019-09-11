@@ -264,12 +264,13 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         formData.append('param3', JSON.stringify(this.econEnv));
         formData.append('param4', JSON.stringify(this.elecParam));
         formData.append('param5', JSON.stringify(this.heatParam));
+        formData.append('method', 'LOAD');
         formData.append('email', this.userProfile.getEmail());
         let url: string = '/planet/rest/upload';
         this.httpClient.post(url, formData,
         )
             .subscribe(
-                () => {
+                (timeStamp) => {
                     const oldWindValue: string = JSON.stringify(this.windParam['payload']).replace(/ /g, '+');
                     this.windParam['payload'] = JSON.parse(oldWindValue);
                     this.windParam['payload']['formName'] = this.genParams['formName'];
@@ -284,7 +285,9 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                     this.httpClient.post(url, {
                         'windPayload': JSON.stringify(this.windParam),
                         'pvPayload': JSON.stringify(this.pvParam),
+                        'method': 'LOAD',
                         'email': this.userProfile.getEmail(),
+                        'timeStamp': timeStamp['timeStamp'],
                     },
                     )
                         .subscribe(

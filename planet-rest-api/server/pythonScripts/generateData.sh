@@ -2,7 +2,7 @@
 
 function genFilesLessHour {
 
-cut -d , -f1 nodeFiles/$1 | awk -v diff="$2" 'BEGIN {FS=OFS=","} {
+cut -d , -f1 "$3/nodeFiles/$1" | awk -v diff="$2" 'BEGIN {FS=OFS=","} {
    if ( NR == 1 ) { print $0 ; next }
    if ( NR == 2 ) { previous=$0 }
    else { current=$0
@@ -19,14 +19,14 @@ cut -d , -f1 nodeFiles/$1 | awk -v diff="$2" 'BEGIN {FS=OFS=","} {
       for ( i=1; i<diff ;i++ ) {
          print (previous + i*val )
       }
-   }' > temp$1
+   }' > "$3/temp$1"
 
-mv temp$1 nodeFiles/$1
+mv "$3/temp$1" "$3/nodeFiles/$1"
 }
 
 function genFilesMoreHour {
 
-cut -d , -f1 nodeFiles/$1 | awk -v step="$2" 'BEGIN { FS = OFS = "," } {
+cut -d , -f1 "$3/nodeFiles/$1" | awk -v step="$2" 'BEGIN { FS = OFS = "," } {
    if( NR == 1 ) { 
       print $0
       next
@@ -38,9 +38,9 @@ cut -d , -f1 nodeFiles/$1 | awk -v step="$2" 'BEGIN { FS = OFS = "," } {
    } else {
       start = ( start - 1 )
    }
-}' > temp$1
+}' > "$3/temp$1"
 
-mv temp$1 nodeFiles/$1
+mv "$3/temp$1" "$3/nodeFiles/$1"
 }
 
 function replicateColumns {
@@ -60,7 +60,7 @@ awk -v id="$1" -v count=$2 'BEGIN {FS=OFS=","} {
       }
       print val
    }
-}' "nodeFiles/${1}1" > ./public/files/$1.csv
+}' "$3/nodeFiles/${1}1" > "$3/$1.csv"
 
 }
 
@@ -68,16 +68,18 @@ windData="$1"
 pvData="$2"
 import="$3"
 if [[ $import == true ]]; then
-   NODES_COUNT=$(grep -o 'node\.[0-9]' ./public/files/Parameters_initialization.txt | wc -l)
+   dirName="./public/files/$4"
+   NODES_COUNT=$(grep -o 'node\.[0-9]' "$dirName/Parameters_initialization.txt" | wc -l)
 else
    NODES_COUNT="$4"
+   dirName="./public/files/$5"
 fi
 
 formName="$(echo $pvData | python ./server/pythonScripts/getAttribute.py --formName true)"
 
 lat=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --lat true)
 lon=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --lon true)
-mkdir nodeFiles
+mkdir -p "$dirName/nodeFiles"
 
 systemLoss=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --node node.1 --system.loss true)
 azimuth=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --node node.1 --azimuth true)
@@ -92,7 +94,7 @@ turbineModel=$(echo "$windData" | python ./server/pythonScripts/getAttribute.py 
 windCapacity=$(echo "$windData" | python ./server/pythonScripts/getAttribute.py --node node.1 --capacity true)
 pvCapacity=$(echo "$pvData" | python ./server/pythonScripts/getAttribute.py --node node.1 --capacity true)
 leapYearIndexBefore=$(python ./server/pythonScripts/checkLeapYear.py --startDate "$pvStartYear" --endDate "$pvEndYear" | cut -d ' ' -f1)
-if [[ "$(echo $pvStartYear | cut -d - -f1)" != "$(echo $pvEndYear | cut -d - -f1)" ]]; then 
+if [[ "$(echo $pvStartYear | cut -d - -f1)" != "$(echo $pvEndYear | cut -d - -f1)" ]]; then
    pvStartYear=$(echo "$pvStartYear" | sed 's/^[0-9]*\(\-.*\)/2015\1/')
    pvEndYear=$(echo "$pvEndYear" | sed 's/^[0-9]*\(\-.*\)/2016\1/')
 else
@@ -107,16 +109,16 @@ turbineModel=$(echo "$turbineModel" | sed 's/[[:space:]]/+/g')
 
 echo "Lat= $lat Lon = $lon StartDt = $pvStartYear EndDt = $pvEndYear Capacity = $pvCapacity Tracking = $tracking SystemLoss = $systemLoss Tilt = $tilt Azimuth = $azimuth"
 curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/pv?&lat=$lat&lon=$lon&date_from=$pvStartYear&date_to=$pvEndYear&capacity=$pvCapacity&tracking=$tracking&system_loss=$systemLoss&tilt=$tilt&azim=$azimuth&raw=false&header=false&dataset=merra2&format=csv" |
-   cut -d , -f2 > nodeFiles/PV1
+   cut -d , -f2 > "$dirName/nodeFiles/PV1"
 curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/wind?&lat=$lat&lon=$lon&date_from=$windStartYear&date_to=$windEndYear&capacity=$windCapacity&raw=false&dataset=merra2&height=$hubHeight&turbine=$turbineModel&header=false&format=csv" |
-   cut -d , -f2 > nodeFiles/Wind1
+   cut -d , -f2 > "$dirName/nodeFiles/Wind1"
 
 if [[ "$leapYearIndexAfter" != "$leapYearIndexBefore" ]]; then
-   eval ' for hour in {'"$((leapYearIndexAfter+1))"'..'"$((leapYearIndexAfter+24))"'}; do sed -i ""$hour"d" nodeFiles/PV1; sed -i ""$hour"d" nodeFiles/Wind1 ;done'
+   eval ' for hour in {'"$((leapYearIndexAfter+1))"'..'"$((leapYearIndexAfter+24))"'}; do sed -i ""$hour"d" '"$dirName"'/nodeFiles/PV1; sed -i ""$hour"d" '"$dirName"'/nodeFiles/Wind1 ;done'
 fi
 
 if [[ $import == true ]]; then
-   timeStep=$(cat ./public/files/Parameters_initialization.txt | python ./server/pythonScripts/getAttribute.py --time.step true)
+   timeStep=$(cat "$dirName/Parameters_initialization.txt" | python ./server/pythonScripts/getAttribute.py --time.step true)
 else
    timeStep="$5"
 fi
@@ -156,39 +158,39 @@ hourEnd=$(awk -v end=$pvEndYear 'BEGIN {
    print (monthHour + dayHour + 1)
 }')
 
-head -n1 ./public/staticFiles/Electricity.csv | cut -d , -f1-$((NODES_COUNT*2)) > nodeFiles/Electricity
-head -n1 ./public/staticFiles/Heat.csv > nodeFiles/Heat
-sed -n "$hourStart"','"$hourEnd"'p' ./public/staticFiles/Electricity.csv | cut -d , -f1-$((NODES_COUNT*2)) >> nodeFiles/Electricity
-sed -n "$hourStart"','"$hourEnd"'p' ./public/staticFiles/Heat.csv >> nodeFiles/Heat
+head -n1 ./public/staticFiles/Electricity.csv | cut -d , -f1-$((NODES_COUNT*2)) > "$dirName/nodeFiles/Electricity"
+head -n1 ./public/staticFiles/Heat.csv > "$dirName/nodeFiles/Heat"
+sed -n "$hourStart"','"$hourEnd"'p' ./public/staticFiles/Electricity.csv | cut -d , -f1-$((NODES_COUNT*2)) >> "$dirName/nodeFiles/Electricity"
+sed -n "$hourStart"','"$hourEnd"'p' ./public/staticFiles/Heat.csv >> "$dirName/nodeFiles/Heat"
 
 if [[ $steps > "1" ]]; then
-   genFilesLessHour "PV1" "$steps"
-   genFilesLessHour "Wind1" "$steps"
-   eval ' for node in {1..'"$((NODES_COUNT*2))"'}; do cut -d , -f"$node" nodeFiles/Electricity > nodeFiles/Electricity"$node"; genFilesLessHour "Electricity$node" "$steps" ;done'
-   rm nodeFiles/Electricity
-   paste -d , nodeFiles/Electricity* > ./public/files/Electricity.csv
+   genFilesLessHour "PV1" "$steps" "$dirName"
+   genFilesLessHour "Wind1" "$steps" "$dirName"
+   eval ' for node in {1..'"$((NODES_COUNT*2))"'}; do cut -d , -f"$node" '"$dirName"'/nodeFiles/Electricity > '"$dirName"'/nodeFiles/Electricity"$node"; genFilesLessHour "Electricity$node" "$steps" "$dirName";done'
+   rm "$dirName/nodeFiles/Electricity"
+   paste -d , $dirName/nodeFiles/Electricity* > "$dirName/Electricity.csv"
    for node in {1..2}; do
-      cut -d , -f$node nodeFiles/Heat > nodeFiles/Heat$node
-      genFilesLessHour "Heat$node" "$steps"
+      cut -d , -f$node "$dirName/nodeFiles/Heat" > "$dirName/nodeFiles/Heat$node"
+      genFilesLessHour "Heat$node" "$steps" "$dirName"
    done
-   rm nodeFiles/Heat
-   paste -d , nodeFiles/Heat* > ./public/files/Heat.csv
+   rm "$dirName/nodeFiles/Heat"
+   paste -d , $dirName/nodeFiles/Heat* > "$dirName/Heat.csv"
 elif [[ $steps < "1" ]]; then
    stepToIncrease=$(awk -v step="$timeStep" 'BEGIN{print (step - 1)}')
-   genFilesMoreHour "PV1" "$stepToIncrease"
-   genFilesMoreHour "Wind1" "$stepToIncrease"
-   genFilesMoreHour "Heat1" "$stepToIncrease"
-   genFilesMoreHour "Electricity1" "$stepToIncrease"
+   genFilesMoreHour "PV1" "$stepToIncrease" "$dirName"
+   genFilesMoreHour "Wind1" "$stepToIncrease" "$dirName"
+   genFilesMoreHour "Heat1" "$stepToIncrease" "$dirName"
+   genFilesMoreHour "Electricity1" "$stepToIncrease" "$dirName"
 else
-   mv nodeFiles/Electricity ./public/files/Electricity.csv
-   mv nodeFiles/Heat ./public/files/Heat.csv
+   mv "$dirName/nodeFiles/Electricity" "$dirName/Electricity.csv"
+   mv "$dirName/nodeFiles/Heat" "$dirName/Heat.csv"
 fi
 
-replicateColumns "PV" "$NODES_COUNT"
-replicateColumns "Wind" "$NODES_COUNT"
+replicateColumns "PV" "$NODES_COUNT" "$dirName"
+replicateColumns "Wind" "$NODES_COUNT" "$dirName"
 
-rm -rf nodeFiles
+rm -rf "$dirName/nodeFiles"
 
 if [[ $import == true ]]; then
-   ./server/pythonScripts/importDataToDB.sh "$formName" "$windData" "$pvData"
+   ./server/pythonScripts/importDataToDB.sh "$formName" "$windData" "$pvData" "$dirName"
 fi

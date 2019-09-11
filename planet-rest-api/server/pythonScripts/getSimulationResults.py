@@ -10,16 +10,20 @@ class SimulationData (threading.Thread):
       proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations_results'],stdout=subprocess.PIPE)
       for msg in iter(proc.stdout.readline,''):
          msg = msg.decode("utf-8")
-         for line in msg.split('\n'):
+         messages = msg.split('\n')
+         matching = [pattern for pattern in messages if "./public/files" in pattern]
+         if len(matching) != 0:
+            path = matching[0]
+         for line in messages:
             lineLength = len(line.split(','))
             if lineLength == 24:
-               with open (os.path.join(os.getcwd(),'../../public/files','Results1.csv'), 'a') as f:
+               with open (os.path.join(os.getcwd(),'../../',str(path).rstrip(),'Results1.csv'), 'a') as f:
                   f.write("%s\n" % line)
             elif lineLength == 3:
-               with open (os.path.join(os.getcwd(),'../../public/files','Results2.csv'), 'a') as f:
+               with open (os.path.join(os.getcwd(),'../../',str(path).rstrip(),'Results2.csv'), 'a') as f:
                   f.write("%s\n" % line)
-            elif lineLength == 1 and line != '' and line != '"':
-               with open (os.path.join(os.getcwd(),'../../public/files','simulationStatus.txt'), 'a') as f:
+            elif lineLength == 1 and line != '' and line != '"' and "./public/files" not in line:
+               with open (os.path.join(os.getcwd(),'../../',str(path).rstrip(),'simulationStatus.txt'), 'a') as f:
                   f.write("%s\n" % line)
 
 
@@ -31,8 +35,12 @@ class BarStatus (threading.Thread):
       proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations_status'],stdout=subprocess.PIPE)
       for msg in iter(proc.stdout.readline,''):
          msg = msg.decode("utf-8")
-         with open (os.path.join(os.getcwd(),'../../public/files','barStatus.txt'), 'w') as f:
-            f.write("%s\n" % msg)
+         try:
+            path = msg.split(":")[1].rstrip()
+            with open (os.path.join(os.getcwd(),'../../',str(path),'barStatus.txt'), 'w') as f:
+               f.write("%s\n" % msg.split(":")[0])
+         except(IndexError):
+            pass
 
 if __name__ == "__main__":
 

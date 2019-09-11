@@ -12,11 +12,17 @@ const fileUpload = require('express-fileupload');
 app.use(fileUpload({}));
 
 exports.upload = (req, res) => {
-    shell.echo(req.body.param1).to(`${__dirname}/../../public/files/Parameters_initialization.txt`);
-    shell.echo(req.body.param2).to(`${__dirname}/../../public/files/Control_initialization.txt`);
-    shell.echo(req.body.param3).to(`${__dirname}/../../public/files/Economy_environment_initialization.txt`);
+    const timeStamp = Date.now();
+    shell.exec('mkdir ' + `${__dirname}/../../public/files/` + req.body.email + "_" + timeStamp);
+    shell.echo(req.body.param1).to(`${__dirname}/../../public/files/` +
+        req.body.email + "_" + timeStamp + `/Parameters_initialization.txt`);
+    shell.echo(req.body.param2).to(`${__dirname}/../../public/files/` +
+        req.body.email + "_" + timeStamp + `/Control_initialization.txt`);
+    shell.echo(req.body.param3).to(`${__dirname}/../../public/files/` +
+        req.body.email + "_" + timeStamp + `/Economy_environment_initialization.txt`);
     res.json({
         file: '$(req.files.file)',
+        timeStamp: timeStamp,
     });
 };
 
@@ -39,7 +45,8 @@ exports.saveData = (req, res) => {
             shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
                 ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
                 " planet --eval \"db.results.remove({'formName': '" + inputFormName.payload.formName + "'})\"");
-            shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" + req.body.pvPayload + "' true",
+            shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" +
+                req.body.pvPayload + "' true " + req.body.email + "_" + req.body.timeStamp,
                 function (code, stdout, stderr) {
                     if (code === 1) {
                         return res.send('Error: Not all data are loaded to the DB!');
@@ -51,7 +58,8 @@ exports.saveData = (req, res) => {
             return res.send('Error: Simulation Name Already Exists!');
         }
     } else {
-        shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" + req.body.pvPayload + "' true",
+        shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + req.body.windPayload + "' '" +
+            req.body.pvPayload + "' true " + req.body.email + "_" + req.body.timeStamp,
             function (code) {
                 if (code === 1) {
                     return res.send('Error: Not all data are loaded to the DB!');
@@ -80,24 +88,39 @@ exports.getFormNames = (req, res) => {
 };
 
 exports.transfer = (req, res) => {
-    shell.exec(`${__dirname}/../pythonScripts/simulate.sh ` + '"' + req.body.formName + '" ' + req.body.mode);
+    const timeStamp = Date.now();
+    shell.exec(`${__dirname}/../pythonScripts/simulate.sh ` + '"' + req.body.formName + '" ' +
+        req.body.mode + " " + req.body.email + "_" + timeStamp);
     return res.send({
         status: 'Transfer Completed',
+        timeStamp: timeStamp,
     });
 };
 
 exports.loadData = (req, res) => {
-    shell.exec(`${__dirname}/../pythonScripts/load_data.sh ` + '"' + req.query.formName + '"');
-    const paramInitParam = shell.exec('cat ' + `${__dirname}/../../public/files/loadData/Parameters_initialization.txt`);
-    const econEnvParam = shell.exec('cat ' + `${__dirname}/../../public/files/loadData/Economy_environment_initialization.txt`);
-    const controlParam = shell.exec('cat ' + `${__dirname}/../../public/files/loadData/Control_initialization.txt`);
-    const windParam = shell.exec('cat ' + `${__dirname}/../../public/files/loadData/WindData.txt`);
-    const pvParam = shell.exec('cat ' + `${__dirname}/../../public/files/loadData/PVData.txt`);
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/loadData/Electricity.csv`);
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/loadData/Heat.csv`);
-    const elecParam = shell.exec('cat ' + `${__dirname}/../../public/files/loadData/Electricity.csv`);
-    const heatParam = shell.exec('cat ' + `${__dirname}/../../public/files/loadData/Heat.csv`);
-    const Parameters = {
+    const timeStamp = Date.now();
+    const email = req.query.email + "_" + timeStamp;
+    console.log(`${__dirname}/../pythonScripts/load_data.sh ` + `"` + req.query.formName + `" "` + email + `"`)
+    shell.exec(`${__dirname}/../pythonScripts/load_data.sh ` + `"` + req.query.formName + `" "` + email + `"`);
+    const paramInitParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
+        email + `/loadData/Parameters_initialization.txt`);
+    const econEnvParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
+        email + `/loadData/Economy_environment_initialization.txt`);
+    const controlParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
+        email + `/loadData/Control_initialization.txt`);
+    const windParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
+        email + `/loadData/WindData.txt`);
+    const pvParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
+        email + `/loadData/PVData.txt`);
+    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/` +
+        email + `/loadData/Electricity.csv`);
+    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/` +
+        email + `/loadData/Heat.csv`);
+    const elecParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
+        email + `/loadData/Electricity.csv`);
+    const heatParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
+        email + `/loadData/Heat.csv`);
+    const parameters = {
         paramInit: paramInitParam.stdout,
         econEnv: econEnvParam.stdout,
         controlSystem: controlParam.stdout,
@@ -106,27 +129,28 @@ exports.loadData = (req, res) => {
         windParam: windParam.stdout,
         pvParam: pvParam.stdout,
     };
-    res.send(Parameters);
-    shell.exec('rm -rf ' + `${__dirname}/../../public/files/loadData`);
+    res.send(parameters);
+    shell.exec('rm -rf ' + `${__dirname}/../../public/files/` + email);
 };
 
 exports.simulation = (req, res) => {
-    shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'Results1' " + '"' + req.query.formName + '"');
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/Results1.csv`);
-    const results1 = shell.exec('cat ' + `${__dirname}/../../public/files/Results1.csv`);
-    shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'Results2' " + '"' + req.query.formName + '"');
-    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/Results2.csv`);
-    const results2 = shell.exec('cat ' + `${__dirname}/../../public/files/Results2.csv`);
-    const status = shell.exec('cat ' + `${__dirname}/../../public/files/simulationStatus.txt`);
+    const email = req.query.email;
+    shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'Results1' " + '"' +
+        req.query.formName + '" ' + email);
+    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/` + email + `/Results1.csv`);
+    const results1 = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/Results1.csv`);
+    shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'Results2' " + '"' +
+        req.query.formName + '" ' + email);
+    shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/` + email + `/Results2.csv`);
+    const results2 = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/Results2.csv`);
+    const status = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/simulationStatus.txt`);
     const finalResults = {
         results1: results1.stdout,
         results2: results2.stdout,
         status: status.stdout,
     };
     res.send(finalResults);
-    if (results1.stderr === '' && results2.stderr === '') {
-        shell.exec('rm -rf ' + `${__dirname}/../../public/files/*`);
-    }
+    shell.exec('rm -rf ' + `${__dirname}/../../public/files/` + email);
 };
 
 exports.multiSimulation = (req, res) => {
@@ -134,15 +158,19 @@ exports.multiSimulation = (req, res) => {
         let results1;
         let results2;
         let finalResults = {};
+        const email = req.query['email'];
         for (let i = 0; i < Object.keys(req.query).length; i++) {
             const formName = 'formName' + (i + 1);
-            shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'multi'" + (i + 1) + "'Results1' " + '"' + req.query[formName] + '"');
-            shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'Results2' " + '"' + req.query[formName] + '"');
-            shell.exec(`mv ${__dirname}/../../public/files/Results2.csv ${__dirname}/../../public/files/` + "'multi'" + (i + 1) + "'Results2.csv'");
-            shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/multi` + (i + 1) + 'Results1.csv');
-            shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/multi` + (i + 1) + 'Results2.csv');
-            results1 = shell.exec('cat ' + `${__dirname}/../../public/files/multi` + (i + 1) + 'Results1.csv');
-            results2 = shell.exec('cat ' + `${__dirname}/../../public/files/multi` + (i + 1) + 'Results2.csv');
+            shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'multi'" + (i + 1) +
+                "'Results1' " + '"' + req.query[formName] + '" ' + email);
+            shell.exec(`${__dirname}/../pythonScripts/save_results.sh ` + "'Results2' " + '"' +
+                req.query[formName] + '" ' + email);
+            shell.exec(`mv ${__dirname}/../../public/files/` + email + `/Results2.csv ${__dirname}/../../public/files/` +
+                email + `/` + "'multi'" + (i + 1) + "'Results2.csv'");
+            shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/` + email + `/multi` + (i + 1) + 'Results1.csv');
+            shell.exec("sed -i '/^,,.*/d' " + `${__dirname}/../../public/files/` + email + `/multi` + (i + 1) + 'Results2.csv');
+            results1 = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/multi` + (i + 1) + 'Results1.csv');
+            results2 = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/multi` + (i + 1) + 'Results2.csv');
             const finalResultsString = 'results' + (i + 1);
             finalResults[finalResultsString] = {
                 results1: results1.stdout,
@@ -150,14 +178,14 @@ exports.multiSimulation = (req, res) => {
             };
         }
         res.send(finalResults);
-        shell.exec('rm -rf ' + `${__dirname}/../../public/files/*`);
+        shell.exec('rm -rf ' + `${__dirname}/../../public/files/` + email);
     } catch (error) {
         console.log(error);
     }
 };
 
 exports.simulationStatus = (req, res) => {
-    const results = shell.exec('cat ' + `${__dirname}/../../public/files/barStatus.txt`);
+    const results = shell.exec('cat ' + `${__dirname}/../../public/files/` + req.body.email + `/barStatus.txt`);
     const finalResults = {
         value: results.stdout,
     };
@@ -203,23 +231,25 @@ exports.deleteScenario = (req, res) => {
 exports.get_profiles = (req, res) => {
     const windPayload = req.query.windPayload;
     const pvPayload = req.query.pvPayload;
+    const timeStamp = Date.now();
+    const email = req.query.email + "_" + timeStamp;
     shell.exec(`${__dirname}/../pythonScripts/generateData.sh '` + windPayload + "' '" + pvPayload + "' false '" +
-        req.query.nodes + "' '" + req.query.timeStep + "'",
+        req.query.nodes + "' '" + req.query.timeStep + "' " + email,
         function (code) {
             if (code === 1) {
                 return res.send('Error: Not all data are loaded to the DB!');
             } else {
-                const pv = shell.exec('cat ' + `${__dirname}/../../public/files/PV.csv`).stdout;
-                const wind = shell.exec('cat ' + `${__dirname}/../../public/files/Wind.csv`).stdout;
-                const elec = shell.exec('cat ' + `${__dirname}/../../public/files/Electricity.csv`).stdout;
-                const heat = shell.exec('cat ' + `${__dirname}/../../public/files/Heat.csv`).stdout;
+                const pv = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/PV.csv`).stdout;
+                const wind = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/Wind.csv`).stdout;
+                const elec = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/Electricity.csv`).stdout;
+                const heat = shell.exec('cat ' + `${__dirname}/../../public/files/` + email + `/Heat.csv`).stdout;
                 res.send({
                     'electricity': elec,
                     'heat': heat,
                     'pv': pv,
                     'wind': wind,
                 });
-                shell.exec('rm -rf ' + `${__dirname}/../../public/files/*`);
+                shell.exec('rm -rf ' + `${__dirname}/../../public/files/` + email);
             }
         });
 };

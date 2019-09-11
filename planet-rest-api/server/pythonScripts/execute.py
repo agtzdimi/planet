@@ -20,6 +20,7 @@ import datetime
 import threading
 import time
 import requests
+import argparse
 
 class SimulationData (threading.Thread):
    def __init__(self):
@@ -141,6 +142,7 @@ def csv_from_excel(filename):
 
 def sendFiles(fileName):
    finalFile = '"\n'
+   global path
    with open(fileName) as f:
       content = f.readlines()
    
@@ -158,6 +160,8 @@ def sendFiles(fileName):
          p1.wait()
          msg=""
       else:
+         if line == 1:
+            msg = msg + path + "\n"
          msg = msg + splitted[line] + "\n"
    p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','192.168.11.128','-t','simulations_results'])
    p1.wait()
@@ -173,13 +177,13 @@ class BarStatus (threading.Thread):
       times = 1
       while 'Results1.csv' not in files and times <= 36:
          if len(files) > 20 and len(files) <= 24:
-            length = "20"
+            length = "20:" + path
          elif len(files) > 24 and len(files) <= 27:
-            length = "50"
+            length = "50:" + path
          elif len(files) > 27 and len(files) <= 30:
-            length = "65"
+            length = "65:" + path
          elif len(files) >= 30:
-            length = "85"
+            length = "85:" + path
          p1 = subprocess.Popen(['mosquitto_pub','-m',length,'-h','192.168.11.128','-t','simulations_status'])
          p1.wait()
          time.sleep(5)
@@ -188,10 +192,11 @@ class BarStatus (threading.Thread):
 
 if __name__ == "__main__":
 
-   #parser = argparse.ArgumentParser()
-   #parser.add_argument("--msg", required=True,
-   #   help="Simulation Files Data")
-   #args = vars(parser.parse_args())
+   parser = argparse.ArgumentParser()
+   parser.add_argument("--path", required=True,
+      help="Filepath to be send back to the Backend")
+   args = vars(parser.parse_args())
+   path = args['path']
    t1 = SimulationData()
    t2 = BarStatus()
    t1.start()

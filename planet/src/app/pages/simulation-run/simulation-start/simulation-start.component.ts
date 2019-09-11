@@ -69,67 +69,67 @@ export class SimulationStartComponent {
       .subscribe(
         data => {
           this.changingValue = 50;
+          const barData = setInterval(() => {
+            url = '/planet/rest/simulation_status';
+            this.httpClient.get(url, {
+              params: {
+                'formName': this.formName,
+                'email': this.userProfile.getEmail() + '_' + data['timeStamp'],
+              },
+            })
+              .subscribe(
+                status => {
+                  // console.log('GET Request is successful ');
+                  if (status['value']) {
+                    this.changingValue = status['value'];
+                  }
+                },
+                error => {
+                  // console.log('Error', error);
+                },
+              );
+          }, 10000);
+          const interval = setInterval(() => {
+            url = '/planet/rest/simulation';
+            this.httpClient.get(url, {
+              params: {
+                'formName': this.formName,
+                'email': this.userProfile.getEmail() + '_' + data['timeStamp'],
+              },
+            })
+              .subscribe(
+                simulationData => {
+                  // console.log('GET Request is successful ');
+                  if (simulationData['results1'] && simulationData['results2']) {
+                    this.status = simulationData['status'];
+                    this.results1Data = simulationData['results1'];
+                    this.results2Data = simulationData['results2'];
+                    clearInterval(interval);
+                    clearInterval(barData);
+                    this.spreadValuesToCharts(this.results1Data);
+                    this.spreadValuesToCharts2(this.results2Data);
+                  } else if (simulationData['status'] && !simulationData['status'].includes('Simulation finished successfully')) {
+                    const tempStatus = simulationData['status'].split('\n');
+                    this.status = tempStatus[2] + '\n' + tempStatus[3];
+                    if (!this.status.includes('Error')) {
+                      this.status = 'Error: ' + this.status;
+                    }
+                    clearInterval(interval);
+                    clearInterval(barData);
+                    this.loading = false;
+                    this.showVal = true;
+                  }
+                },
+                error => {
+                  // console.log('Error', error);
+                },
+              );
+          }, 10000);
         },
         error => {
           this.changingValue = 50;
         },
       );
-    const barData = setInterval(() => {
-      url = '/planet/rest/simulation_status';
-      this.httpClient.get(url, {
-        params: {
-          'formName': this.formName,
-          'email': this.userProfile.getEmail(),
-        },
-      })
-        .subscribe(
-          data => {
-            // console.log('GET Request is successful ');
-            if (data['value']) {
-              this.changingValue = data['value'];
-            }
-          },
-          error => {
-            // console.log('Error', error);
-          },
-        );
-    }, 10000);
-    const interval = setInterval(() => {
-      url = '/planet/rest/simulation';
-      this.httpClient.get(url, {
-        params: {
-          'formName': this.formName,
-          'email': this.userProfile.getEmail(),
-        },
-      })
-        .subscribe(
-          data => {
-            // console.log('GET Request is successful ');
-            if (data['results1'] && data['results2']) {
-              this.status = data['status'];
-              this.results1Data = data['results1'];
-              this.results2Data = data['results2'];
-              clearInterval(interval);
-              clearInterval(barData);
-              this.spreadValuesToCharts(this.results1Data);
-              this.spreadValuesToCharts2(this.results2Data);
-            } else if (data['status'] && !data['status'].includes('Simulation finished successfully')) {
-              const tempStatus = data['status'].split('\n');
-              this.status = tempStatus[2] + '\n' + tempStatus[3];
-              if (!this.status.includes('Error')) {
-                this.status = 'Error: ' + this.status;
-              }
-              clearInterval(interval);
-              clearInterval(barData);
-              this.loading = false;
-              this.showVal = true;
-            }
-          },
-          error => {
-            // console.log('Error', error);
-          },
-        );
-    }, 10000);
   }
 
   spreadValuesToCharts(data) {
