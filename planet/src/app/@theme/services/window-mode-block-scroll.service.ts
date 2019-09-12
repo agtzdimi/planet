@@ -31,7 +31,7 @@ export class WindowModeBlockScrollService implements OnDestroy {
     private viewportRuler: NbViewportRulerAdapter,
     private layout: NbLayoutRulerService,
     @Inject(NB_WINDOW) private window,
-  ) {}
+  ) { }
 
   ngOnDestroy() {
     this.destroy$.next();
@@ -67,7 +67,8 @@ export class WindowModeBlockScrollService implements OnDestroy {
     this.backupStyles();
 
     this.container.style.overflowY = 'scroll';
-    this.content.style.overflow = 'hidden';
+    this.content.style.overflowX = 'hidden';
+    this.content.style.overflowY = 'scroll';
     this.content.style.position = 'fixed';
     this.updateContentSizeAndPosition();
 
