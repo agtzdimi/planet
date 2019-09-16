@@ -93,7 +93,7 @@ export class UnitAddComponent implements OnInit {
         break;
     }
     metadata = metadata.replace('}{', ',');
-    metadata = metadata.replace(/_/g, '.');
+    // metadata = metadata.replace(/_/g, '.');
     metadata = JSON.parse(metadata);
 
     this.createDeviceService.createNewDevice(metadata, this.unitName, this.unitDescr,

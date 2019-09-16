@@ -11,7 +11,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
       <nb-card [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge" accent="primary">
         <nb-card-body (click)="handleUnit(model)">
           <img class="component-icon" src="assets/images/{{modelType}}.jpg"
-            [ngStyle]="{'width': '120px', 'height': '100px'}">
+            [ngStyle]="{'width': '15rem', 'height': '11rem'}">
           <label class="component-name">{{models[i]['name']}}</label>
         </nb-card-body>
       </nb-card>
