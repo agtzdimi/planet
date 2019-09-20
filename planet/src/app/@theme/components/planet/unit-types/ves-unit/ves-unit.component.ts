@@ -20,9 +20,8 @@ export class VESUnitComponent implements OnInit, OnChanges {
       'payload': {
         'parameters': {
           'timeStamp': '',
-          'horizon': 120,
+          'vesHorizon': 120,
           'timeStep': '',
-          'timeUnit': 'MINUTES',
           'noAssets': 100,
           'assetType': 'residential',
         },
@@ -44,9 +43,9 @@ export class VESUnitComponent implements OnInit, OnChanges {
         },
         'inputData': {
           'tOutForecast': [13, 13, 13, 13, 13, 13],
+          'tInInit': 21.5,
         },
         'optionalInputData': {
-          'tInInit': 21.5,
           'tInBaseMin': [21, 21, 21, 21, 21, 21],
           'tInBaseMax': [22, 22, 22, 22, 22, 22],
           'tInAltMin': [20, 20, 20, 20, 20, 20],
@@ -63,6 +62,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
     if (this.mode === 'edit') {
       this.parametersColumnSize = 'col-md-12';
     }
+    this.ves.emit(this.vesParams);
   }
 
   ngOnChanges(changes: SimpleChanges) {

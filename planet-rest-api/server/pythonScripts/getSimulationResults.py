@@ -16,7 +16,7 @@ class SimulationData (threading.Thread):
             path = matching[0]
          for line in messages:
             lineLength = len(line.split(','))
-            if lineLength == 24:
+            if lineLength >= 24:
                with open (os.path.join(os.getcwd(),'../../',str(path).rstrip(),'Results1.csv'), 'a') as f:
                   f.write("%s\n" % line)
             elif lineLength == 3:

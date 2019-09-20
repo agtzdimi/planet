@@ -150,7 +150,9 @@ exports.simulation = (req, res) => {
         status: status.stdout,
     };
     res.send(finalResults);
-    shell.exec('rm -rf ' + `${__dirname}/../../public/files/` + email);
+    if (results1.stderr === '' && results2.stderr === '') {
+        shell.exec('rm -rf ' + `${__dirname}/../../public/files/` + email);
+    }
 };
 
 exports.multiSimulation = (req, res) => {

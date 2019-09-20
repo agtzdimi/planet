@@ -21,6 +21,7 @@ import threading
 import time
 import requests
 import argparse
+import random
 
 class SimulationData (threading.Thread):
    def __init__(self):
@@ -37,48 +38,92 @@ class SimulationData (threading.Thread):
       # Start the matlab workspace
       print ("Starting Matlab engine...")
       eng = matlab.engine.start_matlab()
+      flexibilityBaseline = []
+      flexibilityMin = []
+      flexibilityModif = []
+      flexibilityMax = []
+      consumptions = []
       # Initialize the simulink file
       try:
          with open("Parameters_initialization.txt", "r") as read_file:
             data = json.load(read_file)
+         formName = data['payload']['formName']
          model = data['payload']['model']
-         startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
+         startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d').date()
          steps = data['payload']['simulation']['time.step']
-         #unixTimestamp = datetime.datetime.strptime(startDate, "%Y-%m-%d").timestamp()
-         #if model == 2 or model == 4:
-         #   nodes = 8
-         #else:
-         #   nodes = 1
-         #for node in range(nodes):
-            #nodeName = 'node.' + str(node+1)
-            #for attr, value in data['payload']['electric.grid'][nodeName]['VES'].items():
-               #if attr == 'name':
-                  #vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
-                  #URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/requestFlexibility'
-                  #del vesData['name']
-                  #del vesData['IP']
-                  #del vesData['Port']
-                  #times = vesData['horizon'] / steps * 60
-                  #for i in range(times):
-                     #vesData['timeStamp'] = unixTimestamp
-                     #vesData['timeStep'] = steps * 60
-                     #r = requests.post(url = URL, data = vesData)
-                     #pastebin_url = r.text
-                     #print("The pastebin URL is:%s"%pastebin_url)
-                     #consumptionData = `{
-                     #   "timeStamp": unixTimestamp,
-                     #   "timeStep": steps,
-                     #   "timeUnit": "MINUTES",
-                     #   "powerUnit": "Watt",
-                     #   "powerModification": -11010,
-                     #   "externalTemperature": 13
-                     #}`
-                     #URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/requestConsumption'
-                     #r = requests.post(url = URL, data = consumptionData)
-                     #pastebin_url = r.text
-                     #print("The pastebin URL is:%s"%pastebin_url)
-                     #unixTimestamp = unixTimestamp + steps * 3600
+         unixTimestamp = datetime.datetime.strptime(str(startDate), "%Y-%m-%d").timestamp()
+         if model == 2 or model == 4:
+            nodes = 8
+         else:
+            nodes = 1
+         for node in range(nodes):
+            nodeName = 'node.' + str(node+1)
+            for attr, value in data['payload']['electric.grid'][nodeName]['VES'].items():
+               if attr == 'name':
+                  flexibilityBaseline.append(nodeName)
+                  flexibilityMin.append(nodeName)
+                  flexibilityMax.append(nodeName)
+                  flexibilityModif.append(nodeName)
+                  consumptions.append(nodeName)
+                  vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
+                  URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/flexibility'
+                  vesData['VESID'] = vesData['name']
+                  vesData['nodeID'] = str(node+1)
+                  vesData['simulationID'] = formName + "-" +vesData['VESID'] + "-" + vesData['nodeID'] + "-" + "flex"
+                  vesName = vesData['name']
+                  vesIp = vesData['IP']
+                  vesPort = vesData['Port']
+                  del vesData['name']
+                  del vesData['IP']
+                  del vesData['Port']
+                  del vesData['optionalParameters']
+                  del vesData['optionalInputData']
+                  times = len(vesData['inputData']['tOutForecast'])
+                  print("Requesting Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
+                  vesData['parameters']['timeStep'] = int(steps * 60)
+                  for i in range(times):
+                     vesData['parameters']['timeStamp'] = int(unixTimestamp)
+                     URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/flexibility'
+                     r = requests.post(url = URL, json = vesData)
+                     r.encoding = 'utf-8'
+                     flexibilityResponse = json.loads(r.text)
+                     min = flexibilityResponse['flexibility'][0]['consumptions'][0]['total'] + (flexibilityResponse['flexibility'][0]['consumptions'][1]['total'] - flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
+                     max = flexibilityResponse['flexibility'][0]['consumptions'][0]['total'] + (flexibilityResponse['flexibility'][0]['consumptions'][2]['total'] - flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
+                     print("Flexibility in timestep " + str(i+1) +":")
+                     calcModif = random.uniform(min,max)
+                     flexibilityBaseline.append(flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
+                     flexibilityMin.append(flexibilityResponse['flexibility'][0]['consumptions'][1]['total'])
+                     flexibilityMax.append(flexibilityResponse['flexibility'][0]['consumptions'][2]['total'])
+                     flexibilityModif.append(calcModif)
+                     consumptionData = {
+                      "simulationID": formName + "-" +vesData['VESID'] + "-" + vesData['nodeID'] + "-" + "cons",
+                      "nodeID": vesData['nodeID'],
+                      "VESID": vesData['VESID'],
+                      "parameters": {
+                          "timeStamp": vesData['parameters']['timeStamp'],
+                          "duration": vesData['parameters']['timeStep'],
+                          "noAssets": vesData['parameters']['noAssets'],
+                          "assetType": vesData['parameters']['assetType']
+                       },
+                      "inputData": {
+                          "tOut": vesData['inputData']['tOutForecast'][0],
+                          "tInInit": vesData['inputData']['tInInit'],
+                          "powerUnit": "Watt",
+                          "powerConsumption": calcModif
+                       }
+                     }
+                     URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/requestConsumption'
+                     r = requests.post(url = URL, json = consumptionData)
+                     r.encoding = 'utf-8'
+                     consumptionResponse = json.loads(r.text)
+                     vesData['inputData']['tInInit'] = consumptionResponse['tInFinal']
+                     vesData['parameters']['vesHorizon'] = vesData['parameters']['vesHorizon'] - vesData['parameters']['timeStep']
+                     del vesData['inputData']['tOutForecast'][0]
+                     unixTimestamp = unixTimestamp + steps * 3600
+                     print("Consumption in timestep " + str(i+1) +":")
+                     consumptions.append(consumptionResponse['tInFinal'])
          horizonDays= round(24 /steps, 0)
+         startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
          currentModel = switcher.get(model, "Invalid Model")
          eng.run(currentModel,nargout=0)
          message='Simulation finished successfully'
@@ -102,13 +147,18 @@ class SimulationData (threading.Thread):
       with open("Control_initialization.txt", "r") as read_file:
          data = json.load(read_file)
    
-      formName = data['payload']['formName']
+      
       try:
          csv_from_excel("Results1")
          csv_from_excel("Results2")
          csv_input = pd.read_csv('Results1.csv')
          csv_input['formName'] = formName
          csv_input['Hours'] = csv_input['Time']
+         csv_input['FlexibilityBaseline'] = pd.Series(flexibilityBaseline)
+         csv_input['FlexibilityMin'] = pd.Series(flexibilityMin)
+         csv_input['FlexibilityMax'] = pd.Series(flexibilityMax)
+         csv_input['FlexibilityModif'] = pd.Series(flexibilityModif)
+         csv_input['IndoorTemp'] = pd.Series(consumptions)
          i = 0
          for timestep in csv_input['Time']:
             if timestep % horizonDays == 0:

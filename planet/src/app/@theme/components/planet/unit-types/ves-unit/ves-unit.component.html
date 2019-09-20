@@ -15,8 +15,8 @@
     <div [class]="parametersColumnSize">
         <h6 *ngIf="mode !== 'scenario'">Mandatory Parameters</h6>
         <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
-            (valChange)="onChange(['horizon'],+$event,'parameters')"
-            [(val)]="vesParams['payload']['parameters']['horizon']" [compId]="'ves_horizon'"
+            (valChange)="onChange(['vesHorizon'],+$event,'parameters')"
+            [(val)]="vesParams['payload']['parameters']['vesHorizon']" [compId]="'ves_horizon'"
             [inputHtmlLabel1]="'VES horizon'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
         </ngx-input-field>
 

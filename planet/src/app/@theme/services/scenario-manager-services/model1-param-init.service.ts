@@ -67,7 +67,7 @@ export class Model1ParamInitService {
                     'VES': {
                         'parameters': {
                             'timeStamp': '',
-                            'horizon': 120,
+                            'vesHorizon': 120,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noAssets': 100,
@@ -91,9 +91,9 @@ export class Model1ParamInitService {
                         },
                         'inputData': {
                             'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tInInit': 21.5,
                         },
                         'optionalInputData': {
-                            'tInInit': 21.5,
                             'tInBaseMin': [21, 21, 21, 21, 21, 21],
                             'tInBaseMax': [22, 22, 22, 22, 22, 22],
                             'tInAltMin': [20, 20, 20, 20, 20, 20],
@@ -244,7 +244,7 @@ export class Model1ParamInitService {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'horizon': 120,
+                            'vesHorizon': 120,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noAssets': 100,
@@ -268,9 +268,9 @@ export class Model1ParamInitService {
                         },
                         'inputData': {
                             'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tInInit': 21.5,
                         },
                         'optionalInputData': {
-                            'tInInit': 21.5,
                             'tInBaseMin': [21, 21, 21, 21, 21, 21],
                             'tInBaseMax': [22, 22, 22, 22, 22, 22],
                             'tInAltMin': [20, 20, 20, 20, 20, 20],
@@ -281,7 +281,7 @@ export class Model1ParamInitService {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'horizon': 120,
+                            'vesHorizon': 120,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noAssets': 100,
@@ -305,9 +305,9 @@ export class Model1ParamInitService {
                         },
                         'inputData': {
                             'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tInInit': 21.5,
                         },
                         'optionalInputData': {
-                            'tInInit': 21.5,
                             'tInBaseMin': [21, 21, 21, 21, 21, 21],
                             'tInBaseMax': [22, 22, 22, 22, 22, 22],
                             'tInAltMin': [20, 20, 20, 20, 20, 20],
