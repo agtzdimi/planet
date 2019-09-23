@@ -26,6 +26,12 @@
             [inputHtmlLabel1]="'Number of Assets'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
         </ngx-input-field>
 
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
+            (valChange)="onChange(['tInInit'],+$event,'inputData')"
+            [(val)]="vesParams['payload']['inputData']['tInInit']" [compId]="'ves_tInInit'"
+            [inputHtmlLabel1]="'Initial Indoor Temperature'" [columnLength1]="'col-sm-4'" [columnLength2]="'col-sm-1'">
+        </ngx-input-field>
+
         <div class="listItem">
             <ul>
                 <li>

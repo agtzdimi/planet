@@ -18,6 +18,9 @@ export class VESUnitComponent implements OnInit, OnChanges {
       'hardwareId': 'VES1',
       'topic': 'VES/1',
       'payload': {
+        'simulationID': '',
+        'nodeID': '',
+        'VESID': '',
         'parameters': {
           'timeStamp': '',
           'vesHorizon': 120,
@@ -26,8 +29,8 @@ export class VESUnitComponent implements OnInit, OnChanges {
           'assetType': 'residential',
         },
         'optionalParameters': {
-          'conductance': null,
-          'capacity': null,
+          'conductance': 800,
+          'capacity': 6000000,
           'hvacCOP': {
             'heat': {
               'a': 0.0461466850663691,

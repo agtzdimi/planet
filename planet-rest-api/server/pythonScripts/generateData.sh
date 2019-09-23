@@ -112,9 +112,11 @@ curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "
    cut -d , -f2 > "$dirName/nodeFiles/PV1"
 curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/wind?&lat=$lat&lon=$lon&date_from=$windStartYear&date_to=$windEndYear&capacity=$windCapacity&raw=false&dataset=merra2&height=$hubHeight&turbine=$turbineModel&header=false&format=csv" |
    cut -d , -f2 > "$dirName/nodeFiles/Wind1"
+curl -H 'Authorization: Token e416f7559a1fb5e98bdbf96be463b474d3a0367b' -X GET "https://www.renewables.ninja/api/data/weather?local_time=true&format=csv&header=false&lat=$lat&lon=$lon&date_from=$windStartYear&date_to=$windEndYear&dataset=merra2&var_t2m=true" |
+   cut -d , -f3 > "$dirName/nodeFiles/Weather1"
 
 if [[ "$leapYearIndexAfter" != "$leapYearIndexBefore" ]]; then
-   eval ' for hour in {'"$((leapYearIndexAfter+1))"'..'"$((leapYearIndexAfter+24))"'}; do sed -i ""$hour"d" '"$dirName"'/nodeFiles/PV1; sed -i ""$hour"d" '"$dirName"'/nodeFiles/Wind1 ;done'
+   eval ' for hour in {'"$((leapYearIndexAfter+1))"'..'"$((leapYearIndexAfter+24))"'}; do sed -i ""$hour"d" '"$dirName"'/nodeFiles/PV1; sed -i ""$hour"d" '"$dirName"'/nodeFiles/Wind1; sed -i ""$hour"d" '"$dirName"'/nodeFiles/Weather1 ;done'
 fi
 
 if [[ $import == true ]]; then
@@ -166,6 +168,7 @@ sed -n "$hourStart"','"$hourEnd"'p' ./public/staticFiles/Heat.csv >> "$dirName/n
 if [[ $steps > "1" ]]; then
    genFilesLessHour "PV1" "$steps" "$dirName"
    genFilesLessHour "Wind1" "$steps" "$dirName"
+   genFilesLessHour "Weather1" "$steps" "$dirName"
    eval ' for node in {1..'"$((NODES_COUNT*2))"'}; do cut -d , -f"$node" '"$dirName"'/nodeFiles/Electricity > '"$dirName"'/nodeFiles/Electricity"$node"; genFilesLessHour "Electricity$node" "$steps" "$dirName";done'
    rm "$dirName/nodeFiles/Electricity"
    paste -d , $dirName/nodeFiles/Electricity* > "$dirName/Electricity.csv"
@@ -179,6 +182,7 @@ elif [[ $steps < "1" ]]; then
    stepToIncrease=$(awk -v step="$timeStep" 'BEGIN{print (step - 1)}')
    genFilesMoreHour "PV1" "$stepToIncrease" "$dirName"
    genFilesMoreHour "Wind1" "$stepToIncrease" "$dirName"
+   genFilesMoreHour "Weather1" "$stepToIncrease" "$dirName"
    genFilesMoreHour "Heat1" "$stepToIncrease" "$dirName"
    genFilesMoreHour "Electricity1" "$stepToIncrease" "$dirName"
 else
@@ -188,6 +192,8 @@ fi
 
 replicateColumns "PV" "$NODES_COUNT" "$dirName"
 replicateColumns "Wind" "$NODES_COUNT" "$dirName"
+
+python ./server/pythonScripts/generateWeatherTimeseries.py --dir "$dirName"
 
 rm -rf "$dirName/nodeFiles"
 
