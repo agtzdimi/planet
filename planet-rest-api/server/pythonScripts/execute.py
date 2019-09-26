@@ -76,8 +76,15 @@ class SimulationData (threading.Thread):
                   del vesData['name']
                   del vesData['IP']
                   del vesData['Port']
-                  del vesData['optionalParameters']
-                  del vesData['optionalInputData']
+                  vesData['optionalInputData']['tInBaseMin'] = []
+                  vesData['optionalInputData']['tInBaseMax'] = []
+                  vesData['optionalInputData']['tInAltMin'] = []
+                  vesData['optionalInputData']['tInAltMax'] = []
+                  for val in range(len(vesData['inputData']['tOutForecast'])):
+                     vesData['optionalInputData']['tInBaseMin'].append(vesData['inputData']['tInInit']-1)
+                     vesData['optionalInputData']['tInBaseMax'].append(vesData['inputData']['tInInit']+1)
+                     vesData['optionalInputData']['tInAltMin'].append(vesData['inputData']['tInInit']-3)
+                     vesData['optionalInputData']['tInAltMax'].append(vesData['inputData']['tInInit']+4)
                   times = len(vesData['inputData']['tOutForecast'])
                   print("Requesting Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
                   vesData['parameters']['timeStep'] = int(steps * 60)
@@ -110,7 +117,12 @@ class SimulationData (threading.Thread):
                           "tInInit": vesData['inputData']['tInInit'],
                           "powerUnit": "Watt",
                           "powerConsumption": calcModif
-                       }
+                       },
+                       "optionalParameters": vesData['optionalParameters'],
+                       "optionalInputData": {
+                          "tInAltMin": vesData['optionalInputData']['tInAltMin'][0],
+                          "tInAltMax": vesData['optionalInputData']['tInAltMax'][0]
+                        }
                      }
                      URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/requestConsumption'
                      r = requests.post(url = URL, json = consumptionData)

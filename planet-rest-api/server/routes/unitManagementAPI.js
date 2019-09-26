@@ -101,7 +101,7 @@ exports.editDevice = (req, res) => {
             if (!status.stderr) {
                 res.json({
                     status: 'success',
-                    value: val,
+                    value: results['resources'],
                 });
             }
         })

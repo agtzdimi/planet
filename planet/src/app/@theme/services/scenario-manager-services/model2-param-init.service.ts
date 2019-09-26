@@ -76,8 +76,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -169,8 +169,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -262,8 +262,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -355,8 +355,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -448,8 +448,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -541,8 +541,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -634,8 +634,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -728,8 +728,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -907,8 +907,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,
@@ -944,8 +944,8 @@ export class Model2ParamInitService {
                             'assetType': 'residential',
                         },
                         'optionalParameters': {
-                            'conductance': null,
-                            'capacity': null,
+                            'conductance': 800,
+                            'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
                                     'a': 0.0461466850663691,

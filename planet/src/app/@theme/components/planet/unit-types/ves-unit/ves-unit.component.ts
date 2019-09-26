@@ -71,6 +71,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['vesInput']['currentValue']['metadata']) {
       const defaultValues = this.changeDotsToUnderScores(changes['vesInput']['currentValue']['metadata']);
+      this.vesParams['payload'] = JSON.parse(defaultValues);
       this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
       this.vesParams['description'] = changes['vesInput']['currentValue']['description'];
       this.ves.emit(this.vesParams);
@@ -89,6 +90,14 @@ export class VESUnitComponent implements OnInit, OnChanges {
 
   onChange(attribute, event, attributeType) {
     this.vesParams['payload'][attributeType][attribute] = event;
+    if (this.vesParams['payload']['parameters']['configuration']) {
+      this.vesParams['payload']['parameters']['configuration']['parameters']['vesHorizon'] = this.vesParams['payload']['parameters']['vesHorizon'];
+      this.vesParams['payload']['parameters']['configuration']['parameters']['vesHorizon'] = this.vesParams['payload']['parameters']['vesHorizon'];
+      this.vesParams['payload']['parameters']['configuration']['parameters']['assetType'] = this.vesParams['payload']['parameters']['assetType'];
+      this.vesParams['payload']['parameters']['configuration']['optionalParameters'] = this.vesParams['payload']['optionalParameters'];
+      this.vesParams['payload']['parameters']['configuration']['inputData'] = this.vesParams['payload']['inputData'];
+      this.vesParams['payload']['parameters']['configuration']['optionalInputData'] = this.vesParams['payload']['optionalInputData'];
+    }
     this.ves.emit(this.vesParams);
   }
 
