@@ -10,7 +10,7 @@
   },
   "protocols": {
     "REST": {
-      "location": "/rest"
+      "location": "/planet"
     },
     "MQTT": {
       "discover": false,

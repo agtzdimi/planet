@@ -1,9 +1,11 @@
 import subprocess
 import os
 import psutil
+import time
 
 if __name__ == "__main__":
    p2 = subprocess.Popen(['docker','run','-p','8082:8082','linksmart/sc'])
+   time.sleep(5)
    p1 = subprocess.Popen(['./device-gateway-linux-amd64'])
    proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','middleware_restart'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
