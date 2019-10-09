@@ -228,6 +228,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     public startUpload(): void {
         // Start spinner
         this.loading = true;
+        this.updateVES();
         const formData: FormData = new FormData();
         const originalTimestep: number = this.paramInit['payload']['simulation']['time.step'];
         const originalHorizon: number = this.paramInit['payload']['simulation']['simulation.time'];
@@ -374,6 +375,26 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                 this.model2.changeModel(this.paramInit);
                 this.model2.paramUpdated.next(this.paramInit);
                 break;
+        }
+    }
+
+    /**
+    *
+    * Function responsible to initialize VES time.step & VES horizon to be 3 times the time.step
+    * @example
+    * updateVES()
+    *
+    */
+    private updateVES(): void {
+        let nodes = 1;
+        if (this.genParams['model'] === 2) {
+            nodes = 8;
+        }
+        for (let i = 0; i < nodes; i++) {
+            if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['timeStep'] = this.paramInit['payload']['simulation']['time.step'];
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['vesHorizon'] = this.paramInit['payload']['simulation']['time.step'] * 3;
+            }
         }
     }
 

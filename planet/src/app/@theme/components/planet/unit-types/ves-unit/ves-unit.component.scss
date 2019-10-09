@@ -11,7 +11,7 @@
   }
 
   nb-select {
-    width: 15.5rem;
+    width: 12.8rem;
   }
 
   ::ng-deep .select-button {
@@ -36,4 +36,9 @@
     text-align: left;
     font-family: Open Sans, sans-serif;
     font-weight: nb-theme(text-label-font-weight);
+  }
+
+  .vl {
+    border-left: 3px solid #e4e9f2;
+    height: 100%;
   }

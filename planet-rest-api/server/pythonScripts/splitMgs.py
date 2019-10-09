@@ -16,7 +16,7 @@ args = vars(parser.parse_args())
 
 path = args["path"] + '/single/*'
 files = glob.glob(path)
-broker='localhost'
+broker='160.40.49.244'
 port=1883
 
 client1 = paho.Client("control1")                           #create client object
@@ -53,8 +53,8 @@ with open("sendMesg.lock","w") as f:
    pass
 
 for file in sendMesg:
-   ret = client1.publish("/planet/GetData", file)
+   ret = client1.publish("SendSimulator", file)
    time.sleep(2)
 
-ret = client1.publish("/planet/GetData", "END OF SIM:" + args['path'])
+ret = client1.publish("SendSimulator", "END OF SIM:" + args['path'])
 os.remove("sendMesg.lock")

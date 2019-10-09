@@ -7,7 +7,7 @@ class SimulationData (threading.Thread):
       super(SimulationData , self).__init__(name="SimulationData thread")
 
    def run(self):
-      proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations_results'],stdout=subprocess.PIPE)
+      proc = subprocess.Popen(['mosquitto_sub','-h','160.40.49.244','-t','simulations_results'],stdout=subprocess.PIPE)
       for msg in iter(proc.stdout.readline,''):
          msg = msg.decode("utf-8")
          messages = msg.split('\n')
@@ -32,7 +32,7 @@ class BarStatus (threading.Thread):
       super(BarStatus , self).__init__(name="BarStatus thread")
 
    def run(self):
-      proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','simulations_status'],stdout=subprocess.PIPE)
+      proc = subprocess.Popen(['mosquitto_sub','-h','160.40.49.244','-t','simulations_status'],stdout=subprocess.PIPE)
       for msg in iter(proc.stdout.readline,''):
          msg = msg.decode("utf-8")
          try:

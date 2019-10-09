@@ -11,7 +11,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
   @Input() vesInput: Object;
   @Input() mode: string;
   @Output() ves: EventEmitter<Object>;
-  parametersColumnSize = 'col-md-6';
+  parametersColumnSize = 'col-md-8';
 
   constructor() {
     this.vesParams = {
@@ -23,7 +23,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
         'VESID': '',
         'parameters': {
           'timeStamp': '',
-          'vesHorizon': 120,
+          'vesHorizon': '',
           'timeStep': '',
           'noAssets': 100,
           'assetType': 'residential',
@@ -33,12 +33,12 @@ export class VESUnitComponent implements OnInit, OnChanges {
           'capacity': 6000000,
           'hvacCOP': {
             'heat': {
-              'a': 0.0461466850663691,
-              'b': 2.90629308414889,
+              'a': 0.046,
+              'b': 2.906,
             },
             'cool': {
-              'a': -0.1082518,
-              'b': 7.10789209,
+              'a': -0.108,
+              'b': 7.107,
             },
           },
           'pMax': 4000,

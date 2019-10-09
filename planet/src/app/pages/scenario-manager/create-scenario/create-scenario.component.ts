@@ -150,6 +150,7 @@ export class CreateScenarioComponent implements OnDestroy {
     public startUpload(): void {
         // Start spinner
         this.loading = true;
+        this.updateVES();
         const formData: FormData = new FormData();
 
         // Add files to formData and transform the time step to the form that the model works
@@ -391,6 +392,26 @@ export class CreateScenarioComponent implements OnDestroy {
         }
         controller.animate(
             new Transition(transitionName, 2000, TransitionDirection.In));
+    }
+
+    /**
+    *
+    * Function responsible to initialize VES time.step & VES horizon to be 3 times the time.step
+    * @example
+    * updateVES()
+    *
+    */
+    private updateVES(): void {
+        let nodes = 1;
+        if (this.genParams['model'] === 2) {
+            nodes = 8;
+        }
+        for (let i = 0; i < nodes; i++) {
+            if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['timeStep'] = this.paramInit['payload']['simulation']['time.step'];
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['vesHorizon'] = this.paramInit['payload']['simulation']['time.step'] * 3;
+            }
+        }
     }
 
     /**
