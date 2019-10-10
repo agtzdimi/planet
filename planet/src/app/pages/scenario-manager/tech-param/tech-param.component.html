@@ -237,16 +237,18 @@
                 <div class="col-md-3">
                     <div *ngFor="let node of nodes;let i = index">
                         <nb-select placeholder="Available P2G Units" #P2GSelect
-                            (selectedChange)="optionSelected($event,'P2G')" *ngIf="displayingNode === ('node.' + (i+1))"
+                            (selectedChange)="optionSelected($event,'P2G')" *ngIf="displayingNode === ('node.' + (i+1)) " 
                             [selected]="unitSelectedPerNode[displayingNode]['P2G']">
+                           
                             <nb-option *ngFor="let regP2G of registeredDevices['P2G']" [value]="regP2G['name']">
                                 {{regP2G.name}}</nb-option>
+                            <nb-option [value]="'None'">None</nb-option>
                         </nb-select>
                     </div>
                 </div>
             </div>
 
-            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]['P2G']['name']">
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]['P2G']['name'] && paramInit['payload']['electric.grid'][displayingNode]['P2G']['name']!=='None'">
                 <ngx-p2g-unit (p2g)="onUnitChange($event,'P2G')" *ngIf="unitSelectedPerNode[displayingNode]['P2G']"
                     [p2gInput]="paramInit['payload']['electric.grid'][displayingNode]['P2G']">
                 </ngx-p2g-unit>
@@ -263,12 +265,13 @@
                             [selected]="unitSelectedPerNode[displayingNode]['VES']">
                             <nb-option *ngFor="let regVES of registeredDevices['VES']" [value]="regVES['name']">
                                 {{regVES.name}}</nb-option>
+                            <nb-option [value]="'None'">None</nb-option>
                         </nb-select>
                     </div>
                 </div>
             </div>
 
-            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]['VES']['name']">
+            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]['VES']['name'] && paramInit['payload']['electric.grid'][displayingNode]['VES']['name']!=='None'">
                 <ngx-ves-unit (ves)="onUnitChange($event,'VES')" *ngIf="unitSelectedPerNode[displayingNode]['VES']"
                     [vesInput]="paramInit['payload']['electric.grid'][displayingNode]['VES']" [mode]="'scenario'">
                 </ngx-ves-unit>
