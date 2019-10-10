@@ -31,6 +31,7 @@ export class SimulationStartComponent {
   expanded = false;
   yVal: number = 0;
   changingValue = 0;
+  showSimBar = false;
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
@@ -57,6 +58,8 @@ export class SimulationStartComponent {
     this.showArea = false;
     this.showBar = false;
     this.showVal = false;
+    this.showSimBar = true;
+    this.changingValue = 0;
     this.initializeCharts();
     this.status = '';
     let url = '/planet/rest/transfer';
@@ -119,6 +122,7 @@ export class SimulationStartComponent {
                     this.loading = false;
                     this.showVal = true;
                   }
+                  this.showSimBar = false;
                 },
                 error => {
                   // console.log('Error', error);
@@ -328,6 +332,7 @@ export class SimulationStartComponent {
   }
 
   openDialogBox() {
+    this.formName = name['Select Saved Scenario'];
     this.dialogService.open(DialogSelectFormPromptComponent)
       .onClose.subscribe(name => {
         if (name) {
