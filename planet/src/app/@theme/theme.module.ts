@@ -26,6 +26,7 @@ import {
   NbThemeModule,
   NbUserModule,
   NbRadioModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -56,6 +57,7 @@ import {
 /* PLANET Components */
 import {
   TechInputFieldComponent,
+  ScenarioPanelComponent,
   P2HUnitComponent,
   LeafletMapComponent,
   SimulationBarsComponent,
@@ -72,6 +74,8 @@ import {
   TechnologiesDialogComponent,
   EnergyGridComponent,
   EightNodeElGridComponent,
+  ScenPanelCheckBoxComponent,
+  ScenPanelSimIconComponent,
 } from './components';
 import { OneColumnLayoutComponent } from './layouts';
 import { CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -106,6 +110,7 @@ import {
   DialogSelectMultipleFormPromptComponent,
   DialogSubmitPromptComponent,
 } from './components';
+import { CheckBoxesService } from './components/planet/general-components/scenario-panel/scenario-panel-checkboxes-values.service';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -114,6 +119,7 @@ const NB_MODULES = [
   NbActionsModule,
   NbCardModule,
   NbInputModule,
+  NbSpinnerModule,
   NbSearchModule,
   NbSidebarModule,
   NbAlertModule,
@@ -137,6 +143,7 @@ const COMPONENTS = [
   NgxAuthBlockComponent,
   EightNodeElGridComponent,
   TechInputFieldComponent,
+  ScenarioPanelComponent,
   NgxLoginComponent,
   NgxAuthComponent,
   EnergyGridComponent,
@@ -168,6 +175,8 @@ const COMPONENTS = [
   LeafletMapComponent,
   DialogSubmitPromptComponent,
   DialogInfoPromptComponent,
+  ScenPanelCheckBoxComponent,
+  ScenPanelSimIconComponent,
 ];
 const ENTRY_COMPONENTS = [
   TechnologiesDialogComponent,
@@ -178,6 +187,9 @@ const ENTRY_COMPONENTS = [
   SimulationBarsComponent,
   DialogSubmitPromptComponent,
   DialogInfoPromptComponent,
+  ScenarioPanelComponent,
+  ScenPanelCheckBoxComponent,
+  ScenPanelSimIconComponent,
 ];
 const PIPES = [
   CapitalizePipe,
@@ -200,6 +212,7 @@ const SERVICES = [
   GetDeviceByTypeService,
   GetJWTService,
   GetOutboundConnService,
+  CheckBoxesService,
 ];
 const GENERAL_MODULES = [
   FormsModule,

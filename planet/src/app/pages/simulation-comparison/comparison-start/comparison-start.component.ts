@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DialogSelectMultipleFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-multiple-form.component';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbDialogConfig } from '@nebular/theme';
 import { UserProfileService } from '../../../@theme/services';
+import { ScenarioPanelComponent } from '../../../@theme/components';
 
 @Component({
   selector: 'ngx-comparison-start',
@@ -232,10 +232,15 @@ export class ComparisonStartComponent {
   }
 
   openDialogBox() {
-    this.dialogService.open(DialogSelectMultipleFormPromptComponent)
+    const context: Object = {
+      context: {
+        scenarioType: 'comparison',
+      },
+    } as Partial<NbDialogConfig<string | Partial<ScenarioPanelComponent>>>;
+    this.dialogService.open(ScenarioPanelComponent, context)
       .onClose.subscribe(name => {
         if (name) {
-          this.selectedForms = name;
+          this.selectedForms = name['comparison'];
           this.buttonText = 'Compared Scenarios';
         }
       });

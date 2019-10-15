@@ -10,13 +10,13 @@ import {
     NbMenuService,
 } from '@nebular/theme';
 
-import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 import { UserProfileService } from '../../../@theme/services';
+import { ScenarioPanelComponent } from '../../../@theme/components';
 
 
 /**
@@ -151,7 +151,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
   * Angular lifecycle hook used to retrive all the data from the backend and spread it to the components
   */
     ngOnInit() {
-        this.dialogService.open(DialogSelectFormPromptComponent)
+        this.dialogService.open(ScenarioPanelComponent)
             .onClose.subscribe(name => {
                 if (name) {
                     // Update formName - formDescription based on user input in dialog box
@@ -250,6 +250,13 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         this.paramInit['payload']['model'] = this.genParams['model'];
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
+        const today = new Date();
+        this.paramInit['payload']['eventDate'] = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${
+            today.getDate().toString().padStart(2, '0')}/${
+            today.getFullYear().toString().padStart(4, '0')} ${
+            today.getHours().toString().padStart(2, '0')}:${
+            today.getMinutes().toString().padStart(2, '0')}`;
+        this.paramInit['payload']['owner'] = this.userProfile.getName();
         this.updateModel();
 
         delete this.controlSystem['_id'];
