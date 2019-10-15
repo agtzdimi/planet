@@ -34,10 +34,11 @@ import { UserProfileService } from '../../../@theme/services';
 /**
  * @param {number} gotPhase2  Private variable to check whether the phase 2 of scenario-creation reached
  * @param {Object} paramInit Private variable holding the instance of a JSON model corresponding to the user selections.
- * @example The paramInit will hold the JSON structure of 8-node electricity grid, 3-node district heating and 1-node gas grid
- * @param {Subscription[]} subscriptions Private variable holding the custom Observables to unsubscribe when the component will be destroyed
- * @param {boolean} phase2 Variable holding the status of reaching phase2 [true|false]
+ * @example The paramInit will hold the JSON structure of 8-node electricity grid, 3-nodlding the custom Observables to unsubscribe when the component will be destroyed
+ * @param {boolean} phase2 Variable holding the statue district heating and 1-node gas grid
+ * @param {Subscription[]} subscriptions Private variable hos of reaching phase2 [true|false]
  * @param {boolean} phase3 Variable holding the status of reaching phase3 [true|false]
+ * @param {boolean} _phase3 Variable holding the status of reaching phase3 [true|false]
  * @param {boolean} phase4 Variable holding the status of reaching phase4 [true|false]
  * @param {boolean} phase5 Variable holding the status of reaching phase5 [true|false]
  * @param {boolean} loading Variable used to define if the spinner of ```Save Scenario``` button will spin or not as a loader
@@ -60,6 +61,7 @@ export class CreateScenarioComponent implements OnDestroy {
     private subscriptions: Subscription[] = [];
     public phase2: boolean = false;
     public phase3: boolean = false;
+    public DisEnSimPar: boolean = false;
     public phase4: boolean = false;
     public phase5: boolean = false;
     public loading: boolean = false;
@@ -150,6 +152,7 @@ export class CreateScenarioComponent implements OnDestroy {
     public startUpload(): void {
         // Start spinner
         this.loading = true;
+        this.updateVES();
         const formData: FormData = new FormData();
 
         // Add files to formData and transform the time step to the form that the model works
@@ -267,6 +270,14 @@ export class CreateScenarioComponent implements OnDestroy {
         } else {
             return false;
         }
+    }
+
+    public disSimPar(): void {
+        this.DisEnSimPar = false;
+    }
+
+    public enSimPar(): void {
+        this.DisEnSimPar = true;
     }
 
     /* TODO when profiles charts will be visible for the users in scenario creation
@@ -391,6 +402,26 @@ export class CreateScenarioComponent implements OnDestroy {
         }
         controller.animate(
             new Transition(transitionName, 2000, TransitionDirection.In));
+    }
+
+    /**
+    *
+    * Function responsible to initialize VES time.step & VES horizon to be 3 times the time.step
+    * @example
+    * updateVES()
+    *
+    */
+    private updateVES(): void {
+        let nodes = 1;
+        if (this.genParams['model'] === 2) {
+            nodes = 8;
+        }
+        for (let i = 0; i < nodes; i++) {
+            if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['timeStep'] = this.paramInit['payload']['simulation']['time.step'];
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['vesHorizon'] = this.paramInit['payload']['simulation']['time.step'] * 3;
+            }
+        }
     }
 
     /**
