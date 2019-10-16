@@ -82,15 +82,15 @@ export class ScenarioPanelComponent implements OnInit {
   submit() {
     if (this.scenarioNameID && !this['scenarioType']) {
       this.dialogRef.close({
-        formName: this.scenarios[this.scenarioNameID['id'] - 1]['formName'],
-        formDescription: this.scenarios[this.scenarioNameID['id'] - 1]['formDescription'],
+        formName: this.scenarios[this.scenarioNameID[0]['id'] - 1]['formName'],
+        formDescription: this.scenarios[this.scenarioNameID[0]['id'] - 1]['formDescription'],
       });
-    } else if (this['scenarioType']) {
+    } else if (this['scenarioType'] && this.scenarioNameID) {
       let tempstring = this.scenarios[this.scenarioNameID[0]['id'] - 1]['formName'];
       for (let name = 1; name < this.scenarioNameID.length; name++) {
         tempstring = tempstring + '  -  ' + this.scenarios[this.scenarioNameID[name]['id'] - 1]['formName'];
       }
-      this.dialogRef.close(tempstring);
+      this.dialogRef.close({ comparison: tempstring });
     } else {
       this.cancel();
     }
@@ -111,15 +111,20 @@ export class ScenarioPanelComponent implements OnInit {
     this.httpClient.get(url)
       .subscribe(
         (scenarios) => {
-          for (let scenario = 0; scenario < scenarios['formName'].length; scenario++) {
-            this.scenarios.push({
-              id: (scenario + 1),
+          for (let scenario = 0, id = 1; scenario < scenarios['formName'].length; scenario++) {
+            const scen = {
+              id: id,
               formName: scenarios['formName'][scenario],
               formDescription: scenarios['formDescription'][scenario],
               owner: scenarios['owner'][scenario],
               eventDate: scenarios['eventDate'][scenario],
               simulated: scenarios['simulated'][scenario],
-            });
+            }
+            if (this['scenarioType'] && !scen['simulated']) {
+              continue
+            }
+            this.scenarios.push(scen);
+            id++;
           }
           this.scenarioSource.load(this.scenarios);
         },
