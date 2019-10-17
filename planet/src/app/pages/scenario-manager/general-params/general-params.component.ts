@@ -63,11 +63,21 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   private subscriptions: Subscription[] = [];
   private dataLoaded: boolean = false;
   public showButton: boolean = false;
+  private RadioButtonCopy: object;
+
   public loadedSelections: Object = {
     'elec': '',
     'dh': '',
     'gas': '',
   };
+
+
+  public showRadioButton: Object = {
+    'elec': true,
+    'dh': true,
+    'gas': true,
+  };
+
   public min: Date;
   public max: Date;
   public timeStep: Object = {
@@ -86,7 +96,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
   @Input() isLoadModule: boolean;
   @Output() phaseOutput = new EventEmitter<boolean>();
-  @ViewChild('elecRadio', { 'static': false }) elecRadio: ElementRef;
+  @ViewChild('elecRadio', { 'static': true }) elecRadio: ElementRef;
   @ViewChild('dhRadio', { 'static': false }) dhRadio: ElementRef;
   @ViewChild('gasRadio', { 'static': false }) gasRadio: ElementRef;
   @ViewChild('formpicker', { 'static': false }) formpicker: ElementRef;
@@ -121,6 +131,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
         this.genParams['model'] = data['model'];
       },
     ));
+
+
     // In case it is loadModule we need to get generalParameters from the Database
     this.subscriptions.push(this.model1.paramUpdated.subscribe(
       (data: Object) => {
@@ -246,6 +258,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
       });
   }
 
+
+
   /**
   * Function used to emit the phase change to trigger the animation
   * @example
@@ -298,6 +312,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
     }
   }
 
+
   /**
   * Function used to keep track of which node number is used per grid e.g 8 node electrical grid
   * @example
@@ -306,6 +321,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   * @param {Object} radioButtonText the title corresponding to the radio button being clicked
   */
   public onRadioButtonClicked(radioButtonText: Object): void {
+    if (!this.checkDefaultData()) {
     if (radioButtonText['target']['textContent'] === '8 Node') {
       this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
       this.nodesSelected['8 node el'] = true;
@@ -327,6 +343,9 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
       this.nodesSelected['8 node dh'] = false;
     }
     this.resizeMap();
+    } else {
+      this.RadioButtonCopy = radioButtonText;
+    }
   }
 
   /**
@@ -367,6 +386,81 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
   }
 
+  private checkIfDifferentModelandModelTypeSelected(selectedModel: Object, modelType: string): boolean {
+    if (this.genParams['selectedModel'][modelType] !== selectedModel)  {
+      return true;
+    }   else {
+      return false;
+    }
+  }
+
+  private YesOrNoOnDialog(selectedModel: Object, modelType: string, x: boolean): void {
+    if (x) {
+      this.phaseOutput.emit(false);
+
+      if (this.RadioButtonCopy['target']['textContent'] === '8 Node') {
+        this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
+        this.nodesSelected['8 node el'] = true;
+        this.nodesSelected['1 node el'] = false;
+      } else if (this.RadioButtonCopy['target']['textContent'] === '3 Node') {
+        this.generalParams.updateGeneralParameters('assets/images/3NodeDH.png', 'gridImage');
+        this.nodesSelected['3 node dh'] = true;
+        this.nodesSelected['1 node dh'] = false;
+      } else if (this.currentTab === 'Electric Grid') {
+        this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
+        this.nodesSelected['1 node el'] = true;
+        this.nodesSelected['8 node el'] = false;
+      } else if (this.currentTab === 'Gas Network') {
+        this.generalParams.updateGeneralParameters('assets/images/singleNodeGas.png', 'gridImage');
+        this.nodesSelected['1 node gas'] = true;
+      } else {
+        this.generalParams.updateGeneralParameters('assets/images/singleNodeDistrictHeating.png', 'gridImage');
+        this.nodesSelected['1 node dh'] = true;
+        this.nodesSelected['8 node dh'] = false;
+      }
+      this.resizeMap();
+
+      this.genParams['selectedModel'][modelType] = selectedModel;
+      this.generalParams.updateGeneralParameters(this.genParams['selectedModel'], 'selectedModel');
+
+      setTimeout(() => {this.phaseOutput.emit(true); }, 150);
+    } else {
+      this.showRadioButton[modelType] = false;
+      setTimeout(() => {
+        this.loadedSelections[modelType] = this.genParams['selectedModel'][modelType];
+        this.showRadioButton[modelType] = true;
+   }, 150);
+    }
+  }
+
+  /**
+  * Function responsible for Opening a dialog box over the current screen
+  * @example
+  * changeModelDialog(transitionName2)
+  *
+  * @param {string} transitionName Parameter to hold animated value type.
+  * The available types are described in detail on: https://edcarroll.github.io/ng2-semantic-ui/#/modules/transition
+  */
+  public changeModelDialog(transitionName: string = 'scale', selectedModel: Object, modelType: string): void {
+    const context: Object = {
+      context: {
+        title: 'You are about to change the model of the grid. Any configuration done will be lost!',
+      },
+    } as Partial<NbDialogConfig<string | Partial<DialogSubmitPromptComponent>>>;
+    this.transitionController1.animate(
+      new Transition(transitionName, 2000, TransitionDirection.In));
+    this.dialogService.open(DialogSubmitPromptComponent, context)
+      .onClose.subscribe(status => {
+
+        if (status) {
+          this.YesOrNoOnDialog(selectedModel, modelType, true);
+        } else {
+          this.YesOrNoOnDialog(selectedModel, modelType, false);
+        }
+      });
+  }
+
+
   /**
   * Function to update the attribute `model` of the general parameters
   * @example
@@ -376,8 +470,12 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   * @param {Object} selectedModel Object holding the model type and the text value corresponding to the radio button
   */
   public updateSelectedModel(selectedModel: Object, modelType: string): void {
+    if (!this.checkDefaultData()) {
     this.genParams['selectedModel'][modelType] = selectedModel;
     this.generalParams.updateGeneralParameters(this.genParams['selectedModel'], 'selectedModel');
+   } else if (this.checkIfDifferentModelandModelTypeSelected(selectedModel, modelType)) {
+    this.changeModelDialog('scale', selectedModel, modelType);
+    }
   }
 
   /**
