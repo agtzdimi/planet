@@ -130,6 +130,8 @@ export class Model1ParamInitService {
                     'efficiency.thermal': 90,
                 },
             },
+            'owner': 'admin',
+            'eventDate': '2018-21-07T15:40:03.391+02:00',
         },
     };
 

@@ -53,9 +53,6 @@ export class EconomyFileService {
                     'life.time': 20,
                 },
             },
-
-            'updateState': true,
-            'eventDate': '2018-21-07T15:40:03.391+02:00',
         },
     };
 
@@ -111,9 +108,6 @@ export class EconomyFileService {
                             'life.time': 20,
                         },
                     },
-
-                    'updateState': true,
-                    'eventDate': '2018-21-07T15:40:03.391+02:00',
                 },
             };
         } else {
@@ -164,9 +158,6 @@ export class EconomyFileService {
                             'life.time': 20,
                         },
                     },
-
-                    'updateState': true,
-                    'eventDate': '2018-21-07T15:40:03.391+02:00',
                 },
             };
         }

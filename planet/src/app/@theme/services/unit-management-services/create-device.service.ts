@@ -27,7 +27,7 @@ export class CreateDeviceService {
                 'agent': {
                     'type': 'service',
                     'dir': null,
-                    'exec': 'agent-examples/mqtt-switch/switch.sh',
+                    'exec': 'agent/mqtt-switch/switch.sh',
                 },
                 'representation': {},
                 'protocols': [

@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { NbDialogService, NbDialogConfig } from '@nebular/theme';
 
-import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
 import { DialogSubmitPromptComponent } from '../../../@theme/components/planet/dialogs/dialog-submit.component';
+import { ScenarioPanelComponent } from '../../../@theme/components';
 
 /**
  * Component responsible for the deletion of a saved scenario
@@ -46,7 +46,7 @@ export class DeleteScenarioComponent {
         color: 'red',
       },
     } as Partial<NbDialogConfig<string | Partial<DialogSubmitPromptComponent>>>;
-    this.dialogService.open(DialogSelectFormPromptComponent, context)
+    this.dialogService.open(ScenarioPanelComponent, context)
       .onClose.subscribe(name => {
         if (name) {
           this.formName = name['formName'];

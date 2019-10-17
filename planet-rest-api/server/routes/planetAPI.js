@@ -78,13 +78,39 @@ exports.getFormNames = (req, res) => {
     } else {
         collection = 'files';
     }
+    const formDescr = [];
+    const owner = [];
+    const eventDates = [];
+    const simulated = [];
     const formName = JSON.parse(shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
         ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
         " --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'"));
-    const formDescr = JSON.parse(shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
-        ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-        " --quiet planet --eval 'db.files.distinct(\"payload.formDescription\");'"));
-    res.send({ formName: formName, formDescription: formDescr });
+    for (let form = 0; form < formName.length; form++) {
+        let formJson = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
+            ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
+            " --quiet planet --eval 'db.files.find({\"payload.formName\": \"" + formName[form] + "\", \"payload.model\" : {$gt: 0}});'").stdout;
+        formJson = formJson.replace("ObjectId(", "");
+        formJson = formJson.replace("\")", "\"");
+        formJson = JSON.parse(formJson);
+        const sim = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
+            ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
+            " --quiet planet --eval 'db.results.find({\"formName\": \"" + formName[form] + "\"});'").stdout;
+        if (sim.length !== 0) {
+            simulated.push(true);
+        } else {
+            simulated.push(false);
+        }
+        formDescr.push(formJson.payload.formDescription);
+        eventDates.push(formJson.payload.eventDate);
+        owner.push(formJson.payload.owner);
+    }
+    res.send({
+        formName: formName,
+        formDescription: formDescr,
+        owner: owner,
+        eventDate: eventDates,
+        simulated: simulated,
+    });
 };
 
 exports.transfer = (req, res) => {

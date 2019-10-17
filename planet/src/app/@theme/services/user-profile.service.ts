@@ -5,6 +5,7 @@ import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 @Injectable()
 export class UserProfileService {
     private email: string = '';
+    private name: string = '';
 
     constructor(private httpClient: HttpClient, private authService: NbAuthService) {
 
@@ -12,6 +13,7 @@ export class UserProfileService {
             .subscribe((token: NbAuthJWTToken) => {
                 if (token.isValid()) {
                     this.email = token['payload']['email'];
+                    this.name = token['payload']['fullName'];
                 }
             });
     }
@@ -40,6 +42,10 @@ export class UserProfileService {
 
     public getEmail(): string {
         return this.email;
+    }
+
+    public getName(): string {
+        return this.name;
     }
 }
 
