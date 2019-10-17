@@ -119,9 +119,9 @@ export class ScenarioPanelComponent implements OnInit {
               owner: scenarios['owner'][scenario],
               eventDate: scenarios['eventDate'][scenario],
               simulated: scenarios['simulated'][scenario],
-            }
+            };
             if (this['scenarioType'] && !scen['simulated']) {
-              continue
+              continue;
             }
             this.scenarios.push(scen);
             id++;
