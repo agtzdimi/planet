@@ -67,7 +67,7 @@ export class Model1ParamInitService {
                     'VES': {
                         'parameters': {
                             'timeStamp': '',
-                            'vesHorizon': 120,
+                            'vesHorizon': '',
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noAssets': 100,
@@ -78,12 +78,12 @@ export class Model1ParamInitService {
                             'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
-                                    'a': 0.0461466850663691,
-                                    'b': 2.90629308414889,
+                                    'a': 0.046,
+                                    'b': 2.906,
                                 },
                                 'cool': {
-                                    'a': -0.1082518,
-                                    'b': 7.10789209,
+                                    'a': -0.108,
+                                    'b': 7.107,
                                 },
                             },
                             'pMax': 4000,
@@ -130,6 +130,8 @@ export class Model1ParamInitService {
                     'efficiency.thermal': 90,
                 },
             },
+            'owner': 'admin',
+            'eventDate': '2018-21-07T15:40:03.391+02:00',
         },
     };
 
@@ -244,7 +246,7 @@ export class Model1ParamInitService {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'vesHorizon': 120,
+                            'vesHorizon': '',
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noAssets': 100,
@@ -255,12 +257,12 @@ export class Model1ParamInitService {
                             'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
-                                    'a': 0.0461466850663691,
-                                    'b': 2.90629308414889,
+                                    'a': 0.046,
+                                    'b': 2.906,
                                 },
                                 'cool': {
-                                    'a': -0.1082518,
-                                    'b': 7.10789209,
+                                    'a': -0.108,
+                                    'b': 7.107,
                                 },
                             },
                             'pMax': 4000,
@@ -281,7 +283,7 @@ export class Model1ParamInitService {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'vesHorizon': 120,
+                            'vesHorizon': '',
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noAssets': 100,
@@ -292,12 +294,12 @@ export class Model1ParamInitService {
                             'capacity': 6000000,
                             'hvacCOP': {
                                 'heat': {
-                                    'a': 0.0461466850663691,
-                                    'b': 2.90629308414889,
+                                    'a': 0.046,
+                                    'b': 2.906,
                                 },
                                 'cool': {
-                                    'a': -0.1082518,
-                                    'b': 7.10789209,
+                                    'a': -0.108,
+                                    'b': 7.107,
                                 },
                             },
                             'pMax': 4000,

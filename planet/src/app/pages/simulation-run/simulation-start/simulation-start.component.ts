@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
+import { ScenarioPanelComponent } from '../../../@theme/components/planet/general-components/scenario-panel/scenario-panel.component';
 import { NbDialogService } from '@nebular/theme';
 import { SendScenarioService } from '../../../@theme/services/sendScenarioName.service';
 import { NbSidebarService } from '@nebular/theme';
@@ -332,8 +332,7 @@ export class SimulationStartComponent {
   }
 
   openDialogBox() {
-    this.formName = name['Select Saved Scenario'];
-    this.dialogService.open(DialogSelectFormPromptComponent)
+    this.dialogService.open(ScenarioPanelComponent)
       .onClose.subscribe(name => {
         if (name) {
           this.formName = name['formName'];

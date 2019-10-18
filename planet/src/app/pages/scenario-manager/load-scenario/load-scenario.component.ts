@@ -10,13 +10,13 @@ import {
     NbMenuService,
 } from '@nebular/theme';
 
-import { DialogSelectFormPromptComponent } from '../../../@theme/components/planet/dialogs/select-form.component';
 import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
 import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 import { UserProfileService } from '../../../@theme/services';
+import { ScenarioPanelComponent } from '../../../@theme/components';
 
 
 /**
@@ -151,7 +151,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
   * Angular lifecycle hook used to retrive all the data from the backend and spread it to the components
   */
     ngOnInit() {
-        this.dialogService.open(DialogSelectFormPromptComponent)
+        this.dialogService.open(ScenarioPanelComponent)
             .onClose.subscribe(name => {
                 if (name) {
                     // Update formName - formDescription based on user input in dialog box
@@ -228,6 +228,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     public startUpload(): void {
         // Start spinner
         this.loading = true;
+        this.updateVES();
         const formData: FormData = new FormData();
         const originalTimestep: number = this.paramInit['payload']['simulation']['time.step'];
         const originalHorizon: number = this.paramInit['payload']['simulation']['simulation.time'];
@@ -249,6 +250,13 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
         this.paramInit['payload']['model'] = this.genParams['model'];
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
+        const today = new Date();
+        this.paramInit['payload']['eventDate'] = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${
+            today.getDate().toString().padStart(2, '0')}/${
+            today.getFullYear().toString().padStart(4, '0')} ${
+            today.getHours().toString().padStart(2, '0')}:${
+            today.getMinutes().toString().padStart(2, '0')}`;
+        this.paramInit['payload']['owner'] = this.userProfile.getName();
         this.updateModel();
 
         delete this.controlSystem['_id'];
@@ -374,6 +382,26 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                 this.model2.changeModel(this.paramInit);
                 this.model2.paramUpdated.next(this.paramInit);
                 break;
+        }
+    }
+
+    /**
+    *
+    * Function responsible to initialize VES time.step & VES horizon to be 3 times the time.step
+    * @example
+    * updateVES()
+    *
+    */
+    private updateVES(): void {
+        let nodes = 1;
+        if (this.genParams['model'] === 2) {
+            nodes = 8;
+        }
+        for (let i = 0; i < nodes; i++) {
+            if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['timeStep'] = this.paramInit['payload']['simulation']['time.step'];
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['vesHorizon'] = this.paramInit['payload']['simulation']['time.step'] * 3;
+            }
         }
     }
 

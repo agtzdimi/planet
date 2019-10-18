@@ -3,6 +3,7 @@ import { SendScenarioService } from '../../services/sendScenarioName.service';
 import { StateService } from '../../../@core/utils';
 import { HttpClient } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
+import { UserProfileService } from '../../../@theme/services/user-profile.service';
 
 @Component({
   selector: 'ngx-theme-settings',
@@ -191,7 +192,8 @@ export class ThemeSettingsComponent {
 
   constructor(protected stateService: StateService,
     private sendScenarioService: SendScenarioService,
-    private httpClient: HttpClient) {
+    private httpClient: HttpClient,
+    private userProfile: UserProfileService) {
     this.stateService.getLayoutStates()
       .subscribe((layouts: any[]) => this.layouts = layouts);
 
@@ -203,6 +205,7 @@ export class ThemeSettingsComponent {
         this.httpClient.get(url, {
           params: {
             'formName': this.scenarioName,
+            'email': this.userProfile.getEmail(),
           },
         })
           .subscribe(

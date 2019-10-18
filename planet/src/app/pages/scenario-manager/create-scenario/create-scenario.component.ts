@@ -174,6 +174,13 @@ export class CreateScenarioComponent implements OnDestroy {
         this.paramInit['payload']['model'] = this.genParams['model'];
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
+        const today = new Date();
+        this.paramInit['payload']['eventDate'] = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${
+            today.getDate().toString().padStart(2, '0')}/${
+            today.getFullYear().toString().padStart(4, '0')} ${
+            today.getHours().toString().padStart(2, '0')}:${
+            today.getMinutes().toString().padStart(2, '0')}`;
+        this.paramInit['payload']['owner'] = this.userProfile.getName();
         this.updateModel();
         this.controlSystem['payload']['formName'] = this.genParams['formName'];
         this.controlSystem['payload']['formDescription'] = this.genParams['formDescription'];

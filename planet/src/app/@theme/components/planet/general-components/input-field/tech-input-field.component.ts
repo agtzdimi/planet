@@ -36,6 +36,7 @@ export class TechInputFieldComponent {
             this.stringValChange.emit(value);
         } else {
             this.val = +event.target.value;
+            this.val = +this.val.toFixed(3);
             this.valChange.emit(this.val);
         }
     }

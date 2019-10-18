@@ -1,8 +1,7 @@
-""" Script that uses the Python API of OpalRT to execute a model
-The script will make a connection to a current loaded model. If the model is not loaded it will
-load the model and execute it.
+""" Script that uses the Python API of Matlab to execute a model
+The script will make a connection to a current loaded model.
 Notes:
-   Before runinng this script, verify that the model is compiled
+   
 """
 
 import matlab.engine
@@ -43,7 +42,6 @@ class SimulationData (threading.Thread):
       flexibilityModif = []
       flexibilityMax = []
       consumptions = []
-      # Initialize the simulink file
       try:
          with open("Parameters_initialization.txt", "r") as read_file:
             data = json.load(read_file)
@@ -68,6 +66,7 @@ class SimulationData (threading.Thread):
                   vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
                   URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/flexibility'
                   vesData['VESID'] = vesData['name']
+                  vesData['publishTopic'] = '/planet/Get' + vesData['VESID']
                   vesData['nodeID'] = str(node+1)
                   vesData['simulationID'] = formName + "-" +vesData['VESID'] + "-" + vesData['nodeID'] + "-" + "flex"
                   vesName = vesData['name']
@@ -87,13 +86,15 @@ class SimulationData (threading.Thread):
                      vesData['optionalInputData']['tInAltMax'].append(vesData['inputData']['tInInit']+4)
                   times = len(vesData['inputData']['tOutForecast'])
                   print("Requesting Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
-                  vesData['parameters']['timeStep'] = int(steps * 60)
                   for i in range(times):
                      vesData['parameters']['timeStamp'] = int(unixTimestamp)
-                     URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/flexibility'
-                     r = requests.post(url = URL, json = vesData)
-                     r.encoding = 'utf-8'
-                     flexibilityResponse = json.loads(r.text)
+                     #URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/flexibility'
+                     #r = requests.post(url = URL, json = vesData)
+                     #r.encoding = 'utf-8'
+                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(vesData),'-h','160.40.49.244','-q','1','-t','/planet/units/vesData'])
+                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','160.40.49.244','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
+                     flexibilityResponse = json.loads(p2.stdout.decode("utf-8"))
+                     #flexibilityResponse = json.loads(r.text)
                      min = flexibilityResponse['flexibility'][0]['consumptions'][0]['total'] + (flexibilityResponse['flexibility'][0]['consumptions'][1]['total'] - flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
                      max = flexibilityResponse['flexibility'][0]['consumptions'][0]['total'] + (flexibilityResponse['flexibility'][0]['consumptions'][2]['total'] - flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
                      print("Flexibility in timestep " + str(i+1) +":")
@@ -106,6 +107,7 @@ class SimulationData (threading.Thread):
                       "simulationID": formName + "-" +vesData['VESID'] + "-" + vesData['nodeID'] + "-" + "cons",
                       "nodeID": vesData['nodeID'],
                       "VESID": vesData['VESID'],
+                      "publishTopic": vesData['publishTopic'],
                       "parameters": {
                           "timeStamp": vesData['parameters']['timeStamp'],
                           "duration": vesData['parameters']['timeStep'],
@@ -124,10 +126,13 @@ class SimulationData (threading.Thread):
                           "tInAltMax": vesData['optionalInputData']['tInAltMax'][0]
                         }
                      }
-                     URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/requestConsumption'
-                     r = requests.post(url = URL, json = consumptionData)
-                     r.encoding = 'utf-8'
-                     consumptionResponse = json.loads(r.text)
+                     #URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/requestConsumption'
+                     #r = requests.post(url = URL, json = consumptionData)
+                     #r.encoding = 'utf-8'
+                     #consumptionResponse = json.loads(r.text)
+                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(consumptionData),'-h','160.40.49.244','-q','1','-t','/planet/units/vesData'])
+                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','160.40.49.244','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
+                     consumptionResponse = json.loads(p2.stdout.decode("utf-8"))
                      vesData['inputData']['tInInit'] = consumptionResponse['tInFinal']
                      vesData['parameters']['vesHorizon'] = vesData['parameters']['vesHorizon'] - vesData['parameters']['timeStep']
                      del vesData['inputData']['tOutForecast'][0]
@@ -218,14 +223,14 @@ def sendFiles(fileName):
    for line in range(1,len(splitted)):
       if line % 100 == 0:
          msg = msg + splitted[line] + "\n"
-         p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','192.168.11.128','-t','simulations_results'])
+         p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','160.40.49.244','-t','simulations_results'])
          p1.wait()
          msg=""
       else:
          if line == 1:
             msg = msg + path + "\n"
          msg = msg + splitted[line] + "\n"
-   p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','192.168.11.128','-t','simulations_results'])
+   p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','160.40.49.244','-t','simulations_results'])
    p1.wait()
 
 
@@ -246,7 +251,7 @@ class BarStatus (threading.Thread):
             length = "65:" + path
          elif len(files) >= 30:
             length = "85:" + path
-         p1 = subprocess.Popen(['mosquitto_pub','-m',length,'-h','192.168.11.128','-t','simulations_status'])
+         p1 = subprocess.Popen(['mosquitto_pub','-m',length,'-h','160.40.49.244','-t','simulations_status'])
          p1.wait()
          time.sleep(5)
          times = times + 1
