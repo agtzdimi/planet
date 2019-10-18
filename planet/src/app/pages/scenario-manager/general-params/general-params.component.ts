@@ -73,7 +73,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
 
   public showRadioButton: Object = {
-    'elec': false,
+    'elec': true,
     'dh': true,
     'gas': true,
   };
