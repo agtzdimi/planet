@@ -1,7 +1,7 @@
 (function (window) {
     window.__env = window.__env || {};
 
-    window.__env.planet = '160.40.49.244';
+    window.__env.planet = 'localhost';
     window.__env.sitewhere = '192.168.11.128';
     window.__env.planetRESTPort = 8000;
     window.__env.sitewhereUIPort = 8080;
