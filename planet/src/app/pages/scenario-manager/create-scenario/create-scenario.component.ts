@@ -38,7 +38,6 @@ import { UserProfileService } from '../../../@theme/services';
  * @param {boolean} phase2 Variable holding the statue district heating and 1-node gas grid
  * @param {Subscription[]} subscriptions Private variable hos of reaching phase2 [true|false]
  * @param {boolean} phase3 Variable holding the status of reaching phase3 [true|false]
- * @param {boolean} _phase3 Variable holding the status of reaching phase3 [true|false]
  * @param {boolean} phase4 Variable holding the status of reaching phase4 [true|false]
  * @param {boolean} phase5 Variable holding the status of reaching phase5 [true|false]
  * @param {boolean} loading Variable used to define if the spinner of ```Save Scenario``` button will spin or not as a loader
@@ -61,7 +60,6 @@ export class CreateScenarioComponent implements OnDestroy {
     private subscriptions: Subscription[] = [];
     public phase2: boolean = false;
     public phase3: boolean = false;
-    public DisEnSimPar: boolean = false;
     public phase4: boolean = false;
     public phase5: boolean = false;
     public loading: boolean = false;
@@ -272,13 +270,6 @@ export class CreateScenarioComponent implements OnDestroy {
         }
     }
 
-    public disSimPar(): void {
-        this.DisEnSimPar = false;
-    }
-
-    public enSimPar(): void {
-        this.DisEnSimPar = true;
-    }
 
     /* TODO when profiles charts will be visible for the users in scenario creation
 

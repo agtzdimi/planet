@@ -2,13 +2,13 @@
   <div class="col-xxl-12">
 
     <!-- Phase 1 General Parameters -->
-    <ngx-general-params (phaseOutput)="phase2=$event" [isLoadModule]="false" (disSimPar)="disSimPar()" (enSimPar)="enSimPar()"></ngx-general-params>
+    <ngx-general-params (phaseOutput)="phase2=$event" [isLoadModule]="false"></ngx-general-params>
 
     <!-- Phase 2 Simulation Technologies Parameters -->
     <div class="row">
       <div class="col-md-12">
         <div class="ui content">
-          <ngx-tech-param [suiTransition]="transitionController2" *ngIf="checkPhase2() && DisEnSimPar" [(pvParam)]="pvParam"
+          <ngx-tech-param [suiTransition]="transitionController2" *ngIf="checkPhase2()" [(pvParam)]="pvParam"
             [(windParam)]="windParam" (phase3)="animateInfo(transitionController3,transitionName3,3)"
             (pvChange)="pvParam" (windChange)="windParam" [isLoadModule]="false">
           </ngx-tech-param>
