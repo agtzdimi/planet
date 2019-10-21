@@ -97,7 +97,7 @@ export class ScenarioPanelComponent implements OnInit {
         this.dialogService.open(DialogInfoPromptComponent, context)
             .onClose.subscribe(value => { });
     }
-    
+
   submit() {
     if (this.scenarioNameID && !this['scenarioType']) {
       if (this.scenarioNameID.length > 0) {
@@ -149,9 +149,9 @@ export class ScenarioPanelComponent implements OnInit {
               owner: scenarios['owner'][scenario],
               eventDate: scenarios['eventDate'][scenario],
               simulated: scenarios['simulated'][scenario],
-            }
+            };
             if (this['scenarioType'] && !scen['simulated']) {
-              continue
+              continue;
             }
             this.scenarios.push(scen);
             id++;
