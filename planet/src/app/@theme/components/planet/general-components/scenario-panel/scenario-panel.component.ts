@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NbDialogRef } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
 import { ScenPanelCheckBoxComponent } from './scenario-panel-checkbox.component';
 import { ScenPanelSimIconComponent } from './scenario-panel-sim-icon.component';
 import { CheckBoxesService } from './scenario-panel-checkboxes-values.service';
+import { DialogInfoPromptComponent } from '../../dialogs/info-prompt-dialog.component';
 
 @Component({
   selector: 'ngx-scenario-panel',
@@ -57,6 +59,7 @@ export class ScenarioPanelComponent implements OnInit {
   comparisonNames: any;
 
   constructor(protected dialogRef: NbDialogRef<ScenarioPanelComponent>,
+    private dialogService: NbDialogService,
     private httpClient: HttpClient,
     private checkBoxesService: CheckBoxesService) {
     this.checkBoxesService.initializeService();
@@ -79,18 +82,45 @@ export class ScenarioPanelComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
+      /**
+    *
+    * Function responsible for Opening a dialog box over the current screen
+    * @example
+    * openDialogBox(context)
+    * context = { context: { title: 'This is a title passed to the dialog component'}}
+    *
+    * @param {Object} context Object holding the title for the dialog box
+    * @returns A dialog box with some information for the user
+    */
+    private openDialogBox(context: Object): void {
+        // Function to open a new dialog box given its corresponding component
+        this.dialogService.open(DialogInfoPromptComponent, context)
+            .onClose.subscribe(value => { });
+    }
+    
   submit() {
     if (this.scenarioNameID && !this['scenarioType']) {
+      if (this.scenarioNameID.length > 0) {
       this.dialogRef.close({
         formName: this.scenarios[this.scenarioNameID[0]['id'] - 1]['formName'],
         formDescription: this.scenarios[this.scenarioNameID[0]['id'] - 1]['formDescription'],
       });
+      }
     } else if (this['scenarioType'] && this.scenarioNameID) {
+      if (this.scenarioNameID.length > 1 && this.scenarioNameID.length < 6) {
       let tempstring = this.scenarios[this.scenarioNameID[0]['id'] - 1]['formName'];
       for (let name = 1; name < this.scenarioNameID.length; name++) {
         tempstring = tempstring + '  -  ' + this.scenarios[this.scenarioNameID[name]['id'] - 1]['formName'];
       }
       this.dialogRef.close({ comparison: tempstring });
+      } else {
+        const context: Object = {
+          context: {
+              title: 'Error: Selected Scenarios can\'t be less than two or more than five',
+          },
+      };
+      this.openDialogBox(context);
+      }
     } else {
       this.cancel();
     }
