@@ -6,7 +6,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { AnalyticsService } from './@core/utils/analytics.service';
 import {TabCount} from './@theme/components/count_tabs';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-app',
