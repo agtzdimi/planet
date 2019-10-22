@@ -17,6 +17,7 @@ export class AuthGuard implements CanActivate {
                     if (!authenticated) {
                         this.router.navigate(['auth/login']);
                     } else if (authenticated) {
+                        localStorage.setItem('login_token', '51336'); /**not sure if it is correct */
                         this.authService.onTokenChange()
                             .subscribe((token: NbAuthJWTToken) => {
                                 if (token.isValid()) {

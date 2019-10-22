@@ -36,7 +36,8 @@ export class NgxLogoutComponent extends NbLogoutComponent implements OnChanges {
   }
 
   logout(strategy: string): void {
-
+    localStorage.removeItem('login_token');
+    localStorage.clear();
     this.httpClient.post('/planet/rest/logout', {
       login_token: this.token,
     },

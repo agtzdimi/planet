@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: 'pages',
     canActivate: [AuthGuard],
-    loadChildren: () => import('app/pages/pages.module')
+    loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
   },
   {
@@ -46,7 +46,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/pages/welcome-screen', canActivate: [AuthGuard], pathMatch: 'full' },
   { path: '**', redirectTo: 'auth/login' },
 ];
 
