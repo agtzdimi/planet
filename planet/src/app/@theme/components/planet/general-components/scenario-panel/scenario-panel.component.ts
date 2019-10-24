@@ -97,7 +97,7 @@ export class ScenarioPanelComponent implements OnInit {
         this.dialogService.open(DialogInfoPromptComponent, context)
             .onClose.subscribe(value => { });
     }
-    
+
   submit() {
     if (this.scenarioNameID && !this['scenarioType']) {
       if (this.scenarioNameID.length > 0) {
