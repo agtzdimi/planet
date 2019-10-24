@@ -71,7 +71,7 @@
                     <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'dh')"
                       (click)="onRadioButtonClicked($event)" #dhRadio name="dhRadio" [value]="loadedSelections['dh']">
                       <nb-radio [value]="'1 Node'">1 Node</nb-radio>
-                      <nb-radio [value]="'3 Node'">3 Node</nb-radio>
+                      <nb-radio [value]="'3 Node'" disabled>3 Node</nb-radio>
                     </nb-radio-group>
                   </nb-tab>
                   <nb-tab tabTitle="Gas Network">
