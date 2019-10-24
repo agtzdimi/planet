@@ -531,7 +531,7 @@ export class TechParamComponent implements OnChanges,
     }
 
     /**
-    * Function responsible to changue the crrently selected node.
+    * Function responsible to change the currently selected node.
     * @example
     * changeNode('node.1')
     *
