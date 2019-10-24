@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+/**
+ * @ignore
+ */
 @Component({
   selector: 'ngx-simulation-comparison',
   template: `

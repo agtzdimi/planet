@@ -12,11 +12,13 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument("--path", required=True,
    help="path directory")
+parser.add_argument("--simMachine", required=True,
+   help="simulation machine IP")
 args = vars(parser.parse_args())
 
 path = args["path"] + '/single/*'
 files = glob.glob(path)
-broker='160.40.49.244'
+broker=args["simMachine"]
 port=1883
 
 client1 = paho.Client("control1")                           #create client object
