@@ -91,8 +91,8 @@ class SimulationData (threading.Thread):
                      #URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/flexibility'
                      #r = requests.post(url = URL, json = vesData)
                      #r.encoding = 'utf-8'
-                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(vesData),'-h','160.40.49.244','-q','1','-t','/planet/units/vesData'])
-                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','160.40.49.244','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
+                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(vesData),'-h','localhost','-q','1','-t','/planet/units/vesData'])
+                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','localhost','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
                      flexibilityResponse = json.loads(p2.stdout.decode("utf-8"))
                      #flexibilityResponse = json.loads(r.text)
                      min = flexibilityResponse['flexibility'][0]['consumptions'][0]['total'] + (flexibilityResponse['flexibility'][0]['consumptions'][1]['total'] - flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
@@ -130,8 +130,8 @@ class SimulationData (threading.Thread):
                      #r = requests.post(url = URL, json = consumptionData)
                      #r.encoding = 'utf-8'
                      #consumptionResponse = json.loads(r.text)
-                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(consumptionData),'-h','160.40.49.244','-q','1','-t','/planet/units/vesData'])
-                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','160.40.49.244','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
+                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(consumptionData),'-h','localhost','-q','1','-t','/planet/units/vesData'])
+                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','localhost','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
                      consumptionResponse = json.loads(p2.stdout.decode("utf-8"))
                      vesData['inputData']['tInInit'] = consumptionResponse['tInFinal']
                      vesData['parameters']['vesHorizon'] = vesData['parameters']['vesHorizon'] - vesData['parameters']['timeStep']
@@ -223,14 +223,14 @@ def sendFiles(fileName):
    for line in range(1,len(splitted)):
       if line % 100 == 0:
          msg = msg + splitted[line] + "\n"
-         p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','160.40.49.244','-t','simulations_results'])
+         p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','localhost','-t','simulations_results'])
          p1.wait()
          msg=""
       else:
          if line == 1:
             msg = msg + path + "\n"
          msg = msg + splitted[line] + "\n"
-   p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','160.40.49.244','-t','simulations_results'])
+   p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','localhost','-t','simulations_results'])
    p1.wait()
 
 
@@ -251,7 +251,7 @@ class BarStatus (threading.Thread):
             length = "65:" + path
          elif len(files) >= 30:
             length = "85:" + path
-         p1 = subprocess.Popen(['mosquitto_pub','-m',length,'-h','160.40.49.244','-t','simulations_status'])
+         p1 = subprocess.Popen(['mosquitto_pub','-m',length,'-h','localhost','-t','simulations_status'])
          p1.wait()
          time.sleep(5)
          times = times + 1

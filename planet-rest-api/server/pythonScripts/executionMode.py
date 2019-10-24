@@ -137,13 +137,13 @@ def executeMode(message,filePath):
 if __name__ == "__main__":
    allFiles = 0
    message=""
-   proc = subprocess.Popen(['mosquitto_sub','-h','192.168.11.128','-t','SendSimulator'],stdout=subprocess.PIPE)
+   proc = subprocess.Popen(['mosquitto_sub','-h','localhost','-t','SendSimulator'],stdout=subprocess.PIPE)
    for msg in iter(proc.stdout.readline,''):
       actualMessage = msg.decode("utf-8")
       msg = msg.decode("utf-8")
       if "END OF SIM" not in msg:
          message = message + msg
       else:
-         path=msg.split(":")[1]
+         path = msg.split(":")[1]
          executeMode(message,path)
          message = ""

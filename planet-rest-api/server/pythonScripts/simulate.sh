@@ -45,7 +45,7 @@ sleep 1
 
 simTopic="$(echo ""$SIMULATION_TOPIC"" | sed 's/^Send//')"
 
-python ./server/pythonScripts/splitMgs.py --path "$dirName"
+python ./server/pythonScripts/splitMgs.py --path "$dirName" --simMachine "$SIMULATION_MACHINE"
 }
 
 form="$1"
