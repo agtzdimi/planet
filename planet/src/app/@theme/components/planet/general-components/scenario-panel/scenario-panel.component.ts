@@ -58,6 +58,10 @@ export class ScenarioPanelComponent implements OnInit {
   private scenarioNameID;
   comparisonNames: any;
 
+  context_error1: Object = {context: {title: 'Error: One Scenario Needs to be Selected' }};
+
+  context_error2: Object = {context: {title: 'Error: Selected Scenarios can\'t be less than two or more than five' }};
+
   constructor(protected dialogRef: NbDialogRef<ScenarioPanelComponent>,
     private dialogService: NbDialogService,
     private httpClient: HttpClient,
@@ -105,6 +109,8 @@ export class ScenarioPanelComponent implements OnInit {
         formName: this.scenarios[this.scenarioNameID[0]['id'] - 1]['formName'],
         formDescription: this.scenarios[this.scenarioNameID[0]['id'] - 1]['formDescription'],
       });
+      } else {
+        this.openDialogBox(this.context_error1);
       }
     } else if (this['scenarioType'] && this.scenarioNameID) {
       if (this.scenarioNameID.length > 1 && this.scenarioNameID.length < 6) {
@@ -114,16 +120,19 @@ export class ScenarioPanelComponent implements OnInit {
       }
       this.dialogRef.close({ comparison: tempstring });
       } else {
-        const context: Object = {
-          context: {
-              title: 'Error: Selected Scenarios can\'t be less than two or more than five',
-          },
-      };
-      this.openDialogBox(context);
+        this.openDialogBox(this.context_error2);
       }
-    } else {
+    } else if (this.scenarioNameID === undefined && !this['scenarioType']) {
+        this.openDialogBox(this.context_error1);
+    } else if (this.scenarioNameID === undefined && this['scenarioType']) {
+        this.openDialogBox(this.context_error2);
+  } else {
       this.cancel();
     }
+  }
+
+  onCancelClick() {
+    this.cancel();
   }
 
   checkScenarios() {
