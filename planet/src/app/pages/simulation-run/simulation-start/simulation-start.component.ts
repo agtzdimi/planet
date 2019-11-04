@@ -332,7 +332,6 @@ export class SimulationStartComponent {
   }
 
   openDialogBox() {
-    this.formName = name['Select Saved Scenario'];
     this.dialogService.open(ScenarioPanelComponent)
       .onClose.subscribe(name => {
         if (name) {

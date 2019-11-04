@@ -20,7 +20,7 @@ export class Model2ParamInitService {
             'electric.grid': {
                 'node.1': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -113,7 +113,7 @@ export class Model2ParamInitService {
 
                 'node.2': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -206,7 +206,7 @@ export class Model2ParamInitService {
 
                 'node.3': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -299,7 +299,7 @@ export class Model2ParamInitService {
 
                 'node.4': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -392,7 +392,7 @@ export class Model2ParamInitService {
 
                 'node.5': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -485,7 +485,7 @@ export class Model2ParamInitService {
 
                 'node.6': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -578,7 +578,7 @@ export class Model2ParamInitService {
 
                 'node.7': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -672,7 +672,7 @@ export class Model2ParamInitService {
 
                 'node.8': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -886,7 +886,7 @@ export class Model2ParamInitService {
             case 5:
                 if (flag) {
                     this.paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load'] = {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     };
                 } else {
                     this.paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load'] = {

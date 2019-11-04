@@ -48,7 +48,7 @@ export class P2GUnitComponent implements OnChanges {
       this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
       this.p2gParams['description'] = changes['p2gInput']['currentValue']['description'];
       this.p2g.emit(this.p2gParams);
-    } else if (changes['p2gInput']['currentValue']['efficiency.electrolysis']) {
+    } else if (changes['p2gInput']['currentValue']['efficiency_electrolysis']) {
       const defaultValues = this.changeDotsToUnderScores(changes['p2gInput']['currentValue']);
       this.p2gParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
       this.p2g.emit(this.p2gParams);

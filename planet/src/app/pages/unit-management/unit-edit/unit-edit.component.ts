@@ -115,7 +115,7 @@ export class UnitEditComponent implements OnInit {
       metadata = JSON.stringify(this.selectedModel['payload']['parameters']['configuration']);
     }
     metadata = metadata.replace('}{', ',');
-    metadata = metadata.replace(/_/g, '.');
+    // metadata = metadata.replace(/_/g, '.');
     metadata = JSON.parse(metadata);
     this.editDevice.editDevice(this.devices, metadata, this.unitName, this.selectedModel['description'], this.unitIP, this.unitPort)
       .then(results => {

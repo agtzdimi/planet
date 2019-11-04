@@ -18,7 +18,7 @@ export class Model1ParamInitService {
             'electric.grid': {
                 'node.1': {
                     'uncontrollable.load': {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     },
                     'PV': {
                         'nominal.electric.power': 0,
@@ -233,7 +233,7 @@ export class Model1ParamInitService {
             case 5:
                 if (flag) {
                     this.paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load'] = {
-                        'peak.load': 2000,
+                        'peak.load': 10,
                     };
                 } else {
                     this.paramInit['payload']['electric.grid'][displayingNode]['uncontrollable.load'] = {
