@@ -13,10 +13,16 @@
                 </div>
 
                 <div class="row" *ngIf="scenarios.length !== 0">
-                    <div class="col-md-5"></div>
-                    <div class="col-md-2">
-                        <button nbButton hero status="success" class="m-4" (click)="submit()">OK</button>
-                    </div>
+                        <div class="col-md-4"></div>
+                        
+                        <div class="col-md-2">
+                                <button nbButton hero status="success" class="m-4" style="width: 6rem" (click)="submit()">OK</button>
+                            </div>       
+                            <div class="col-md-2">   
+                                <button nbButton hero status="danger" class="m-4"  style="width: 6rem" (click)="cancel()">Cancel</button>
+                            </div>
+ 
+                  
                 </div>
 
             </nb-card-body>

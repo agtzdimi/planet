@@ -334,7 +334,7 @@ export class SimulationStartComponent {
   openDialogBox() {
     this.dialogService.open(ScenarioPanelComponent)
       .onClose.subscribe(name => {
-        if (name) {
+        if (name['formName'] !== undefined) {
           this.formName = name['formName'];
         }
       });
