@@ -128,7 +128,7 @@ export class SimulationStartComponent {
                   // console.log('Error', error);
                 },
               );
-          }, 10000);
+          }, 5000);
         },
         error => {
           this.changingValue = 50;

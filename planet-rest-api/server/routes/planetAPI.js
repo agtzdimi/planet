@@ -84,17 +84,17 @@ exports.getFormNames = (req, res) => {
     const simulated = [];
     const formName = JSON.parse(shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
         ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-        " --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'"));
+        " --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'", { silent: true }).stdout);
     for (let form = 0; form < formName.length; form++) {
         let formJson = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
             ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-            " --quiet planet --eval 'db.files.find({\"payload.formName\": \"" + formName[form] + "\", \"payload.model\" : {$gt: 0}});'").stdout;
+            " --quiet planet --eval 'db.files.find({\"payload.formName\": \"" + formName[form] + "\", \"payload.model\" : {$gt: 0}});'", { silent: true }).stdout;
         formJson = formJson.replace("ObjectId(", "");
         formJson = formJson.replace("\")", "\"");
         formJson = JSON.parse(formJson);
         const sim = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
             ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-            " --quiet planet --eval 'db.results.find({\"formName\": \"" + formName[form] + "\"});'").stdout;
+            " --quiet planet --eval 'db.results.find({\"formName\": \"" + formName[form] + "\"});'", { silent: true }).stdout;
         if (sim.length !== 0) {
             simulated.push(true);
         } else {
