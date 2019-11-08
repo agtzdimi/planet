@@ -492,20 +492,20 @@ export class TechParamComponent implements OnChanges,
   */
     public optionSelected(unitName: string, unitType: string): void {
         if (unitName !== 'None') {
-        this.unitSelectedPerNode[this.displayingNode][unitType] = unitName;
+            this.unitSelectedPerNode[this.displayingNode][unitType] = unitName;
         } else {
             this.unitSelectedPerNode[this.displayingNode][unitType] = 'None';
         }
         const optionValue = this.registeredDevices[unitType].filter(value => {
-            if (value['name'] === unitName ) {
+            if (value['name'] === unitName) {
                 return value['metadata'];
             }
         });
         if (unitName !== 'None') {
-          this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = optionValue[0]['metadata'];
-          this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['IP'] = optionValue[0]['IP'];
-          this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['Port'] = optionValue[0]['Port'];
-          this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['name'] = optionValue[0]['name'];
+            this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = optionValue[0]['metadata'];
+            this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['IP'] = optionValue[0]['IP'];
+            this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['Port'] = optionValue[0]['Port'];
+            this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['name'] = optionValue[0]['name'];
         } else {
             this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = [];
             this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['IP'] = '';

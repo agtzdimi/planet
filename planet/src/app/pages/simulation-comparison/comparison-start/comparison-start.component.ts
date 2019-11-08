@@ -111,7 +111,7 @@ export class ComparisonStartComponent {
             // console.log('Error', error);
           },
         );
-    }, 5000);
+    }, 12000);
   }
 
   /**
