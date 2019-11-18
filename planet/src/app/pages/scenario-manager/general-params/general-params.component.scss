@@ -2,3 +2,9 @@
 @import '../../../@theme/styles/scenario.component.scss';
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/breakpoints';
+
+label {
+  font-weight: nb-theme(text-subtitle-font-weight);
+  font-size: nb-theme(text-paragraph-2-font-size);
+  line-height: nb-theme(text-subtitle-line-height);
+}

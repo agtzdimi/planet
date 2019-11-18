@@ -49,7 +49,7 @@ export const CORPORATE_THEME = {
     ...theme,
 
     temperature: {
-      arcFill: [ '#ffa36b', '#ffa36b', '#ff9e7a', '#ff9888', '#ff8ea0' ],
+      arcFill: ['#ffa36b', '#ffa36b', '#ff9e7a', '#ff9888', '#ff8ea0'],
       arcEmpty: theme.bg2,
       thumbBg: theme.bg2,
       thumbBorder: '#ffa36b',

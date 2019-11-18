@@ -208,7 +208,8 @@
             [(val)]="economyParams['payload']['carbon.tax']" [compId]="'ec_carbon.tax'">
         </ngx-input-field>
 
-        <ngx-input-field [isChecked]="true" [label1]="'NG emission factor'" [label2]="'%'"
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel1]="'NG emission factor'"
+            [inputHtmlLabel2]="'tCO<sub>2</sub>/MWhCH<sub>4</sub>'"
             (valChange)="economyParams['payload']['NG.emission.factor']=+$event"
             [(val)]="economyParams['payload']['NG.emission.factor']" [compId]="'ec_ng.emission.factor'">
         </ngx-input-field>
