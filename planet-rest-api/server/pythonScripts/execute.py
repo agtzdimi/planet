@@ -35,7 +35,6 @@ class SimulationData (threading.Thread):
          4 : "DEMO_PLANETm_POC3_model4"
       }
       # Start the matlab workspace
-      print ("Starting Matlab engine...")
       eng = matlab.engine.start_matlab()
       flexibilityBaseline = []
       flexibilityMin = []
@@ -46,6 +45,7 @@ class SimulationData (threading.Thread):
          with open("Parameters_initialization.txt", "r") as read_file:
             data = json.load(read_file)
          formName = data['payload']['formName']
+         print ("Starting Matlab engine to simulate scenario: " + str(formName) + "...")
          model = data['payload']['model']
          startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d').date()
          steps = data['payload']['simulation']['time.step']
@@ -84,7 +84,7 @@ class SimulationData (threading.Thread):
                      vesData['optionalInputData']['tInBaseMax'].append(vesData['inputData']['tInInit']+1)
                      vesData['optionalInputData']['tInAltMin'].append(vesData['inputData']['tInInit']-3)
                      vesData['optionalInputData']['tInAltMax'].append(vesData['inputData']['tInInit']+4)
-                  times = len(vesData['inputData']['tOutForecast'])
+                  times = len(vesData['inputData']['tOutForecast']) - 1
                   print("Requesting Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
                   for i in range(times):
                      vesData['parameters']['timeStamp'] = int(unixTimestamp)
@@ -136,6 +136,10 @@ class SimulationData (threading.Thread):
                      vesData['inputData']['tInInit'] = consumptionResponse['tInFinal']
                      vesData['parameters']['vesHorizon'] = vesData['parameters']['vesHorizon'] - vesData['parameters']['timeStep']
                      del vesData['inputData']['tOutForecast'][0]
+                     del vesData['optionalInputData']['tInBaseMin'][0]
+                     del vesData['optionalInputData']['tInBaseMax'][0]
+                     del vesData['optionalInputData']['tInAltMin'][0]
+                     del vesData['optionalInputData']['tInAltMax'][0]
                      unixTimestamp = unixTimestamp + steps * 3600
                      print("Consumption in timestep " + str(i+1) +":")
                      consumptions.append(consumptionResponse['tInFinal'])
@@ -143,7 +147,7 @@ class SimulationData (threading.Thread):
          startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
          currentModel = switcher.get(model, "Invalid Model")
          eng.run(currentModel,nargout=0)
-         message='Simulation finished successfully'
+         message='Simulation for scenario: ' + str(formName) + ' finished successfully'
       except Exception as e:
          message=str(e)
          lineMatch = re.search(' line (.*),',message)

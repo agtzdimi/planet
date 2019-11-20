@@ -18,7 +18,7 @@ with open(path + "/Parameters_initialization.txt", "r") as read_file:
 
 timeStep = data['payload']['simulation']['time.step'] * 60
 
-valuesLength = data['payload']['electric.grid']['node.1']['VES']['parameters']['vesHorizon'] / timeStep
+valuesLength = data['payload']['electric.grid']['node.1']['VES']['parameters']['vesHorizon'] / timeStep + 1
 
 model = data['payload']['model']
 if model == 2 or model == 4:
