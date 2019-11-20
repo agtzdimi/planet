@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ViewCell } from 'ng2-smart-table';
+import { ViewCell } from '@mykeels/ng2-smart-table';
 import { CheckBoxesService } from './scenario-panel-checkboxes-values.service';
 import { FormControl } from '@angular/forms';
 

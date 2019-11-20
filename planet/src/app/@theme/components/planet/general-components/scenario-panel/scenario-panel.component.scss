@@ -46,6 +46,7 @@
   }
   
   @include nb-install-component() {
+    width: 100vw;
     display: flex;
     justify-content: center;
     min-width: 100%;

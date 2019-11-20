@@ -28,7 +28,7 @@ import {
   NbRadioModule,
   NbSpinnerModule,
 } from '@nebular/theme';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { Ng2SmartTableModule } from '@mykeels/ng2-smart-table';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 /* General Components */

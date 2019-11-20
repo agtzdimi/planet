@@ -16,7 +16,9 @@ export class SimulationBarsComponent implements OnDestroy, OnChanges {
     @Input() yVal;
 
     ngOnChanges(changes: SimpleChanges) {
-        this.afterDataRecieved(changes.data.currentValue);
+        if (changes.data) {
+            this.afterDataRecieved(changes.data.currentValue);
+        }
     }
 
     options: any = {};

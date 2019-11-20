@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LocalDataSource } from 'ng2-smart-table';
+import { LocalDataSource } from '@mykeels/ng2-smart-table';
 import { UserAdminPictureComponent } from './user-admin-picture/user-admin-picture.component';
 import { UserAdminRoleComponent } from './user-admin-role/user-admin-role.component';
 import { NbDialogService, NbDialogConfig } from '@nebular/theme';

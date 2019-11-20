@@ -18,7 +18,7 @@ import { SystemParamsModule } from './system-params/system-params.module';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { UserAdministrationComponent } from './user-administration/user-administration.component';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { Ng2SmartTableModule } from '@mykeels/ng2-smart-table';
 import { UserAdminPictureComponent } from './user-administration/user-admin-picture/user-admin-picture.component';
 import { UserAdminRoleComponent } from './user-administration/user-admin-role/user-admin-role.component';
 

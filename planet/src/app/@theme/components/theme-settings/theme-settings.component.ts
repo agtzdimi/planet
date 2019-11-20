@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SendScenarioService } from '../../services/sendScenarioName.service';
 import { StateService } from '../../../@core/utils';
 import { HttpClient } from '@angular/common/http';
-import { LocalDataSource } from 'ng2-smart-table';
+import { LocalDataSource } from '@mykeels/ng2-smart-table';
 import { UserProfileService } from '../../../@theme/services/user-profile.service';
 
 @Component({

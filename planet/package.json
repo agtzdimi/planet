@@ -43,6 +43,7 @@
     "@angular/router": "^8.0.0",
     "@asymmetrik/ngx-leaflet": "3.0.1",
     "@mapbox/mapbox-gl-geocoder": "^3.1.0",
+    "@mykeels/ng2-smart-table": "^1.5.3",
     "@nebular/auth": "4.2.1",
     "@nebular/bootstrap": "4.2.1",
     "@nebular/eva-icons": "4.2.1",
