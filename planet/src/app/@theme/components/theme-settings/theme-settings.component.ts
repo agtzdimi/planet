@@ -62,7 +62,12 @@ export class ThemeSettingsComponent {
         filter: false,
       },
       uncontrollableLoad: {
-        title: 'Uncontrollable Load',
+        title: 'Leak Electric Load',
+        editable: false,
+        filter: false,
+      },
+      flexibleVESLoad: {
+        title: 'Flexible VES Load',
         editable: false,
         filter: false,
       },
@@ -106,6 +111,11 @@ export class ThemeSettingsComponent {
       },
       P2G: {
         title: 'P2G',
+        editable: false,
+        filter: false,
+      },
+      VES: {
+        title: 'VES',
         editable: false,
         filter: false,
       },
@@ -237,6 +247,14 @@ export class ThemeSettingsComponent {
                   } else if (tech === 'uncontrollable.load') {
                     tempTechData['uncontrollableLoad'] =
                       this.paramInit['payload']['electric.grid'][node]['uncontrollable.load']['peak.load'];
+                  } else if (tech === 'VES') {
+                    if (this.paramInit['payload']['electric.grid'][node]['VES']['parameters']['vesHorizon']) {
+                    tempTechData['flexibleVESLoad'] =
+                    this.paramInit['payload']['electric.grid'][node]['VES']['optionalParameters']['pMax'] *
+                    this.paramInit['payload']['electric.grid'][node]['VES']['parameters']['noAssets'];
+                    } else {
+                      tempTechData['flexibleVESLoad'] = 0;
+                    }
                   } else if (tech === 'EB') {
                     continue;
                   } else {

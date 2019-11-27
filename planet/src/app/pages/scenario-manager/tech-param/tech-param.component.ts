@@ -478,6 +478,7 @@ export class TechParamComponent implements OnChanges,
         arr = arr.map(value => {
             return JSON.parse(JSON.stringify(value).replace(/_/g, '.'));
         });
+
         this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = arr[0];
     }
 

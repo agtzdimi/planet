@@ -13,9 +13,13 @@ import { UserProfileService } from '../../../@theme/services';
 })
 export class SimulationStartComponent {
 
-  AREAS_TOTAL = 4;
+  AREAS_TOTAL = 7;
   BARS_TOTAL = 5;
+  VES_CHART_TOTAL = 5;
+  STADALONE_VES_CHARTS = 3;
+  lengthAreas: number = 0;
   areaChart = [];
+  VesChart = [];
   barChart = [];
   showBar: boolean = false;
   showArea: boolean = false;
@@ -32,6 +36,15 @@ export class SimulationStartComponent {
   yVal: number = 0;
   changingValue = 0;
   showSimBar = false;
+  paramInit: Object = {
+    'payload': {
+      'model': '',
+    },
+  };
+  simulationTime: any;
+  tOutForecast: any;
+  demandModTimeseries: any;
+  isVesPresent: boolean;
 
   constructor(private httpClient: HttpClient,
     private dialogService: NbDialogService,
@@ -61,6 +74,31 @@ export class SimulationStartComponent {
     this.showSimBar = true;
     this.changingValue = 0;
     this.initializeCharts();
+    // get Ves parameters from parameters_initialization
+    const urlVesParams = '/planet/rest/load_data';
+        this.httpClient.get(urlVesParams, {
+          params: {
+            'formName': this.formName,
+            'email': this.userProfile.getEmail(),
+          },
+        })
+        .subscribe(
+          res => {
+            this.paramInit = JSON.parse(res['paramInit']);
+            this.simulationTime = this.paramInit['payload']['simulation']['simulation.time'];
+            this.tOutForecast = this.paramInit['payload']['electric.grid']['node.1']['VES']['inputData']['tOutForecast'];
+            this.demandModTimeseries = this.paramInit['payload']['electric.grid']['node.1']['VES']['optionalInputData'];
+            if (this.paramInit['payload']['electric.grid']['node.1']['VES']['name']) {
+              this.isVesPresent = true;
+            } else {
+              this.isVesPresent = false;
+            }
+          },
+          error => {
+            this.isVesPresent = false;
+          },
+          );
+    // end of get Ves parameters
     this.status = '';
     let url = '/planet/rest/transfer';
     this.httpClient.post(url,
@@ -107,9 +145,14 @@ export class SimulationStartComponent {
                     this.status = simulationData['status'];
                     this.results1Data = simulationData['results1'];
                     this.results2Data = simulationData['results2'];
+                    this.initializeAreaChart();
                     clearInterval(interval);
                     clearInterval(barData);
+                    if (this.isVesPresent) {
+                      this.spreadValuesToChartsWithVes(this.results1Data);
+                    } else {
                     this.spreadValuesToCharts(this.results1Data);
+                    }
                     this.spreadValuesToCharts2(this.results2Data);
                   } else if (simulationData['status'] && !simulationData['status'].includes('Simulation finished successfully')) {
                     const tempStatus = simulationData['status'].split('\n');
@@ -196,6 +239,16 @@ export class SimulationStartComponent {
         case 'EB_input':
           // this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
+        case 'FlexibilityMin':
+          break;
+        case 'FlexibilityMax':
+          break;
+        case 'FlexibilityBaseline':
+          break;
+        case 'FlexibilityModif':
+          break;
+        case 'IndoorTemp':
+          break;
         default:
           break;
       }
@@ -204,6 +257,113 @@ export class SimulationStartComponent {
     this.areaChart[1].title = 'Fulfilment of the Electric Demand';
     this.areaChart[2].title = 'Fulfilment of the Heat Demand (both DH and LHD)';
     this.areaChart[3].title = 'Electric grid power flow';
+
+    this.showArea = true;
+    this.loading = false;
+    this.showVal = true;
+  }
+
+  spreadValuesToChartsWithVes(data) {
+    const lines = data.split('\n');
+    const headers = lines[0].split(',');
+    for (let index = 0; index < headers.length; index++) {
+      if (this.isVesPresent) {
+      this.setVesCharts(index, headers);
+    }
+      switch (headers[index]) {
+        case 'Hours':
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          this.areaChart[3].data.push(this.getColumnData(lines, index));
+          this.areaChart[4].data.push(this.getColumnData(lines, index));
+          this.areaChart[5].data.push(this.getColumnData(lines, index));
+          this.areaChart[6].data.push(this.getColumnData(lines, index));
+          break;
+        case 'P2H_heat':
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'P2G_heat':
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'G2H_heat':
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'CHP_heat':
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'EB_output':
+          // this.areaChart[1].data.push(this.getColumnData(lines, index));
+          break;
+        case 'RES_Curtailment':
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'Surplus':
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'Electric_demand':
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          break;
+        case 'RES_direct_utilization':
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          break;
+        case 'P2H_input':
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'CHP_el_production':
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          break;
+        case 'P2G_input':
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'Total_heat_demand':
+          this.areaChart[2].data.push(this.getColumnData(lines, index));
+          break;
+        case 'Electric_grid_power_flow':
+          this.areaChart[3].data.push(this.getColumnData(lines, index));
+          break;
+        case 'RES_power':
+          this.areaChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'EB_input':
+          // this.areaChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'FlexibilityMin':
+          this.areaChart[4].data.push(this.getColumnData(lines, index));
+          break;
+        case 'FlexibilityMax':
+          this.areaChart[4].data.push(this.getColumnData(lines, index));
+          break;
+        case 'FlexibilityBaseline':
+          this.areaChart[4].data.push(this.getColumnData(lines, index));
+          break;
+        case 'FlexibilityModif':
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          this.areaChart[4].data.push(this.getColumnData(lines, index));
+          break;
+        case 'IndoorTemp':
+          this.areaChart[5].data.push(this.getColumnData(lines, index));
+          break;
+        default:
+          break;
+      }
+    }
+
+    this.areaChart[5].data.push(this.VesChart[0].data);
+    this.areaChart[6].data.push(this.VesChart[1].data);
+    this.areaChart[6].data.push(this.VesChart[2].data);
+    this.areaChart[6].data.push(this.VesChart[3].data);
+    this.areaChart[6].data.push(this.VesChart[4].data);
+
+    this.areaChart[0].title = 'Electric demand, RES producibility, dispatch of the electric surplus';
+    this.areaChart[1].title = 'Fulfilment of the Electric Demand';
+    this.areaChart[2].title = 'Fulfilment of the Heat Demand (both DH and LHD)';
+    this.areaChart[3].title = 'Electric grid power flow';
+    this.areaChart[4].title = 'Flexibility Values for time horizon';
+    this.areaChart[5].title = 'Indoor & Outdoor Temperature evolution timeseries';
+    this.areaChart[6].title = 'Modified heat Consumption';
+
     this.showArea = true;
     this.loading = false;
     this.showVal = true;
@@ -340,15 +500,46 @@ export class SimulationStartComponent {
       });
   }
 
-  initializeCharts() {
-    for (let i = 0; i < this.AREAS_TOTAL; i++) {
+  setVesCharts(index, headers) {
+    if (index === 0) {
+      this.VesChart[0].data.push('OutDoor Temp'); // , this.tOutForecast[index / tmp]) ;
+      this.VesChart[1].data.push('Alt Min');
+      this.VesChart[2].data.push('Alt Max');
+      this.VesChart[3].data.push('Baseline Mix');
+      this.VesChart[4].data.push('Baseline Max');
+    } else {
+      const tmp = Math.floor((index / (headers.length / this.tOutForecast.length)));
+      this.VesChart[0].data.push(this.tOutForecast[tmp].toString());
+      this.VesChart[1].data.push(this.demandModTimeseries['tInAltMin'][tmp].toString());
+      this.VesChart[2].data.push(this.demandModTimeseries['tInAltMax'][tmp].toString());
+      this.VesChart[3].data.push(this.demandModTimeseries['tInBaseMin'][tmp].toString());
+      this.VesChart[4].data.push(this.demandModTimeseries['tInBaseMax'][tmp].toString());
+    }
+  }
+
+  initializeAreaChart() {
+    this.areaChart = [];
+    if (this.isVesPresent) {
+      this.lengthAreas = this.AREAS_TOTAL;
+    } else {
+      this.lengthAreas = this.AREAS_TOTAL - this.STADALONE_VES_CHARTS;
+    }
+    for (let i = 0; i < this.lengthAreas; i++) {
       this.areaChart[i] = {
         data: [],
       };
     }
+  }
 
+  initializeCharts() {
     for (let i = 0; i < this.BARS_TOTAL; i++) {
       this.barChart[i] = {
+        data: [],
+      };
+    }
+
+    for (let i = 0; i < this.VES_CHART_TOTAL; i++) {
+      this.VesChart[i] = {
         data: [],
       };
     }
