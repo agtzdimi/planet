@@ -31,7 +31,7 @@ export class TechCostComponent implements OnDestroy {
     public checkVal: boolean[] = [];
     public economyParams: Object;
     private subscriptions: Subscription[] = [];
-    private CHECKBOX_COUNT: number = 6;
+    private CHECKBOX_COUNT: number = 5;
     @Output() phase5: EventEmitter<boolean>;
     @Input() isLoadModule: boolean;
 

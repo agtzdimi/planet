@@ -13,9 +13,9 @@
 <div class="row">
 
     <div [class]="parametersColumnSize">
-        <h6 *ngIf="mode !== 'scenario' || mode !== 'scenario2'">Parameters per asset</h6>
+        <h6 *ngIf="mode !== 'scenario'">Parameters per asset</h6>
 
-        <div *ngIf="mode === 'scenario' || mode === 'scenario2'">
+        <div *ngIf="mode === 'scenario'">
 
             <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''"
                 (valChange)="onChange(['noAssets'],+$event,'parameters')"
@@ -32,7 +32,7 @@
             </ngx-input-field>
         </div>
 
-        <div *ngIf= "mode !== 'scenario2'" class="listItem">
+        <div class="listItem">
             <ul>
                 <li>
                     <div class="form-group row">
@@ -74,7 +74,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <ngx-input-field [isChecked]="true"
-                                [inputHtmlLabel2]="'W&sdot;K<sup>-1</sup>'"
+                                [inputHtmlLabel2]="'W&sdot;m<sup>-1</sup>&sdot;K<sup>-1</sup>'"
                                 (valChange)="onChange(['conductance'],+$event,'optionalParameters','optionalParameters')"
                                 [(val)]="vesParams['payload']['optionalParameters']['conductance']"
                                 [compId]="'ves_conductance'" id="ves_conductance" [inputHtmlLabel1]="'Conductivity'"
@@ -105,25 +105,6 @@
                 <div class="col-md-10 vl">
 
                     <div class="row">
-                        <div class="col-md-4" style="padding-left: 4.1rem;" >
-                            <label>Heat Pump</label>
-                        </div>
-                        <div class="col-md-4" style="padding-left: 4.1rem; margin-top: 14px;" > 
-                            <nb-toggle [(checked)]="tbHeadPump" (checkedChange)="onTGchange($event)"></nb-toggle>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4" style="padding-left: 4.1rem;" >
-                            <label>Electric Heater</label>
-                        </div>
-                        <div class="col-md-4" style="padding-left: 4.1rem; margin-top: 14px;" > 
-                            <nb-toggle [(checked)]="tbNominalPower"></nb-toggle>
-                        </div>
-                    </div>
-
-
-                    <div *ngIf="tbHeadPump" class="row">
                         <div class="col-md-2" style="padding-left: 4.1rem;">
                             <div class="row">
                                 <div class="col-md-12">
@@ -155,8 +136,7 @@
                         </div>
                     </div>
 
-                    
-                    <div *ngIf="tbHeadPump" class="row">
+                    <div class="row">
                         <div class="col-md-2" style="padding-left: 4.2rem;">
                             <div class="row">
                                 <div class="col-md-12">
@@ -192,7 +172,7 @@
 
                     <hr>
 
-                    <div *ngIf="tbHeadPump == true || tbNominalPower == true" class="row">
+                    <div class="row">
                         <div class="col-md-12">
 
                             <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'W'"
@@ -205,7 +185,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="tbHeadPump" class="row">
+                    <div class="row">
                         <div class="col-md-12">
 
                             <div class="listItem">

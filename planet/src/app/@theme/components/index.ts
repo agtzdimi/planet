@@ -14,7 +14,6 @@ export * from './auth/request-password/request-password.component';
 export * from './auth/reset-password/reset-password.component';
 export * from './auth/reset-password/send-reset-request';
 export * from './planet/dialogs/info-prompt-dialog.component';
-export * from './planet/dialogs/DialogInfoPromptComponentWithBody';
 export * from './planet/dialogs/dialog-submit.component';
 export * from './planet/dialogs/select-multiple-form.component';
 export * from './planet/dialogs/highlight.directive';

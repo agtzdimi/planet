@@ -38,7 +38,7 @@ export const NB_CORE_PROVIDERS = [
         refreshToken: {
           endpoint: '/planet/rest/refresh',
         },
-        baseEndpoint: 'http://160.40.52.193:8000',
+        baseEndpoint: 'http://160.40.49.244:8000',
         login: {
           endpoint: '/planet/rest/login_with_email_password',
           method: 'post',

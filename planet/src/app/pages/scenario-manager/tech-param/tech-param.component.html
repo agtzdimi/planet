@@ -273,7 +273,7 @@
 
             <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]['VES']['name'] && paramInit['payload']['electric.grid'][displayingNode]['VES']['name']!=='None'">
                 <ngx-ves-unit (ves)="onUnitChange($event,'VES')" *ngIf="unitSelectedPerNode[displayingNode]['VES']"
-                    [vesInput]="paramInit['payload']['electric.grid'][displayingNode]['VES']" [mode]="'scenario2'">
+                    [vesInput]="paramInit['payload']['electric.grid'][displayingNode]['VES']" [mode]="'scenario'">
                 </ngx-ves-unit>
             </div>
 

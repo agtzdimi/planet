@@ -94,7 +94,7 @@ Liion_eff_dis_v(3)=messageJSON.payload.technologies.node_3.EB.efficiency_dischar
     Liion_dis_v(3)=Liion_cap_v(3)*C_rate_Liion_v(3);
  DH_gas_B_Cap_v(3)=messageJSON.payload.technologies.node_3.G2H.DH.nomial_heat_power;
  DH_gas_B_eff_v(3)=messageJSON.payload.technologies.node_3.G2H.DH.efficiency_thermal;
-LHD_gas_B_Cap_v(3)=messageJSON.payload.technologies.nlode_3.G2H.LHD.nomial_heat_power;
+LHD_gas_B_Cap_v(3)=messageJSON.payload.technologies.node_3.G2H.LHD.nomial_heat_power;
 LHD_gas_B_eff_v(3)=messageJSON.payload.technologies.node_3.G2H.LHD.efficiency_thermal;
 
 %NODE4

@@ -27,7 +27,6 @@ import {
   NbUserModule,
   NbRadioModule,
   NbSpinnerModule,
-  NbToggleModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from '@mykeels/ng2-smart-table';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -106,7 +105,6 @@ import { DEFAULT_THEME } from './styles/theme.default';
 /* Dialog Components */
 import {
   DialogInfoPromptComponent,
-  DialogInfoPromptComponentWithBody,
   DialogSelectFormPromptComponent,
   HighlightDirective,
   DialogSelectMultipleFormPromptComponent,
@@ -122,7 +120,6 @@ const NB_MODULES = [
   NbCardModule,
   NbInputModule,
   NbSpinnerModule,
-  NbToggleModule,
   NbSearchModule,
   NbSidebarModule,
   NbAlertModule,
@@ -178,7 +175,6 @@ const COMPONENTS = [
   LeafletMapComponent,
   DialogSubmitPromptComponent,
   DialogInfoPromptComponent,
-  DialogInfoPromptComponentWithBody,
   ScenPanelCheckBoxComponent,
   ScenPanelSimIconComponent,
 ];
@@ -191,7 +187,6 @@ const ENTRY_COMPONENTS = [
   SimulationBarsComponent,
   DialogSubmitPromptComponent,
   DialogInfoPromptComponent,
-  DialogInfoPromptComponentWithBody,
   ScenarioPanelComponent,
   ScenPanelCheckBoxComponent,
   ScenPanelSimIconComponent,

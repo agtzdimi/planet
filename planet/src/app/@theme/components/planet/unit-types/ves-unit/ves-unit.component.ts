@@ -1,7 +1,4 @@
 import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
-import { NbDialogService } from '@nebular/theme';
-import { DialogInfoPromptComponentWithBody } from '../../../../components/planet/dialogs/DialogInfoPromptComponentWithBody';
-
 
 @Component({
   selector: 'ngx-ves-unit',
@@ -15,12 +12,8 @@ export class VESUnitComponent implements OnInit, OnChanges {
   @Input() mode: string;
   @Output() ves: EventEmitter<Object>;
   parametersColumnSize = 'col-md-8';
-  tbHeadPump: boolean;
-  tbNominalPower: boolean;
 
-
-
-  constructor(private dialogService: NbDialogService) {
+  constructor() {
     this.vesParams = {
       'hardwareId': 'VES1',
       'topic': 'VES/1',
@@ -65,27 +58,8 @@ export class VESUnitComponent implements OnInit, OnChanges {
       'description': '',
     };
     this.ves = new EventEmitter<Object>();
-    this.tbHeadPump = true;
-    this.tbNominalPower = false;
 
   }
-
-      /**
-    *
-    * Function responsible for Opening a dialog box over the current screen
-    * @example
-    * openDialogBox(context)
-    * context = { context: { title: 'This is a title passed to the dialog component'}}
-    *
-    * @param {Object} context Object holding the title for the dialog box
-    * @returns A dialog box with some information for the user
-    */
-   private openDialogBox(context: Object): void {
-    // Function to open a new dialog box given its corresponding component
-    this.dialogService.open(DialogInfoPromptComponentWithBody, context)
-        .onClose.subscribe(value => { });
-}
-
 
   ngOnInit() {
     if (this.mode === 'edit') {
@@ -125,12 +99,6 @@ export class VESUnitComponent implements OnInit, OnChanges {
       this.vesParams['payload']['parameters']['configuration']['optionalInputData'] = this.vesParams['payload']['optionalInputData'];
     }
     this.ves.emit(this.vesParams);
-  }
-
-  onTGchange(event: any) {
-    if (event === true) {
-      this.openDialogBox(null);
-    }
   }
 
 }

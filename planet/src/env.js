@@ -1,7 +1,7 @@
 (function (window) {
     window.__env = window.__env || {};
 
-    window.__env.planet = '160.40.52.193';
+    window.__env.planet = '160.40.49.244';
     window.__env.sitewhere = '192.168.11.128';
     window.__env.planetRESTPort = 8000;
     window.__env.sitewhereUIPort = 8080;
@@ -11,7 +11,7 @@
     window.__env.mongoUser = 'planet';
     window.__env.mongoPassword = 'SrV+DB-20+19';
     window.__env.mongoAuthDB = 'admin';
-    window.__env.simulationMachine = '160.40.52.193';
+    window.__env.simulationMachine = '160.40.49.244';
     window.__env.simulationMachineTopic = 'SendSimulator';
     window.__env.simulationMachinePort = '1883';
 }(this));

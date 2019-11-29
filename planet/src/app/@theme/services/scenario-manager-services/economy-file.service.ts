@@ -52,10 +52,6 @@ export class EconomyFileService {
                     'OPEX': 2,
                     'life.time': 20,
                 },
-                'VES': {
-                    'CAPEX': 800,
-                    'OPEX': 1,
-                },
             },
         },
     };
@@ -111,10 +107,6 @@ export class EconomyFileService {
                             'OPEX': 2,
                             'life.time': 20,
                         },
-                        'VES': {
-                            'CAPEX': 800,
-                            'OPEX': 1,
-                        },
                     },
                 },
             };
@@ -164,10 +156,6 @@ export class EconomyFileService {
                             'CAPEX': 750,
                             'OPEX': 2,
                             'life.time': 20,
-                        },
-                        'VES': {
-                            'CAPEX': 800,
-                            'OPEX': 1,
                         },
                     },
                 },
