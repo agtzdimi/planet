@@ -7,12 +7,12 @@
         <div>
           <ng-template #popContent> Dispatch priority order: <br>
             <ol type="1">
-              <li> P2H - EB - P2G </li>
-              <li> P2H - P2G - EB </li>
-              <li> EB - P2H - P2G </li>
-              <li> EB - P2G - P2H </li>
-              <li> P2G - P2H - EB </li>
-              <li> P2G - EB - P2H </li>
+              <li> P2H - VES - P2G </li>
+              <li> P2H - P2G - VES </li>
+              <li> VES - P2H - P2G </li>
+              <li> VES - P2G - P2H </li>
+              <li> P2G - P2H - VES </li>
+              <li> P2G - VES - P2H </li>
             </ol>
           </ng-template>
           <div [nbPopover]="popContent" nbPopoverTrigger="hover" nbPopoverPlacement="right">

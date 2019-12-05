@@ -36,6 +36,7 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
             return {
                 name: name,
                 type: 'line',
+                stack: 'stacked',
                 areaStyle: { normal: { opacity: echarts.areaOpacity } },
                 data: data,
             };
@@ -114,6 +115,10 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
                         break;
                     case 'RES_direct_utilization':
                         name = 'From RES';
+                        tempData = this.setData('area', name, csvData[index]);
+                        break;
+                    case 'Imported_el':
+                        name = 'Imported El.';
                         tempData = this.setData('area', name, csvData[index]);
                         break;
                     case 'EB_output':

@@ -175,6 +175,9 @@ export class SimulationStartComponent {
         case 'RES_direct_utilization':
           this.areaChart[1].data.push(this.getColumnData(lines, index));
           break;
+        case 'Imported_el':
+          this.areaChart[1].data.push(this.getColumnData(lines, index));
+          break;
         case 'P2H_input':
           this.areaChart[0].data.push(this.getColumnData(lines, index));
           break;
