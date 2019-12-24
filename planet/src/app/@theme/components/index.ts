@@ -37,4 +37,5 @@ export * from './planet/unit-types/ves-unit/ves-unit.component';
 export * from './planet/unit-types/wt-unit/wt-unit.component';
 export * from './planet/simulation-charts/simulation-line.component';
 export * from './planet/simulation-charts/simulation-bars.component';
+export * from './planet/simulation-charts/simulation-nodes.component';
 export * from './planet/map/map.component';
