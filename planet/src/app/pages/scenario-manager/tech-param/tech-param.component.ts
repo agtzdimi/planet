@@ -507,7 +507,11 @@ export class TechParamComponent implements OnChanges,
             this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['Port'] = optionValue[0]['Port'];
             this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['name'] = optionValue[0]['name'];
         } else {
-            this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = [];
+            if (unitType === 'P2G') {
+                this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['nominal.electric.power'] = 0;
+            } else {
+                this.paramInit['payload']['electric.grid'][this.displayingNode][unitType] = [];
+            }
             this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['IP'] = '';
             this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['Port'] = '';
             this.paramInit['payload']['electric.grid'][this.displayingNode][unitType]['name'] = '';
