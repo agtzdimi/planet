@@ -18,7 +18,7 @@ export class CheckBoxesService {
     }
 
     initializeService() {
-        this.checkboxes = [];
+        // this.checkboxes = [];
         this.checkboxesUpdated = new Subject<Object>();
     }
 

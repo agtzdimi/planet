@@ -212,7 +212,7 @@ export class SimulationsLineComponent implements OnDestroy, OnChanges {
             this.options = {
                 backgroundColor: echarts.bg,
                 color: [colors.warningLight, colors.infoLight, colors.dangerLight,
-                colors.successLight, colors.primaryLight],
+                colors.successLight, colors.primaryLight, '#8b0000'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -337,6 +337,7 @@ v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H
                                     show: true,
                                     position: ['50%', '50%'],
                                     formatter: 'Reverse power flow',
+                                    color: '#ffffff',
                                 },
                                 itemStyle: {
                                     normal: {
@@ -371,6 +372,7 @@ v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H
                                     show: true,
                                     position: ['50%', '50%'],
                                     formatter: 'Power imported from the grid',
+                                    color: '#ffffff',
                                 },
                                 itemStyle: {
                                     normal: {

@@ -72,45 +72,50 @@ exports.saveData = (req, res) => {
 };
 
 exports.getFormNames = (req, res) => {
-    let collection = '';
-    if (req.query.executed === 'true') {
-        collection = 'results';
-    } else {
-        collection = 'files';
-    }
-    const formDescr = [];
-    const owner = [];
-    const eventDates = [];
-    const simulated = [];
-    const formName = JSON.parse(shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
-        ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-        " --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'", { silent: true }).stdout);
-    for (let form = 0; form < formName.length; form++) {
-        let formJson = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
-            ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-            " --quiet planet --eval 'db.files.find({\"payload.formName\": \"" + formName[form] + "\", \"payload.model\" : {$gt: 0}});'", { silent: true }).stdout;
-        formJson = formJson.replace("ObjectId(", "");
-        formJson = formJson.replace("\")", "\"");
-        formJson = JSON.parse(formJson);
-        const sim = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
-            ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-            " --quiet planet --eval 'db.results.find({\"formName\": \"" + formName[form] + "\"});'", { silent: true }).stdout;
-        if (sim.length !== 0) {
-            simulated.push(true);
+    try {
+        let collection = '';
+        if (req.query.executed === 'true') {
+            collection = 'results';
         } else {
-            simulated.push(false);
+            collection = 'files';
         }
-        formDescr.push(formJson.payload.formDescription);
-        eventDates.push(formJson.payload.eventDate);
-        owner.push(formJson.payload.owner);
+        const formDescr = [];
+        const owner = [];
+        const eventDates = [];
+        const simulated = [];
+        const formName = JSON.parse(shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
+            ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
+            " --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'", { silent: true }).stdout);
+        for (let form = 0; form < formName.length; form++) {
+            let formJson = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
+                ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
+                " --quiet planet --eval 'db.files.find({\"payload.formName\": \"" + formName[form] + "\", \"payload.model\" : {$gt: 0}});'", { silent: true }).stdout;
+            formJson = formJson.replace("ObjectId(", "");
+            formJson = formJson.replace("\")", "\"");
+            formJson = JSON.parse(formJson);
+            const sim = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
+                ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
+                " --quiet planet --eval 'db.results.find({\"formName\": \"" + formName[form] + "\"});'", { silent: true }).stdout;
+            if (sim.length !== 0) {
+                simulated.push(true);
+            } else {
+                simulated.push(false);
+            }
+            formDescr.push(formJson.payload.formDescription);
+            eventDates.push(formJson.payload.eventDate);
+            owner.push(formJson.payload.owner);
+        }
+        res.send({
+            formName: formName,
+            formDescription: formDescr,
+            owner: owner,
+            eventDate: eventDates,
+            simulated: simulated,
+        });
     }
-    res.send({
-        formName: formName,
-        formDescription: formDescr,
-        owner: owner,
-        eventDate: eventDates,
-        simulated: simulated,
-    });
+    catch (e) {
+        console.log(e)
+    }
 };
 
 exports.transfer = (req, res) => {

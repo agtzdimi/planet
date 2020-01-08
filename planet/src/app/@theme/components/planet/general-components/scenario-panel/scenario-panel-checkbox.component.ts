@@ -40,6 +40,10 @@ export class ScenPanelCheckBoxComponent implements ViewCell, OnInit {
         this.checkBoxesService.addCheckBox(this.rowData['id']);
     }
 
+    addCheckBoxes() {
+        this.checkBoxesService.addCheckBox(this.rowData['id']);
+    }
+
     valueChanged(checkBoxValue) {
         this.checkBoxesService.changeCheckBoxValue(this.scenarioType, this.rowData['id'], checkBoxValue.target.checked);
     }
