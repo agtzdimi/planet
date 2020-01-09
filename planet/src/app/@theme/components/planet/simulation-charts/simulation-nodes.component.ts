@@ -1,129 +1,175 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { GridCoordinatesService } from '../../../services/gridCoordinates.service';
+
+import "mapbox-echarts";
 
 @Component({
     selector: 'ngx-simulation-nodes',
     providers: [GridCoordinatesService],
     template: `
-    <div echarts [options]="options" class="echart"></div>
+    <div echarts [options]="options" class="echarts"></div>
   `,
 })
-export class SimulationsNodesComponent implements OnDestroy, OnChanges {
+export class SimulationsNodesComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() data;
 
-    private gridCoordinates = [];
+    // Graph Data
+    private gridData = [];
     private gridLinks = [];
-    private timelineData = [];
+    private gridCoords = [];
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes.data.currentValue) {
-            this.afterDataRecieved(changes.data.currentValue);
-            this.setData();
-        }
-    }
+    // Echarts options
+    options: any = [];
+    coords = [];
+    links = [];
 
-    options: any = {};
     themeSubscription: any;
 
     constructor(private theme: NbThemeService,
-        private gridService: GridCoordinatesService, ) {
-        this.gridCoordinates = gridService.getGridCoordinates();
+        gridService: GridCoordinatesService) {
+        // Grid coordinates and the links between them (Graph's nodes and edges)
         this.gridLinks = gridService.getGridLinks();
-        gridService.setVoltage(this.gridLinks.length),
-            this.timelineData = gridService.getVoltage();
+        this.gridCoords = gridService.getGridCoordinates();
+
+        // Calculate dummy values (TODO: read the values from a file)
+        gridService.setVoltage(this.gridLinks.length)
+        this.gridData = gridService.getVoltage();
     }
 
-    afterDataRecieved(dataFromCsv) {
-        this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-            const colors: any = config.variables;
-            const echarts: any = config.variables.echarts;
+    ngOnInit() {
+        this.initializeGraph();
+        this.setData();
 
-            this.options = {
-                timeline: {
-                    axisType: 'value',
-                    autoPlay: true,
-                    playInterval: 2000,
-                    controlStyle: {
-                        position: 'left'
-                    },
-                    data: []
-                },
-                baseOption: {
-                    title: { text: 'Electric Grid' },
-                    tooltip: {},
-                    series: [
-                        {
-                            id: 'ElectricGridGraph',
-                            name: "Electric Grid",
-                            type: 'graph',
-
-                            layout: 'force', //'circular', 'force', 'node' (default)
-                            //roam: 'zoom',
-                            symbol: 'circle', //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
-
-                            focusNodeAdjacency: true,
-                            //edgeSymbol: ['none', 'arrow'],
-                            //edgeSymbolSize: 1000,
-
-                            itemStyle: {
-                                borderColor: 'black',
-                                borderWidth: 0.3,
-                                borderType: 'solid',
-                                opacity: 1
-                            },
-
-                            lineStyle: {
-                                type: 'solid', // 'solid', 'dashed', 'dotted'
-                                opacity: 0.9,
-                                curveness: 0
-                            },
-
-                            label: {
-                                normal: {
-                                    show: true,
-                                    position: 'left',
-                                    formatter: '{b}',
-                                    color: 'auto',
-                                    fontStyle: 'oblique'
-                                }
-                            },
-
-                            edgeLabel: {
-                                show: true,
-                            },
-
-                            left: 'center',
-                            right: 'auto',
-                            top: 'middle',
-                            bottom: 'auto',
-
-                            tooltip: {
-                                position: 'right',
-                                formatter: '{b}<br/>Voltage: {c}',
-                                padding: [5, 10, 5, 10], // up, right, down, left
-                            },
-
-                            force: {
-                                repulsion: 700,
-                                initLayout: true,
-                                //gravity: 1,
-                                edgeLength: 30,
-                                layoutAnimation: true
-                            },
-
-                        },
-                    ]
-                },
-                options: []
-            };
-        });
     }
+
+    ngOnChanges(changes: SimpleChanges) {
+        //if (changes.data.currentValue) {
+        //    this.afterDataRecieved(changes.data.currentValue);
+        //}
+    }
+
 
     ngOnDestroy(): void {
         this.themeSubscription.unsubscribe();
+    }
+
+    initializeGraph() {
+        this.options = {
+            // Timeline Element
+            timeline: {
+                axisType: 'value',
+                autoPlay: false,
+                playInterval: 2000,
+                controlStyle: { position: 'left' },
+                data: []
+            },
+
+            // Echarts base options
+            baseOption: {
+                title: { text: 'Electric Grid' },
+                tooltip: {},
+                animation: false,
+                tmap: {
+                    center: [7.6000496, 45.0702388], // Starting Position [lng, lat] (default: Turin)
+                    zoom: 9,
+                    roam: true,
+                    style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
+                },
+
+                // Base options of all series
+                series: [
+                    {
+                        id: 'ElectricGridGraph',
+                        name: "Electric Grid",
+                        type: 'graph',
+
+                        coordinateSystem: 'tmap',
+
+                        //layout: 'force', //'circular', 'force', 'node' (default)
+                        //roam: true, //'zoom',
+                        symbol: 'circle', //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
+
+                        focusNodeAdjacency: true,
+                        //edgeSymbol: ['none', 'arrow'],
+                        //edgeSymbolSize: 1000,
+
+                        itemStyle: {
+                            borderColor: 'black',
+                            borderWidth: 0.3,
+                            borderType: 'solid',
+                            opacity: 1
+                        },
+
+                        lineStyle: {
+                            color: "black",
+                            type: 'solid', // 'solid', 'dashed', 'dotted'
+                            opacity: 0.8,
+                            curveness: 0
+                        },
+
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'left',
+                                formatter: '{b}',
+                                color: 'auto',
+                                fontStyle: 'oblique'
+                            }
+                        },
+
+                        edgeLabel: {
+                            show: true,
+                        },
+
+                        left: 'center',
+                        right: 'auto',
+                        top: 'middle',
+                        bottom: '100',
+
+                        tooltip: {
+                            position: 'right',
+                            formatter: function (params) {
+                                let label = 'NaN'
+                                if (params.dataType === 'node') {
+                                    label = "Name: " + params.name + "<br/>" +
+                                        "lng: " + params.value[0] + "<br/>" +
+                                        "lan: " + params.value[1] + "<br/>" +
+                                        "Power: " + params.value[2]
+                                }
+                                else {
+                                    label = "Line: " + params.value
+                                }
+
+                                return label
+                            }, //'{b}<br/>Voltage: {@2}',
+                            padding: [5, 10, 5, 10], // up, right, down, left
+
+                            //force: {
+                            //  repulsion: 7000,
+                            //  initLayout: false,
+                            //  //gravity: 0.1,
+                            //  edgeLength: 400,
+                            //  layoutAnimation: false
+                            //},
+                        },
+                    }
+                ]
+            },
+
+            // Base options of the echart
+            options: []
+        }
+    }
+
+    setData() {
+        let timestamp = this.gridData[0].map(function (o) { return o.hour; })
+
+        for (let hour = 0; hour < timestamp.length; hour++) {
+            this.options.options.push(this.getOption(hour));
+            this.options.timeline.data.push(timestamp[hour]);
+        }
     }
 
     getOption(i) {
@@ -131,54 +177,54 @@ export class SimulationsNodesComponent implements OnDestroy, OnChanges {
         let data = [];
         let links = [];
 
-        for (let node = 0; node < this.gridCoordinates.length; node++) {
+        for (let node = 0; node < this.gridCoords.length; node++) {
             data.push({
-                name: this.gridCoordinates[node]['name'],
-                //x: this.gridCoordinates[node]['x'],
-                //y: this.gridCoordinates[node]['y'],
-                value: this.timelineData[node][i]['voltage'],
+                name: this.gridCoords[node]['name'],
+                value: [this.gridCoords[node]['x'], this.gridCoords[node]['y'], this.gridData[node][i]['voltage']]
             })
         }
 
         let widthRange = [1, 5];
-        let min = this.timelineData[0][i]['lineLoad']
-        let max = this.timelineData[0][i]['lineLoad']
+        let min = this.gridData[0][i]['lineLoad']
+        let max = this.gridData[0][i]['lineLoad']
         for (let node = 1; node < this.gridLinks.length; node++) {
-            if (this.timelineData[node][i]['lineLoad'] < min) {
-                min = this.timelineData[node][i]['lineLoad']
+            if (this.gridData[node][i]['lineLoad'] < min) {
+                min = this.gridData[node][i]['lineLoad']
             }
-            if (this.timelineData[node][i]['lineLoad'] > max) {
-                max = this.timelineData[node][i]['lineLoad']
+            if (this.gridData[node][i]['lineLoad'] > max) {
+                max = this.gridData[node][i]['lineLoad']
             }
         }
+        console.log("Hour:" + i)
+        console.log(min)
+        console.log(max)
 
         for (let node = 0; node < this.gridLinks.length; node++) {
-            let x = Math.round((widthRange[1] - widthRange[0]) * (this.timelineData[node][i]['lineLoad'] - min) / (max - min) + widthRange[0]);
+            let x = Math.round((widthRange[1] - widthRange[0]) * (this.gridData[node][i]['lineLoad'] - min) / (max - min) + widthRange[0]);
             links.push({
                 name: this.gridLinks[node]['name'],
                 source: this.gridLinks[node]['source'],
                 target: this.gridLinks[node]['target'],
-                value: this.timelineData[node][i]['lineLoad'],
-                lineLoad: this.timelineData[node][i]['lineLoad'],
+                value: this.gridData[node][i]['lineLoad'],
+                lineLoad: this.gridData[node][i]['lineLoad'],
                 lineStyle: { width: x }
             })
         }
-
         series.push({
             data,
             links,
             symbolSize: function (v) {
-                let symbolRange = [20, 40];
-                let max = Math.max.apply(Math, data.map(function (o) { return o.value; }));
-                let min = Math.min.apply(Math, data.map(function (o) { return o.value; }));
+                let symbolRange = [10, 30];
+                let max = Math.max.apply(Math, data.map(function (o) { return o.value[2]; }));
+                let min = Math.min.apply(Math, data.map(function (o) { return o.value[2]; }));
                 // [a, b] => (b - a) * (x - min(x)) / (max(x) - min(x)) + a
-                let x = Math.round((symbolRange[1] - symbolRange[0]) * (v - min) / (max - min) + symbolRange[0]);
+                let x = Math.round((symbolRange[1] - symbolRange[0]) * (v[2] - min) / (max - min) + symbolRange[0]);
                 return x
             },
             itemStyle: {
                 color: function (params) {
-                    let max = Math.max.apply(Math, data.map(function (o) { return o.value; }));
-                    return params.value > 0.8 * max ? '#c72c41' : 'lightgrey';
+                    let max = Math.max.apply(Math, data.map(function (o) { return o.value[2]; }));
+                    return params.value[2] > 0.8 * max ? '#c72c41' : 'darkgrey';
                 },
             },
             edgeLabel: {
@@ -190,18 +236,16 @@ export class SimulationsNodesComponent implements OnDestroy, OnChanges {
         });
 
         return {
-            title: { subtext: 'Timestamp: ' + this.timelineData[0][i]['hour'] },
+            title: { subtext: 'Timestamp: ' + this.gridData[0][i]['hour'] },
             series: series
         };
     }
 
-    setData() {
-        let timestamp = this.timelineData[0].map(function (o) { return o.hour; })
-
-        for (let hour = 0; hour < timestamp.length; hour++) {
-            this.options.options.push(this.getOption(hour));
-            this.options.timeline.data.push(timestamp[hour]);
-        }
+    afterDataRecieved(dataFromCsv) {
+        this.setData();
     }
+
+
+
 
 }
