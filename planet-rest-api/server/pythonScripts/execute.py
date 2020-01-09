@@ -65,10 +65,10 @@ class SimulationData (threading.Thread):
                   consumptions.append(nodeName)
                   vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
                   URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/flexibility'
-                  vesData['VESID'] = vesData['name']
-                  vesData['publishTopic'] = '/planet/Get' + vesData['VESID']
+                  vesData['VESPortfolioID'] = vesData['name']
+                  vesData['publishTopic'] = '/planet/Get' + vesData['VESPortfolioID']
                   vesData['nodeID'] = str(node+1)
-                  vesData['simulationID'] = formName + "-" +vesData['VESID'] + "-" + vesData['nodeID'] + "-" + "flex"
+                  vesData['simulationID'] = formName + "-" +vesData['VESPortfolioID'] + "-" + vesData['nodeID'] + "-" + "flex"
                   vesName = vesData['name']
                   vesIp = vesData['IP']
                   vesPort = vesData['Port']
@@ -104,9 +104,9 @@ class SimulationData (threading.Thread):
                      flexibilityMax.append(flexibilityResponse['flexibility'][0]['consumptions'][2]['total'])
                      flexibilityModif.append(calcModif)
                      consumptionData = {
-                      "simulationID": formName + "-" +vesData['VESID'] + "-" + vesData['nodeID'] + "-" + "cons",
+                      "simulationID": formName + "-" +vesData['VESPortfolioID'] + "-" + vesData['nodeID'] + "-" + "cons",
                       "nodeID": vesData['nodeID'],
-                      "VESID": vesData['VESID'],
+                      "VESPortfolioID": vesData['VESPortfolioID'],
                       "publishTopic": vesData['publishTopic'],
                       "parameters": {
                           "timeStamp": vesData['parameters']['timeStamp'],

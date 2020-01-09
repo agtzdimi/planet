@@ -20,7 +20,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
       'payload': {
         'simulationID': '',
         'nodeID': '',
-        'VESID': '',
+        'VESPortfolioID': '',
         'parameters': {
           'timeStamp': '',
           'vesHorizon': '',
