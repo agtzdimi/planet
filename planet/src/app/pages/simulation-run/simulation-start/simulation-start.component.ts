@@ -336,7 +336,7 @@ export class SimulationStartComponent {
           this.nodesChart[0].data.push(this.getColumnData(lines, index));
           break;
         case 'Overvoltage':
-          //this.nodesChart[0].data.push(this.getColumnData(lines, index));
+          // this.nodesChart[0].data.push(this.getColumnData(lines, index));
           break;
         default:
           break;
