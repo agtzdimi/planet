@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
 import { GridCoordinatesService } from '../../../services/gridCoordinates.service';
 
 import 'mapbox-echarts';
@@ -210,10 +209,10 @@ export class SimulationsNodesComponent implements OnInit, OnDestroy, OnChanges {
             links,
             symbolSize: function (v) {
                 const symbolRange = [10, 30];
-                const max = Math.max.apply(Math, data.map(function (o) { return o.value[2]; }));
-                const min = Math.min.apply(Math, data.map(function (o) { return o.value[2]; }));
+                const max_v = Math.max.apply(Math, data.map(function (o) { return o.value[2]; }));
+                const min_v = Math.min.apply(Math, data.map(function (o) { return o.value[2]; }));
                 // [a, b] => (b - a) * (x - min(x)) / (max(x) - min(x)) + a
-                const x = Math.round((symbolRange[1] - symbolRange[0]) * (v[2] - min) / (max - min) + symbolRange[0]);
+                const x = Math.round((symbolRange[1] - symbolRange[0]) * (v[2] - min_v) / (max_v - min_v) + symbolRange[0]);
                 return x;
             },
             itemStyle: {
