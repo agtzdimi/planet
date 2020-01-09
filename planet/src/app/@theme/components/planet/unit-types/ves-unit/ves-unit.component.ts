@@ -27,6 +27,8 @@ export class VESUnitComponent implements OnInit, OnChanges {
           'timeStep': '',
           'noAssets': 100,
           'assetType': 'residential',
+          'residential': 100,
+          'commercial': 150
         },
         'optionalParameters': {
           'conductance': 800,
