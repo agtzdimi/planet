@@ -18,8 +18,8 @@
         <div *ngIf="mode === 'scenario'">
 
             <ngx-input-field [isChecked]="true"
-                (valChange)="onChange(['residential'],+$event,'parameters')"
-                [(val)]="vesParams['payload']['parameters']['residential']"
+                (valChange)="onChange(['noResidentialBuildings'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['noResidentialBuildings']"
                 [compId]="'ves_residential'"
                 [inputHtmlLabel1]="'Residential'"
                 [inputHtmlLabel2]="'No of Buildings'"
@@ -28,8 +28,8 @@
             </ngx-input-field>
 
             <ngx-input-field [isChecked]="true"
-                (valChange)="onChange(['commercial'],+$event,'parameters')"
-                [(val)]="vesParams['payload']['parameters']['commercial']"
+                (valChange)="onChange(['noCommercialBuildings'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['noCommercialBuildings']"
                 [compId]="'ves_commercial'"
                 [inputHtmlLabel1]="'commercial'"
                 [inputHtmlLabel2]="'No of Buildings'"
@@ -53,8 +53,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <ngx-input-field [isChecked]="true"
-                                (valChange)="onChange(['residential'],+$event,'parameters')"
-                                [(val)]="vesParams['payload']['parameters']['residential']"
+                                (valChange)="onChange(['noResidentialBuildings'],+$event,'parameters')"
+                                [(val)]="vesParams['payload']['parameters']['noResidentialBuildings']"
                                 [compId]="'ves_residential'"
                                 id="ves_residential"
                                 [inputHtmlLabel1]="'Residential'"
@@ -67,8 +67,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <ngx-input-field [isChecked]="true"
-                                (valChange)="onChange(['commercial'],+$event,'parameters')"
-                                [(val)]="vesParams['payload']['parameters']['commercial']"
+                                (valChange)="onChange(['noCommercialBuildings'],+$event,'parameters')"
+                                [(val)]="vesParams['payload']['parameters']['noCommercialBuildings']"
                                 [compId]="'ves_commercial'"
                                 [inputHtmlLabel1]="'Commercial'"
                                 [inputHtmlLabel2]="''"

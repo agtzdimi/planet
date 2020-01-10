@@ -23,38 +23,11 @@ export class VESUnitComponent implements OnInit, OnChanges {
         'VESPortfolioID': '',
         'parameters': {
           'timeStamp': '',
-          'vesHorizon': '',
+          'noSteps': '',
           'timeStep': '',
-          'noAssets': 100,
-          'assetType': 'residential',
-          'residential': 100,
-          'commercial': 150,
-        },
-        'optionalParameters': {
-          'conductance': 800,
-          'capacity': 6000000,
-          'hvacCOP': {
-            'heat': {
-              'a': 0.046,
-              'b': 2.906,
-            },
-            'cool': {
-              'a': -0.108,
-              'b': 7.107,
-            },
-          },
-          'pMax': 4000,
-          'mode': 'HEAT',
-        },
-        'inputData': {
+          'noResidentialBuildings': 100,
+          'noCommercialBuildings': 150,
           'tOutForecast': [13, 13, 13, 13, 13, 13],
-          'tInInit': 21.5,
-        },
-        'optionalInputData': {
-          'tInBaseMin': [21, 21, 21, 21, 21, 21],
-          'tInBaseMax': [22, 22, 22, 22, 22, 22],
-          'tInAltMin': [20, 20, 20, 20, 20, 20],
-          'tInAltMax': [23, 23, 23, 23, 23, 23],
         },
       },
       'description': '',
@@ -93,12 +66,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
   onChange(attribute, event, attributeType) {
     this.vesParams['payload'][attributeType][attribute] = event;
     if (this.vesParams['payload']['parameters']['configuration']) {
-      this.vesParams['payload']['parameters']['configuration']['parameters']['vesHorizon'] = this.vesParams['payload']['parameters']['vesHorizon'];
-      this.vesParams['payload']['parameters']['configuration']['parameters']['vesHorizon'] = this.vesParams['payload']['parameters']['vesHorizon'];
-      this.vesParams['payload']['parameters']['configuration']['parameters']['assetType'] = this.vesParams['payload']['parameters']['assetType'];
-      this.vesParams['payload']['parameters']['configuration']['optionalParameters'] = this.vesParams['payload']['optionalParameters'];
-      this.vesParams['payload']['parameters']['configuration']['inputData'] = this.vesParams['payload']['inputData'];
-      this.vesParams['payload']['parameters']['configuration']['optionalInputData'] = this.vesParams['payload']['optionalInputData'];
+      this.vesParams['payload']['parameters']['configuration']['parameters']['tOutForecast'] = this.vesParams['payload']['parameters']['tOutForecast'];
     }
     this.ves.emit(this.vesParams);
   }
