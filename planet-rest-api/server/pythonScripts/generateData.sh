@@ -69,7 +69,7 @@ pvData="$2"
 import="$3"
 if [[ $import == true ]]; then
    dirName="./public/files/$4"
-   NODES_COUNT=$(grep -o 'node\.[0-9]' "$dirName/Parameters_initialization.txt" | wc -l)
+   NODES_COUNT=$(grep -o '"node\.[0-9]\+":' "$dirName/Parameters_initialization.txt" | wc -l)
 else
    NODES_COUNT="$4"
    dirName="./public/files/$5"
