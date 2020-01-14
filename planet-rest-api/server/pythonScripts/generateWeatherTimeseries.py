@@ -18,7 +18,7 @@ with open(path + "/Parameters_initialization.txt", "r") as read_file:
 
 timeStep = data['payload']['simulation']['time.step'] * 60
 
-valuesLength = data['payload']['electric.grid']['node.1']['VES']['parameters']['vesHorizon'] / timeStep + 1
+valuesLength = data['payload']['electric.grid']['node.1']['VES']['parameters']['noSteps']
 
 model = data['payload']['model']
 if model == 2 or model == 4:
@@ -32,7 +32,6 @@ for val in range(int(valuesLength)):
 
 for node in range(nodes):
    nodeName = 'node.' + str(node+1)
-   data['payload']['electric.grid'][nodeName]['VES']['inputData']['tOutForecast'] = finalWeather
-
+   data['payload']['electric.grid'][nodeName]['VES']['parameters']['tOutForecast'] = finalWeather
 with open(path + "/Parameters_initialization.txt", "w") as read_file:
    read_file.write(json.dumps(data))

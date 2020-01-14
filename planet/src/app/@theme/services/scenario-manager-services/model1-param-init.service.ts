@@ -66,7 +66,7 @@ export class Model1ParamInitService {
 
                     'VES': {
                         'parameters': {
-                            'noSteps': '',
+                            'noSteps': 24,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
@@ -220,7 +220,7 @@ export class Model1ParamInitService {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'noSteps': '',
+                            'noSteps': 24,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
@@ -232,7 +232,7 @@ export class Model1ParamInitService {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'noSteps': '',
+                            'noSteps': 24,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,

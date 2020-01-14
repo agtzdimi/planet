@@ -23,7 +23,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
         'VESPortfolioID': '',
         'parameters': {
           'timeStamp': '',
-          'noSteps': '',
+          'noSteps': 24,
           'timeStep': '',
           'noResidentialBuildings': 100,
           'noCommercialBuildings': 150,
