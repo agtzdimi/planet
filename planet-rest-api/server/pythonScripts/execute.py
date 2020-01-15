@@ -28,123 +28,148 @@ class SimulationData (threading.Thread):
 
    def run(self):
       pd.options.mode.chained_assignment = None  # default='warn'
+
+      # Create a dictionary with possible models
       switcher = {
          1: "PLANETm_POC3_model1",
          2: "PLANETm_POC3_model2",
          3: "DEMO_PLANETm_POC3_model3",
-         4 : "DEMO_PLANETm_POC3_model4"
+         4: "DEMO_PLANETm_POC3_model4"
       }
+
       # Start the matlab workspace
       eng = matlab.engine.start_matlab()
+
+      # Lists with all the data that will be appended to the final csv files
       flexibilityBaseline = []
       flexibilityMin = []
       flexibilityModif = []
       flexibilityMax = []
-      consumptions = []
+      consumptionsCommercial = []
+      consumptionsResidential = []
+
       try:
+         # Get the data for the current scenario
          with open("Parameters_initialization.txt", "r") as read_file:
             data = json.load(read_file)
+         
+         # Get Scenario's name
          formName = data['payload']['formName']
+
          print ("Starting Matlab engine to simulate scenario: " + str(formName) + "...")
+
+         # Get model's parameters
          model = data['payload']['model']
          startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d').date()
          steps = data['payload']['simulation']['time.step']
          unixTimestamp = datetime.datetime.strptime(str(startDate), "%Y-%m-%d").timestamp()
+
+         # Set number of nodes based on selected model
          if model == 2 or model == 4:
             nodes = 8
          else:
             nodes = 1
+         
+         # Initialize flexibility dictionary that will be sent to SCCE
+         nodesFlexibility = {
+            "nodes": {}
+         }
+
+         # Iterate through each node
          for node in range(nodes):
+            # Get node's name
             nodeName = 'node.' + str(node+1)
-            for attr, value in data['payload']['electric.grid'][nodeName]['VES'].items():
-               if attr == 'name':
-                  flexibilityBaseline.append(nodeName)
-                  flexibilityMin.append(nodeName)
-                  flexibilityMax.append(nodeName)
-                  flexibilityModif.append(nodeName)
-                  consumptions.append(nodeName)
-                  vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
-                  URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/flexibility'
-                  vesData['VESPortfolioID'] = vesData['name']
-                  vesData['publishTopic'] = '/planet/Get' + vesData['VESPortfolioID']
-                  vesData['nodeID'] = str(node+1)
-                  vesData['simulationID'] = formName + "-" +vesData['VESPortfolioID'] + "-" + vesData['nodeID'] + "-" + "flex"
-                  vesName = vesData['name']
-                  vesIp = vesData['IP']
-                  vesPort = vesData['Port']
-                  del vesData['name']
-                  del vesData['IP']
-                  del vesData['Port']
-                  vesData['optionalInputData']['tInBaseMin'] = []
-                  vesData['optionalInputData']['tInBaseMax'] = []
-                  vesData['optionalInputData']['tInAltMin'] = []
-                  vesData['optionalInputData']['tInAltMax'] = []
-                  for val in range(len(vesData['inputData']['tOutForecast'])):
-                     vesData['optionalInputData']['tInBaseMin'].append(vesData['inputData']['tInInit']-1)
-                     vesData['optionalInputData']['tInBaseMax'].append(vesData['inputData']['tInInit']+1)
-                     vesData['optionalInputData']['tInAltMin'].append(vesData['inputData']['tInInit']-3)
-                     vesData['optionalInputData']['tInAltMax'].append(vesData['inputData']['tInInit']+4)
-                  times = len(vesData['inputData']['tOutForecast']) - 1
-                  print("Requesting Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
-                  for i in range(times):
-                     vesData['parameters']['timeStamp'] = int(unixTimestamp)
-                     #URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/flexibility'
-                     #r = requests.post(url = URL, json = vesData)
-                     #r.encoding = 'utf-8'
-                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(vesData),'-h','localhost','-q','1','-t','/planet/units/vesData'])
-                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','localhost','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
-                     flexibilityResponse = json.loads(p2.stdout.decode("utf-8"))
-                     #flexibilityResponse = json.loads(r.text)
-                     min = flexibilityResponse['flexibility'][0]['consumptions'][0]['total'] + (flexibilityResponse['flexibility'][0]['consumptions'][1]['total'] - flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
-                     max = flexibilityResponse['flexibility'][0]['consumptions'][0]['total'] + (flexibilityResponse['flexibility'][0]['consumptions'][2]['total'] - flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
-                     print("Flexibility in timestep " + str(i+1) +":")
-                     calcModif = random.uniform(min,max)
-                     flexibilityBaseline.append(flexibilityResponse['flexibility'][0]['consumptions'][0]['total'])
-                     flexibilityMin.append(flexibilityResponse['flexibility'][0]['consumptions'][1]['total'])
-                     flexibilityMax.append(flexibilityResponse['flexibility'][0]['consumptions'][2]['total'])
-                     flexibilityModif.append(calcModif)
-                     consumptionData = {
-                      "simulationID": formName + "-" +vesData['VESPortfolioID'] + "-" + vesData['nodeID'] + "-" + "cons",
-                      "nodeID": vesData['nodeID'],
-                      "VESPortfolioID": vesData['VESPortfolioID'],
-                      "publishTopic": vesData['publishTopic'],
-                      "parameters": {
-                          "timeStamp": vesData['parameters']['timeStamp'],
-                          "duration": vesData['parameters']['timeStep'],
-                          "noAssets": vesData['parameters']['noAssets'],
-                          "assetType": vesData['parameters']['assetType']
-                       },
-                      "inputData": {
-                          "tOut": vesData['inputData']['tOutForecast'][0],
-                          "tInInit": vesData['inputData']['tInInit'],
-                          "powerUnit": "Watt",
-                          "powerConsumption": calcModif
-                       },
-                       "optionalParameters": vesData['optionalParameters'],
-                       "optionalInputData": {
-                          "tInAltMin": vesData['optionalInputData']['tInAltMin'][0],
-                          "tInAltMax": vesData['optionalInputData']['tInAltMax'][0]
-                        }
-                     }
-                     #URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/requestConsumption'
-                     #r = requests.post(url = URL, json = consumptionData)
-                     #r.encoding = 'utf-8'
-                     #consumptionResponse = json.loads(r.text)
-                     p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(consumptionData),'-h','localhost','-q','1','-t','/planet/units/vesData'])
-                     p2 = subprocess.run(['mosquitto_sub','-C','1','-h','localhost','-t',vesData['publishTopic']],stdout=subprocess.PIPE)
-                     consumptionResponse = json.loads(p2.stdout.decode("utf-8"))
-                     vesData['inputData']['tInInit'] = consumptionResponse['tInFinal']
-                     vesData['parameters']['vesHorizon'] = vesData['parameters']['vesHorizon'] - vesData['parameters']['timeStep']
-                     del vesData['inputData']['tOutForecast'][0]
-                     del vesData['optionalInputData']['tInBaseMin'][0]
-                     del vesData['optionalInputData']['tInBaseMax'][0]
-                     del vesData['optionalInputData']['tInAltMin'][0]
-                     del vesData['optionalInputData']['tInAltMax'][0]
-                     unixTimestamp = unixTimestamp + steps * 3600
-                     print("Consumption in timestep " + str(i+1) +":")
-                     consumptions.append(consumptionResponse['tInFinal'])
-         horizonDays= round(24 /steps, 0)
-         startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
+            # Check if the node is not None
+            if "name" in data['payload']['electric.grid'][nodeName]['VES']:
+               # Append node's name to flexibility lists
+               flexibilityBaseline.append(nodeName)
+               flexibilityMin.append(nodeName)
+               flexibilityMax.append(nodeName)
+               flexibilityModif.append(nodeName)
+
+               # Get VES node's attributes
+               vesData = data['payload']['electric.grid'][nodeName]['VES'].copy()
+
+               # Set URL for the node, based on VES unit parameters
+               # URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/flexibility'
+
+               # Set node's data
+               vesData['publishTopic'] = '/planet/resres'
+               vesName = vesData['name']
+               #vesIp = vesData['IP']
+               #vesPort = vesData['Port']
+               del vesData['name']
+               del vesData['IP']
+               del vesData['Port']
+
+               print("Requesting Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
+               # Set timeStamp
+               vesData['parameters']['timeStamp'] = int(unixTimestamp)
+               #URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/flexibility'
+               #r = requests.post(url = URL, json = vesData)
+               #r.encoding = 'utf-8'
+
+               # TODO: SEND Request Flexibility
+               print("Send Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
+               #p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(vesData),'-h','localhost','-q','1','-t','/planet/units/vesData'])
+               ##nodeRequestFlexibility = json.dumps(vesData)
+
+               # TODO: RECEIVE Flexibility
+               print("Receive Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
+               #p2 = subprocess.run(['mosquitto_sub','-C','1','-h','localhost','-t',vesData['publishTopic']],stdout=subprocess.PIPE)                 
+               #flexibilityResponse = json.loads(p2.stdout.decode("utf-8"))
+               # #flexibilityResponse = json.loads(r.text)              
+               flexibilityResponse = json.loads(json.dumps(nodeResponseFlexibility))
+
+               # Iterate through each step of node's flexibility array
+               for step in flexibilityResponse['flexibility']:
+                  # Get baseline, minumum and maximum values and create a dictionary
+                  consumptionsInDict = {consumption['type']: consumption['total'] for consumption in step['consumptions']}
+                  # Get baseline, minumum and maximum values from the dictionary
+                  flexibilityBaseline.append(consumptionsInDict['BASELINE'])
+                  flexibilityMin.append(consumptionsInDict['MINIMUM'])
+                  flexibilityMax.append(consumptionsInDict['MAXIMUM'])
+                  # Calulate flexibility Modification
+                  min = consumptionsInDict['BASELINE'] + (consumptionsInDict['MINIMUM'] - consumptionsInDict['BASELINE'])
+                  max = consumptionsInDict['BASELINE'] + (consumptionsInDict['MAXIMUM'] - consumptionsInDict['BASELINE'])
+                  calcModif = random.uniform(min,max)
+                  flexibilityModif.append(calcModif)
+
+               # Create a temporary dictionary that holds the node's flexibility array 
+               currentflexibilityResponse = {
+                  flexibilityResponse['nodeID']: {
+                     "flexibility": flexibilityResponse['flexibility']
+                  }
+               }
+               # Append node's flexibility array to the final dictionary
+               nodesFlexibility['nodes'].update(currentflexibilityResponse)
+
+         # TODO: SEND Aggregated Flexibilies
+         print("Send Aggregated Flexibilies")
+         # <-- ADD HERE THE CODE TO SEND TAggregated Flexibilies
+
+         # TODO: RECEIVE request Consumption 
+         print("Receive Consumption request")
+         # <-- ADD HERE THE CODE TO RECEIVE request Consumption 
+
+         # TODO: SEND request Consumption
+         print("Send Consumption request")
+         # <-- ADD HERE THE CODE TO SEND request Consumption
+
+         # TODO: RECEIVE response Consumption
+         print("Receive Consumption response")
+         nodesResponseConsumptions = {} # <-- ADD HERE THE CODE TO RECEIVE THE Consumption
+
+         # Iterate through each node's Consumption
+         for nodeName, nodeAttr in nodesResponseConsumptions['nodes'].items():
+            # Append node's name and Final Commercial to the list
+            consumptionsCommercial.append(nodeName)
+            consumptionsCommercial.append(nodeAttr['tInFinalCommercial'])
+
+            # Append node's name and Final Residential to the list
+            consumptionsResidential.append(nodeName)
+            consumptionsResidential.append(nodeAttr['tInFinalResidential'])
+
          currentModel = switcher.get(model, "Invalid Model")
          eng.run(currentModel,nargout=0)
          message='Simulation for scenario: ' + str(formName) + ' finished successfully'
@@ -164,11 +189,11 @@ class SimulationData (threading.Thread):
       with open('simulationStatus.txt', 'a') as simStatus:
          simStatus.write(message)
       print ("Simulation Finished!")
-
+      
       with open("Control_initialization.txt", "r") as read_file:
          data = json.load(read_file)
-   
-      
+
+
       try:
          csv_from_excel("Results1")
          csv_from_excel("Results2")
@@ -179,15 +204,16 @@ class SimulationData (threading.Thread):
          csv_input['FlexibilityMin'] = pd.Series(flexibilityMin)
          csv_input['FlexibilityMax'] = pd.Series(flexibilityMax)
          csv_input['FlexibilityModif'] = pd.Series(flexibilityModif)
-         csv_input['IndoorTemp'] = pd.Series(consumptions)
-         i = 0
-         for timestep in csv_input['Time']:
-            if timestep % horizonDays == 0:
-               csv_input['Hours'][i] = str(startDate.year) + "/" + str(startDate.month) + "/" + str(startDate.day)
-            else:
-               csv_input['Hours'][i] = "{:02d}".format(startDate.hour) + ":" + "{:02d}".format(startDate.minute)
-            startDate = startDate + datetime.timedelta(steps / 24)
-            i+=1
+         csv_input['IndoorTemp1'] = pd.Series(consumptionsCommercial)
+         csv_input['IndoorTemp2'] = pd.Series(consumptionsResidential)
+         #i = 0
+         #for timestep in csv_input['Time']:
+         #   if timestep % horizonDays == 0:
+         #      csv_input['Hours'][i] = str(startDate.year) + "/" + str(startDate.month) + "/" + str(startDate.day)
+         #   else:
+         #      csv_input['Hours'][i] = "{:02d}".format(startDate.hour) + ":" + "{:02d}".format(startDate.minute)
+         #   startDate = startDate + datetime.timedelta(steps / 24)
+         #   i+=1
          csv_input.to_csv('output.csv', index=False)
          csv_input2 = pd.read_csv('Results2.csv')
          csv_input2['formName'] = formName
@@ -199,9 +225,9 @@ class SimulationData (threading.Thread):
       except Exception as e:
          print(str(e))
 
-      sendFiles("Results1.csv")
-      sendFiles("Results2.csv")
-      sendFiles("simulationStatus.txt")
+      #sendFiles("Results1.csv")
+      #sendFiles("Results2.csv")
+      #sendFiles("simulationStatus.txt")
 
 def csv_from_excel(filename):
    wb = xlrd.open_workbook(filename + ".xlsx")
