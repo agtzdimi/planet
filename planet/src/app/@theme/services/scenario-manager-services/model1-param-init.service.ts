@@ -71,7 +71,7 @@ export class Model1ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -225,7 +225,7 @@ export class Model1ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     };
                 } else {
@@ -237,7 +237,7 @@ export class Model1ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     };
                 }

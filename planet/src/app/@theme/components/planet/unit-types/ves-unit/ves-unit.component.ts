@@ -27,7 +27,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
           'timeStep': '',
           'noResidentialBuildings': 100,
           'noCommercialBuildings': 150,
-          'tOutForecast': [13, 13, 13, 13, 13, 13],
+          'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
         },
       },
       'description': '',

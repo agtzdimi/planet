@@ -402,6 +402,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['timeStep'] = this.paramInit['payload']['simulation']['time.step'];
                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['simulationID'] = this.genParams['formName'];
                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['nodeID'] = 'node.' + (i + 1);
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['VESPortfolioID'] = this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name'];
             }
         }
     }

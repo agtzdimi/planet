@@ -74,7 +74,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -142,7 +142,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -210,7 +210,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -278,7 +278,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -346,7 +346,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -414,7 +414,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -482,7 +482,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -551,7 +551,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -704,7 +704,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     };
                 } else {
@@ -716,7 +716,7 @@ export class Model2ParamInitService {
                             'timeUnit': 'MINUTES',
                             'noResidentialBuildings': 100,
                             'noCommercialBuildings': 150,
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     };
                 }
