@@ -36,6 +36,7 @@ class SimulationData (threading.Thread):
          3: "DEMO_PLANETm_POC3_model3",
          4: "DEMO_PLANETm_POC3_model4"
       }
+      currentModel = ""
 
       # Start the matlab workspace
       eng = matlab.engine.start_matlab()
@@ -60,6 +61,9 @@ class SimulationData (threading.Thread):
 
          # Get model's parameters
          model = data['payload']['model']
+         # Get current Model
+         currentModel = switcher.get(model, "Invalid Model")
+
          startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d').date()
          steps = data['payload']['simulation']['time.step']
          unixTimestamp = datetime.datetime.strptime(str(startDate), "%Y-%m-%d").timestamp()
@@ -170,17 +174,20 @@ class SimulationData (threading.Thread):
             consumptionsResidential.append(nodeName)
             consumptionsResidential.append(nodeAttr['tInFinalResidential'])
 
-         currentModel = switcher.get(model, "Invalid Model")
+         horizonDays = round(24 /steps, 0)
+         startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
+
          eng.run(currentModel,nargout=0)
          message='Simulation for scenario: ' + str(formName) + ' finished successfully'
       except Exception as e:
          message=str(e)
-         lineMatch = re.search(' line (.*),',message)
+         lineMatch = re.search(' line (.*),', message)
          with open( currentModel + '.m' ) as file:
             for i, line in enumerate(file):
                index = i+1
-               if str(index) == str(lineMatch.group(1)):
-                  message = message + line
+               if lineMatch is not None:
+                  if str(index) == str(lineMatch.group(1)):
+                     message = message + line
          with open('Results1.csv', 'a'):
             os.utime('Results1.csv', None)
          with open('Results2.csv', 'a'):
@@ -193,10 +200,10 @@ class SimulationData (threading.Thread):
       with open("Control_initialization.txt", "r") as read_file:
          data = json.load(read_file)
 
-
       try:
+         # Convert first excel file to csv
          csv_from_excel("Results1")
-         csv_from_excel("Results2")
+         # Append data to csv file
          csv_input = pd.read_csv('Results1.csv')
          csv_input['formName'] = formName
          csv_input['Hours'] = csv_input['Time']
@@ -206,28 +213,35 @@ class SimulationData (threading.Thread):
          csv_input['FlexibilityModif'] = pd.Series(flexibilityModif)
          csv_input['IndoorTemp1'] = pd.Series(consumptionsCommercial)
          csv_input['IndoorTemp2'] = pd.Series(consumptionsResidential)
-         #i = 0
-         #for timestep in csv_input['Time']:
-         #   if timestep % horizonDays == 0:
-         #      csv_input['Hours'][i] = str(startDate.year) + "/" + str(startDate.month) + "/" + str(startDate.day)
-         #   else:
-         #      csv_input['Hours'][i] = "{:02d}".format(startDate.hour) + ":" + "{:02d}".format(startDate.minute)
-         #   startDate = startDate + datetime.timedelta(steps / 24)
-         #   i+=1
+         # Update 'Hour' field
+         i = 0
+         for timestep in csv_input['Time']:
+            if timestep % horizonDays == 0:
+               csv_input['Hours'][i] = str(startDate.year) + "/" + str(startDate.month) + "/" + str(startDate.day)
+            else:
+               csv_input['Hours'][i] = "{:02d}".format(startDate.hour) + ":" + "{:02d}".format(startDate.minute)
+            startDate = startDate + datetime.timedelta(steps / 24)
+            i+=1
+         # Override original csv file
          csv_input.to_csv('output.csv', index=False)
-         csv_input2 = pd.read_csv('Results2.csv')
-         csv_input2['formName'] = formName
-         csv_input2.to_csv('output2.csv', index=False)
          os.remove("Results1.csv")
          os.rename("output.csv", "Results1.csv")
+         
+         # Convert second excel file to csv
+         csv_from_excel("Results2")
+         # Append data to csv file
+         csv_input2 = pd.read_csv('Results2.csv')
+         csv_input2['formName'] = formName
+         # Override original csv file
+         csv_input2.to_csv('output2.csv', index=False)
          os.remove("Results2.csv")
          os.rename("output2.csv", "Results2.csv")
       except Exception as e:
          print(str(e))
 
-      #sendFiles("Results1.csv")
-      #sendFiles("Results2.csv")
-      #sendFiles("simulationStatus.txt")
+      sendFiles("Results1.csv")
+      sendFiles("Results2.csv")
+      sendFiles("simulationStatus.txt")
 
 def csv_from_excel(filename):
    wb = xlrd.open_workbook(filename + ".xlsx")
