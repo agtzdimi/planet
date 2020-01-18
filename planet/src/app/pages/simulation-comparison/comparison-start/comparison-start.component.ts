@@ -124,7 +124,7 @@ export class ComparisonStartComponent {
   * Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,
   * EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,
   * G2H_heat,Electric_grid_power_flow,formName,Hours,FlexibilityBaseline,
-  * FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp`
+  * FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp1,IndoorTemp2`
   * id = 1
   *
   * @param {string} data contains a CSV file as string
@@ -175,7 +175,7 @@ export class ComparisonStartComponent {
   * Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,
   * EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,
   * G2H_heat,Electric_grid_power_flow,formName,Hours,FlexibilityBaseline,
-  * FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp`
+  * FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp1,IndoorTemp2`
   *
   * @param {string} data contains a CSV file as string
   */

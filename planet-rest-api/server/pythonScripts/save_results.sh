@@ -29,17 +29,17 @@ if [[ "$fileName" == "Results2" ]]; then
    fi
 else
    linesF1=$(mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
-    --authenticationDatabase $MONGO_AUTH_DB --db planet -q '{"formName": "'"$formName"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName,Hours,FlexibilityBaseline,FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp, |
+    --authenticationDatabase $MONGO_AUTH_DB --db planet -q '{"formName": "'"$formName"'"}' --collection results --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,formName,Hours,FlexibilityBaseline,FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp1,IndoorTemp2, |
     egrep -v "^,," | wc -l)
    if (( linesF1 == 1 )) && [[ -s "$dirName/${fileName}.csv" ]]; then
       mongoimport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
        --authenticationDatabase $MONGO_AUTH_DB --db planet --collection results --type csv --headerline --file "$dirName/${fileName}.csv"
       mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
-       --authenticationDatabase $MONGO_AUTH_DB --db planet --collection results -q '{"formName": "'"$formName"'"}' --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,Electric_grid_power_flow,formName,Hours,FlexibilityBaseline,FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp,Imported_el, --out "$dirName/${fileName}.csv"
+       --authenticationDatabase $MONGO_AUTH_DB --db planet --collection results -q '{"formName": "'"$formName"'"}' --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,Electric_grid_power_flow,formName,Hours,FlexibilityBaseline,FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp1,IndoorTemp2,Imported_el, --out "$dirName/${fileName}.csv"
       sortFile "$dirName/${fileName}.csv"
    elif (( linesF1 > 1 )); then
       mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
-       --authenticationDatabase $MONGO_AUTH_DB --db planet --collection results -q '{"formName": "'"$formName"'"}' --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,Electric_grid_power_flow,formName,Hours,FlexibilityBaseline,FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp,Imported_el, --out "$dirName/${fileName}.csv"
+       --authenticationDatabase $MONGO_AUTH_DB --db planet --collection results -q '{"formName": "'"$formName"'"}' --type=csv --fields Time,Electric_demand,WT_power,PV_power,RES_power,Surplus,EB_input,P2G_input,P2H_input,RES_Curtailment,RES_direct_utilization,EB_output,CHP_el_production,DH_demand,LHD_demand,Total_heat_demand,P2H_heat,CHP_heat,P2G_heat,G2H_heat,Electric_grid_power_flow,formName,Hours,FlexibilityBaseline,FlexibilityMin,FlexibilityMax,FlexibilityModif,IndoorTemp1,IndoorTemp2,Imported_el, --out "$dirName/${fileName}.csv"
       sortFile "$dirName/${fileName}.csv"
    fi
 fi
