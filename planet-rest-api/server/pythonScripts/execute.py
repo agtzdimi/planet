@@ -1,7 +1,7 @@
 """ Script that uses the Python API of Matlab to execute a model
 The script will make a connection to a current loaded model.
 Notes:
-   
+
 """
 
 import matlab.engine
@@ -22,6 +22,12 @@ import requests
 import argparse
 import random
 
+# Constants
+FLEXIBILITY_IP = '160.40.49.244'
+CONSUMPTION_IP = '160.40.49.244'
+SCCE_IP = '130.192.92.239'
+SENT_IP = '160.40.49.244'
+
 class SimulationData (threading.Thread):
    def __init__(self):
       super(SimulationData , self).__init__(name="SimulationData thread")
@@ -36,6 +42,7 @@ class SimulationData (threading.Thread):
          3: "DEMO_PLANETm_POC3_model3",
          4: "DEMO_PLANETm_POC3_model4"
       }
+      # Initialize current model
       currentModel = ""
 
       # Start the matlab workspace
@@ -49,11 +56,16 @@ class SimulationData (threading.Thread):
       consumptionsCommercial = []
       consumptionsResidential = []
 
+      # Dictionary that holds the flexibility request for each non-None VES node
+      # This dictionary will be used to create the consumption request for each of the VES nodes,
+      # because both requests have the same format
+      aggregatedFlexibilitiesDict = {}
+
       try:
          # Get the data for the current scenario
          with open("Parameters_initialization.txt", "r") as read_file:
             data = json.load(read_file)
-         
+
          # Get Scenario's name
          formName = data['payload']['formName']
 
@@ -73,17 +85,19 @@ class SimulationData (threading.Thread):
             nodes = 8
          else:
             nodes = 1
-         
+
          # Initialize flexibility dictionary that will be sent to SCCE
-         nodesFlexibility = {
-            "nodes": {}
+         aggrFlexibilityRequest = {
+            "VES": {
+               "nodes": {}
+            }
          }
 
          # Iterate through each node
          for node in range(nodes):
             # Get node's name
             nodeName = 'node.' + str(node+1)
-            # Check if the node is not None
+            # Check if the node has VES unit that is not None
             if "name" in data['payload']['electric.grid'][nodeName]['VES']:
                # Append node's name to flexibility lists
                flexibilityBaseline.append(nodeName)
@@ -97,6 +111,9 @@ class SimulationData (threading.Thread):
                # Set URL for the node, based on VES unit parameters
                # URL = 'http://' + vesData['IP'] + ':' + vesData['Port'] + '/planet/VTES/api/v1.0/flexibility'
 
+               # TODO: Fix bug with VESPortfolioID name pattern
+               vesData['VESPortfolioID'] = "VESPortfolio1"
+
                # Set node's data
                vesData['publishTopic'] = '/planet/resres'
                vesName = vesData['name']
@@ -106,24 +123,32 @@ class SimulationData (threading.Thread):
                del vesData['IP']
                del vesData['Port']
 
-               print("Requesting Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
+               print("Requesting Flexibility from:" + vesName + ", for " + nodeName + " of scenario " + formName)
                # Set timeStamp
                vesData['parameters']['timeStamp'] = int(unixTimestamp)
                #URL = 'http://' + vesIp + ':' + vesPort + '/planet/VTES/api/v1.0/flexibility'
                #r = requests.post(url = URL, json = vesData)
                #r.encoding = 'utf-8'
 
-               # TODO: SEND Request Flexibility
-               print("Send Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
-               #p1 = subprocess.Popen(['mosquitto_pub','-m',json.dumps(vesData),'-h','localhost','-q','1','-t','/planet/units/vesData'])
-               ##nodeRequestFlexibility = json.dumps(vesData)
+               # Add node's flexibility request to the dictionary
+               aggregatedFlexibilitiesDict[nodeName] = json.dumps(vesData)
 
-               # TODO: RECEIVE Flexibility
-               print("Receive Flexibility from:" + vesName + ", for " + 'node.' + str(node+1) + " of scenario " + formName)
-               #p2 = subprocess.run(['mosquitto_sub','-C','1','-h','localhost','-t',vesData['publishTopic']],stdout=subprocess.PIPE)                 
-               #flexibilityResponse = json.loads(p2.stdout.decode("utf-8"))
-               # #flexibilityResponse = json.loads(r.text)              
-               flexibilityResponse = json.loads(json.dumps(nodeResponseFlexibility))
+               # Send Flexibility Request for the node
+               print("Send Flexibility from:" + vesName + ", for " + nodeName + " of scenario " + formName)
+               p1 = subprocess.Popen(['mosquitto_pub',
+                                      '-m', json.dumps(vesData),
+                                      '-h', FLEXIBILITY_IP,
+                                      '-q', '1',
+                                      '-t', '/planet/units/vesData'])
+
+               # Receive Flexibility response for the node
+               print("Receive Flexibility from:" + vesName + ", for " + nodeName + " of scenario " + formName)
+               p2 = subprocess.run(['mosquitto_sub',
+                                    '-C', '1',
+                                    '-h', FLEXIBILITY_IP,
+                                    '-t', vesData['publishTopic']], stdout=subprocess.PIPE)
+               flexibilityResponse = json.loads(p2.stdout.decode("utf-8"))
+               #flexibilityResponse = json.loads(r.text)
 
                # Iterate through each step of node's flexibility array
                for step in flexibilityResponse['flexibility']:
@@ -139,40 +164,99 @@ class SimulationData (threading.Thread):
                   calcModif = random.uniform(min,max)
                   flexibilityModif.append(calcModif)
 
-               # Create a temporary dictionary that holds the node's flexibility array 
+               # Create a temporary dictionary that holds the node's flexibility array
                currentflexibilityResponse = {
                   flexibilityResponse['nodeID']: {
                      "flexibility": flexibilityResponse['flexibility']
                   }
                }
                # Append node's flexibility array to the final dictionary
-               nodesFlexibility['nodes'].update(currentflexibilityResponse)
+               aggrFlexibilityRequest['VES']['nodes'].update(currentflexibilityResponse)
 
-         # TODO: SEND Aggregated Flexibilies
-         print("Send Aggregated Flexibilies")
-         # <-- ADD HERE THE CODE TO SEND TAggregated Flexibilies
+         # TODO: Uncomment these lines when the SCCE is ready to send the data
+         # print("Send Aggregated Flexibilies")
+         # p1 = subprocess.Popen(['mosquitto_pub',
+         #                        '-m', json.dumps(flexibilityResponse),
+         #                        '-h', SCCE_IP,
+         #                        '-p', '1882',
+         #                        '-t', '/planet/ves/api/v1.0/flexibility'])
 
-         # TODO: RECEIVE request Consumption 
-         print("Receive Consumption request")
-         # <-- ADD HERE THE CODE TO RECEIVE request Consumption 
+         # TODO: Uncomment these lines when the SCCE is ready to send the data
+         # print("Receive Consumption request")
+         # p2 = subprocess.run(['mosquitto_sub',
+         #                      '-C', '1',
+         #                      '-h', SCCE_IP,
+         #                      '-p', '1882',
+         #                      '-t', '/planet/scce/api/v1.0/setpoints'],stdout=subprocess.PIPE)
+         # nodesConsumption = json.loads(p2.stdout.decode("utf-8"))
 
-         # TODO: SEND request Consumption
-         print("Send Consumption request")
-         # <-- ADD HERE THE CODE TO SEND request Consumption
+         ###########################################################################################
+         # TODO: Remove these lines when the SCCE is ready to send the data
+         # The SCCE is not ready to manipulate the aggregated flexibility information in order to
+         # sent the Consumption requests
+         #
+         # Assumption: The Consumption request that SCCE sends has the same format as the Aggregated
+         # Flexibilies request but with Consumption arrays
+         #   { 'VES': {
+         #         'nodes': {
+         #            'node.1': {
+         #               'consumptions': [520221.75214914937, 520221.752983136, 520221.75370815],
+         #               'consumptionUnits': 'Watt'
+         #            },
+         #            ...
+         #         }
+         #      }
+         #   }
+         #
+         # The above function modifies the aggregated flexibilities json and keeps only the baseline
+         # for each consumption
+         
+         nodesConsumption = aggrFlexibilityRequest
+         for node in nodesConsumption['VES']['nodes']:
+            consumptionsInList = []
+            for i in range(len(nodesConsumption['VES']['nodes'][node]['flexibility'])):
+               d = nodesConsumption['VES']['nodes'][node]['flexibility'][i]['consumptions']
+               consumptionsInDict = {consumption['type']: consumption['total'] for consumption in d}
+               consumptionsInList.append(consumptionsInDict['BASELINE'])
+            del nodesConsumption['VES']['nodes'][node]['flexibility']
+            nodesConsumption['VES']['nodes'][node]['consumptionUnits'] = 'Watt'
+            nodesConsumption['VES']['nodes'][node]['consumptions'] = consumptionsInList
+         ###########################################################################################
 
-         # TODO: RECEIVE response Consumption
-         print("Receive Consumption response")
-         nodesResponseConsumptions = {} # <-- ADD HERE THE CODE TO RECEIVE THE Consumption
+         # Receive Final Commercial and Residential values
+         # Iterate through each node included in aggregated Consumption received from SCCE
+         for node in nodesConsumption['VES']['nodes']:
+            # Get consumption request (At this point the attributes 'consumptions' and
+            # 'consumptionUnits' are missing)
+            requestConsumption = json.loads(aggregatedFlexibilitiesDict[node])
+            # Get node's 'consumptions' and 'consumptionUnits' from the aggregated SCCE response
+            consumption = nodesConsumption['VES']['nodes'][node]
+            # Add 'consumptions' and 'consumptionUnits to the final consumption request
+            requestConsumption.update(consumption)
 
-         # Iterate through each node's Consumption
-         for nodeName, nodeAttr in nodesResponseConsumptions['nodes'].items():
+            # Send Consumption request
+            print("Send Consumption request for " + nodeName + " of scenario " + formName)
+            p1 = subprocess.Popen(['mosquitto_pub',
+                                   '-m', json.dumps(requestConsumption),
+                                   '-h', CONSUMPTION_IP,
+                                   '-q', '1',
+                                   '-t', '/planet/units/vesData'])
+
+            # Receive Consumption response
+            print("Receive Consumption response for " + nodeName + " of scenario " + formName)
+            p2 = subprocess.run(['mosquitto_sub',
+                                 '-C', '1',
+                                 '-h', CONSUMPTION_IP,
+                                 '-t', requestConsumption['publishTopic']], stdout=subprocess.PIPE)
+            consumptionResponse = json.loads(p2.stdout.decode("utf-8"))
+
             # Append node's name and Final Commercial to the list
             consumptionsCommercial.append(nodeName)
-            consumptionsCommercial.append(nodeAttr['tInFinalCommercial'])
+            consumptionsCommercial.append(consumptionResponse['tInFinalCommercial'])
 
             # Append node's name and Final Residential to the list
             consumptionsResidential.append(nodeName)
-            consumptionsResidential.append(nodeAttr['tInFinalResidential'])
+            consumptionsResidential.append(consumptionResponse['tInFinalResidential'])
 
          horizonDays = round(24 /steps, 0)
          startDate = datetime.datetime.strptime(data['payload']['startDate'], '%Y-%m-%d')
@@ -196,7 +280,7 @@ class SimulationData (threading.Thread):
       with open('simulationStatus.txt', 'a') as simStatus:
          simStatus.write(message)
       print ("Simulation Finished!")
-      
+
       with open("Control_initialization.txt", "r") as read_file:
          data = json.load(read_file)
 
@@ -226,7 +310,7 @@ class SimulationData (threading.Thread):
          csv_input.to_csv('output.csv', index=False)
          os.remove("Results1.csv")
          os.rename("output.csv", "Results1.csv")
-         
+      
          # Convert second excel file to csv
          csv_from_excel("Results2")
          # Append data to csv file
@@ -256,25 +340,31 @@ def sendFiles(fileName):
    global path
    with open(fileName) as f:
       content = f.readlines()
-   
+
    for i in range(len(content)):
       finalFile = finalFile + content[i]
    finalFile = finalFile + '\n"'
-   
+
    splitted = []
    splitted = finalFile.split('\n')
    msg=""
    for line in range(1,len(splitted)):
       if line % 100 == 0:
          msg = msg + splitted[line] + "\n"
-         p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','localhost','-t','simulations_results'])
+         p1 = subprocess.Popen(['mosquitto_pub',
+                                '-m', msg,
+                                '-h', SENT_IP,
+                                '-t', 'simulations_results'])
          p1.wait()
          msg=""
       else:
          if line == 1:
             msg = msg + path + "\n"
          msg = msg + splitted[line] + "\n"
-   p1 = subprocess.Popen(['mosquitto_pub','-m',msg,'-h','localhost','-t','simulations_results'])
+   p1 = subprocess.Popen(['mosquitto_pub',
+                        '-m', msg,
+                        '-h', SENT_IP,
+                        '-t', 'simulations_results'])
    p1.wait()
 
 
@@ -295,7 +385,10 @@ class BarStatus (threading.Thread):
             length = "65:" + path
          elif len(files) >= 30:
             length = "85:" + path
-         p1 = subprocess.Popen(['mosquitto_pub','-m',length,'-h','localhost','-t','simulations_status'])
+         p1 = subprocess.Popen(['mosquitto_pub',
+                                '-m', length,
+                                '-h', SENT_IP,
+                                '-t', 'simulations_status'])
          p1.wait()
          time.sleep(5)
          times = times + 1
