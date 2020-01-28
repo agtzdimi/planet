@@ -70,6 +70,7 @@ export class ScenarioPanelComponent implements OnInit {
     private httpClient: HttpClient,
     private checkBoxesService: CheckBoxesService) {
     this.checkBoxesService.initializeService();
+    this.checkBoxesService.initializeCheckBoxes(); // Clear selected checkboxes from previous runs
     this.checkBoxesService.checkboxesUpdated.subscribe(
       (data) => {
         if (!data['scenarioType']) {
@@ -156,6 +157,8 @@ export class ScenarioPanelComponent implements OnInit {
     if (this.scenarios.length !== 0) {
       if (this['scenarioType']) {
         this.checkBoxesService.checkboxesUpdated.next({ 'scenarioType': this['scenarioType'] });
+        // Refresh the scenarios' selection table, in case of page changing
+        this.checkBoxesService.checkboxesUpdated.next(this.checkBoxesService.checkboxes);
       }
       return true;
     }

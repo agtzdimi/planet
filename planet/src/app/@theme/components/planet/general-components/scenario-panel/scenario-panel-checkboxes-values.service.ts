@@ -32,6 +32,11 @@ export class CheckBoxesService {
         this.checkboxesUpdated = new Subject<Object>();
     }
 
+    initializeCheckBoxes() {
+        // This funtions initialize the array that holds the selected by the user scenarios
+        this.checkboxes = [];
+    }
+
     changeCheckBoxValue(simulationType, id, value) {
         if (simulationType === 'single') {
             for (let i = 0; i < this.checkboxes.length; i++) {
