@@ -11,10 +11,20 @@ export class CheckBoxesService {
     constructor() { }
 
     addCheckBox(id: string) {
-        this.checkboxes.push({
-            id: id,
-            value: false,
+        // Check if the ID exists in the checkbox array
+        const idExist = this.checkboxes.find(row => {
+            if (id === row['id']) {
+                return row;
+            }
         });
+
+        // If the ID does not exist in the checkbox array then add it
+        if (idExist === undefined) {
+            this.checkboxes.push({
+                id: id,
+                value: false,
+            });
+        }
     }
 
     initializeService() {
