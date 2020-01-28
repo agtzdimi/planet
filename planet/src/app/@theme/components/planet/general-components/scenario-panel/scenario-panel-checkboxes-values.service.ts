@@ -32,7 +32,13 @@ export class CheckBoxesService {
                 }
             }
         } else {
-            this.checkboxes[id - 1]['value'] = value;
+            // Iterate through each checkbox
+            for (let i = 0; i < this.checkboxes.length; i++) {
+                // If the checkbox has the given id then update its value
+                if (id === this.checkboxes[i]['id']) {
+                    this.checkboxes[i]['value'] = value;
+                }
+            }
         }
         this.checkboxesUpdated.next(this.checkboxes);
 
