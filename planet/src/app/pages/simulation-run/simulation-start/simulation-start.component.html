@@ -36,6 +36,15 @@
       </nb-card-body>
     </nb-card>
 
+    <div *ngIf="showNodes">
+      <nb-card *ngFor="let nodeCh of nodesChart" accent="primary" size="large">
+        <nb-card-header>{{nodeCh.title}}</nb-card-header>
+        <nb-card-body>
+          <ngx-simulation-nodes [data]="nodeCh.data"></ngx-simulation-nodes>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
     <div *ngIf="showArea">
       <nb-card *ngFor="let areaCh of areaChart" accent="primary" size="large">
         <nb-card-header>{{areaCh.title}}</nb-card-header>

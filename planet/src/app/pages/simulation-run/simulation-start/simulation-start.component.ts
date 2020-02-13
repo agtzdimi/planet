@@ -15,10 +15,13 @@ export class SimulationStartComponent {
 
   AREAS_TOTAL = 4;
   BARS_TOTAL = 5;
+  MAPS_TOTAL = 1;
   areaChart = [];
   barChart = [];
+  nodesChart = [];
   showBar: boolean = false;
   showArea: boolean = false;
+  showNodes: boolean = false;
   loading = false;
   count = 0;
   results1Data: any;
@@ -57,6 +60,7 @@ export class SimulationStartComponent {
     this.sendScenarioService.updateFormName(this.formName);
     this.showArea = false;
     this.showBar = false;
+    this.showNodes = false;
     this.showVal = false;
     this.showSimBar = true;
     this.changingValue = 0;
@@ -111,6 +115,7 @@ export class SimulationStartComponent {
                     clearInterval(barData);
                     this.spreadValuesToCharts(this.results1Data);
                     this.spreadValuesToCharts2(this.results2Data);
+                    this.spreadValuesToCharts3(this.results1Data);
                   } else if (simulationData['status'] && !simulationData['status'].includes('Simulation finished successfully')) {
                     const tempStatus = simulationData['status'].split('\n');
                     this.status = tempStatus[2] + '\n' + tempStatus[3];
@@ -322,6 +327,25 @@ export class SimulationStartComponent {
     this.showBar = true;
   }
 
+  spreadValuesToCharts3(data) {
+    const lines = data.split('\n');
+    const headers = lines[0].split(',');
+    for (let index = 0; index < headers.length; index++) {
+      switch (headers[index]) {
+        case 'Hours':
+          this.nodesChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        case 'Overvoltage':
+          // this.nodesChart[0].data.push(this.getColumnData(lines, index));
+          break;
+        default:
+          break;
+      }
+    }
+    this.nodesChart[0].title = 'Electric Grid';
+    this.showNodes = true;
+  }
+
   getColumnData(lines, column: number) {
     let result = lines.map(val => {
       const value = val.split(',');
@@ -344,6 +368,12 @@ export class SimulationStartComponent {
   }
 
   initializeCharts() {
+    for (let i = 0; i < this.MAPS_TOTAL; i++) {
+      this.nodesChart[i] = {
+        data: [],
+      };
+    }
+
     for (let i = 0; i < this.AREAS_TOTAL; i++) {
       this.areaChart[i] = {
         data: [],

@@ -66,6 +66,7 @@
     "intl": "1.2.5",
     "ionicons": "2.0.1",
     "leaflet": "1.2.0",
+    "mapbox-echarts": "^1.0.3",
     "mapbox-gl": "^0.52.0",
     "nebular-icons": "1.1.0",
     "ng2-ckeditor": "^1.2.2",
