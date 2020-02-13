@@ -66,38 +66,12 @@ export class Model1ParamInitService {
 
                     'VES': {
                         'parameters': {
-                            'timeStamp': '',
-                            'vesHorizon': '',
+                            'noSteps': 24,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
-                            'noAssets': 100,
-                            'assetType': 'residential',
-                        },
-                        'optionalParameters': {
-                            'conductance': 800,
-                            'capacity': 6000000,
-                            'hvacCOP': {
-                                'heat': {
-                                    'a': 0.046,
-                                    'b': 2.906,
-                                },
-                                'cool': {
-                                    'a': -0.108,
-                                    'b': 7.107,
-                                },
-                            },
-                            'pMax': 4000,
-                            'mode': 'HEAT',
-                        },
-                        'inputData': {
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
-                            'tInInit': 21.5,
-                        },
-                        'optionalInputData': {
-                            'tInBaseMin': [21, 21, 21, 21, 21, 21],
-                            'tInBaseMax': [22, 22, 22, 22, 22, 22],
-                            'tInAltMin': [20, 20, 20, 20, 20, 20],
-                            'tInAltMax': [23, 23, 23, 23, 23, 23],
+                            'noResidentialBuildings': 100,
+                            'noCommercialBuildings': 150,
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     },
 
@@ -246,74 +220,24 @@ export class Model1ParamInitService {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'vesHorizon': '',
+                            'noSteps': 24,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
-                            'noAssets': 100,
-                            'assetType': 'residential',
-                        },
-                        'optionalParameters': {
-                            'conductance': 800,
-                            'capacity': 6000000,
-                            'hvacCOP': {
-                                'heat': {
-                                    'a': 0.046,
-                                    'b': 2.906,
-                                },
-                                'cool': {
-                                    'a': -0.108,
-                                    'b': 7.107,
-                                },
-                            },
-                            'pMax': 4000,
-                            'mode': 'HEAT',
-                        },
-                        'inputData': {
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
-                            'tInInit': 21.5,
-                        },
-                        'optionalInputData': {
-                            'tInBaseMin': [21, 21, 21, 21, 21, 21],
-                            'tInBaseMax': [22, 22, 22, 22, 22, 22],
-                            'tInAltMin': [20, 20, 20, 20, 20, 20],
-                            'tInAltMax': [23, 23, 23, 23, 23, 23],
+                            'noResidentialBuildings': 100,
+                            'noCommercialBuildings': 150,
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     };
                 } else {
                     this.paramInit['payload']['electric.grid'][displayingNode]['VES'] = {
                         'parameters': {
                             'timeStamp': '',
-                            'vesHorizon': '',
+                            'noSteps': 24,
                             'timeStep': '',
                             'timeUnit': 'MINUTES',
-                            'noAssets': 100,
-                            'assetType': 'residential',
-                        },
-                        'optionalParameters': {
-                            'conductance': 800,
-                            'capacity': 6000000,
-                            'hvacCOP': {
-                                'heat': {
-                                    'a': 0.046,
-                                    'b': 2.906,
-                                },
-                                'cool': {
-                                    'a': -0.108,
-                                    'b': 7.107,
-                                },
-                            },
-                            'pMax': 4000,
-                            'mode': 'HEAT',
-                        },
-                        'inputData': {
-                            'tOutForecast': [13, 13, 13, 13, 13, 13],
-                            'tInInit': 21.5,
-                        },
-                        'optionalInputData': {
-                            'tInBaseMin': [21, 21, 21, 21, 21, 21],
-                            'tInBaseMax': [22, 22, 22, 22, 22, 22],
-                            'tInAltMin': [20, 20, 20, 20, 20, 20],
-                            'tInAltMax': [23, 23, 23, 23, 23, 23],
+                            'noResidentialBuildings': 100,
+                            'noCommercialBuildings': 150,
+                            'tOutForecast': [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
                         },
                     };
                 }

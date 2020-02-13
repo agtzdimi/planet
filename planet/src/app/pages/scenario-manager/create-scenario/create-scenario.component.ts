@@ -403,7 +403,7 @@ export class CreateScenarioComponent implements OnDestroy {
 
     /**
     *
-    * Function responsible to initialize VES time.step & VES horizon to be 3 times the time.step
+    * Function responsible to initialize VES time.step
     * @example
     * updateVES()
     *
@@ -416,7 +416,9 @@ export class CreateScenarioComponent implements OnDestroy {
         for (let i = 0; i < nodes; i++) {
             if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['timeStep'] = this.paramInit['payload']['simulation']['time.step'];
-                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['vesHorizon'] = this.paramInit['payload']['simulation']['time.step'] * 3;
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['simulationID'] = this.genParams['formName'];
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['nodeID'] = 'node.' + (i + 1);
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['VESPortfolioID'] = this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name'];
             }
         }
     }
