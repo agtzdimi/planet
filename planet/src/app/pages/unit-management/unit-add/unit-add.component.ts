@@ -54,10 +54,10 @@ export class UnitAddComponent implements OnInit {
       id: 'VES',
       label: 'Virtual Energy Storage',
     },
-    {
-      id: 'Sim',
-      label: 'Simulator',
-    },
+      /*     {
+            id: 'Sim',
+            label: 'Simulator',
+          }, */
     ];
   }
 

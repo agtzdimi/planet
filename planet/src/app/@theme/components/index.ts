@@ -23,6 +23,7 @@ export * from './planet/general-components/scenario-panel/scenario-panel.compone
 export * from './planet/general-components/scenario-panel/scenario-panel-sim-icon.component';
 export * from './planet/general-components/scenario-panel/scenario-panel-checkbox.component';
 export * from './planet/grids/eight-node-el-grid/eight-node-el-grid.component';
+export * from './planet/grids/43-node-el-grid/fourty-three-node-el-grid.component';
 export * from './planet/grids/energy-grid/energy-grid.component';
 export * from './planet/grids/energy-grid/energy-grid.tech.component';
 export * from './planet/unit-types/chp-unit/chp-unit.component';

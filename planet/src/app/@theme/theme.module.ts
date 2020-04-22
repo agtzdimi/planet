@@ -75,6 +75,7 @@ import {
   TechnologiesDialogComponent,
   EnergyGridComponent,
   EightNodeElGridComponent,
+  FourtyThreeNodeElGridComponent,
   ScenPanelCheckBoxComponent,
   ScenPanelSimIconComponent,
 } from './components';
@@ -143,6 +144,7 @@ const COMPONENTS = [
   OneColumnLayoutComponent,
   NgxAuthBlockComponent,
   EightNodeElGridComponent,
+  FourtyThreeNodeElGridComponent,
   TechInputFieldComponent,
   ScenarioPanelComponent,
   NgxLoginComponent,

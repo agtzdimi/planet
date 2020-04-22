@@ -40,12 +40,6 @@ sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' "$dirName/tempFile$simulationTyp
 
 rm "$dirName/$simulationType/allDocuments.txt" "$dirName/tempFile$simulationType"
 
-eventDate=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
-sleep 1
-
-simTopic="$(echo ""$SIMULATION_TOPIC"" | sed 's/^Send//')"
-
-python ./server/pythonScripts/splitMgs.py --path "$dirName" --simMachine "$SIMULATION_MACHINE"
 }
 
 form="$1"
