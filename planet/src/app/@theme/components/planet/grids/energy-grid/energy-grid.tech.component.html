@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-xxl-12">
+    <nb-card size="giant" accent="primary">
+      <nb-card-header>{{node}}</nb-card-header>
+      <nb-card-body style="width: 100%;">
+
+        <div class="row">
+          <div class="col-md-12 centralize">
+            <nb-card (click)="on = !on" [ngClass]="{'off': !on}" style="width: 30%;">
+
+              <div class="icon-container">
+                <div class="icon status-primary">
+                  <i class="nb-power"></i>
+                </div>
+              </div>
+              <div class=" details">
+                <div class="title h5">Node</div>
+                <div class="status paragraph-2">{{ on ? 'Activated' : 'Deactivated' }}</div>
+              </div>
+            </nb-card>
+          </div>
+        </div>
+
+        <!-- <div class="row p-2 centralize">
+          <div class="col-md-1 ">
+            <label>P2G</label>
+          </div>
+          <div class="col-md-5">
+            <nb-select placeholder="Available P2G Units" #P2GSelect (selectedChange)="optionSelected($event,'P2G')">
+              <nb-option *ngFor="let regP2G of registeredDevices['P2G']" [value]="regP2G['name']">
+                {{regP2G.name}}</nb-option>
+              <nb-option [value]="'None'">None</nb-option>
+            </nb-select>
+          </div>
+        </div>
+
+        <div class="row p-2 centralize">
+          <div class="col-md-1 ">
+            <label>P2H</label>
+          </div>
+          <div class="col-md-5">
+            <nb-select placeholder="Available P2H Units" #P2HSelect (selectedChange)="optionSelected($event,'P2H')">
+              <nb-option *ngFor="let regP2H of registeredDevices['P2H']" [value]="regP2H['name']">
+                {{regP2H.name}}</nb-option>
+              <nb-option [value]="'None'">None</nb-option>
+            </nb-select>
+          </div>
+        </div>
+
+        <div class="row p-2 centralize">
+          <div class="col-md-1 ">
+            <label>VES</label>
+          </div>
+          <div class="col-md-5">
+            <nb-select placeholder="Available VES Units" #VESSelect (selectedChange)="optionSelected($event,'VES')">
+              <nb-option *ngFor="let regVES of registeredDevices['VES']" [value]="regVES['name']">
+                {{regVES.name}}</nb-option>
+              <nb-option [value]="'None'">None</nb-option>
+            </nb-select>
+          </div>
+        </div>
+
+        <div
+          *ngIf="paramInit['payload']['electric.grid'][node]['VES']['name'] && paramInit['payload']['electric.grid'][node]['VES']['name']!=='None'">
+          <ngx-ves-unit (ves)="onUnitChange($event,'VES')"
+            [vesInput]="paramInit['payload']['electric.grid'][node]['VES']" [mode]="'scenario'">
+          </ngx-ves-unit>
+        </div> -->
+
+      </nb-card-body>
+      <nb-card-footer style="display: flex;justify-content: center;">
+        <button nbButton hero status="success" (click)="submit()">Submit</button>
+        <button nbButton hero status="danger" (click)="cancel()">Close</button>
+      </nb-card-footer>
+    </nb-card>
+
+  </div>
+</div>

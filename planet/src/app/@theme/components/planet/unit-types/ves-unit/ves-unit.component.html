@@ -17,24 +17,16 @@
 
         <div *ngIf="mode === 'scenario'">
 
-            <ngx-input-field [isChecked]="true"
-                (valChange)="onChange(['noResidentialBuildings'],+$event,'parameters')"
-                [(val)]="vesParams['payload']['parameters']['noResidentialBuildings']"
-                [compId]="'ves_residential'"
-                [inputHtmlLabel1]="'Residential'"
-                [inputHtmlLabel2]="'No of Buildings'"
-                [columnLength1]="'col-sm-3'"
-                [columnLength2]="'col-sm-3'">
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['noResidentialBuildings'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['noResidentialBuildings']" [compId]="'ves_residential'"
+                [inputHtmlLabel1]="'Residential'" [inputHtmlLabel2]="'No of Buildings'" [columnLength1]="'col-sm-3'"
+                [columnLength2]="'col-sm-5'">
             </ngx-input-field>
 
-            <ngx-input-field [isChecked]="true"
-                (valChange)="onChange(['noCommercialBuildings'],+$event,'parameters')"
-                [(val)]="vesParams['payload']['parameters']['noCommercialBuildings']"
-                [compId]="'ves_commercial'"
-                [inputHtmlLabel1]="'commercial'"
-                [inputHtmlLabel2]="'No of Buildings'"
-                [columnLength1]="'col-sm-3'"
-                [columnLength2]="'col-sm-3'">
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['noCommercialBuildings'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['noCommercialBuildings']" [compId]="'ves_commercial'"
+                [inputHtmlLabel1]="'Commercial'" [inputHtmlLabel2]="'No of Buildings'" [columnLength1]="'col-sm-3'"
+                [columnLength2]="'col-sm-5'">
             </ngx-input-field>
         </div>
 
@@ -55,12 +47,8 @@
                             <ngx-input-field [isChecked]="true"
                                 (valChange)="onChange(['noResidentialBuildings'],+$event,'parameters')"
                                 [(val)]="vesParams['payload']['parameters']['noResidentialBuildings']"
-                                [compId]="'ves_residential'"
-                                id="ves_residential"
-                                [inputHtmlLabel1]="'Residential'"
-                                [inputHtmlLabel2]="''"
-                                [columnLength1]="'col-sm-3'"
-                                [columnLength2]="'col-sm-1'">
+                                [compId]="'ves_residential'" id="ves_residential" [inputHtmlLabel1]="'Residential'"
+                                [inputHtmlLabel2]="''" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-1'">
                             </ngx-input-field>
                         </div>
                     </div>
@@ -69,11 +57,8 @@
                             <ngx-input-field [isChecked]="true"
                                 (valChange)="onChange(['noCommercialBuildings'],+$event,'parameters')"
                                 [(val)]="vesParams['payload']['parameters']['noCommercialBuildings']"
-                                [compId]="'ves_commercial'"
-                                [inputHtmlLabel1]="'Commercial'"
-                                [inputHtmlLabel2]="''"
-                                [columnLength1]="'col-sm-3'"
-                                [columnLength2]="'col-sm-1'">
+                                [compId]="'ves_commercial'" [inputHtmlLabel1]="'Commercial'" [inputHtmlLabel2]="''"
+                                [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-1'">
                             </ngx-input-field>
                         </div>
                     </div>

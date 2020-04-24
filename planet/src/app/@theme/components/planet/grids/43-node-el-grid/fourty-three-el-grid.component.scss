@@ -67,8 +67,13 @@
 }
 
 svg {
- height: 70%;
+ height: 75%;
  width: 100%;
  left: 0;
  top: 0;
+}
+
+:host ::ng-deep nb-list-item {
+  font-size: 0.77rem;
+    font-weight: 600;
 }

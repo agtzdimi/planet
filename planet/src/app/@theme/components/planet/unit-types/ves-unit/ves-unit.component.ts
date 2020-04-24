@@ -11,7 +11,7 @@ export class VESUnitComponent implements OnInit, OnChanges {
   @Input() vesInput: Object;
   @Input() mode: string;
   @Output() ves: EventEmitter<Object>;
-  parametersColumnSize = 'col-md-8';
+  parametersColumnSize = 'col-md-12';
 
   constructor() {
     this.vesParams = {

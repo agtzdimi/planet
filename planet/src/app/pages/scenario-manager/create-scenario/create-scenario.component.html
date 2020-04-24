@@ -3,7 +3,11 @@
 
     <!-- Phase 1 General Parameters -->
     <ngx-general-params (phaseOutput)="phase2=$event" [isLoadModule]="false"></ngx-general-params>
-    <ngx-fourty-three-el-grid style="width: 50%;"></ngx-fourty-three-el-grid>
+    <nb-card>
+      <nb-card-body>
+        <ngx-fourty-three-el-grid></ngx-fourty-three-el-grid>
+      </nb-card-body>
+    </nb-card>
 
     <!-- Phase 2 Simulation Technologies Parameters -->
     <div class="row">
