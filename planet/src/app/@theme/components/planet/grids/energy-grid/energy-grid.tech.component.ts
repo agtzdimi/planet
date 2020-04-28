@@ -3,13 +3,12 @@ import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { Model2ParamInitService } from '../../../../services/scenario-manager-services/model2-param-init.service';
+import { TurinGridInitService } from '../../../../services/scenario-manager-services/turin-grid-init.service';
 
 @Component({
   selector: 'nb-name-prompt',
   templateUrl: './energy-grid.tech.component.html',
   styleUrls: ['./energy-grid.tech.component.scss'],
-  providers: [Model2ParamInitService],
 })
 export class TechnologiesDialogComponent implements OnInit {
 
@@ -17,11 +16,13 @@ export class TechnologiesDialogComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   public registeredDevices: Array<any> = [];
   public paramInit: Object = {};
+  showUnit = false;
   on = true;
   constructor(protected dialogRef: NbDialogRef<TechnologiesDialogComponent>,
     private httpClient: HttpClient,
-    private model2: Model2ParamInitService) {
-    this.subscriptions.push(this.model2.paramUpdated.subscribe(
+    private turinGrid: TurinGridInitService) {
+    this.paramInit = this.turinGrid.paramInit;
+    this.subscriptions.push(this.turinGrid.paramUpdated.subscribe(
       (data) => {
         this.paramInit = data;
       },
@@ -29,7 +30,6 @@ export class TechnologiesDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.paramInit = this.model2.paramInit;
     for (const property in this) {
       if (!isNaN(Number(property))) {
         this.node = this.node + this[property];
@@ -47,6 +47,7 @@ export class TechnologiesDialogComponent implements OnInit {
           this.registeredDevices['P2G'] = devices.filter(value => value.unitType === 'P2G');
           this.registeredDevices['P2H'] = devices.filter(value => value.unitType === 'P2H');
           this.registeredDevices['VES'] = devices.filter(value => value.unitType === 'VES');
+          this.showUnit = true;
         },
         (error) => {
           // console.log(error)
@@ -55,7 +56,9 @@ export class TechnologiesDialogComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close(false);
+    this.dialogRef.close({
+      'activated': this.on,
+    });
   }
 
   submit() {

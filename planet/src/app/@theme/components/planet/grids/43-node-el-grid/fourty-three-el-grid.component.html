@@ -1,25 +1,39 @@
-<div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-10">
-        <svg height="1400" width="1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid">
+<nb-card accent="primary">
+    <nb-card-header>Electrical Grid</nb-card-header>
+    <nb-card-body>
+        <div class="row" style="max-height: 60rem">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <svg height="1400" width="1200" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid">
 
-            <g [attr.id]="room.id" [class.selected-room]="room.isNode && room.isActivated"
-                *ngFor="let room of sortedRooms">
-                <path class="room-border" (click)="selectRoom(room.id,true)" [attr.d]="room.area.d"
-                    [style.filter]="isIE || isFirefox ? 'inherit': ''" />
-                <path class="room-border" [attr.d]="room.border.d" />
-                <path class="room-border room-border-glow" [attr.d]="room.border.d"
-                    [style.filter]="isIE || isFirefox ? 'inherit': ''" />
-                <text class="room-text" (click)="selectRoom(room.id,true)" text-anchor="middle" [attr.x]="room.name.x"
-                    [attr.y]="room.name.y">{{room.name.text}}</text>
-                <text class="room-text" (click)="selectRoom(room.id,true)" text-anchor="middle" [attr.x]="room.number.x"
-                    [attr.y]="room.number.y">{{room.number.text}}</text>
-                <text *ngIf="room.number.x2" class="room-text" (click)="selectRoom(room.id,true)" text-anchor="middle"
-                    [attr.x]="room.number.x2" [attr.y]="room.number.y2">{{room.number.text2}}</text>
-            </g>
+                    <g [attr.id]="room.id" [class.selected-room]="room.isNode && room.isActivated"
+                        *ngFor="let room of sortedRooms">
+                        <path class="room-border" (click)="selectRoom(room.id,true)" [attr.d]="room.area.d"
+                            [style.filter]="isIE || isFirefox ? 'inherit': ''" />
+                        <path class="room-border" [attr.d]="room.border.d" />
+                        <path class="room-border room-border-glow" [attr.d]="room.border.d"
+                            [style.filter]="isIE || isFirefox ? 'inherit': ''" />
+                        <text class="room-text" (click)="selectRoom(room.id,true)" text-anchor="middle"
+                            [attr.x]="room.name.x" [attr.y]="room.name.y">{{room.name.text}}</text>
+                        <text class="room-text" (click)="selectRoom(room.id,true)" text-anchor="middle"
+                            [attr.x]="room.number.x" [attr.y]="room.number.y">{{room.number.text}}</text>
+                        <text *ngIf="room.number.x2" class="room-text" (click)="selectRoom(room.id,true)"
+                            text-anchor="middle" [attr.x]="room.number.x2"
+                            [attr.y]="room.number.y2">{{room.number.text2}}</text>
+                    </g>
 
-        </svg>
-    </div>
+                </svg>
+            </div>
 
-</div>
+        </div>
+    </nb-card-body>
+    <nb-card-footer *ngIf="!isLoadModule">
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-3">
+                <button nbButton hero status="info" shape="round" (click)="nextPhase()">Continue</button>
+            </div>
+        </div>
+    </nb-card-footer>
+</nb-card>

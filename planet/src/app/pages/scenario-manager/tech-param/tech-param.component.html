@@ -1,13 +1,9 @@
-<nb-card size="large" accent="primary">
+<nb-card accent="primary">
     <nb-card-header>
 
         <!--    Tabs  and Dropdown with Nodes-->
         <nb-tabset (changeTab)="changeTab($event)">
             <nb-tab tabTitle="Electric Grid">
-            </nb-tab>
-            <nb-tab tabTitle="Centralised Heat">
-            </nb-tab>
-            <nb-tab tabTitle="Localised Heat">
             </nb-tab>
         </nb-tabset>
 
@@ -24,117 +20,99 @@
         <div *ngIf="displayContent">
             <!--    PV switcher   -->
 
-            <div class="row p-2">
-                <div class="col-md-1">
-                    <label>PV</label>
-                </div>
-                <div class="col-md-2">
-                    <section class="slider-checkbox">
-                        <input type="checkbox" [checked]="checkVal[displayingNode][0]" (change)="changeCheckBoxVal(0)"
-                            id="techParamCheck1" #techParamCheck1>
-                        <label class="label" for="techParamCheck1"></label>
-                    </section>
-                </div>
-            </div>
-
-
-            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'System Loss'" [label2]="'%'"
-                    (valChange)="updateWindPVParams('PV','system.loss',+$event)"
-                    [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
-                </ngx-input-field>
-                <div class="row" *ngIf="checkBoxStatus[displayingNode][0]">
-                    <div class="col-md-2">
-                        <ul class="listItem">
-                            <li>
-                                <div class="form-group row">
-                                    <label for="input1" class="col-sm-2 col-form-label">Tracking</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
-                        <nb-select *ngIf="checkBoxStatus[displayingNode][0]" class="m-2" [placeholder]="'Tracking'"
-                            [ngModel]="nodePvParam[displayingNode]['tracking']"
-                            (ngModelChange)="updateWindPVParams('PV','tracking',$event)" [ngStyle]="{'align-items': 'center',
-                            'display': 'flex',
-                            'width': '61.2%',
-                        'text-align-last':'center'}">
-                            <nb-option value="None">None</nb-option>
-                            <nb-option value="1">1-axis (azimuth)</nb-option>
-                            <nb-option value="2">2-axis (tilt & azimuth)</nb-option>
-                        </nb-select>
-                    </div>
-                </div>
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Tilt'" [label2]="'°'"
-                    (valChange)="updateWindPVParams('PV','tilt',+$event)" [(val)]="nodePvParam[displayingNode]['tilt']"
-                    [compId]="'techParamCheckInput1.2'">
-                </ngx-input-field>
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Azimuth'" [label2]="'°'"
-                    (valChange)="updateWindPVParams('PV','azimuth',+$event)"
-                    [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'">
-                </ngx-input-field>
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][0]" [label1]="'Nominal Power'"
-                    [label2]="'MW'"
-                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']=+$event"
-                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']"
-                    [compId]="'techParamCheckInput1.4'">
-                </ngx-input-field>
-            </div>
-
-            <!--    WT switcher   -->
-
-            <div class="row p-2">
-                <div class="col-md-1">
-                    <label>WT</label>
-                </div>
-                <div class="col-md-2">
-                    <section class="slider-checkbox">
-                        <input type="checkbox" [checked]="checkVal[displayingNode][1]" (change)="changeCheckBoxVal(1)"
-                            id="techParamCheck2" #techParamCheck2>
-                        <label class="label" for="techParamCheck2"></label>
-                    </section>
-                </div>
-            </div>
-
-            <div *ngIf="paramInit['payload']['electric.grid'][displayingNode]">
-
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][1]" [label1]="'Hub Height'" [label2]="'m'"
-                    (valChange)="updateWindPVParams('Wind','hub.height',+$event)"
-                    [(val)]="nodeWindParam[displayingNode]['hub.height']" [compId]="'techParamCheckInput2.1'">
-                </ngx-input-field>
-                <div class="row" *ngIf="checkBoxStatus[displayingNode][1]">
-                    <div class="col-md-2">
-                        <ul class="listItem">
-                            <li>
-                                <div class="form-group row">
-                                    <label for="input1" class="col-sm-12 col-form-label">Turbine Model</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
-                        <nb-select class="m-2" placeholder="Turbine Model"
-                            [ngModel]="nodeWindParam[displayingNode]['turbine.model']"
-                            (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)" [ngStyle]="{'align-items': 'center',
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 style="margin-left: 6.5rem">Wind Turbine</h4>
+                    <img src="assets/images/turbines-spin.svg" style="margin-left: 5rem">
+                    <ngx-input-field [isChecked]="true" [label1]="'Hub Height'" [label2]="'m'"
+                        (valChange)="updateWindPVParams('Wind','hub.height',+$event)"
+                        [(val)]="nodeWindParam[displayingNode]['hub.height']" [compId]="'techParamCheckInput2.1'">
+                    </ngx-input-field>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <ul class="listItem">
+                                <li>
+                                    <div class="form-group row">
+                                        <label for="input1" class="col-sm-12 col-form-label">Turbine Model</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
+                            <nb-select class="m-2" placeholder="Turbine Model"
+                                [ngModel]="nodeWindParam[displayingNode]['turbine.model']"
+                                (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)" [ngStyle]="{'align-items': 'center',
                         'display': 'flex',
                         'width': '61.2%',
                     'text-align-last':'center'}">
-                            <nb-option *ngFor="let turbine of turbineModels" [value]="turbine">{{turbine}}</nb-option>
-                        </nb-select>
+                                <nb-option *ngFor="let turbine of turbineModels" [value]="turbine">{{turbine}}
+                                </nb-option>
+                            </nb-select>
+                        </div>
                     </div>
+                    <ngx-input-field [isChecked]="true" [label1]="'Nominal Power'" [label2]="'MW'"
+                        (valChange)="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']=+$event"
+                        [(val)]="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']"
+                        [compId]="'techParamCheckInput2.2'">
+                    </ngx-input-field>
                 </div>
-                <ngx-input-field [isChecked]="checkBoxStatus[displayingNode][1]" [label1]="'Nominal Power'"
-                    [label2]="'MW'"
-                    (valChange)="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']=+$event"
-                    [(val)]="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']"
-                    [compId]="'techParamCheckInput2.2'">
-                </ngx-input-field>
+                <div class="col-md-6">
+                    <h4 style="margin-left: 9rem">PV</h4>
+                    <img src="assets/images/solar_panel.jpg" style="margin-left: 5rem">
+                    <ngx-input-field [isChecked]="true" [label1]="'System Loss'" [label2]="'%'"
+                        (valChange)="updateWindPVParams('PV','system.loss',+$event)"
+                        [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
+                    </ngx-input-field>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <ul class="listItem">
+                                <li>
+                                    <div class="form-group row">
+                                        <label for="input1" class="col-sm-2 col-form-label">Tracking</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
+                            <nb-select class="m-2" [placeholder]="'Tracking'"
+                                [ngModel]="nodePvParam[displayingNode]['tracking']"
+                                (ngModelChange)="updateWindPVParams('PV','tracking',$event)" [ngStyle]="{'align-items': 'center',
+                            'display': 'flex',
+                            'width': '61.2%',
+                        'text-align-last':'center'}">
+                                <nb-option value="None">None</nb-option>
+                                <nb-option value="1">1-axis (azimuth)</nb-option>
+                                <nb-option value="2">2-axis (tilt & azimuth)</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                    <ngx-input-field [isChecked]="true" [label1]="'Tilt'" [label2]="'°'"
+                        (valChange)="updateWindPVParams('PV','tilt',+$event)"
+                        [(val)]="nodePvParam[displayingNode]['tilt']" [compId]="'techParamCheckInput1.2'">
+                    </ngx-input-field>
+                    <ngx-input-field [isChecked]="true" [label1]="'Azimuth'" [label2]="'°'"
+                        (valChange)="updateWindPVParams('PV','azimuth',+$event)"
+                        [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'">
+                    </ngx-input-field>
+                    <ngx-input-field [isChecked]="true" [label1]="'Nominal Power'" [label2]="'MW'"
+                        (valChange)="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']=+$event"
+                        [(val)]="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']"
+                        [compId]="'techParamCheckInput1.4'">
+                    </ngx-input-field>
+                </div>
             </div>
 
-            <!--    CHP switcher   -->
 
-            <div class="row p-2">
+        </div>
+
+        <!--    WT switcher   -->
+
+
+
+
+        <!--    CHP switcher   -->
+
+        <!-- <div class="row p-2">
                 <div class="col-md-1">
                     <label>CHP</label>
                 </div>
@@ -164,11 +142,11 @@
                     (valChange)="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']=+$event"
                     [(val)]="paramInit['payload']['electric.grid'][displayingNode].CHP['efficiency.thermal']"
                     [compId]="'techParamCheckInput3.3'"></ngx-input-field>
-            </div>
+            </div> -->
 
-            <!--    P2H switcher   -->
+        <!--    P2H switcher   -->
 
-            <div class="row p-2">
+        <!-- <div class="row p-2">
                 <div class="col-md-1">
                     <label>P2H</label>
                 </div>
@@ -226,11 +204,11 @@
                     [(val)]="paramInit['payload']['electric.grid'][displayingNode].P2H.LHD.EH['efficiency.thermal']"
                     [compId]="'techParamCheckInput4.8'">
                 </ngx-input-field>
-            </div>
+            </div> -->
 
-            <!--    P2G switcher   -->
+        <!--    P2G switcher   -->
 
-            <div class="row p-2">
+        <!-- <div class="row p-2">
                 <div class="col-md-1">
                     <label>P2G</label>
                 </div>
@@ -299,11 +277,11 @@
             </div>
         </div>
 
-    </nb-card-body>
+    </nb-card-body> -->
 
-    <!--    Centralised Heat TAB   -->
+        <!--    Centralised Heat TAB   -->
 
-    <nb-card-body *ngIf="currentTab === 'Centralised Heat'">
+        <!-- <nb-card-body *ngIf="currentTab === 'Centralised Heat'">
 
         <div class="row p-2">
             <div class="col-md-1">
@@ -346,11 +324,11 @@
             [(val)]="paramInit['payload']['centralised.heat']['G2H']['efficiency.thermal']" [compId]="'g2h1eff'">
         </ngx-input-field>
 
-    </nb-card-body>
+    </nb-card-body> -->
 
-    <!--    Localised Heat TAB   -->
+        <!--    Localised Heat TAB   -->
 
-    <nb-card-body *ngIf="currentTab === 'Localised Heat'">
+        <!-- <nb-card-body *ngIf="currentTab === 'Localised Heat'">
 
         <div class="row p-2">
             <div class="col-md-3">
@@ -399,7 +377,7 @@
         <ngx-input-field [isChecked]="g2h['localised']" [label1]="'Efficiency Thermal'" [label2]="'%'"
             (valChange)="paramInit['payload']['localised.heat']['G2H']['efficiency.thermal']=+$event"
             [(val)]="paramInit['payload']['localised.heat']['G2H']['efficiency.thermal']" [compId]="'g2h2eff'">
-        </ngx-input-field>
+        </ngx-input-field>-->
 
     </nb-card-body>
 

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   height="288.19"
+   width="250"
+   id="solar-wind-combi">
+  <metadata
+     id="metadata68">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#cdc3b9;mix-blend-mode:multiply}.cls-1,.cls-10,.cls-11,.cls-2,.cls-3,.cls-4,.cls-8{fill-rule:evenodd}.cls-2{fill:#cdd7dc}.cls-3{fill:#b2bbc0}.cls-4{fill:#c3cacd}.cls-11,.cls-5,.cls-8{fill:#fff}.cls-10{fill:#26478a}.cls-11{opacity:.2}</style>
+  </defs>
+  <path
+     id="Shape_552_copy"
+     data-name="Shape 552 copy"
+     class="cls-1"
+     d="m 0,183 81,14 0.96,14.08 z"
+     style="mix-blend-mode:multiply;fill:#cdc3b9;fill-rule:evenodd" />
+  <path
+     id="Shape_552_copy_2"
+     data-name="Shape 552 copy 2"
+     class="cls-1"
+     d="m 57,218 81,14 0.96,14.08 z"
+     style="mix-blend-mode:multiply;fill:#cdc3b9;fill-rule:evenodd" />
+  <path
+     class="cls-2"
+     d="M 83.27,87.136 84.25,210.3 a 17.318,17.318 0 0 1 -13.29,0 L 76.47,87.46 Z"
+     id="path8"
+     style="fill:#cdd7dc;fill-rule:evenodd" />
+  <path
+     class="cls-3"
+     d="M 86.19,88.433 H 72.26 V 75.787 c 0,0 1.09,-4.216 6.8,-4.216 5.71,0 7.13,3.891 7.13,3.891 z"
+     id="path10"
+     style="fill:#b2bbc0;fill-rule:evenodd" />
+  <g
+     id="g3790">
+    <path
+       style="fill:#c3cacd;fill-rule:evenodd"
+       id="path12"
+       d="m 84.19,84.417 0.79,2.125 c 0,0 6.74,2.127 10.83,2.257 0,0 16.62,55.631 16.93,60.751 0.18,2.78 -1.81,2.78 -2.38,1.94 -0.57,-0.84 -29.62,-66.126 -29.62,-66.126 z"
+       class="cls-4" />
+    <path
+       style="fill:#c3cacd;fill-rule:evenodd"
+       d="m 74.18,80.162 -2.23,-0.373 c 0,0 -5.45,4.924 -7.61,8.408 0,0 -56.19,-13.56 -60.79,-15.849 -2.49,-1.24 -1.49,-2.963 -0.48,-3.039 1.01,-0.076 72.02,7.387 72.02,7.387 z"
+       class="cls-4"
+       data-name="Shape 526 copy"
+       id="Shape_526_copy" />
+    <path
+       style="fill:#c3cacd;fill-rule:evenodd"
+       d="m 82.28,74.452 1.45,-1.747 c 0,0 -2.03,-7.341 -3.95,-10.962 0,0 40.5,-41.6 44.79,-44.423 2.33,-1.527 3.31,0.2 2.87,1.115 C 127,19.35 84.82,76.979 84.82,76.979 Z"
+       class="cls-4"
+       data-name="Shape 526 copy 2"
+       id="Shape_526_copy_2" />
+    <animateTransform attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 79.620003 80.061996"
+        to="360 79.620003 80.061996"
+        dur="10s"
+        repeatCount="indefinite"/>
+  </g>
+  <circle
+     class="cls-5"
+     cx="79.620003"
+     cy="80.061996"
+     r="6"
+     id="circle16"
+     style="fill:#ffffff" />
+  <path
+     class="cls-2"
+     d="m 151.77,98.863 1.15,146.587 a 20.626,20.626 0 0 1 -15.81,0 l 6.56,-146.2 z"
+     id="path18"
+     style="fill:#cdd7dc;fill-rule:evenodd" />
+  <path
+     class="cls-3"
+     d="M 155.24,100.407 H 138.66 V 85.355 c 0,0 1.3,-5.017 8.09,-5.017 6.79,0 8.49,4.631 8.49,4.631 z"
+     id="path20"
+     style="fill:#b2bbc0;fill-rule:evenodd" />
+  <g
+     id="g3795">
+    <path
+       style="fill:#b2bbc0;fill-rule:evenodd"
+       id="path22"
+       d="m 142.2,92.646 -2.66,0.42 c 0,0 -4.09,7.35 -5.22,12.1 0,0 -68.75,6.062 -74.8,5.2 -3.28,-0.464 -2.79,-2.785 -1.68,-3.251 1.11,-0.466 84.09,-18.723 84.09,-18.723 z"
+       class="cls-3" />
+    <path
+       style="fill:#b2bbc0;fill-rule:evenodd"
+       d="m 149.56,81.991 0.97,-2.522 c 0,0 -4.43,-7.539 -7.97,-10.891 0,0 29.26,-62.341 33.03,-67.159 2.04,-2.608 3.8,-1.031 3.65,0.167 -0.15,1.198 -25.87,82.29 -25.87,82.29 z"
+       class="cls-3"
+       data-name="Shape 526 copy"
+       id="Shape_526_copy-2" />
+    <path
+       style="fill:#b2bbc0;fill-rule:evenodd"
+       d="m 154.26,92.816 1.69,2.108 c 0,0 9.03,-0.612 13.71,-1.988 0,0 38.72,57.254 40.98,62.944 1.22,3.08 -1.03,3.81 -1.99,3.08 -0.96,-0.73 -57.94,-63.788 -57.94,-63.788 z"
+       class="cls-3"
+       data-name="Shape 526 copy 2"
+       id="Shape_526_copy_2-2" />
+    <animateTransform attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 147.42 90.453003"
+        to="360 147.42 90.453003"
+        dur="7s"
+        repeatCount="indefinite"/>
+  </g>
+  <circle
+     class="cls-5"
+     cx="147.42"
+     cy="90.453003"
+     r="7.1399999"
+     id="circle26"
+     style="fill:#ffffff" />
+  <g
+     id="solar">
+    <path
+       id="path29"
+       transform="translate(-2063 -875)"
+       d="M2073 1150l53-21-9.04 34.08z"
+       class="cls-1" />
+    <path
+       id="path31"
+       fill-rule="evenodd"
+       fill="#93a5b1"
+       transform="translate(-2063 -875)"
+       d="M2117.43 1163.18l-22.98-39.92 1.71-5.5 23.25 36.55z" />
+    <path
+       id="path33"
+       fill-rule="evenodd"
+       fill="#ebedfc"
+       transform="translate(-2063 -875)"
+       d="M2282.56 1106.28l-1.82 5.97-163.2 50.46 1.87-8.4z" />
+    <path
+       id="path35"
+       transform="translate(-2063 -875)"
+       d="M2258.9 1067.19l-163.31 50.93 23.19 38.99 163.57-49.89z"
+       class="cls-8" />
+    <path
+       id="path37"
+       fill-rule="evenodd"
+       fill="#395bb4"
+       transform="translate(-2063 -875)"
+       d="M2257.6 1070.83l-156.51 49.01 18.84 32.13 157.38-46.36z" />
+    <path
+       id="path39"
+       transform="translate(-2063 -875)"
+       d="M2268.51 1091.75s-22-3.1-35.99 10.27-29.29 17.24-45.32 11.97-19.25-13.44-40.79 7.1-30.97 22.57-30.97 22.57l4.73 7.53 156.89-45.93z"
+       class="cls-10" />
+    <path
+       id="path41"
+       transform="translate(-2063 -875)"
+       d="M2260.76 1076.89s-14.66.69-25.01 8.92-29.11 20.66-53.67 16.49-34.71 2.8-41.11 8.51S2106 1128 2106 1128l-4.06-7.95L2257 1071z"
+       class="cls-10" />
+    <path
+       id="path43"
+       transform="translate(-2063 -875)"
+       d="M2230.71 1077.1l20.34 36.39-1.72 1.09-20.23-36.86z"
+       class="cls-8" />
+    <path
+       id="path45"
+       transform="translate(-2063 -875)"
+       d="M2274.98 1100.68l-158.43 46.62-.72-1.14 159.46-46.88z"
+       class="cls-11" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2271.35 1094.97l-158.43 46.62-.72-1.14 159.46-46.88z"
+       class="cls-11"
+       data-name="Shape 551 copy"
+       id="Shape_551_copy" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2264.65 1083.18l-158.84 48.49-.72-1.14 159.88-48.75z"
+       class="cls-11"
+       data-name="Shape 551 copy 3"
+       id="Shape_551_copy_3" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2261.13 1077l-159.05 49.43-.73-1.14 160.09-49.69z"
+       class="cls-11"
+       data-name="Shape 551 copy 4"
+       id="Shape_551_copy_4" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2267.82 1088.79l-158.84 48.49-.73-1.14 159.88-48.75z"
+       class="cls-11"
+       data-name="Shape 551 copy 2"
+       id="Shape_551_copy_2" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2200.97 1085.19l20.33 36.39-1.71 1.09-20.23-36.86z"
+       class="cls-8"
+       data-name="Shape 550 copy"
+       id="Shape_550_copy" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2169.35 1097.28l20.34 36.39-1.71 1.09-20.24-36.86z"
+       class="cls-8"
+       data-name="Shape 550 copy 2"
+       id="Shape_550_copy_2" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2134.42 1106.66l20.34 36.39-1.72 1.09-20.23-36.86z"
+       class="cls-8"
+       data-name="Shape 550 copy 2"
+       id="Shape_550_copy_2-2" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2111.06 1114.7l21.27 36.6-.31 1.4-21.63-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 3"
+       id="Shape_550_copy_3" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2120.92 1110.03l21.27 36.6-.31 1.4-21.63-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 4"
+       id="Shape_550_copy_4" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2145.11 1102.67l21.27 36.6-.31 1.4-21.63-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 5"
+       id="Shape_550_copy_5" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2154.98 1098l21.27 36.6-.31 1.4-21.64-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 5"
+       id="Shape_550_copy_5-2" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2179.48 1093.64l21.27 36.6-.31 1.4-21.64-37.16z"
+       class="cls-11"
+       data-name="Shape 550 copy 6"
+       id="Shape_550_copy_6" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2189.34 1088.98l21.27 36.59-.31 1.41-21.64-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 6"
+       id="Shape_550_copy_6-2" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2211.19 1085.5l21.27 36.6-.31 1.4-21.63-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 7"
+       id="Shape_550_copy_7" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2221.06 1080.84l21.27 36.59-.32 1.41-21.63-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 7"
+       id="Shape_550_copy_7-2" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2238.19 1074.35l21.27 36.6-.32 1.4-21.63-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 8"
+       id="Shape_550_copy_8" />
+    <path
+       transform="translate(-2063 -875)"
+       d="M2248.05 1069.68l21.27 36.6-.31 1.4-21.64-37.17z"
+       class="cls-11"
+       data-name="Shape 550 copy 8"
+       id="Shape_550_copy_8-2" />
+  </g>
+</svg>

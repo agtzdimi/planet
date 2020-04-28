@@ -3,11 +3,6 @@
 
     <!-- Phase 1 General Parameters -->
     <ngx-general-params (phaseOutput)="phase2=$event" [isLoadModule]="false"></ngx-general-params>
-    <nb-card>
-      <nb-card-body>
-        <ngx-fourty-three-el-grid></ngx-fourty-three-el-grid>
-      </nb-card-body>
-    </nb-card>
 
     <!-- Phase 2 Simulation Technologies Parameters -->
     <div class="row">
@@ -19,14 +14,18 @@
           </ngx-tech-param>
         </div>
       </div>
+      <ngx-fourty-three-el-grid *ngIf="phase3" style="width: 100%">
+      </ngx-fourty-three-el-grid>
+
+
 
       <!-- Phase 3 Control Simulation Parameters -->
-      <div class="col-md-12" *ngIf="phase3">
-        <div [suiTransition]="transitionController3">
+      <!--  <div class="col-md-12" *ngIf="phase3">
+        <div [suiTransition]="transitionController3"> -->
 
-          <!-- Profiles Card -->
+      <!-- Profiles Card -->
 
-          <!--  <nb-card size="large" accent="primary" *ngIf="!showProfiles">
+      <!--  <nb-card size="large" accent="primary" *ngIf="!showProfiles">
             <nb-card-header>Profiles Timeseries</nb-card-header>
             <div [ngStyle]="{'display': 'flex','align-items': 'center',
     'justify-content': 'center', 'width': '100%','height':'100%'}">
@@ -34,19 +33,19 @@
             </div>
           </nb-card>
           <ngx-simulation-line *ngIf="showProfiles" [data]="profiles"></ngx-simulation-line> -->
-          <ngx-tech-control [isLoadModule]="false" (phase4)="animateInfo(transitionController4,transitionName4,4)">
+      <!-- <ngx-tech-control [isLoadModule]="false" (phase4)="animateInfo(transitionController4,transitionName4,4)">
           </ngx-tech-control>
         </div>
-      </div>
+      </div> -->
 
       <!-- Phase 4 Economy Simulation Parameters -->
 
-      <div class="col-md-12">
+      <!-- <div class="col-md-12">
         <div [suiTransition]="transitionController4">
           <ngx-tech-cost *ngIf="phase4" (phase5)="animateInfo(transitionController5,transitionName5,5)">
           </ngx-tech-cost>
         </div>
-      </div>
+      </div> -->
 
     </div>
 

@@ -75,7 +75,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
     'min60': false,
   };
   private nodesSelected: Object = {
-    '8 node el': false,
+    '43 node el': false,
     '1 node el': false,
     '1 node dh': false,
     '1 node gas': false,
@@ -129,7 +129,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
           this.generalParams.updateGeneralParameters(data['payload']['formDescription'], 'formDescription');
           this.paramInit = data;
           this.nodesSelected = {
-            '8 node el': false,
+            '43 node el': false,
             '1 node el': true,
             '1 node dh': true,
             '1 node gas': true,
@@ -153,7 +153,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
           this.generalParams.updateGeneralParameters(data['payload']['formDescription'], 'formDescription');
           this.paramInit = data;
           this.nodesSelected = {
-            '8 node el': true,
+            '43 node el': true,
             '1 node el': false,
             '1 node dh': true,
             '1 node gas': true,
@@ -199,7 +199,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
           this.loadedSelections['gas'] = '1 Node';
           break;
         case 2:
-          this.loadedSelections['elec'] = '8 Node';
+          this.loadedSelections['elec'] = '43 Node';
           this.loadedSelections['dh'] = '1 Node';
           this.loadedSelections['gas'] = '1 Node';
           break;
@@ -282,7 +282,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
     this.currentTab = tabTitle['tabTitle'];
 
     if (tabTitle['tabTitle'] === 'Electric Grid') {
-      if (this.nodesSelected['8 node el']) {
+      if (this.nodesSelected['43 node el']) {
         this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
       } else {
         this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
@@ -306,9 +306,9 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   * @param {Object} radioButtonText the title corresponding to the radio button being clicked
   */
   public onRadioButtonClicked(radioButtonText: Object): void {
-    if (radioButtonText['target']['textContent'] === '8 Node') {
+    if (radioButtonText['target']['textContent'] === '43 Node') {
       this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
-      this.nodesSelected['8 node el'] = true;
+      this.nodesSelected['43 node el'] = true;
       this.nodesSelected['1 node el'] = false;
     } else if (radioButtonText['target']['textContent'] === '3 Node') {
       this.generalParams.updateGeneralParameters('assets/images/3NodeDH.png', 'gridImage');
@@ -317,14 +317,14 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
     } else if (this.currentTab === 'Electric Grid') {
       this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
       this.nodesSelected['1 node el'] = true;
-      this.nodesSelected['8 node el'] = false;
+      this.nodesSelected['43 node el'] = false;
     } else if (this.currentTab === 'Gas Network') {
       this.generalParams.updateGeneralParameters('assets/images/singleNodeGas.png', 'gridImage');
       this.nodesSelected['1 node gas'] = true;
     } else {
       this.generalParams.updateGeneralParameters('assets/images/singleNodeDistrictHeating.png', 'gridImage');
       this.nodesSelected['1 node dh'] = true;
-      this.nodesSelected['8 node dh'] = false;
+      this.nodesSelected['43 node dh'] = false;
     }
     this.resizeMap();
   }
@@ -496,7 +496,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
         this.model1.paramUpdated.next(this.paramInit);
         this.resizeMap();
       }
-    } else if (this.genParams['selectedModel']['elec'] === '8 Node' && this.genParams['selectedModel']['dh'] === '1 Node') {
+    } else if (this.genParams['selectedModel']['elec'] === '43 Node' && this.genParams['selectedModel']['dh'] === '1 Node') {
       if (this.genParams['model'] !== 2) {
         this.generalParams.updateGeneralParameters(2, 'model');
         this.paramInit = this.model2.paramInit;

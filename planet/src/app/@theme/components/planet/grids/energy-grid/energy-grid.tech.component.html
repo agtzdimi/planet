@@ -21,12 +21,12 @@
           </div>
         </div>
 
-        <!-- <div class="row p-2 centralize">
+        <div class="row m-3 centralize" *ngIf="showUnit">
           <div class="col-md-1 ">
             <label>P2G</label>
           </div>
           <div class="col-md-5">
-            <nb-select placeholder="Available P2G Units" #P2GSelect (selectedChange)="optionSelected($event,'P2G')">
+            <nb-select placeholder="Available P2G Units" (selectedChange)="optionSelected($event,'P2G')">
               <nb-option *ngFor="let regP2G of registeredDevices['P2G']" [value]="regP2G['name']">
                 {{regP2G.name}}</nb-option>
               <nb-option [value]="'None'">None</nb-option>
@@ -34,12 +34,12 @@
           </div>
         </div>
 
-        <div class="row p-2 centralize">
+        <div class="row m-3 centralize" *ngIf="showUnit">
           <div class="col-md-1 ">
             <label>P2H</label>
           </div>
           <div class="col-md-5">
-            <nb-select placeholder="Available P2H Units" #P2HSelect (selectedChange)="optionSelected($event,'P2H')">
+            <nb-select placeholder="Available P2H Units" (selectedChange)="optionSelected($event,'P2H')">
               <nb-option *ngFor="let regP2H of registeredDevices['P2H']" [value]="regP2H['name']">
                 {{regP2H.name}}</nb-option>
               <nb-option [value]="'None'">None</nb-option>
@@ -47,12 +47,13 @@
           </div>
         </div>
 
-        <div class="row p-2 centralize">
+        <div class="row m-3 centralize" *ngIf="showUnit">
           <div class="col-md-1 ">
             <label>VES</label>
           </div>
           <div class="col-md-5">
-            <nb-select placeholder="Available VES Units" #VESSelect (selectedChange)="optionSelected($event,'VES')">
+            <nb-select placeholder="Available VES Units" (selectedChange)="optionSelected($event,'VES')"
+              [selected]="paramInit['payload']['electric.grid'][node]['VES']['name']">
               <nb-option *ngFor="let regVES of registeredDevices['VES']" [value]="regVES['name']">
                 {{regVES.name}}</nb-option>
               <nb-option [value]="'None'">None</nb-option>
@@ -61,11 +62,11 @@
         </div>
 
         <div
-          *ngIf="paramInit['payload']['electric.grid'][node]['VES']['name'] && paramInit['payload']['electric.grid'][node]['VES']['name']!=='None'">
-          <ngx-ves-unit (ves)="onUnitChange($event,'VES')"
+          *ngIf="node && paramInit['payload']['electric.grid'][node]['VES']['name'] && paramInit['payload']['electric.grid'][node]['VES']['name']!=='None'">
+          <ngx-ves-unit (ves)="onUnitChange($event,'VES')" class="centralize"
             [vesInput]="paramInit['payload']['electric.grid'][node]['VES']" [mode]="'scenario'">
           </ngx-ves-unit>
-        </div> -->
+        </div>
 
       </nb-card-body>
       <nb-card-footer style="display: flex;justify-content: center;">

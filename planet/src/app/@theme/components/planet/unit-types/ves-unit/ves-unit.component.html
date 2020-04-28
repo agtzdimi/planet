@@ -28,6 +28,16 @@
                 [inputHtmlLabel1]="'Commercial'" [inputHtmlLabel2]="'No of Buildings'" [columnLength1]="'col-sm-3'"
                 [columnLength2]="'col-sm-5'">
             </ngx-input-field>
+
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['CAPEX'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['CAPEX']" [compId]="'ves_capex'" [inputHtmlLabel1]="'CAPEX'"
+                [inputHtmlLabel2]="'€/kWel'" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-5'">
+            </ngx-input-field>
+
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['OPEX'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['OPEX']" [compId]="'ves_opex'" [inputHtmlLabel1]="'OPEX'"
+                [inputHtmlLabel2]="'%CAPEX'" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-5'">
+            </ngx-input-field>
         </div>
 
         <div *ngIf="mode !== 'scenario'">

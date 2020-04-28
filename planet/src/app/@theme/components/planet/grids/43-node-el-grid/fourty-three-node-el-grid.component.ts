@@ -11,7 +11,7 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
 
     selectedRoom: null;
     sortedRooms = [];
-    viewBox = '-10 -10 1200 1250';
+    viewBox = '-10 -10 1200 1050';
     isIE = !!(navigator.userAgent.match(/Trident/)
         || navigator.userAgent.match(/MSIE/)
         || navigator.userAgent.match(/Edge/));

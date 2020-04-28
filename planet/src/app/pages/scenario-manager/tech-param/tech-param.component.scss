@@ -16,12 +16,27 @@
   }
 }
 
+img {
+  width: 14rem;
+  height: 16rem;
+  margin-bottom: 3rem;
+}
+
+.centralize {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .listItem {
   margin-left: 2.1rem;
 }
 
 label {
   margin-top: 7px;
+  text-align: center;
   font-weight: nb-theme(text-label-font-weight);
   line-height: nb-theme(text-subtitle-line-height);
 }
