@@ -1,16 +1,6 @@
 <nb-card accent="primary">
-    <nb-card-header>
-
-        <!--    Tabs  and Dropdown with Nodes-->
-        <nb-tabset (changeTab)="changeTab($event)">
-            <nb-tab tabTitle="Electric Grid">
-            </nb-tab>
-        </nb-tabset>
-
-        <nb-select *ngIf="currentTab==='Electric Grid'" [status]="'info'" [shape]="'semi-round'" placeholder="node.1">
-            <nb-option [value]="node" *ngFor="let node of currentNodes" (click)="changeNode(node)">{{ node }}
-            </nb-option>
-        </nb-select>
+    <nb-card-header class="rating-header">
+        RES Profile Configuration
     </nb-card-header>
 
     <!--    Electric Grid TAB   -->
@@ -26,10 +16,11 @@
                     <img src="assets/images/turbines-spin.svg" style="margin-left: 5rem">
                     <ngx-input-field [isChecked]="true" [label1]="'Hub Height'" [label2]="'m'"
                         (valChange)="updateWindPVParams('Wind','hub.height',+$event)"
-                        [(val)]="nodeWindParam[displayingNode]['hub.height']" [compId]="'techParamCheckInput2.1'">
+                        [(val)]="nodeWindParam[displayingNode]['hub.height']" [compId]="'techParamCheckInput2.1'"
+                        [columnLength1]="'col-sm-3'">
                     </ngx-input-field>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <ul class="listItem">
                                 <li>
                                     <div class="form-group row">
@@ -38,7 +29,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
+                        <div class="col-md-4" [ngStyle]="{'margin-left': '-1rem'}">
                             <nb-select class="m-2" placeholder="Turbine Model"
                                 [ngModel]="nodeWindParam[displayingNode]['turbine.model']"
                                 (ngModelChange)="updateWindPVParams('Wind','turbine.model',$event)" [ngStyle]="{'align-items': 'center',
@@ -51,9 +42,9 @@
                         </div>
                     </div>
                     <ngx-input-field [isChecked]="true" [label1]="'Nominal Power'" [label2]="'MW'"
-                        (valChange)="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']=+$event"
-                        [(val)]="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']"
-                        [compId]="'techParamCheckInput2.2'">
+                        (valChange)="updateRESPower(+$event,'WT')"
+                        [val]="paramInit['payload']['electric.grid'][displayingNode].WT['nominal.electric.power']"
+                        [compId]="'techParamCheckInput2.2'" [columnLength1]="'col-sm-3'">
                     </ngx-input-field>
                 </div>
                 <div class="col-md-6">
@@ -61,10 +52,11 @@
                     <img src="assets/images/solar_panel.jpg" style="margin-left: 5rem">
                     <ngx-input-field [isChecked]="true" [label1]="'System Loss'" [label2]="'%'"
                         (valChange)="updateWindPVParams('PV','system.loss',+$event)"
-                        [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'">
+                        [(val)]="nodePvParam[displayingNode]['system.loss']" [compId]="'techParamCheckInput1.1'"
+                        [columnLength1]="'col-sm-3'">
                     </ngx-input-field>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <ul class="listItem">
                                 <li>
                                     <div class="form-group row">
@@ -73,7 +65,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-md-3" [ngStyle]="{'margin-left': '3.64rem','margin-bottom': '0.5rem'}">
+                        <div class="col-md-4" [ngStyle]="{'margin-left': '-1rem','margin-bottom': '0.5rem'}">
                             <nb-select class="m-2" [placeholder]="'Tracking'"
                                 [ngModel]="nodePvParam[displayingNode]['tracking']"
                                 (ngModelChange)="updateWindPVParams('PV','tracking',$event)" [ngStyle]="{'align-items': 'center',
@@ -88,16 +80,18 @@
                     </div>
                     <ngx-input-field [isChecked]="true" [label1]="'Tilt'" [label2]="'°'"
                         (valChange)="updateWindPVParams('PV','tilt',+$event)"
-                        [(val)]="nodePvParam[displayingNode]['tilt']" [compId]="'techParamCheckInput1.2'">
+                        [(val)]="nodePvParam[displayingNode]['tilt']" [compId]="'techParamCheckInput1.2'"
+                        [columnLength1]="'col-sm-3'">
                     </ngx-input-field>
                     <ngx-input-field [isChecked]="true" [label1]="'Azimuth'" [label2]="'°'"
                         (valChange)="updateWindPVParams('PV','azimuth',+$event)"
-                        [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'">
+                        [(val)]="nodePvParam[displayingNode]['azimuth']" [compId]="'techParamCheckInput1.3'"
+                        [columnLength1]="'col-sm-3'">
                     </ngx-input-field>
                     <ngx-input-field [isChecked]="true" [label1]="'Nominal Power'" [label2]="'MW'"
-                        (valChange)="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']=+$event"
-                        [(val)]="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']"
-                        [compId]="'techParamCheckInput1.4'">
+                        (valChange)="updateRESPower(+$event,'PV')"
+                        [val]="paramInit['payload']['electric.grid'][displayingNode].PV['nominal.electric.power']"
+                        [compId]="'techParamCheckInput1.4'" [columnLength1]="'col-sm-3'">
                     </ngx-input-field>
                 </div>
             </div>

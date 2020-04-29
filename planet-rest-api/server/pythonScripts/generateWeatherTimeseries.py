@@ -20,11 +20,7 @@ timeStep = data['payload']['simulation']['time.step'] * 60
 
 valuesLength = data['payload']['electric.grid']['node.1']['VES']['parameters']['noSteps']
 
-model = data['payload']['model']
-if model == 2 or model == 4:
-   nodes = 8
-else:
-   nodes = 1
+nodes = 43
 
 finalWeather = []
 for val in range(int(valuesLength)):

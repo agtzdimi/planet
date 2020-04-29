@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { TechnologiesDialogComponent } from '../energy-grid/energy-grid.tech.component';
+import { TurinGridInitService } from '../../../../services/scenario-manager-services/turin-grid-init.service';
 
 @Component({
     selector: 'ngx-fourty-three-el-grid',
@@ -11,7 +12,9 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
 
     selectedRoom: null;
     sortedRooms = [];
+    paramInit = {};
     viewBox = '-10 -10 1200 1050';
+    @Output() phase4: EventEmitter<boolean>;
     isIE = !!(navigator.userAgent.match(/Trident/)
         || navigator.userAgent.match(/MSIE/)
         || navigator.userAgent.match(/Edge/));
@@ -832,11 +835,25 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
         ],
     };
 
-    constructor(private dialogService: NbDialogService) {
+    constructor(private dialogService: NbDialogService,
+        private turinGrid: TurinGridInitService) {
+        this.paramInit = this.turinGrid.paramInit;
         this.selectRoom('7', false);
+        this.phase4 = new EventEmitter<boolean>();
     }
 
     ngOnInit() {
+    }
+
+    /**
+  *
+  * Function that will brief the create-scenario component to proceed to the next phase
+  * @example
+  * nextPhase()
+  *
+  */
+    public nextPhase(): void {
+        this.phase4.emit(true);
     }
 
     private sortRooms() {
@@ -866,8 +883,8 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
     protected open(hasBackdrop: boolean) {
         let type: string;
         const number: number = this.selectedRoom;
-
-        type = this.roomSvg['rooms'][number]['name']['text'];
+        const nodeId = 'node.' + (number - 6) + ',' + this.roomSvg['rooms'][number]['name']['text'];
+        type = nodeId;
         this.dialogService.open(TechnologiesDialogComponent, { hasBackdrop, 'context': type })
             .onClose.subscribe(
                 (data) => {
@@ -884,32 +901,42 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
     public bottomUpLoop(number: number, activated: boolean) {
         if (number <= 10) {
             for (let i = number; i >= 7; i--) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 16) {
             for (let i = number; i >= 11; i--) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 26) {
             for (let i = number; i >= 17; i--) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 34) {
             for (let i = number; i >= 27; i--) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 49) {
             for (let i = number; i >= 35; i--) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         }
@@ -925,37 +952,47 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
     public topDownLoop(number: number, activated: boolean) {
         if (number <= 10) {
             for (let i = number; i <= 10; i++) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
                     this.roomSvg['rooms'][i]['name']['text'] = '';
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 16) {
             for (let i = number; i <= 16; i++) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
                     this.roomSvg['rooms'][i]['name']['text'] = '';
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 26) {
             for (let i = number; i <= 26; i++) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
                     this.roomSvg['rooms'][i]['name']['text'] = '';
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 34) {
             for (let i = number; i <= 34; i++) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
                     this.roomSvg['rooms'][i]['name']['text'] = '';
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
         } else if (number <= 49) {
             for (let i = number; i <= 49; i++) {
+                const nodeId = 'node.' + (i - 6);
                 if (this.roomSvg['rooms'][i]['isNode']) {
                     this.roomSvg['rooms'][i]['isActivated'] = activated;
                     this.roomSvg['rooms'][i]['name']['text'] = '';
+                    this.paramInit['payload']['electric.grid'][nodeId]['activated'] = activated;
                 }
             }
 
@@ -968,7 +1005,8 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
         }
         for (let i = number; i <= 49; i++) {
             if (this.roomSvg['rooms'][i]['isActivated']) {
-                this.roomSvg['rooms'][i]['name']['text'] = 'node.' + (i - deactivatedNodes);
+                const nodeId = 'node.' + (i - deactivatedNodes);
+                this.roomSvg['rooms'][i]['name']['text'] = nodeId;
             }
         }
     }

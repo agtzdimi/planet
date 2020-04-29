@@ -14,13 +14,14 @@
           </ngx-tech-param>
         </div>
       </div>
-      <ngx-fourty-three-el-grid *ngIf="phase3" style="width: 100%">
+      <ngx-fourty-three-el-grid style="width: 100%" *ngIf="phase3"
+        (phase4)="animateInfo(transitionController4,transitionName4,4)">
       </ngx-fourty-three-el-grid>
 
 
 
       <!-- Phase 3 Control Simulation Parameters -->
-      <!--  <div class="col-md-12" *ngIf="phase3">
+      <!--  <div class=" col-md-12" *ngIf="phase3">
         <div [suiTransition]="transitionController3"> -->
 
       <!-- Profiles Card -->
@@ -50,7 +51,7 @@
     </div>
 
     <!-- Phase 5 Start Uploading -->
-    <div class="row submit-button" *ngIf="phase5">
+    <div class="row submit-button" *ngIf="phase4">
       <div class="col-md-2">
         <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"
           nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startUpload()">

@@ -16,6 +16,7 @@ export class TechnologiesDialogComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   public registeredDevices: Array<any> = [];
   public paramInit: Object = {};
+  showingNode = '';
   showUnit = false;
   on = true;
   constructor(protected dialogRef: NbDialogRef<TechnologiesDialogComponent>,
@@ -35,7 +36,9 @@ export class TechnologiesDialogComponent implements OnInit {
         this.node = this.node + this[property];
       }
     }
-
+    this.showingNode = this.node.split(',')[1];
+    this.node = this.node.split(',')[0];
+    this.on = this.paramInit['payload']['electric.grid'][this.node]['activated'];
     const url = '/planet/rest/get_devices';
     this.httpClient.get(url)
       .pipe(map((results) => {

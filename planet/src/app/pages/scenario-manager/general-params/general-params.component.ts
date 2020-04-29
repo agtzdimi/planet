@@ -15,10 +15,9 @@ import { Subscription } from 'rxjs';
 import { TransitionController, Transition, TransitionDirection } from 'ng2-semantic-ui';
 import { NbDialogService, NbDialogConfig } from '@nebular/theme';
 
-import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
-import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
 import { DialogSubmitPromptComponent } from '../../../@theme/components/planet/dialogs/dialog-submit.component';
+import { TurinGridInitService } from '../../../@theme/services/scenario-manager-services/turin-grid-init.service';
 
 /**
  * Component to handle all the general parameters that exist at the first phase of creating/loading a scenario
@@ -92,14 +91,11 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   @ViewChild('formpicker', { 'static': false }) formpicker: ElementRef;
 
   /**
- * @param {Model1ParamInitService} model1 Custom service holding the structure of model 2
- * @param {Model2ParamInitService} model2 Custom service holding the structure of model 2
  * @param {GeneralParamsService} generalParams Custom service responsible on holding the general parameters of the scenario e.g horizon, timestep
  * @param {NbDialogService} dialogService Nebular service to open a new dialog screen over the current one
  *
  */
-  constructor(private model1: Model1ParamInitService,
-    private model2: Model2ParamInitService,
+  constructor(private turinGrid: TurinGridInitService,
     public generalParams: GeneralParamsService,
     private dialogService: NbDialogService) {
 
@@ -110,23 +106,17 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
     // Subscribe to events
     this.subscriptions.push(this.generalParams.parametersSubject.subscribe(
       (data: Object) => {
-        this.genParams['formDescription'] = data['formDescription'];
-        this.genParams['formName'] = data['formName'];
         this.genParams['showMap'] = data['showMap'];
         this.genParams['areaPicked'] = data['areaPicked'];
         this.genParams['gridImage'] = data['gridImage'];
         this.genParams['errorMessage'] = data['errorMessage'];
         this.genParams['dateRangeClicked'] = data['dateRangeClicked'];
-        this.genParams['selectedModel'] = data['selectedModel'];
-        this.genParams['model'] = data['model'];
       },
     ));
     // In case it is loadModule we need to get generalParameters from the Database
-    this.subscriptions.push(this.model1.paramUpdated.subscribe(
+    this.subscriptions.push(this.turinGrid.paramUpdated.subscribe(
       (data: Object) => {
         if (this.isLoadModule && !this.dataLoaded) {
-          this.generalParams.updateGeneralParameters(data['payload']['formName'], 'formName');
-          this.generalParams.updateGeneralParameters(data['payload']['formDescription'], 'formDescription');
           this.paramInit = data;
           this.nodesSelected = {
             '43 node el': false,
@@ -136,30 +126,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
             '3 node dh': false,
           };
           this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
-          if (this.paramInit['payload']['simulation']['time.step'] === 60) {
-            this.timeStep['min60'] = true;
-            this.timeStep['min15'] = false;
-          }
-          this.waitLoad = true;
-        }
-      },
-    ));
-
-    this.subscriptions.push(this.model2.paramUpdated.subscribe(
-      (data: Object) => {
-        if (this.isLoadModule && !this.dataLoaded) {
-          this.dataLoaded = true;
-          this.generalParams.updateGeneralParameters(data['payload']['formName'], 'formName');
-          this.generalParams.updateGeneralParameters(data['payload']['formDescription'], 'formDescription');
-          this.paramInit = data;
-          this.nodesSelected = {
-            '43 node el': true,
-            '1 node el': false,
-            '1 node dh': true,
-            '1 node gas': true,
-            '3 node dh': false,
-          };
-          this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
           if (this.paramInit['payload']['simulation']['time.step'] === 60) {
             this.timeStep['min60'] = true;
             this.timeStep['min15'] = false;
@@ -183,7 +149,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   */
   ngOnInit() {
     if (!this.paramInit) {
-      this.paramInit = this.model1.paramInit;
+      this.paramInit = this.turinGrid.paramInit;
     }
   }
 
@@ -192,18 +158,9 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   */
   ngAfterViewInit() {
     if (this.isLoadModule) {
-      switch (this.genParams['model']) {
-        case 1:
-          this.loadedSelections['elec'] = '1 Node';
-          this.loadedSelections['dh'] = '1 Node';
-          this.loadedSelections['gas'] = '1 Node';
-          break;
-        case 2:
-          this.loadedSelections['elec'] = '43 Node';
-          this.loadedSelections['dh'] = '1 Node';
-          this.loadedSelections['gas'] = '1 Node';
-          break;
-      }
+      this.loadedSelections['elec'] = '1 Node';
+      this.loadedSelections['dh'] = '1 Node';
+      this.loadedSelections['gas'] = '1 Node';
     }
     this.resizeMap();
   }
@@ -216,7 +173,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   * @param {Object} newDescription Parameter to hold the updated value of the scenario description
   */
   public handleDescriptionChange(newDescription: Object): void {
-    this.generalParams.updateGeneralParameters(newDescription['target']['value'], 'formDescription');
+    this.paramInit['payload']['formDescription'] = newDescription['target']['value'];
   }
 
   /**
@@ -283,7 +240,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
 
     if (tabTitle['tabTitle'] === 'Electric Grid') {
       if (this.nodesSelected['43 node el']) {
-        this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
+        this.generalParams.updateGeneralParameters('assets/images/43-node-grid.png', 'gridImage');
       } else {
         this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
       }
@@ -307,7 +264,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   */
   public onRadioButtonClicked(radioButtonText: Object): void {
     if (radioButtonText['target']['textContent'] === '43 Node') {
-      this.generalParams.updateGeneralParameters('assets/images/grid.png', 'gridImage');
+      this.generalParams.updateGeneralParameters('assets/images/43-node-grid.png', 'gridImage');
       this.nodesSelected['43 node el'] = true;
       this.nodesSelected['1 node el'] = false;
     } else if (radioButtonText['target']['textContent'] === '3 Node') {
@@ -330,22 +287,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   /**
-  * Function to update the user selected model [model1|model2]
-  * @example
-  * updateModel()
-  */
-  private updateModel(): void {
-    switch (this.genParams['model']) {
-      case 1:
-        this.model1.paramUpdated.next(this.paramInit);
-        break;
-      case 2:
-        this.model2.paramUpdated.next(this.paramInit);
-        break;
-    }
-  }
-
-  /**
   * Function to calculate the simulation horizon based on the date range of the user selection
   * @example
   * dateRange = {start: '2016-01-01', end: '2016-01-02'}
@@ -362,22 +303,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
       this.generalParams.updateGeneralParameters(this.genParams['endingDate'], 'endingDate');
       const daysTotal: number = Math.round(Math.abs((dateRange['start'].getTime() - dateRange['end'].getTime()) / (24 * 60 * 60 * 1000))) + 1;
       this.paramInit['payload']['simulation']['simulation.time'] = Math.round(daysTotal * 24);
-      this.updateModel();
     }
 
-  }
-
-  /**
-  * Function to update the attribute `model` of the general parameters
-  * @example
-  * updateSelectedModel(selectedModel,modelType)
-  *
-  * @param {string} modelType Variable used to define in which radio group the user is. [elec|dh|gas]
-  * @param {Object} selectedModel Object holding the model type and the text value corresponding to the radio button
-  */
-  public updateSelectedModel(selectedModel: Object, modelType: string): void {
-    this.genParams['selectedModel'][modelType] = selectedModel;
-    this.generalParams.updateGeneralParameters(this.genParams['selectedModel'], 'selectedModel');
   }
 
   /**
@@ -404,8 +331,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   */
   private checkDefaultData(): boolean {
     let status = false;
-    if (this.genParams['formDescription'] === '' || this.genParams['formName'] === '' ||
-      this.genParams['formName'].includes('  -  ') || this.genParams['formName'].includes('|')) {
+    if (this.paramInit['payload']['formDescription'] === '' || this.paramInit['payload']['formName'] === '' ||
+      this.paramInit['payload']['formName'].includes('  -  ') || this.paramInit['payload']['formName'].includes('|')) {
       this.generalParams.updateGeneralParameters('Please fill in/correct the Simulation Name and Description', 'errorMessage');
     } else if (!Number(+this.paramInit['payload']['simulation']['time.step'])) {
       this.generalParams.updateGeneralParameters('Please give a number for time.step', 'errorMessage');
@@ -435,28 +362,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   /**
-  * Function to update the scenario name with a new value
-  * @example
-  * formNameChange(scenarioName)
-  *
-  * @param {string} scenarioName variable holding the scenario name
-  */
-  public formNameChange(scenarioName: string): void {
-    this.generalParams.updateGeneralParameters(scenarioName, 'formName');
-  }
-
-  /**
-  * Function to update the scenario name with a new value
-  * @example
-  * formDescriptionChange(scenarioDescription)
-  *
-  * @param {string} scenarioDescription variable holding the scenario description
-  */
-  public formDescriptionChange(scenarioDescription: string): void {
-    this.generalParams.updateGeneralParameters(scenarioDescription, 'formDescription');
-  }
-
-  /**
   * Function to update the date range of the horizon
   * @example
   * dateRangeChange()
@@ -475,7 +380,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   public openParams(): boolean {
     if (this.genParams['areaPicked'] && this.checkGrids() || this.isLoadModule) {
       // Initialize model base on user input
-      this.calculateModel();
       return true;
     } else {
       return false;
@@ -483,27 +387,16 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   }
 
   /**
-  * Function to check which model the user selected based on his input in the radio group
-  * @example
-  * calculateModel()
-  *
-  */
-  private calculateModel(): void {
-    if (this.genParams['selectedModel']['elec'] === '1 Node' && this.genParams['selectedModel']['dh'] === '1 Node') {
-      if (this.genParams['model'] !== 1) {
-        this.generalParams.updateGeneralParameters(1, 'model');
-        this.paramInit = this.model1.paramInit;
-        this.model1.paramUpdated.next(this.paramInit);
-        this.resizeMap();
-      }
-    } else if (this.genParams['selectedModel']['elec'] === '43 Node' && this.genParams['selectedModel']['dh'] === '1 Node') {
-      if (this.genParams['model'] !== 2) {
-        this.generalParams.updateGeneralParameters(2, 'model');
-        this.paramInit = this.model2.paramInit;
-        this.model2.paramUpdated.next(this.paramInit);
-        this.resizeMap();
-      }
-    }
+ * Function to update the attribute `model` of the general parameters
+ * @example
+ * updateSelectedModel(selectedModel,modelType)
+ *
+ * @param {string} modelType Variable used to define in which radio group the user is. [elec|dh|gas]
+ * @param {Object} selectedModel Object holding the model type and the text value corresponding to the radio button
+ */
+  public updateSelectedModel(selectedModel: Object, modelType: string): void {
+    this.genParams['selectedModel'][modelType] = selectedModel;
+    this.generalParams.updateGeneralParameters(this.genParams['selectedModel'], 'selectedModel');
   }
 
   /**
@@ -539,7 +432,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
       this.timeStep['min60'] = true;
       this.timeStep['min15'] = false;
     }
-    this.updateModel();
   }
 
   /**

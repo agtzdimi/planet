@@ -16,10 +16,6 @@ exports.upload = (req, res) => {
     shell.exec('mkdir ' + `${__dirname}/../../public/files/` + req.body.email + "_" + timeStamp);
     shell.echo(req.body.param1).to(`${__dirname}/../../public/files/` +
         req.body.email + "_" + timeStamp + `/Parameters_initialization.txt`);
-    shell.echo(req.body.param2).to(`${__dirname}/../../public/files/` +
-        req.body.email + "_" + timeStamp + `/Control_initialization.txt`);
-    shell.echo(req.body.param3).to(`${__dirname}/../../public/files/` +
-        req.body.email + "_" + timeStamp + `/Economy_environment_initialization.txt`);
     res.json({
         file: '$(req.files.file)',
         timeStamp: timeStamp,
@@ -135,10 +131,6 @@ exports.loadData = (req, res) => {
     shell.exec(`${__dirname}/../pythonScripts/load_data.sh ` + `"` + req.query.formName + `" "` + email + `"`);
     const paramInitParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
         email + `/loadData/Parameters_initialization.txt`);
-    const econEnvParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
-        email + `/loadData/Economy_environment_initialization.txt`);
-    const controlParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
-        email + `/loadData/Control_initialization.txt`);
     const windParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +
         email + `/loadData/WindData.txt`);
     const pvParam = shell.exec('cat ' + `${__dirname}/../../public/files/` +

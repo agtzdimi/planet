@@ -3,6 +3,13 @@
 
 @include nb-install-component() {
 
+  .rating-header {
+    line-height: 1.5rem;
+    font-size: 1.25rem;
+    font-family: nb-theme(font-family-secondary);
+    font-weight: nb-theme(text-subtitle-font-weight);
+  }
+
 .stroke-pattern {
   fill: none;
   stroke: #bdc4cd;

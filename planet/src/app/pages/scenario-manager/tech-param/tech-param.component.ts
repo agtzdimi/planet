@@ -14,9 +14,8 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
-import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
+import { TurinGridInitService } from '../../../@theme/services/scenario-manager-services/turin-grid-init.service';
 
 
 /**
@@ -55,7 +54,6 @@ import { GeneralParamsService } from '../../../@theme/services/scenario-manager-
  * @param {string} currentTab Variable holding the information of current tab selected by the user [ElectricGrid|CentralisedHeat|LocalisedHeat]
  * @param {Object} genParams Shortcut variable of generalParams instead of using this.generalParams.parameters
  * @param {Object} paramInit Variable holding the instance of a JSON model corresponding to the user selections.
- * @param {number} currentModel Variable holding which model the user has selected [model1|model2|model3|model4]
  * @param {Object} g2h Variable holding the configuration of G2H
  */
 export class TechParamComponent implements OnChanges,
@@ -86,7 +84,6 @@ export class TechParamComponent implements OnChanges,
     public currentTab: string = 'Electric Grid';
     private genParams: Object = {};
     public paramInit: Object = {};
-    private currentModel: number = 0;
     public g2h: Object = {
         'dh.connected.heat.load': true,
         'not.dh.connected.heat.load': true,
@@ -97,13 +94,11 @@ export class TechParamComponent implements OnChanges,
     /**
      * @param {HttpClient} httpClient Angular service to make REST requests
      * @param {GeneralParamsService} generalParams Custom service responsible on holding the general parameters of the scenario e.g horizon, timestep
-     * @param {Model2ParamInitService} model2 Custom service holding the structure of model 2
-     * @param {Model1ParamInitService} model1 Custom service holding the structure of model 2
      */
-    constructor(private model2: Model2ParamInitService,
-        private generalParams: GeneralParamsService,
-        private model1: Model1ParamInitService,
+    constructor(private generalParams: GeneralParamsService,
+        private turinGrid: TurinGridInitService,
         private httpClient: HttpClient) {
+        this.paramInit = this.turinGrid.paramInit;
         this.genParams = this.generalParams.parameters;
         this.turbineModels = ['Vestas V90 2000', 'Vestas V47 660', 'Vestas V164 7000', 'Siemens SWT 2.3 93',
             'REpower 5M', 'GE 1.5sle', 'Enercon E82 2000', 'Enercon E126 6500', 'Acciona AW77 1500',
@@ -135,27 +130,12 @@ export class TechParamComponent implements OnChanges,
         this.pvChange = new EventEmitter<Object>();
         this.windChange = new EventEmitter<Object>();
         this.phase3 = new EventEmitter<boolean>();
-        this.subscriptions.push(this.model2.paramUpdated.subscribe(
-            (data) => {
-                if (this.currentModel !== 2 || this.isLoadModule) {
-                    this.getNodesNames(true);
-                    this.paramInit = data;
-                    this.initializeValues();
-                    this.checkBoxStatus = { ...this.checkVal };
-                    this.currentModel = 2;
-                }
-            },
-        ));
 
-        this.subscriptions.push(this.model1.paramUpdated.subscribe(
+        this.subscriptions.push(this.turinGrid.paramUpdated.subscribe(
             (data) => {
-                if (this.currentModel !== 1 || this.isLoadModule) {
-                    this.getNodesNames(true);
-                    this.paramInit = data;
-                    this.initializeValues();
-                    this.checkBoxStatus = { ...this.checkVal };
-                    this.currentModel = 1;
-                }
+                this.getNodesNames(true);
+                this.paramInit = data;
+                this.checkBoxStatus = { ...this.checkVal };
             },
         ));
 
@@ -201,11 +181,7 @@ export class TechParamComponent implements OnChanges,
             this.windParam['payload'] = this.nodeWindParam;
         }
         if (!this.paramInit['payload']) {
-            if (this.genParams['model'] === 1) {
-                this.paramInit = this.model1.paramInit;
-            } else if (this.genParams['model'] === 2) {
-                this.paramInit = this.model2.paramInit;
-            }
+            this.paramInit = this.turinGrid.paramInit;
         }
     }
 
@@ -213,7 +189,6 @@ export class TechParamComponent implements OnChanges,
 * Angular lifecycle hook used initialize mandatory variables by calling the initializeValues() function
 */
     ngAfterViewInit() {
-        this.initializeValues();
         this.checkBoxStatus = this.checkVal;
     }
 
@@ -238,18 +213,10 @@ export class TechParamComponent implements OnChanges,
             for (let i = 0; i < this.nodes.length; i++) {
                 this.displayingNode = 'node.' + (i + 1);
                 for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-                    if (this.genParams['model'] === 1) {
-                        if (this.genParams['isDefault']) {
-                            this.model1.updateDefaultValues(j, true, this.displayingNode);
-                        } else {
-                            this.model1.updateDefaultValues(j, false, this.displayingNode);
-                        }
-                    } else if (this.genParams['model'] === 2) {
-                        if (this.genParams['isDefault']) {
-                            this.model2.updateDefaultValues(j, true, this.displayingNode);
-                        } else {
-                            this.model2.updateDefaultValues(j, false, this.displayingNode);
-                        }
+                    if (this.genParams['isDefault']) {
+                        this.turinGrid.updateDefaultValues(j, true, this.displayingNode);
+                    } else {
+                        this.turinGrid.updateDefaultValues(j, false, this.displayingNode);
                     }
                 }
             }
@@ -270,11 +237,7 @@ export class TechParamComponent implements OnChanges,
         if (!calledFromModel) {
             this.displayingNode = 'node.1';
         }
-        if (this.genParams['model'] === 1) {
-            this.nodes = Object.getOwnPropertyNames(this.model1.paramInit['payload']['electric.grid']);
-        } else if (this.genParams['model'] === 2) {
-            this.nodes = Object.getOwnPropertyNames(this.model2.paramInit['payload']['electric.grid']);
-        }
+        this.nodes = Object.getOwnPropertyNames(this.turinGrid.paramInit['payload']['electric.grid']);
 
         if (!calledFromModel) {
             for (let i = 0; i < this.nodes.length; i++) {
@@ -298,6 +261,12 @@ export class TechParamComponent implements OnChanges,
                     'azimuth': 180,
                 };
             }
+        }
+    }
+
+    updateRESPower(val, type) {
+        for (let i = 0; i < this.nodes.length; i++) {
+            this.paramInit['payload']['electric.grid']['node.' + (i + 1)][type]['nominal.electric.power'] = val;
         }
     }
 
@@ -349,89 +318,6 @@ export class TechParamComponent implements OnChanges,
     }
 
     /**
-      * Function responsible to initialize the values of the checkboxes to [true|false] according to their nominal power per node
-      * @example
-      * initializeValues()
-      *
-      */
-    initializeValues() {
-        for (let i = 0; i < this.nodes.length; i++) {
-            this.unitSelectedPerNode['node.' + (i + 1)] = {};
-            for (let j = 0; j < this.CHECKBOX_COUNT; j++) {
-                switch (j) {
-                    case 0:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['PV']['nominal.electric.power'] === 0
-                            && this.checkVal['node.' + (i + 1)][j] !== true) {
-                            this.checkVal['node.' + (i + 1)][j] = false;
-                        } else {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                        }
-                        break;
-                    case 1:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['WT']['nominal.electric.power'] === 0
-                            && this.checkVal['node.' + (i + 1)][j] !== true) {
-                            this.checkVal['node.' + (i + 1)][j] = false;
-                        } else {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                        }
-                        break;
-                    case 2:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['CHP']['nominal.electric.power'] === 0
-                            && this.checkVal['node.' + (i + 1)][j] !== true) {
-                            this.checkVal['node.' + (i + 1)][j] = false;
-                        } else {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                        }
-                        break;
-                    case 3:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2H']['DH']['HP']['nominal.heat.power']
-                            === 0 &&
-                            this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2H']['DH']['EH']['nominal.heat.power']
-                            === 0 &&
-                            this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2H']['LHD']['HP']['nominal.heat.power']
-                            === 0 &&
-                            this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2H']['LHD']['EH']['nominal.heat.power']
-                            === 0
-                            && this.checkVal['node.' + (i + 1)][j] !== true) {
-                            this.checkVal['node.' + (i + 1)][j] = false;
-                        } else {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                        }
-                        break;
-                    case 4:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2G']['nominal.electric.power'] === 0
-                            && this.checkVal['node.' + (i + 1)][j] !== true) {
-                            this.checkVal['node.' + (i + 1)][j] = false;
-                            this.unitSelectedPerNode['node.' + (i + 1)]['P2G'] = '';
-                        } else {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                            this.unitSelectedPerNode['node.' + (i + 1)]['P2G'] =
-                                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['P2G']['name'];
-                        }
-                        break;
-                    case 5:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['uncontrollable.load']['peak.load'] === 0
-                            && this.checkVal['node.' + (i + 1)][j] !== true) {
-                            this.checkVal['node.' + (i + 1)][j] = false;
-                        } else {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                        }
-                        break;
-                    case 6:
-                        if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
-                            this.checkVal['node.' + (i + 1)][j] = true;
-                            this.unitSelectedPerNode['node.' + (i + 1)]['VES'] =
-                                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name'];
-                        } else {
-                            this.unitSelectedPerNode['node.' + (i + 1)]['VES'] = '';
-                        }
-                        break;
-                }
-            }
-        }
-    }
-
-    /**
   * Function responsible on updating the switces holding the different technologies and updating the main model the user has selected.
   * For example if the switch is true on PV and a 10MW power is applied. When the switch is toggled the updated value will be zero and
   * the function will update the model and emit the change to all the corresponding components
@@ -450,11 +336,7 @@ export class TechParamComponent implements OnChanges,
             flag = false;
         }
 
-        if (this.genParams['model'] === 1) {
-            this.model1.updateDefaultValues(id, flag, this.displayingNode);
-        } else if (this.genParams['model'] === 2) {
-            this.model2.updateDefaultValues(id, flag, this.displayingNode);
-        }
+        this.turinGrid.updateDefaultValues(id, flag, this.displayingNode);
     }
 
     /**
@@ -526,11 +408,6 @@ export class TechParamComponent implements OnChanges,
     *
     */
     public nextPhase(): void {
-        if (this.genParams['model'] === 1) {
-            this.model1.paramUpdated.next(this.paramInit);
-        } else if (this.genParams['model'] === 2) {
-            this.model2.paramUpdated.next(this.paramInit);
-        }
         this.phase3.emit(true);
     }
 
@@ -597,11 +474,7 @@ export class TechParamComponent implements OnChanges,
     *
     */
     private emitG2H(id: number, attributeHeatType: string): void {
-        if (this.genParams['model'] === 1) {
-            this.model1.updateG2HValues(id, this.g2h[attributeHeatType]);
-        } else if (this.genParams['model'] === 2) {
-            this.model2.updateG2HValues(id, this.g2h[attributeHeatType]);
-        }
+        this.turinGrid.updateG2HValues(id, this.g2h[attributeHeatType]);
     }
 
     /**
