@@ -76,33 +76,29 @@ exports.getFormNames = (req, res) => {
             collection = 'files';
         }
         const formDescr = [];
+        const finalForms = [];
         const owner = [];
         const eventDates = [];
         const simulated = [];
         const formName = JSON.parse(shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
             ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-            " --quiet planet --eval 'db." + collection + ".distinct(\"formName\");'", { silent: true }).stdout);
+            " --quiet planet --eval 'db." + collection + ".find({$and: [{\"payload.formName\": {$exists: true}},{\"payload.simulation\": {$exists: true}}]},{\"payload.formName\": 1, \"payload.formDescription\": 1,\"payload.owner\": 1,\"payload.eventDate\": 1, _id: 0}).toArray();'", { silent: true }).stdout);
         for (let form = 0; form < formName.length; form++) {
-            let formJson = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
-                ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-                " --quiet planet --eval 'db.files.find({\"payload.formName\": \"" + formName[form] + "\", \"payload.model\" : {$gt: 0}});'", { silent: true }).stdout;
-            formJson = formJson.replace("ObjectId(", "");
-            formJson = formJson.replace("\")", "\"");
-            formJson = JSON.parse(formJson);
             const sim = shell.exec('mongo -u ' + mongoUser + ' -p ' + mongoPass + ' --port ' + mongoPort +
                 ' --host ' + mongoIP + ' --authenticationDatabase ' + mongoAuthDb +
-                " --quiet planet --eval 'db.results.find({\"formName\": \"" + formName[form] + "\"});'", { silent: true }).stdout;
+                " --quiet planet --eval 'db.results.find({\"formName\": \"" + formName[form]['payload']['formName'] + "\"});'", { silent: true }).stdout;
             if (sim.length !== 0) {
                 simulated.push(true);
             } else {
                 simulated.push(false);
             }
-            formDescr.push(formJson.payload.formDescription);
-            eventDates.push(formJson.payload.eventDate);
-            owner.push(formJson.payload.owner);
+            finalForms.push(formName[form].payload.formName)
+            formDescr.push(formName[form].payload.formDescription);
+            eventDates.push(formName[form].payload.eventDate);
+            owner.push(formName[form].payload.owner);
         }
         res.send({
-            formName: formName,
+            formName: finalForms,
             formDescription: formDescr,
             owner: owner,
             eventDate: eventDates,
@@ -145,8 +141,6 @@ exports.loadData = (req, res) => {
         email + `/loadData/Heat.csv`);
     const parameters = {
         paramInit: paramInitParam.stdout,
-        econEnv: econEnvParam.stdout,
-        controlSystem: controlParam.stdout,
         elecParam: elecParam.stdout,
         heatParam: heatParam.stdout,
         windParam: windParam.stdout,

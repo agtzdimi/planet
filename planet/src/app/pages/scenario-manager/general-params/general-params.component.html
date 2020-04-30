@@ -1,4 +1,4 @@
-<nb-card accent="primary" *ngIf="!isLoadModule || ( isLoadModule && waitLoad)">
+<nb-card accent="primary">
   <nb-card-header>Simulation Parameters</nb-card-header>
   <nb-card-body>
 
@@ -51,7 +51,7 @@
           <div class="row">
             <div class="col-md-6">
               <nb-select class="m-2" placeholder="Select grid" (selectedChange)="animateImage('transitionName1')"
-                [status]="'info'" [shape]="'semi-round'">
+                [status]="'info'" [shape]="'semi-round'" [selected]="gridArea">
                 <nb-option value="Turin">Turin</nb-option>
                 <nb-option value="Athens" disabled>Athens</nb-option>
               </nb-select>
@@ -151,10 +151,7 @@
             <div class="col-md-7">
               <div *ngIf="openParams()" class="col-md-12">
                 <div *ngIf="genParams['gridImage']">
-                  <img *ngIf="genParams['gridImage']!=='assets/images/43-node-grid.png'"
-                    [suiTransition]="transitionController1" [src]="genParams['gridImage']">
-                  <img *ngIf="genParams['gridImage']==='assets/images/43-node-grid.png'"
-                    [suiTransition]="transitionController1" [src]="genParams['gridImage']">
+                  <img [suiTransition]="transitionController1" [src]="genParams['gridImage']">
                 </div>
               </div>
             </div>

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 import { TurinGridInitService } from '../../../../services/scenario-manager-services/turin-grid-init.service';
 
 @Component({
@@ -13,7 +12,6 @@ import { TurinGridInitService } from '../../../../services/scenario-manager-serv
 export class TechnologiesDialogComponent implements OnInit {
 
   node: string = '';
-  private subscriptions: Subscription[] = [];
   public registeredDevices: Array<any> = [];
   public paramInit: Object = {};
   showingNode = '';
@@ -23,11 +21,6 @@ export class TechnologiesDialogComponent implements OnInit {
     private httpClient: HttpClient,
     private turinGrid: TurinGridInitService) {
     this.paramInit = this.turinGrid.paramInit;
-    this.subscriptions.push(this.turinGrid.paramUpdated.subscribe(
-      (data) => {
-        this.paramInit = data;
-      },
-    ));
   }
 
   ngOnInit() {

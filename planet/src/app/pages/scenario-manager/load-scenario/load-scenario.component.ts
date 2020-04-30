@@ -10,13 +10,10 @@ import {
     NbMenuService,
 } from '@nebular/theme';
 
-import { Model2ParamInitService } from '../../../@theme/services/scenario-manager-services/model2-param-init.service';
-import { Model1ParamInitService } from '../../../@theme/services/scenario-manager-services/model1-param-init.service';
 import { GeneralParamsService } from '../../../@theme/services/scenario-manager-services/general-params.service';
-import { ControlFileService } from '../../../@theme/services/scenario-manager-services/control-file.service';
-import { EconomyFileService } from '../../../@theme/services/scenario-manager-services/economy-file.service';
 import { UserProfileService } from '../../../@theme/services';
 import { ScenarioPanelComponent } from '../../../@theme/components';
+import { TurinGridInitService } from '../../../@theme/services/scenario-manager-services/turin-grid-init.service';
 
 
 /**
@@ -25,11 +22,7 @@ import { ScenarioPanelComponent } from '../../../@theme/components';
 @Component({
     selector: 'ngx-load-scenario',
     styleUrls: ['../../../@theme/styles/scenario.component.scss'],
-    providers: [Model2ParamInitService,
-        GeneralParamsService,
-        Model1ParamInitService,
-        ControlFileService,
-        EconomyFileService],
+    providers: [GeneralParamsService],
     templateUrl: './load-scenario.component.html',
 })
 /**
@@ -40,9 +33,7 @@ import { ScenarioPanelComponent } from '../../../@theme/components';
  * @param {Subscription[]} subscriptions Private variable holding the custom Observables to unsubscribe when the component will be destroyed
  * @param {boolean} alive Variable indicating that the component exists
  * @param {boolean} loading Variable used to define if the spinner of ```Save Scenario``` button will spin or not as a loader
- * @param {Object} controlSystem Variable holding the JSON structure of ```Control_initialization.txt``` file
  * @param {Object} genParams Variable that is used to shortcut the general parameters irrelevent to the grids i.e horizon / time step etc.
- * @param {Object} econEnv Variable holding the JSON structure of ```Economy_environment_initialization.txt``` file
  * @param {Object} elecParam Variable to hold the electricity timeseries values that was used in the loaded scenario
  * @param {Object} heatParam Variable to hold the electricity timeseries values that was used in the loaded scenario
  * @param {Object} windParam Variable to hold the necessary information to make a request to renewables Ninja API to retrieve Wind timeseries
@@ -57,9 +48,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
     private alive: boolean = true;
     public loading: boolean = false;
-    private controlSystem: Object = {};
     public genParams: Object = {};
-    private econEnv: Object = {};
     private elecParam: Object;
     private heatParam: Object;
 
@@ -83,11 +72,7 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     * @param {HttpClient} httpClient Angular service to make REST requests
     * @param {NbDialogService} dialogService Nebular service to open a new dialog screen over the current one
     * @param {GeneralParamsService} generalParams Custom service responsible on holding the general parameters of the scenario e.g horizon, timestep
-    * @param {Model2ParamInitService} model2 Custom service holding the structure of model 2
-    * @param {Model1ParamInitService} model1 Custom service holding the structure of model 2
     * @param {NbDateService<Date>} dateService Nebular date service to handle the date ranges
-    * @param {ControlFileService} controlFileService Custom service holding the structure of Control_initialization.txt
-    * @param {EconomyFileService} economyFileService Custom service holding the structure of Economy_environment_initialization.txt
     * @param {Router} router Angular service to apply navigation
     * @param {NbMenuService} menuService Nebular service to get access to the Menu service i.e the sidebar menu
     * @param {UserProfileService} userProfile Custom service to get User's information like the email
@@ -95,11 +80,8 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     constructor(private httpClient: HttpClient,
         private dialogService: NbDialogService,
         public generalParams: GeneralParamsService,
-        private model2: Model2ParamInitService,
-        private model1: Model1ParamInitService,
+        private turinGrid: TurinGridInitService,
         private dateService: NbDateService<Date>,
-        private controlFileService: ControlFileService,
-        private economyFileService: EconomyFileService,
         protected router: Router,
         protected menuService: NbMenuService,
         private userProfile: UserProfileService) {
@@ -119,31 +101,12 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.subscriptions.push(this.model2.paramUpdated.subscribe(
-            (data: Object) => this.paramInit = data,
-        ));
-
-        this.subscriptions.push(this.model1.paramUpdated.subscribe(
-            (data: Object) => this.paramInit = data,
-        ));
-
         // Subscribe to events to get modified data
         this.subscriptions.push(this.generalParams.parametersSubject.subscribe(
             (data: Object) => {
-                this.generalParams['formName'] = data['formName'];
                 this.generalParams['startingDate'] = data['startingDate'];
                 this.generalParams['endingDate'] = data['endingDate'];
-                this.generalParams['formDescription'] = data['formDescription'];
-                this.generalParams['model'] = data['model'];
             },
-        ));
-
-        this.subscriptions.push(this.controlFileService.controlFileUpdated.subscribe(
-            (data: Object) => this.controlSystem = data,
-        ));
-
-        this.subscriptions.push(this.economyFileService.economyFileUpdated.subscribe(
-            (data: Object) => this.econEnv = data,
         ));
     }
 
@@ -171,22 +134,16 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                         .subscribe(
                             data => {
                                 // Load and emit the data coming from Database
-
                                 this.loadPage = true;
                                 let temp: Object = JSON.parse(data['paramInit']);
                                 this.paramInit = temp;
+                                this.turinGrid.changeModel(this.paramInit);
                                 this.paramInit['payload']['simulation']['simulation.time'] =
                                     this.paramInit['payload']['simulation']['simulation.time'] *
                                     this.paramInit['payload']['simulation']['time.step'];
                                 this.paramInit['payload']['simulation']['time.step'] = 60 *
                                     this.paramInit['payload']['simulation']['time.step'];
                                 this.generalParams.updateGeneralParameters(this.paramInit['payload']['model'], 'model');
-                                temp = JSON.parse(data['econEnv']);
-                                this.econEnv = temp;
-                                this.economyFileService.changeModel(this.econEnv);
-                                temp = JSON.parse(data['controlSystem']);
-                                this.controlSystem = temp;
-                                this.controlFileService.changeModel(this.controlSystem);
                                 this.elecParam = data['elecParam'];
                                 this.heatParam = data['heatParam'];
                                 temp = JSON.parse(data['windParam']);
@@ -202,9 +159,6 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
                                 this.generalParams.updateGeneralParameters(this.genParams['loadRangeDate'], 'loadRangeDate');
                                 temp = JSON.parse(data['pvParam']);
                                 this.pvParam['payload'] = temp['payload'];
-                                setTimeout(() => {
-                                    this.updateModel();
-                                }, 2500);
                             },
                             error => {
                                 // console.log('Error', error);
@@ -245,9 +199,6 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
             '-' + (this.genParams['endingDate'].getMonth() + 1).toString() +
             '-' + this.genParams['endingDate'].getDate().toString();
         delete this.paramInit['_id'];
-        this.paramInit['payload']['formName'] = this.genParams['formName'];
-        this.paramInit['payload']['formDescription'] = this.genParams['formDescription'];
-        this.paramInit['payload']['model'] = this.genParams['model'];
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
         const today = new Date();
@@ -257,21 +208,9 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
             today.getHours().toString().padStart(2, '0')}:${
             today.getMinutes().toString().padStart(2, '0')}`;
         this.paramInit['payload']['owner'] = this.userProfile.getName();
-        this.updateModel();
-
-        delete this.controlSystem['_id'];
-        this.controlSystem['payload']['formName'] = this.genParams['formName'];
-        this.controlSystem['payload']['formDescription'] = this.genParams['formDescription'];
-        this.updateControlFile();
-        delete this.econEnv['_id'];
-        this.econEnv['payload']['formName'] = this.genParams['formName'];
-        this.econEnv['payload']['formDescription'] = this.genParams['formDescription'];
-        this.updateEconomyFile();
         formData.append('param1', JSON.stringify(this.paramInit));
-        formData.append('param2', JSON.stringify(this.controlSystem));
-        formData.append('param3', JSON.stringify(this.econEnv));
-        formData.append('param4', JSON.stringify(this.elecParam));
-        formData.append('param5', JSON.stringify(this.heatParam));
+        formData.append('param2', JSON.stringify(this.elecParam));
+        formData.append('param3', JSON.stringify(this.heatParam));
         formData.append('method', 'LOAD');
         formData.append('email', this.userProfile.getEmail());
         let url: string = '/planet/rest/upload';
@@ -366,26 +305,6 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     }
 
     /**
-   *
-   * Function to update the user selected model [model1|model2]
-   * @example
-   * updateModel()
-   *
-   */
-    updateModel() {
-        switch (this.genParams['model']) {
-            case 1:
-                this.model1.changeModel(this.paramInit);
-                this.model1.paramUpdated.next(this.paramInit);
-                break;
-            case 2:
-                this.model2.changeModel(this.paramInit);
-                this.model2.paramUpdated.next(this.paramInit);
-                break;
-        }
-    }
-
-    /**
     *
     * Function responsible to initialize VES time.step
     * @example
@@ -393,40 +312,16 @@ export class LoadScenarioComponent implements OnInit, OnDestroy {
     *
     */
     private updateVES(): void {
-        let nodes = 1;
-        if (this.genParams['model'] === 2) {
-            nodes = 8;
-        }
+        const nodes = 43;
         for (let i = 0; i < nodes; i++) {
             if (this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name']) {
                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['timeStep'] = this.paramInit['payload']['simulation']['time.step'];
-                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['simulationID'] = this.genParams['formName'];
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['simulationID'] = this.paramInit['payload']['formName'];
+                this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['parameters']['noSteps'] = this.paramInit['payload']['simulation']['simulation.time'];
                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['nodeID'] = 'node.' + (i + 1);
                 this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['VESPortfolioID'] = this.paramInit['payload']['electric.grid']['node.' + (i + 1)]['VES']['name'];
             }
         }
-    }
-
-    /**
-   *
-   * Function to update the Control_initialazation.txt parameters
-   * @example
-   * updateControlFile()
-   *
-   */
-    updateControlFile() {
-        this.controlFileService.controlFileUpdated.next(this.controlSystem);
-    }
-
-    /**
-    *
-    * Function to update the Economy_environment_initialization.txt parameters
-    * @example
-    * updateEconomyFile()
-    *
-    */
-    updateEconomyFile() {
-        this.economyFileService.economyFileUpdated.next(this.econEnv);
     }
 
     /**

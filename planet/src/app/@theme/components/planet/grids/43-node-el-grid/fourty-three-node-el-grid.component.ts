@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { TechnologiesDialogComponent } from '../energy-grid/energy-grid.tech.component';
 import { TurinGridInitService } from '../../../../services/scenario-manager-services/turin-grid-init.service';
@@ -12,6 +12,7 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
 
     selectedRoom: null;
     sortedRooms = [];
+    @Input() isLoadModule: boolean;
     paramInit = {};
     viewBox = '-10 -10 1200 1050';
     @Output() phase4: EventEmitter<boolean>;
@@ -837,12 +838,27 @@ export class FourtyThreeNodeElGridComponent implements OnInit {
 
     constructor(private dialogService: NbDialogService,
         private turinGrid: TurinGridInitService) {
+
         this.paramInit = this.turinGrid.paramInit;
         this.selectRoom('7', false);
         this.phase4 = new EventEmitter<boolean>();
     }
 
     ngOnInit() {
+        if (this.isLoadModule) {
+            for (let i = 7; i <= 49; i++) {
+                this.roomSvg['rooms'][i]['isActivated'] = this.paramInit['payload']['electric.grid']['node.' + (i - 6)]['activated'];
+            }
+            let counter = 1;
+            for (let i = 7; i <= 49; i++) {
+                if (this.roomSvg['rooms'][i]['isActivated']) {
+                    this.roomSvg['rooms'][i]['name']['text'] = 'node.' + counter;
+                    counter++;
+                } else {
+                    this.roomSvg['rooms'][i]['name']['text'] = '';
+                }
+            }
+        }
     }
 
     /**

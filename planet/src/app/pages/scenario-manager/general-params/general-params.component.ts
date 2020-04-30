@@ -33,7 +33,6 @@ import { TurinGridInitService } from '../../../@theme/services/scenario-manager-
  * @param {number} times Used only in create scenario to resize the map next to the parameters the first time
  * @param {string} currentTab Variable holding the name of the currently selected tab [Electric|DH|Gas]
  * @param {Subscription[]} subscriptions Private variable holding the custom Observables to unsubscribe when the component will be destroyed
- * @param {boolean} dataLoaded Variable to declare if the data are loaded in the component, used only in load-scenario [true|false]
  * @param {boolean} showButton The continue button between phases, visible only in scenario-creation [true|false]
  * @param {Object} loadedSelections Object holding the structure of the grid currently selected e.g elecGrid - 8node, DH - 3node, Gas - 1node
  * @param {Date} min The minimum Date to be used to restrict the horizon on a certain date range combined with max
@@ -42,7 +41,6 @@ import { TurinGridInitService } from '../../../@theme/services/scenario-manager-
  * @param {Object} nodesSelected Object holding [true|false] values for the different nodes per grid @example nodesSelected['8 node el'] = true
  * @param {boolean} waitLoad Variable for smoothing the loading screen, when the data are ready [true|false]
  * @param {Object} genParams Variable holding the instance of general parameters inside the component
- * @param {boolean} isLoadModule Input variable from parent component indicating if we are in load mode or create [true|false]
  * @param {EventEmitter<boolean>} phaseOutput EventEmitter to pass to parent component the information of changing phase. Used only in create scenario
  * @param {ElementRef} elecRadio Element Referrence in electricity radio button.
  * Used to track the user value and adjust the correct schema next to the parameters
@@ -60,8 +58,8 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   private times: number = 1;
   private currentTab: string = 'Electric Grid';
   private subscriptions: Subscription[] = [];
-  private dataLoaded: boolean = false;
   public showButton: boolean = false;
+  public gridArea: string = '';
   public loadedSelections: Object = {
     'elec': '',
     'dh': '',
@@ -74,10 +72,10 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
     'min60': false,
   };
   private nodesSelected: Object = {
-    '43 node el': false,
+    '43 node el': true,
     '1 node el': false,
-    '1 node dh': false,
-    '1 node gas': false,
+    '1 node dh': true,
+    '1 node gas': true,
     '3 node dh': false,
   };
   public waitLoad: boolean = false;
@@ -113,27 +111,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
         this.genParams['dateRangeClicked'] = data['dateRangeClicked'];
       },
     ));
-    // In case it is loadModule we need to get generalParameters from the Database
-    this.subscriptions.push(this.turinGrid.paramUpdated.subscribe(
-      (data: Object) => {
-        if (this.isLoadModule && !this.dataLoaded) {
-          this.paramInit = data;
-          this.nodesSelected = {
-            '43 node el': false,
-            '1 node el': true,
-            '1 node dh': true,
-            '1 node gas': true,
-            '3 node dh': false,
-          };
-          this.generalParams.updateGeneralParameters('assets/images/singleNodeElectric.png', 'gridImage');
-          if (this.paramInit['payload']['simulation']['time.step'] === 60) {
-            this.timeStep['min60'] = true;
-            this.timeStep['min15'] = false;
-          }
-          this.waitLoad = true;
-        }
-      },
-    ));
   }
 
   /**
@@ -150,6 +127,19 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   ngOnInit() {
     if (!this.paramInit) {
       this.paramInit = this.turinGrid.paramInit;
+      if (this.paramInit['payload']['simulation']['time.step'] === 60) {
+        this.timeStep['min60'] = true;
+        this.timeStep['min15'] = false;
+      }
+      if (this.isLoadModule) {
+        this.gridArea = 'Turin';
+        this.loadedSelections = {
+          'elec': '43 Node',
+          'dh': '1 Node',
+          'gas': '1 Node',
+        };
+        this.genParams['gridImage'] = 'assets/images/43-node-grid.png';
+      }
     }
   }
 
@@ -157,11 +147,6 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   * Angular lifecycle hook used to initialize the radio buttons in load mode and resize the map accordingly.
   */
   ngAfterViewInit() {
-    if (this.isLoadModule) {
-      this.loadedSelections['elec'] = '1 Node';
-      this.loadedSelections['dh'] = '1 Node';
-      this.loadedSelections['gas'] = '1 Node';
-    }
     this.resizeMap();
   }
 
@@ -232,7 +217,7 @@ export class GeneralParamsComponent implements AfterViewInit, OnInit, AfterConte
   * @param {Object} tabTitle the title corresponding to the user selected tab
   */
   public changeTab(tabTitle: Object): void {
-    if (this.times === 1 && !this.isLoadModule) {
+    if (this.times === 1) {
       this.resizeMap();
       this.times++;
     }

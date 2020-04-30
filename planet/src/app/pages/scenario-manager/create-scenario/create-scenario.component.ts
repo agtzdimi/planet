@@ -136,8 +136,6 @@ export class CreateScenarioComponent implements OnDestroy {
         const endDate: string = this.genParams['endingDate'].getFullYear().toString() +
             '-' + (this.genParams['endingDate'].getMonth() + 1).toString() +
             '-' + this.genParams['endingDate'].getDate().toString();
-        this.paramInit['payload']['formName'] = this.paramInit['payload']['formName'];
-        this.paramInit['payload']['formDescription'] = this.paramInit['payload']['formDescription'];
         this.paramInit['payload']['startDate'] = startDate;
         this.paramInit['payload']['endDate'] = endDate;
         const today = new Date();
