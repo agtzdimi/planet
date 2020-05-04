@@ -31,7 +31,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -73,7 +79,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -115,7 +127,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -157,7 +175,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -199,7 +223,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -241,7 +271,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -283,7 +319,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -325,7 +367,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -367,7 +415,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -409,7 +463,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -451,7 +511,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -493,7 +559,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -535,7 +607,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -577,7 +655,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -619,7 +703,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -661,7 +751,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -703,7 +799,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -745,7 +847,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -787,7 +895,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -829,7 +943,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -871,7 +991,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -913,7 +1039,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -955,7 +1087,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -997,7 +1135,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1039,7 +1183,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1081,7 +1231,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1123,7 +1279,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1165,7 +1327,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1207,7 +1375,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1249,7 +1423,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1291,7 +1471,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1333,7 +1519,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1375,7 +1567,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1417,7 +1615,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1459,7 +1663,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1501,7 +1711,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1543,7 +1759,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1585,7 +1807,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1627,7 +1855,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1669,7 +1903,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1711,7 +1951,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1753,7 +1999,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1795,7 +2047,13 @@ export class TurinGridInitService {
                     },
 
                     'P2H': {
-
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
                     },
 
                     'P2G': {
@@ -1909,7 +2167,27 @@ export class TurinGridInitService {
 
                 break;
             case 3:
-
+                if (flag) {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H'] = {
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
+                    };
+                } else {
+                    this.paramInit['payload']['electric.grid'][displayingNode]['P2H'] = {
+                        'HPMaxTemperature': 90,
+                        'HPPowerFactor': 0.9,
+                        'HPNominalPower': [30],
+                        'StorageVolume': [500],
+                        'BuildingsVolume': [250000],
+                        'CAPEX': 2000,
+                        'OPEX': 2,
+                    };
+                }
                 break;
             case 4:
                 if (flag) {
@@ -1959,6 +2237,7 @@ export class TurinGridInitService {
                         },
                     };
                 }
+                break;
         }
         this.paramUpdated.next(this.paramInit);
     }

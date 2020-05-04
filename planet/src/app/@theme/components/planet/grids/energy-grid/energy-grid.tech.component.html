@@ -21,6 +21,8 @@
           </div>
         </div>
 
+        <hr>
+
         <div class="row m-3 centralize" *ngIf="showUnit">
           <div class="col-md-1 ">
             <label>P2G</label>
@@ -34,18 +36,29 @@
           </div>
         </div>
 
+        <hr>
+
         <div class="row m-3 centralize" *ngIf="showUnit">
           <div class="col-md-1 ">
             <label>P2H</label>
           </div>
           <div class="col-md-5">
-            <nb-select placeholder="Available P2H Units" (selectedChange)="optionSelected($event,'P2H')">
+            <nb-select placeholder="Available P2H Units" (selectedChange)="optionSelected($event,'P2H')"
+              [selected]="paramInit['payload']['electric.grid'][node]['P2H']['name']">
               <nb-option *ngFor="let regP2H of registeredDevices['P2H']" [value]="regP2H['name']">
                 {{regP2H.name}}</nb-option>
               <nb-option [value]="'None'">None</nb-option>
             </nb-select>
           </div>
         </div>
+
+        <div *ngIf="checkUnit()">
+          <ngx-p2h-unit (p2h)="onUnitChange($event,'P2H')" class="centralize"
+            [p2hInput]="paramInit['payload']['electric.grid'][node]['P2H']" [mode]="'scenario'">
+          </ngx-p2h-unit>
+        </div>
+
+        <hr>
 
         <div class="row m-3 centralize" *ngIf="showUnit">
           <div class="col-md-1 ">

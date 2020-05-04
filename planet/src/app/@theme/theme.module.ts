@@ -19,6 +19,7 @@ import {
   NbLayoutModule,
   NbListModule,
   NbMenuModule,
+  NbPopoverModule,
   NbSearchModule,
   NbSelectModule,
   NbSidebarModule,
@@ -117,6 +118,7 @@ import { CheckBoxesService } from './components/planet/general-components/scenar
 const NB_MODULES = [
   NbLayoutModule,
   NbMenuModule,
+  NbPopoverModule,
   NbUserModule,
   NbActionsModule,
   NbCardModule,

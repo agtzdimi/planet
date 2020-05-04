@@ -96,6 +96,16 @@ export class TechnologiesDialogComponent implements OnInit {
 
   }
 
+  public checkUnit() {
+    if (this.node && this.paramInit['payload']['electric.grid'][this.node]['P2H']['name'] &&
+      this.paramInit['payload']['electric.grid'][this.node]['P2H']['name'] !== 'None') {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   /**
   * Function responsible on updating the main configuration for ```Parameteres_initialazation.txt``` when a flexibility
   * unit has changed one of its attributes
@@ -117,6 +127,11 @@ export class TechnologiesDialogComponent implements OnInit {
     arr = arr.map(value => {
       return JSON.parse(JSON.stringify(value).replace(/_/g, '.'));
     });
+    if (unitType === 'P2H') {
+      for (let i = 1; i <= 43; i++) {
+        this.paramInit['payload']['electric.grid']['node.' + i]['P2H']['HPMaxTemperature'] = this.paramInit['payload']['electric.grid'][this.node]['P2H']['HPMaxTemperature'];
+      }
+    }
     this.paramInit['payload']['electric.grid'][this.node][unitType] = arr[0];
   }
 

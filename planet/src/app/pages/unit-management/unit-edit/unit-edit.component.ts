@@ -105,7 +105,6 @@ export class UnitEditComponent implements OnInit {
   }
 
   handleClick() {
-
     let metadata: string;
     if (this.activeModel === 'Sim') {
       this.selectedModel['metadata']['IP'] = this.unitIP;

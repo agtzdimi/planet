@@ -55,14 +55,12 @@ export class VESUnitComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['vesInput']['currentValue']['metadata']) {
-      const defaultValues = this.changeDotsToUnderScores(changes['vesInput']['currentValue']['metadata']);
-      this.vesParams['payload'] = JSON.parse(defaultValues);
-      this.vesParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.vesParams['payload'] = changes['vesInput']['currentValue']['metadata'];
+      this.vesParams['payload']['parameters']['configuration'] = changes['vesInput']['currentValue']['metadata'];
       this.vesParams['description'] = changes['vesInput']['currentValue']['description'];
       this.ves.emit(this.vesParams);
     } else if (changes['vesInput']['currentValue']['parameters']) {
-      const defaultValues = this.changeDotsToUnderScores(changes['vesInput']['currentValue']);
-      this.vesParams['payload'] = JSON.parse(defaultValues);
+      this.vesParams['payload'] = changes['vesInput']['currentValue'];
       this.ves.emit(this.vesParams);
     }
   }

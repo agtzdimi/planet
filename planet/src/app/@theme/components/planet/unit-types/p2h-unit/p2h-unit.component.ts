@@ -19,16 +19,13 @@ export class P2HUnitComponent implements OnChanges {
       'payload': {
         'parameters': {
           'configuration': {
-            'nominal_heat_power': '',
-            'cop': '',
-          },
-          'input': {
-            'control': '',
-          },
-          'output': {
-            'electricity_power_active': '',
-            'electricity_power_reactive': '',
-            'heat_power': '',
+            'HPMaxTemperature': 90,
+            'HPPowerFactor': 0.9,
+            'HPNominalPower': 30,
+            'StorageVolume': 500,
+            'BuildingsVolume': 250000,
+            'CAPEX': 2000,
+            'OPEX': 2,
           },
         },
       },
@@ -40,20 +37,22 @@ export class P2HUnitComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['p2hInput']['currentValue']['metadata']) {
-      const defaultValues = this.changeDotsToUnderScores(changes['p2hInput']['currentValue']['metadata']);
-      this.p2hParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+      this.p2hParams['payload']['parameters']['configuration'] = changes['p2hInput']['currentValue']['metadata'];
       this.p2hParams['description'] = changes['p2hInput']['currentValue']['description'];
       this.p2h.emit(this.p2hParams);
-    } else if (changes['p2hInput']['currentValue']['nominal_heat_power']) {
-      const defaultValues = this.changeDotsToUnderScores(changes['p2hInput']['currentValue']);
-      this.p2hParams['payload']['parameters']['configuration'] = JSON.parse(defaultValues);
+    } else if (changes['p2hInput']['currentValue']['HPMaxTemperature']) {
+      this.p2hParams['payload']['parameters']['configuration']['HPMaxTemperature'] = changes['p2hInput']['currentValue']['HPMaxTemperature'];
+      this.p2hParams['payload']['parameters']['configuration']['HPPowerFactor'] = changes['p2hInput']['currentValue']['HPPowerFactor'];
+      this.p2hParams['payload']['parameters']['configuration']['HPNominalPower'] = changes['p2hInput']['currentValue']['HPNominalPower'];
+      this.p2hParams['payload']['parameters']['configuration']['StorageVolume'] = changes['p2hInput']['currentValue']['StorageVolume'];
+      this.p2hParams['payload']['parameters']['configuration']['BuildingsVolume'] = changes['p2hInput']['currentValue']['BuildingsVolume'];
+      this.p2hParams['payload']['parameters']['configuration']['name'] = changes['p2hInput']['currentValue']['name'];
+      this.p2hParams['payload']['parameters']['configuration']['IP'] = changes['p2hInput']['currentValue']['IP'];
+      this.p2hParams['payload']['parameters']['configuration']['Port'] = changes['p2hInput']['currentValue']['Port'];
+      this.p2hParams['payload']['parameters']['configuration']['CAPEX'] = changes['p2hInput']['currentValue']['CAPEX'];
+      this.p2hParams['payload']['parameters']['configuration']['OPEX'] = changes['p2hInput']['currentValue']['OPEX'];
       this.p2h.emit(this.p2hParams);
     }
-  }
-
-  changeDotsToUnderScores(p2hObject: Object): string {
-    const p2hObjectValue = JSON.stringify(p2hObject).replace('nominal.heat.power', 'nominal_heat_power');
-    return p2hObjectValue;
   }
 
   onChange(attribute, event) {
