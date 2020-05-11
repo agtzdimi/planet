@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-xxl-12">
+
+    <!-- Phase 1 General Parameters -->
+    <ngx-general-params (phaseOutput)="phase2=$event" [isLoadModule]="false"></ngx-general-params>
+
+    <!-- Phase 2 Simulation Technologies Parameters -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="ui content">
+          <ngx-tech-param [suiTransition]="transitionController2" *ngIf="checkPhase2()" [(pvParam)]="pvParam"
+            [(windParam)]="windParam" (phase3)="animateInfo(transitionController3,transitionName3,3)"
+            (pvChange)="pvParam" (windChange)="windParam" [isLoadModule]="false">
+          </ngx-tech-param>
+        </div>
+      </div>
+      <ngx-fourty-three-el-grid style="width: 100%" *ngIf="phase3"
+        (phase4)="animateInfo(transitionController4,transitionName4,4)">
+      </ngx-fourty-three-el-grid>
+
+
+
+      <!-- Phase 3 Control Simulation Parameters -->
+      <!--  <div class=" col-md-12" *ngIf="phase3">
+        <div [suiTransition]="transitionController3"> -->
+
+      <!-- Profiles Card -->
+
+      <!--  <nb-card size="large" accent="primary" *ngIf="!showProfiles">
+            <nb-card-header>Profiles Timeseries</nb-card-header>
+            <div [ngStyle]="{'display': 'flex','align-items': 'center',
+    'justify-content': 'center', 'width': '100%','height':'100%'}">
+              <button nbButton hero status="info" shape="semi-round" (click)="getProfiles()">Generate</button>
+            </div>
+          </nb-card>
+          <ngx-simulation-line *ngIf="showProfiles" [data]="profiles"></ngx-simulation-line> -->
+      <!-- <ngx-tech-control [isLoadModule]="false" (phase4)="animateInfo(transitionController4,transitionName4,4)">
+          </ngx-tech-control>
+        </div>
+      </div> -->
+
+      <!-- Phase 4 Economy Simulation Parameters -->
+
+      <!-- <div class="col-md-12">
+        <div [suiTransition]="transitionController4">
+          <ngx-tech-cost *ngIf="phase4" (phase5)="animateInfo(transitionController5,transitionName5,5)">
+          </ngx-tech-cost>
+        </div>
+      </div> -->
+
+    </div>
+
+    <!-- Phase 5 Start Uploading -->
+    <div class="row submit-button" *ngIf="phase4">
+      <div class="col-md-2">
+        <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"
+          nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startUpload()">
+          Save Scenario
+        </button>
+      </div>
+      <div *ngIf="saveMessage!==''" class="col-md-2">
+        <div [ngClass]="{
+          'errorTextarea': saveMessage.includes('Error'),
+          'successTextarea': !saveMessage.includes('Error')
+        }">
+          {{saveMessage}}
+        </div>
+      </div>
+    </div>
+  </div>

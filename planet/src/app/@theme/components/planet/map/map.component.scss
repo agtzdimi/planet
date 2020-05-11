@@ -1,0 +1,11 @@
+@import '~mapbox-gl/dist/mapbox-gl.css';
+
+mgl-map {
+  height: 100%;
+  width: 100%;
+}
+
+.mapboxgl-canvas {
+  width: 100%;
+  height: 100%;
+}

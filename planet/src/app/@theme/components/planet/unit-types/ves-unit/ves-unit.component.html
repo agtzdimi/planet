@@ -1,0 +1,80 @@
+<div *ngIf="mode === 'edit'">
+    <div class="form-group row">
+        <label for="'unitDescr'" class="col-md-3 formDescr">Unit Description</label>
+        <div class="col-md-6">
+            <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'"
+                [(ngModel)]="vesParams['description']"></textarea>
+        </div>
+    </div>
+
+    <hr class="m-4">
+</div>
+
+<div class="row">
+
+    <div [class]="parametersColumnSize">
+        <h6 *ngIf="mode !== 'scenario'">Portfolio Parameters</h6>
+
+        <div *ngIf="mode === 'scenario'">
+
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['noResidentialBuildings'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['noResidentialBuildings']" [compId]="'ves_residential'"
+                [inputHtmlLabel1]="'Residential'" [inputHtmlLabel2]="'No of Buildings'" [columnLength1]="'col-sm-3'"
+                [columnLength2]="'col-sm-5'">
+            </ngx-input-field>
+
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['noCommercialBuildings'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['noCommercialBuildings']" [compId]="'ves_commercial'"
+                [inputHtmlLabel1]="'Commercial'" [inputHtmlLabel2]="'No of Buildings'" [columnLength1]="'col-sm-3'"
+                [columnLength2]="'col-sm-5'">
+            </ngx-input-field>
+
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['CAPEX'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['CAPEX']" [compId]="'ves_capex'" [inputHtmlLabel1]="'CAPEX'"
+                [inputHtmlLabel2]="'€/kWel'" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-5'">
+            </ngx-input-field>
+
+            <ngx-input-field [isChecked]="true" (valChange)="onChange(['OPEX'],+$event,'parameters')"
+                [(val)]="vesParams['payload']['parameters']['OPEX']" [compId]="'ves_opex'" [inputHtmlLabel1]="'OPEX'"
+                [inputHtmlLabel2]="'%CAPEX'" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-5'">
+            </ngx-input-field>
+        </div>
+
+        <div *ngIf="mode !== 'scenario'">
+            <div class="row">
+                <div class="col-md-2"
+                    style="display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <label style="text-decoration: underline">Type of Buildings</label>
+                </div>
+                <div class="col-md-10 vl">
+                    <div class="row">
+                        <div class="col-sm-4" style="margin-left: 2.1rem;"></div>
+                        <label>No of Buildings</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ngx-input-field [isChecked]="true"
+                                (valChange)="onChange(['noResidentialBuildings'],+$event,'parameters')"
+                                [(val)]="vesParams['payload']['parameters']['noResidentialBuildings']"
+                                [compId]="'ves_residential'" id="ves_residential" [inputHtmlLabel1]="'Residential'"
+                                [inputHtmlLabel2]="''" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-1'">
+                            </ngx-input-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ngx-input-field [isChecked]="true"
+                                (valChange)="onChange(['noCommercialBuildings'],+$event,'parameters')"
+                                [(val)]="vesParams['payload']['parameters']['noCommercialBuildings']"
+                                [compId]="'ves_commercial'" [inputHtmlLabel1]="'Commercial'" [inputHtmlLabel2]="''"
+                                [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-1'">
+                            </ngx-input-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

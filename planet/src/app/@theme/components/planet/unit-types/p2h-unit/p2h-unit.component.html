@@ -1,0 +1,74 @@
+<div *ngIf="mode === 'edit'">
+    <div class="form-group row">
+        <label for="'unitDescr'" class="col-md-3 formDescr">Unit Description</label>
+        <div class="col-md-6">
+            <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'"
+                [(ngModel)]="p2hParams['description']"></textarea>
+        </div>
+    </div>
+
+    <hr class="m-4">
+</div>
+
+<div class="row">
+    <div [class]="parametersColumnSize">
+        <div [nbPopover]="popContent" nbPopoverTrigger="hover" nbPopoverPlacement="left" *ngIf="mode === 'scenario'">
+            <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'°C'"
+                (valChange)="onChange(['HPMaxTemperature'],+$event)"
+                [(val)]="p2hParams['payload']['parameters']['configuration']['HPMaxTemperature']"
+                [compId]="'HPMaxTemperature'" [inputHtmlLabel1]="'HP Max Temperature'" [columnLength1]="'col-sm-3'"
+                [columnLength2]="'col-sm-5'">
+            </ngx-input-field>
+        </div>
+
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'°C'" *ngIf="mode !== 'scenario'"
+            (valChange)="onChange(['HPMaxTemperature'],+$event)"
+            [(val)]="p2hParams['payload']['parameters']['configuration']['HPMaxTemperature']"
+            [compId]="'HPMaxTemperature'" [inputHtmlLabel1]="'HP Max Temperature'" [columnLength1]="'col-sm-3'"
+            [columnLength2]="'col-sm-5'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="onChange(['HPPowerFactor'],+$event)"
+            [(val)]="p2hParams['payload']['parameters']['configuration']['HPPowerFactor']" [compId]="'HPPowerFactor'"
+            [inputHtmlLabel1]="'HP Power Factor'" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-5'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'MW<sub>th</sub>'"
+            (valChange)="onChange(['HPNominalPower'],+$event)"
+            [(val)]="p2hParams['payload']['parameters']['configuration']['HPNominalPower']" [compId]="'HPNominalPower'"
+            [inputHtmlLabel1]="'HP Nominal Power'" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-5'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'m<sup>3</sup>'"
+            (valChange)="onChange(['StorageVolume'],+$event)"
+            [(val)]="p2hParams['payload']['parameters']['configuration']['StorageVolume']" [compId]="'StorageVolume'"
+            [inputHtmlLabel1]="'Storage Volume'" [columnLength1]="'col-sm-3'" [columnLength2]="'col-sm-5'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" [inputHtmlLabel2]="'m<sup>3</sup>'"
+            (valChange)="onChange(['BuildingsVolume'],+$event)"
+            [(val)]="p2hParams['payload']['parameters']['configuration']['BuildingsVolume']"
+            [compId]="'BuildingsVolume'" [inputHtmlLabel1]="'Buildings Volume'" [columnLength1]="'col-sm-3'"
+            [columnLength2]="'col-sm-5'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" (valChange)="onChange(['CAPEX'],+$event)"
+            [(val)]="p2hParams['payload']['parameters']['configuration']['CAPEX']" [compId]="'p2h_capex'"
+            [inputHtmlLabel1]="'CAPEX'" [inputHtmlLabel2]="'€/kWel'" [columnLength1]="'col-sm-3'"
+            [columnLength2]="'col-sm-5'">
+        </ngx-input-field>
+
+        <ngx-input-field [isChecked]="true" (valChange)="onChange(['OPEX'],+$event)"
+            [(val)]="p2hParams['payload']['parameters']['configuration']['OPEX']" [compId]="'p2h_opex'"
+            [inputHtmlLabel1]="'OPEX'" [inputHtmlLabel2]="'%CAPEX'" [columnLength1]="'col-sm-3'"
+            [columnLength2]="'col-sm-5'">
+        </ngx-input-field>
+    </div>
+</div>
+
+<ng-template #popContent>
+    <label>The Temperature will be the same</label>
+    <br>
+    <label>for all attached P2H units </label>
+</ng-template>

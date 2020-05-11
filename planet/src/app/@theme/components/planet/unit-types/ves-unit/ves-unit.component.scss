@@ -1,0 +1,43 @@
+@import '../../../../styles/themes';
+
+.formDescr {
+    margin-top: 2.5%;
+    margin-left: 2%;
+    font-weight: bold;
+  }
+  
+  textarea {
+    margin-top: 0.9rem;
+  }
+
+  nb-select {
+    width: 12.8rem;
+  }
+
+  ::ng-deep .select-button {
+    text-align: center !important;
+  }
+
+  nb-option {
+    display: flex;
+    justify-content: center;
+  }
+
+  .listItem {
+    margin-left: 2.1rem;
+  }
+
+  h6 {
+    margin-bottom: 2rem;
+  }
+
+  label {
+    margin-top: 14px;
+    text-align: left;
+    font-weight: nb-theme(text-label-font-weight);
+  }
+
+  .vl {
+    border-left: 3px solid #e4e9f2;
+    height: 100%;
+  }

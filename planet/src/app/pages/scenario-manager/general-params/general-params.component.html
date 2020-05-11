@@ -1,0 +1,171 @@
+<nb-card accent="primary">
+  <nb-card-header>Simulation Parameters</nb-card-header>
+  <nb-card-body>
+
+    <div class="col-md-12">
+      <!-- initialize map=id for mapbox -->
+      <div id='map'></div>
+
+      <!-- Name and Description -->
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-5">
+          <div class="row" [ngStyle]="{'margin-bottom':'2rem'}">
+            <div class="col-md-6">
+              <input class="m-2" type="text" nbInput fullWidth fieldSize="small" placeholder="Simulation Name"
+                [(ngModel)]="paramInit['payload']['formName']" [ngStyle]="{'width':'100%','height':'80%'}">
+            </div>
+            <div class="col-md-6">
+              <div *ngIf="paramInit['payload']['formName'] === ''" class="requiredField"> Simulation Name is
+                required</div>
+              <div *ngIf="paramInit['payload']['formName'].includes('  -  ')" class="requiredField">
+                '[space][space]-[space][space]' is a
+                reserved word!</div>
+              <div *ngIf="paramInit['payload']['formName'].includes('|')" class="requiredField">
+                The symbol '|' is reserved!</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <textarea class="m-2" nbInput fullWidth shape="round" (change)="handleDescriptionChange($event)"
+                placeholder="Simulation Description"
+                [ngStyle]="{'width':'100%','padding-left': '1rem','padding-top': '0.3rem'}">{{paramInit['payload']['formDescription']}}</textarea>
+            </div>
+            <div class="col-md-6">
+              <div *ngIf="paramInit['payload']['formDescription'] === ''" class="requiredTextarea"> Simulation
+                Description is
+                required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+
+      <hr>
+
+
+      <div class="row">
+        <div class="col-md-6">
+
+          <!-- Selection of Location and Grid Type -->
+          <div class="row">
+            <div class="col-md-6">
+              <nb-select class="m-2" placeholder="Select grid" (selectedChange)="animateImage('transitionName1')"
+                [status]="'info'" [shape]="'semi-round'" [selected]="gridArea">
+                <nb-option value="Turin">Turin</nb-option>
+                <nb-option value="Athens" disabled>Athens</nb-option>
+              </nb-select>
+            </div>
+            <div class="row">
+              <div class=" col-md-12">
+                <nb-tabset (changeTab)="changeTab($event)">
+                  <nb-tab tabTitle="Electric Grid">
+                    <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'elec')"
+                      (click)="onRadioButtonClicked($event)" #elecRadio name="elecRadio"
+                      [value]="loadedSelections['elec']">
+                      <nb-radio [value]="'43 Node'">43 Node</nb-radio>
+                    </nb-radio-group>
+                  </nb-tab>
+                  <nb-tab tabTitle="District Heating">
+                    <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'dh')"
+                      (click)="onRadioButtonClicked($event)" #dhRadio name="dhRadio" [value]="loadedSelections['dh']">
+                      <nb-radio [value]="'1 Node'">1 Node</nb-radio>
+                      <nb-radio [value]="'3 Node'" disabled>3 Node</nb-radio>
+                    </nb-radio-group>
+                  </nb-tab>
+                  <nb-tab tabTitle="Gas Network">
+                    <nb-radio-group class="m-2" (valueChange)="updateSelectedModel($event,'gas')"
+                      (click)="onRadioButtonClicked($event)" #gasRadio name="gasRadio"
+                      [value]="loadedSelections['gas']">
+                      <nb-radio [value]="'1 Node'">1 Node</nb-radio>
+                    </nb-radio-group>
+                  </nb-tab>
+                </nb-tabset>
+              </div>
+            </div>
+          </div>
+
+          <!-- Configuration Options -->
+          <div class="row">
+            <div class="col-md-4">
+              <div *ngIf="openParams()">
+
+                <hr>
+
+                <div class="form-group row">
+                  <label for="dt" class="col-sm-6 col-form-label"
+                    [ngStyle]="{'line-height': '31px','margin-left':'0'}">Time Step
+                    (Minutes)</label>
+                  <div class="col-sm-12">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="row">
+                          <div class="col-md-4">
+                            <sui-checkbox [ngModel]="timeStep['min15']" [isReadonly]="timeStep['min15']"
+                              (ngModelChange)="handleTimeStep('min15')">
+                              <p>15</p>
+                            </sui-checkbox>
+                          </div>
+                          <div class="col-md-5">
+                            <sui-checkbox [ngModel]="timeStep['min60']" [isReadonly]="timeStep['min60']"
+                              (ngModelChange)="handleTimeStep('min60')">
+                              <p>60</p>
+                            </sui-checkbox>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="simulation-time" class="col-sm-6 col-form-label m-1"
+                    [ngStyle]="{'line-height': '31px'}">Simulation
+                    Horizon</label>
+                  <div class=" row">
+                    <div class="ui icon input datePickerButton" [ngStyle]="{'width':'100%'}">
+                      <input *ngIf="isLoadModule" nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
+                        (click)="dateRangeChange()" [value]="calculateDateInput()">
+                      <input *ngIf="!isLoadModule" nbInput [nbDatepicker]="formpicker" placeholder="Choose a Date range"
+                        (click)="dateRangeChange()">
+                      <i class="calendar alternate outline icon"></i>
+                    </div>
+
+                    <div class="col-md-12">
+                      <nb-rangepicker (rangeChange)="handleDateChange($event)" [min]="min" [max]="max" #formpicker>
+                      </nb-rangepicker>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <button *ngIf="showButton && !isLoadModule" nbButton hero class="m-3" status="info" shape="round"
+                    (click)="animateInfo()">Continue</button>
+                  <div *ngIf="!showButton && !isLoadModule" class="requiredField">
+                    {{genParams['errorMessage']}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-1"></div>
+            <div class="col-md-7">
+              <div *ngIf="openParams()" class="col-md-12">
+                <div *ngIf="genParams['gridImage']">
+                  <img [suiTransition]="transitionController1" [src]="genParams['gridImage']">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div *ngIf="openParams()" class="col-md-5">
+          <ngx-leaflet-map [load]="genParams['showMap']" [(coordinates)]="genParams['coordinates']"
+            (coordChange)="setCoord($event)">
+          </ngx-leaflet-map>
+        </div>
+      </div>
+    </div>
+
+  </nb-card-body>
+</nb-card>

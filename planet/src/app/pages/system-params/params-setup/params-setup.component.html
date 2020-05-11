@@ -1,0 +1,148 @@
+<div class="row">
+  <div class="col">
+
+    <nb-card accent="primary">
+      <nb-card-body>
+
+        <nb-stepper orientation="horizontal">
+
+          <!-- REST Paramaters -->
+
+          <nb-step [label]="'REST Params'">
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="planetRestIP=$event" [(val)]="planetRestIP" [compId]="'planetRestIP'"
+              [inputHtmlLabel1]="'PLANET\'s REST IP'" [type]="'string'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="planetRestPort=+$event"
+              [(val)]="planetRestPort" [compId]="'planetRestPort'" [inputHtmlLabel1]="'PLANET\'s REST Port'">
+            </ngx-input-field>
+
+            <button nbButton disabled nbStepperNext>Previous</button>
+            <button nbButton nbStepperNext>Next</button>
+          </nb-step>
+
+          <!-- Middleware Paramaters -->
+
+          <nb-step [label]="'Middleware Params'">
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="sitewhereIP=$event" [(val)]="sitewhereIP" [compId]="'sitewhereIP'"
+              [inputHtmlLabel1]="'Middleware IP'" [type]="'string'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="sitewhereUIPort=+$event"
+              [(val)]="sitewhereUIPort" [compId]="'sitewhereUIPort'" [inputHtmlLabel1]="'Middleware UI Port'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (valChange)="sitewhereMQTTPort=+$event" [(val)]="sitewhereMQTTPort" [compId]="'sitewhereMQTTPort'"
+              [inputHtmlLabel1]="'Middleware MQTT Port'">
+            </ngx-input-field>
+            <button nbButton nbStepperPrevious>Previous</button>
+            <button nbButton nbStepperNext>Next</button>
+          </nb-step>
+
+          <!-- Database Paramaters -->
+
+          <nb-step [label]="'Database Params'">
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoIP=$event"
+              [(val)]="mongoIP" [compId]="'mongoIP'" [inputHtmlLabel1]="'Database\'s IP'" [type]="'string'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (valChange)="mongoPort=+$event"
+              [(val)]="mongoPort" [compId]="'mongoPort'" [inputHtmlLabel1]="'Database\'s Port'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''" (stringValChange)="mongoUser=$event"
+              [(val)]="mongoUser" [compId]="'mongoUser'" [inputHtmlLabel1]="'PLANET\'s Database UserName'"
+              [type]="'string'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [inputType]="'password'" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="mongoPassword=$event" [(val)]="mongoPassword" [compId]="'mongoPassword'"
+              [inputHtmlLabel1]="'Database Password'" [type]="'string'">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="mongoAuthDB=$event" [(val)]="mongoAuthDB" [compId]="'mongoAuthDB'"
+              [inputHtmlLabel1]="'Database Authentication DB'" [type]="'string'">
+            </ngx-input-field>
+            <button nbButton nbStepperPrevious>Previous</button>
+            <button nbButton nbStepperNext>Next</button>
+          </nb-step>
+
+          <!-- Simulator Paramaters -->
+
+          <nb-step [label]="'Simulator'">
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="simulationMachine=$event" [(val)]="simulationMachine" [compId]="'simulationMachine'"
+              [inputHtmlLabel1]="'Simulations\' Machine IP'" [type]="'string'" [isReadOnly]="true">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (valChange)="simulationMachinePort=+$event" [(val)]="simulationMachinePort"
+              [compId]="'simulationMachinePort'" [inputHtmlLabel1]="'Simulation\'s Port'" [isReadOnly]="true">
+            </ngx-input-field>
+
+            <ngx-input-field class="m-2" [isChecked]="true" [inputHtmlLabel2]="''"
+              (stringValChange)="simulationMachineTopic=$event" [(val)]="simulationMachineTopic"
+              [compId]="'simulationMachineTopic'" [inputHtmlLabel1]="'Simulations\' Machine Topic'" [type]="'string'"
+              [isReadOnly]="true">
+            </ngx-input-field>
+
+            <div *ngIf="loaded">
+              <div class="row">
+                <div class="col-md-3" *ngFor="let simulator of simUnit">
+                  <div class="imageCard">
+
+                    <nb-card [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge" [ngClass]="{
+                      'selectedSim': checkSimulator(simulator)
+                    }">
+                      <nb-card-body (click)="handleUnit(simulator)">
+                        <div *ngIf="simulator['metadata']['Simulink']">
+                          <img class="component-icon" src="assets/images/Simulink.jpg"
+                            [ngStyle]="{'width': '100px', 'height': '80px'}">
+                        </div>
+                        <div *ngIf="simulator['metadata']['OpalRT']">
+                          <img class="component-icon" src="assets/images/Sim.jpg"
+                            [ngStyle]="{'width': '100px', 'height': '80px'}">
+                        </div>
+                        <label class="component-name">{{simulator['description']}}</label>
+                      </nb-card-body>
+                    </nb-card>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button nbButton nbStepperPrevious>Previous</button>
+            <button nbButton disabled nbStepperNext>Next</button>
+          </nb-step>
+        </nb-stepper>
+
+      </nb-card-body>
+    </nb-card>
+
+    <!-- Saving the Parameters -->
+
+    <div class="row">
+      <div class="col-md-5"></div>
+      <div class="col-md-2">
+        <button nbButton type="button" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="large"
+          nbSpinnerMessage="" status="success" size="large" class="start-upload-btn m-2" (click)="startUpload()">
+          Save Parameters
+        </button>
+      </div>
+      <div class="col-md-2">
+        <div *ngIf="saveMessage!==''" [ngClass]="{
+          'errorTextarea': saveMessage.includes('Error'),
+          'successTextarea': !saveMessage.includes('Error')
+        }">
+          {{saveMessage}}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

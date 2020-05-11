@@ -1,0 +1,17 @@
+{
+"simulationID": "kalimera",
+"pubTopicP2H": "/PLANET/P2H",
+"timeStep": 0.25,
+"counter": 1,
+"tOutForecast": 5,
+"setpoint": [700, 800],
+"storage": [0.5, 0.9],
+"HPMaxTemperature": 90,
+"HPPowerFactor":0.9,
+"HPNominalPower": 30,
+"StorageVolume":500,
+"BuildingsVolume":250000,
+"HighTemperatureHeat":400,
+"CAPEX": 2000,
+"OPEX": 2
+}

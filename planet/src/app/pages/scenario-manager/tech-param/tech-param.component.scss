@@ -1,0 +1,44 @@
+@import '../../../@theme/styles/themes.scss';
+@import '../../../@theme/styles/slider.component.scss';
+
+@include nb-install-component() {
+
+  .rating-header {
+    line-height: 1.5rem;
+    font-size: 1.25rem;
+    font-family: nb-theme(font-family-secondary);
+    font-weight: nb-theme(text-subtitle-font-weight);
+  }
+
+  .dropdown {
+    min-width: 120px;
+  }
+}
+
+img {
+  width: 14rem;
+  height: 16rem;
+  margin-bottom: 3rem;
+}
+
+.centralize {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.listItem {
+  margin-left: 2.1rem;
+}
+
+label {
+  margin-top: 7px;
+  font-weight: nb-theme(text-label-font-weight);
+  line-height: nb-theme(text-subtitle-line-height);
+}
+
+.form-control {
+  margin-top: 0.8rem;
+}

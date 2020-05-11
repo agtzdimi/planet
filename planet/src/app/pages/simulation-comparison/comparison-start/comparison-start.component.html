@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col">
+
+    <nb-card accent="primary">
+      <nb-card-header>Simulation Comparison</nb-card-header>
+      <nb-card-body>
+
+        <div class="row">
+          <div class="col-md-4">
+            <button nbButton hero status="info" (click)="openDialogBox()"
+              [ngStyle]="{'width': '50%', 'overflow': 'hidden'}" [nbPopover]="selectedForms" nbPopoverTrigger="hover"
+              nbPopoverPlacement="bottom">{{buttonText}}</button>
+          </div>
+          <div class="col-md-2">
+            <button *ngIf="selectedForms !== 'Select Saved Scenarios'" nbButton type="button" [nbSpinner]="loading"
+              nbSpinnerStatus="primary" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
+              class="start-upload-btn" (click)="startComparison()">
+              Comparison Start
+            </button>
+          </div>
+          <div class="col-md-3">
+            <div *ngIf="status">
+              <div [ngClass]="{
+                'errorTextarea': status.includes('error'),
+                'successTextarea': status.includes('success')
+              }">
+                {{textMessage}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <div *ngIf="showLine">
+      <nb-card *ngFor="let lineCh of lineChart" accent="primary">
+        <nb-card-header>{{lineCh.title}}</nb-card-header>
+        <nb-card-body>
+          <ngx-simulation-line [data]="lineCh.data"></ngx-simulation-line>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
+    <div *ngIf="showBar">
+      <div *ngFor="let barCh of barChart">
+        <nb-card accent="primary"
+          *ngIf="! barCh.title.includes('LCOE and economic results CO') && ! barCh.yAxisLabel.includes('emissions 10')">
+          <nb-card-header>{{barCh.title}}</nb-card-header>
+          <nb-card-body>
+            <ngx-simulation-bars [data]="barCh.data" [yAxisLabel]="barCh.yAxisLabel"
+              [yRightAxisLabel]="barCh.yRightAxisLabel">
+            </ngx-simulation-bars>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+
+  </div>
+</div>

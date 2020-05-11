@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col">
+
+    <nb-card accent="primary">
+      <nb-card-header>Start Simulation</nb-card-header>
+      <nb-card-body>
+
+        <div class="row">
+          <div class="col-md-4">
+            <button nbButton hero status="info" (click)="openDialogBox()">{{formName}}</button>
+          </div>
+          <div class="col-md-2">
+            <button *ngIf="formName !== 'Select Saved Scenario'" nbButton type="button" [nbSpinner]="loading"
+              nbSpinnerStatus="primary" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="medium"
+              class="start-upload-btn" (click)="startSimulation()">
+              Start Simulation
+            </button>
+          </div>
+          <div class="col-md-3">
+            <sui-progress *ngIf="!status && formName !== 'Select Saved Scenario' && showSimBar"
+              class="active indicating" [value]="changingValue" [ngStyle]="{'margin-top': '10px', 'height': '42%'}"
+              [autoSuccess]="true">
+            </sui-progress>
+            <div *ngIf="status">
+              <div [ngClass]="{
+            'errorTextarea': !status.includes('Simulation finished successfully'),
+            'successTextarea': status.includes('Simulation finished successfully')}">
+                {{status}}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3" *ngIf="showVal">
+            <ngx-toggle-settings-button></ngx-toggle-settings-button>
+          </div>
+        </div>
+
+      </nb-card-body>
+    </nb-card>
+
+    <div *ngIf="true">
+      <nb-card *ngFor="let nodeCh of nodesChart" accent="primary" size="large">
+        <nb-card-header>{{nodeCh.title}}</nb-card-header>
+        <nb-card-body>
+          <ngx-simulation-nodes [data]="nodeCh.data"></ngx-simulation-nodes>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
+    <div *ngIf="showArea">
+      <nb-card *ngFor="let areaCh of areaChart" accent="primary" size="large">
+        <nb-card-header>{{areaCh.title}}</nb-card-header>
+        <nb-card-body>
+          <ngx-simulation-line [data]="areaCh.data"></ngx-simulation-line>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
+    <div *ngIf="showBar">
+      <div class="row">
+        <div *ngFor="let barCh of barChart" [ngClass]="{
+          'col-md-12': barCh.title.includes('LCOE and economic results CO'),
+          'col-md-6': !barCh.title.includes('LCOE and economic results CO')
+        }">
+          <nb-card accent="primary">
+            <nb-card-header>{{barCh.title}}</nb-card-header>
+            <nb-card-body>
+              <ngx-simulation-bars [yAxisLabel]="barCh.yAxisLabel" [yRightAxisLabel]="barCh.yRightAxisLabel"
+                [data]="barCh.data" [yVal]="yVal"></ngx-simulation-bars>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

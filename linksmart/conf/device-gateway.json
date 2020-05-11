@@ -1,0 +1,27 @@
+{
+  "id": "PLANET",
+  "description": "PLANET Linskmart Configuration File",
+  "publicEndpoint": "http://localhost:8080",
+  "staticDir": "./static",
+  "catalog": [],
+  "http": {
+    "bindAddr": "0.0.0.0",
+    "bindPort": 8080
+  },
+  "protocols": {
+    "REST": {
+      "location": "/planet"
+    },
+    "MQTT": {
+      "discover": false,
+      "url": "tcp://localhost:1883",
+      "prefix": "PLANET",
+      "offlineBuffer": 100
+    }
+  },
+  "serviceCatalog": {
+    "discover": true,
+    "endpoint": "http://localhost:8082",
+    "ttl": 120
+  }
+}

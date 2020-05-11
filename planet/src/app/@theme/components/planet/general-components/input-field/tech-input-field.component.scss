@@ -1,0 +1,30 @@
+@import '../../../../styles/themes';
+
+.listItem {
+    margin-left: 2.1rem;
+}
+
+input[type=text] {
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  input[type=password] {
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  .innerHtmlStructure {
+      font-size: 15px;
+      font-weight: bold;
+  }
+
+  .innerHtmlLabels {
+    margin-top: 0.8%;
+  }
+
+  label {
+    margin-top: 7px;
+    text-align: left;
+    font-weight: nb-theme(text-label-font-weight);
+  }

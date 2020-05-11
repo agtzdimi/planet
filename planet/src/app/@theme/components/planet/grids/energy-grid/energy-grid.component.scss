@@ -1,0 +1,97 @@
+@import '../../../../../@theme/styles/themes';
+@import '~@nebular/theme/components/card/card.component.theme';
+
+@include nb-install-component() {
+
+.stroke-pattern {
+  fill: none;
+  stroke: #bdc4cd;
+  stroke-miterlimit: 10;
+  opacity: 0.1;
+  stroke-width: 1px;
+}
+
+.stroked-element {
+  stroke-width: 4px;
+  stroke: #bdc4cd;
+  stroke-miterlimit: 10;
+  fill: url('#New_Pattern_Swatch_1');
+}
+
+.room-border-gas {
+  stroke-width: 14px;
+  stroke: rgb(30, 255, 0);
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+.room-border-dh {
+  stroke-width: 14px;
+  stroke: rgba(255, 51, 0, 0.651);
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+.room-border-electrical {
+  stroke-width: 14px;
+  stroke: rgb(0, 89, 255);
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+.room-border-node {
+  stroke-width: 7px;
+  font-weight: 800px;
+  
+  stroke: #b8b8b8;
+  stroke-miterlimit: 10;
+  fill: none;
+}
+
+.room-bg {
+  fill: nb-theme(background-basic-color-1);
+  stroke: transparent;
+  cursor: pointer;
+  stroke-width: 4px;
+}
+
+.room-bg-border-grad {
+  fill: none;
+  stroke: none;
+  stroke-width: 4px;
+}
+
+.room-text {
+  cursor: pointer;
+  user-select: none;
+  pointer-events: none;
+  fill: nb-theme(color-primary-400);
+  font-weight: 700;
+  font-size: large;
+}
+
+.selected-room {
+  z-index: 40;
+
+  .room-text {
+    fill: nb-theme(color-primary-600);
+    font-weight: nb-theme(text-label-font-weight);
+    font-size: large;
+  }
+
+  .room-border-node {
+    stroke:  #262626;
+  }
+}
+
+.header {
+  @include nb-card-header();
+  border-bottom: none;
+  padding-bottom: 0;
+}
+}
+
+svg {
+  display: block;
+  margin: auto;
+}

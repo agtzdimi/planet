@@ -1,0 +1,48 @@
+.imageCard {
+
+    label {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .component-card-wrapper {
+      width: 100%;
+    }
+
+    .component-icon {
+      margin-bottom: 1rem;
+    }
+
+    .component-name {
+      color: nb-theme(color-info-400);
+      font-weight: nb-theme(text-label-font-weight);
+    }
+
+    .component-navigate-link {
+      text-decoration: none;
+    }
+
+    nb-card {
+      box-shadow: 0 4px 27px 0 rgba(230, 234, 240, 0.2);
+      transition: transform 0.25s ease;
+
+      > nb-card-body {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      &:hover {
+        box-shadow: 0 15px 37px 0 nb-theme(color-info-300);
+        transform: translateY(-1rem);
+        cursor: pointer;
+        .component-name {
+          color: nb-theme(color-info-600);
+        }
+      }
+    }
+  }

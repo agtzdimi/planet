@@ -1,0 +1,45 @@
+@import '../../../@theme/styles/themes';
+@import '../../../@theme/styles/image.card.component.scss';
+@import '~@nebular/theme/components/card/card.component.theme';
+
+  h2 {
+    flex: 1 1 100%;
+    color: nb-theme(text-hint-color);
+    margin: 1rem 0 2rem;
+    text-align: center;
+  }
+
+.formLabel {
+  margin-top: 0.8%;
+  margin-left: 2%;
+  font-weight: bold;
+}
+
+input {
+  text-align: center;
+  margin-top: 0.9rem;
+}
+
+textarea {
+  margin-top: 1rem;
+}
+
+.formDescr {
+  margin-top: 1.3%;
+  margin-left: 2%;
+  font-weight: bold;
+}
+
+input[type=file] {
+  display:none;
+}
+
+.errorTextarea {
+  color: nb-theme(color-danger-default);
+  margin-top: 2.5%;
+}
+
+.successTextarea {
+  color: nb-theme(color-success-default);
+  margin-top: 2.5%;
+}

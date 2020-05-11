@@ -1,0 +1,21 @@
+@import '../../../@theme/styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
+nb-select {
+  margin-left: 10%;
+}
+
+.errorTextarea {
+  color: nb-theme(color-danger-default);
+  margin-top: 2.5%;
+}
+
+.successTextarea {
+  color: nb-theme(color-success-default);
+  margin-top: 2.5%;
+}
+
+nb-card-header {
+  font-size: 1.2rem;
+}

@@ -1,0 +1,117 @@
+<div class="row">
+  <div class="col">
+
+    <nb-card accent="primary">
+      <nb-card-header>Flexibility Unit Type Registration</nb-card-header>
+      <nb-card-body>
+
+        <div class="row">
+          <div class="col-md-2">
+            <button nbButton hero status="info" (click)="handleClick()">Save Data to Middleware</button>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-3">
+            <div *ngIf="message" [ngClass]="{
+                'errorTextarea': message.includes('Error'),
+                'successTextarea': !message.includes('Error')
+              }">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <h2>Register Unit</h2>
+
+    <div class="row">
+      <div class="col-md-4" *ngFor="let unit of flexUnits">
+        <div class="imageCard">
+          <nb-card accent="primary">
+            <nb-card-body (click)="animateInfo(transitionController,transitionName,unit.id)">
+              <img class="component-icon" src="assets/images/{{unit.id}}.jpg"
+                [ngStyle]="{'width': '15rem', 'height': '11rem'}">
+              <label class="component-name">{{unit.label}}</label>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeModel" [suiTransition]="transitionController">
+      <nb-card [ngSwitch]="activeModel" accent="primary">
+        <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'VES'">Virtual Energy Storage Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'P2H'">Power 2 Heat Parameters</nb-card-header>
+        <nb-card-header *ngSwitchCase="'Sim'">Simulator Parameters</nb-card-header>
+        <nb-card-body>
+
+          <div class="form-group row">
+
+            <div class="col-md-3"></div>
+            <label for="'unitName'" class="col-md-1 formLabel">Unit Name</label>
+            <div class="col-md-3">
+              <input type="text" fullWidth nbInput shape="semi-round" id="'unitName'" [(ngModel)]="unitName">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-3"></div>
+            <label for="'unitDescr'" class="col-md-1 formDescr">Unit Description</label>
+            <div class="col-md-3">
+              <textarea type="text" nbInput fullWidth shape="round" id="'unitDescr'" [(ngModel)]="unitDescr"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+
+            <div class="col-md-3"></div>
+            <label for="'unitName'" class="col-md-1 formLabel">Unit IP</label>
+            <div class="col-md-3">
+              <input type="text" fullWidth nbInput shape="semi-round" id="'unitIP'" [(ngModel)]="unitIP">
+            </div>
+          </div>
+
+          <div class="form-group row">
+
+            <div class="col-md-3"></div>
+            <label for="'unitName'" class="col-md-1 formLabel">Unit REST Port</label>
+            <div class="col-md-3">
+              <input type="text" fullWidth nbInput shape="semi-round" id="'unitPort'" [(ngModel)]="unitPort">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngSwitchCase="'Sim'">
+
+            <div class="col-md-3"></div>
+            <label for="'unitName'" class="col-md-1 formLabel">Simulator Type</label>
+            <div class="col-md-1">
+              <sui-checkbox [ngModel]="selectedOptions.Simulink" [isReadonly]="selectedOptions.Simulink"
+                (ngModelChange)="handleSimulator($event,'Simulink')" [ngStyle]="{'margin-top': '13px'}"
+                class="formLabel">
+                <p class="formLabel">Simulink</p>
+              </sui-checkbox>
+            </div>
+            <div class=" col-md-1">
+              <sui-checkbox [ngModel]="selectedOptions.OpalRT" [isReadonly]="selectedOptions.OpalRT"
+                (ngModelChange)="handleSimulator($event,'OpalRT')" [ngStyle]="{'margin-top': '13px'}" class="formLabel">
+                <p class="formLabel">OpalRT</p>
+              </sui-checkbox>
+            </div>
+          </div>
+
+          <hr class="m-4">
+          <div class="row">
+            <div class="col-md-12">
+              <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="p2gUnit=$event"></ngx-p2g-unit>
+              <ngx-p2h-unit *ngSwitchCase="'P2H'" (p2h)="p2hUnit=$event"></ngx-p2h-unit>
+              <ngx-ves-unit *ngSwitchCase="'VES'" (ves)="vesUnit=$event"></ngx-ves-unit>
+            </div>
+          </div>
+        </nb-card-body>
+        <div ng-switch-default></div>
+      </nb-card>
+    </div>
+
+  </div>
+</div>

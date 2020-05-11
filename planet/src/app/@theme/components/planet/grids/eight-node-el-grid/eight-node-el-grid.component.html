@@ -1,0 +1,18 @@
+<svg height="600" width="550" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    [attr.viewBox]="viewBox" preserveAspectRatio="xMidYMid">
+
+    <g [attr.id]="room.id" [class.selected-room]="selectedRoom == room.id" *ngFor="let room of sortedRooms">
+        <path class="room-border" (click)="selectRoom(room.id)" [attr.d]="room.area.d"
+            [style.filter]="isIE || isFirefox ? 'inherit': ''" />
+        <path class="room-border" [attr.d]="room.border.d" />
+        <path class="room-border room-border-glow" [attr.d]="room.border.d"
+            [style.filter]="isIE || isFirefox ? 'inherit': ''" />
+        <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.name.x"
+            [attr.y]="room.name.y">{{room.name.text}}</text>
+        <text class="room-text" (click)="selectRoom(room.id)" text-anchor="middle" [attr.x]="room.number.x"
+            [attr.y]="room.number.y">{{room.number.text}}</text>
+        <text *ngIf="room.number.x2" class="room-text" (click)="selectRoom(room.id)" text-anchor="middle"
+            [attr.x]="room.number.x2" [attr.y]="room.number.y2">{{room.number.text2}}</text>
+    </g>
+
+</svg>

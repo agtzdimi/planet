@@ -1,0 +1,29 @@
+label {
+    margin-top: 3.7%;
+}
+
+input[type=file] {
+    display:none;
+  }
+
+  img {
+      width: 50%;
+      height: 90%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 50%;
+  }
+
+  .hide {
+    display:none;
+  }
+
+  .saveButton {
+      margin-top: 5%;
+      text-align: center;
+  }
+
+  nb-card-header {
+    font-size: 1.2rem;
+  }

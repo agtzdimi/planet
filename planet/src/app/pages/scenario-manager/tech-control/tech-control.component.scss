@@ -1,0 +1,46 @@
+@import '../../../@theme/styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
+input[type=text] {
+  text-align: center;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+input[type=number] {
+  text-align: center;
+  width: 100%;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+label {
+  line-height: 31px;
+  margin-left: 30px;
+  font-weight: nb-theme(text-label-font-weight);
+}
+
+nb-card-header {
+  font-size: 1.2rem;
+}
+
+.errorTextarea {
+  color: nb-theme(color-danger-500);
+  margin-top: 0.5%;
+}
+
+.errspan {
+  float: right;
+  margin-right: 6px;
+  margin-top: -20px;
+  position: relative;
+  z-index: 2;
+  color: nb-theme(border-primary-color-2);
+}

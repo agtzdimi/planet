@@ -1,0 +1,37 @@
+@import '../../../@theme/styles/themes';
+@import '../../../@theme/styles/image.card.component.scss';
+
+  h2 {
+    flex: 1 1 100%;
+    color: nb-theme(text-hint-color);
+    margin: 1rem 0 2rem;
+    text-align: center;
+  }
+
+.formLabel {
+  margin-top: 0.5%;
+  margin-left: 2%;
+  font-weight: bold;
+}
+
+input {
+  text-align: center;
+}
+
+input[type=file] {
+  display:none;
+}
+
+.errorTextarea {
+  color: nb-theme(color-danger-default);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.successTextarea {
+  color: nb-theme(color-success-default);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

@@ -1,0 +1,57 @@
+@import '../../styles/themes';
+
+:host /deep/ {
+  $auth-layout-padding: 2.5rem;
+
+  nb-layout .layout .layout-container .content .columns nb-layout-column {
+    padding: $auth-layout-padding;
+  }
+
+  nb-card {
+    height: calc(100vh - 2 * #{$auth-layout-padding});
+  }
+
+  nb-card-header {
+    a {
+      text-decoration: none;
+      i {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+    }
+    border-bottom: 2px solid nb-theme(color-info-400);
+  }
+
+  nb-card {
+    margin: 0;
+  }
+  .flex-centered {
+      margin: auto;
+  }
+  nb-card-body {
+    display: flex;
+  }
+
+  // TODO rewrite when develop responsive
+  @media (max-width: 550px) {
+    /deep/ nb-layout .layout .layout-container .content .columns nb-layout-column {
+      padding: 0;
+    }
+
+    nb-card {
+      border-radius: 0;
+      height: 100vh;
+    }
+  }
+
+}
+img {
+  border-radius: 4px;
+  padding: 5px;
+  width: 310px;
+  border: 0;
+  margin-top: 80px;
+  height: 230px;
+}
+
+

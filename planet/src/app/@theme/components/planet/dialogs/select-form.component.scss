@@ -1,0 +1,18 @@
+@import '../../../styles/themes';
+
+button {
+    margin: 1rem;
+  };
+  nb-list-item { cursor: pointer; };
+  nb-list-item:hover {
+      background-color: nb-theme(color-info-400);
+    };
+    nb-card {
+      min-width: 10rem;
+      max-width: 20rem;
+      margin: 0 auto 2rem;
+    };
+
+    nb-list-item:first-child {
+        border-top: 0 solid #151a30;
+    }

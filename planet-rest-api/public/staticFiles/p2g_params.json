@@ -1,0 +1,17 @@
+{
+   "parameters": {
+      "timeStamp": "",
+      "optimalityPolyNom": "[0,1,1]",
+      "CAPEX": "",
+      "OPEX": "",
+      "constraints": {
+         "ramp_up_lim": 0.5,
+         "ramp_down_lim": 0.5,
+         "FLH": ""
+      }
+   },
+   "nodeID": "",
+   "setpoint": "",
+   "simulationID": "",
+   "counter": ""
+}

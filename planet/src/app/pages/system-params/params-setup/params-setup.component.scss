@@ -1,0 +1,53 @@
+@import '../../../@theme/styles/themes';
+@import '../../../@theme/styles/image.card.component.scss';
+
+.errorTextarea {
+    color: nb-theme(color-danger-default);
+    margin-top: 7.5%;
+  }
+  
+  .successTextarea {
+    color: nb-theme(color-success-default);
+    margin-top: 7.5%;
+  }
+
+  h2 {
+    flex: 1 1 100%;
+    color: nb-theme(color-primary-200);
+    text-align: center;
+    margin: 0;
+  }
+
+  :host ::ng-deep nb-stepper .step-content {
+    text-align: center;
+    button {
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+  }
+
+  label {
+    font-weight: nb-theme(text-label-font-weight);
+  }
+  
+  .lorem {
+    text-align: justify;
+    margin-bottom: 2rem;
+  }
+  
+  .input-group {
+    padding-bottom: 1rem;
+  }
+  
+  .linear-mode-button {
+    margin-bottom: 1rem;
+  }
+
+  .selectedSim {
+    border:3px solid nb-theme(color-primary-default);
+  }
+
+  nb-card-header {
+    font-size: 1.2rem;
+  }
+  

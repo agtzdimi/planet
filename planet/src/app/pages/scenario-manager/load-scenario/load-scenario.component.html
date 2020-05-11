@@ -1,0 +1,41 @@
+<div class="row" *ngIf="loadPage && genParams['formName'] !== ''">
+  <div class="col-xxl-12">
+
+    <ngx-general-params [isLoadModule]="true"></ngx-general-params>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="ui content">
+          <ngx-tech-param [(pvParam)]="pvParam" [(windParam)]="windParam" (pvChange)="pvParam" (windChange)="windParam"
+            [isLoadModule]="true">
+          </ngx-tech-param>
+        </div>
+      </div>
+
+    </div>
+
+    <ngx-fourty-three-el-grid style="width: 100%" [isLoadModule]="true">
+    </ngx-fourty-three-el-grid>
+
+    <div class="row submit-button">
+      <div class="col-md-2">
+        <button *ngIf="!genParams['formName'].includes('  -  ')" nbButton type="button" [nbSpinner]="loading"
+          nbSpinnerStatus="primary" nbSpinnerSize="large" nbSpinnerMessage="" status="success" size="large"
+          class="start-upload-btn m-2" (click)="startUpload()">
+          Save Scenario
+        </button>
+      </div>
+      <div *ngIf="saveMessage!==''" class="col-md-2">
+        <div *ngIf="genParams['formName'].includes('  -  ')" class="errorTextarea"> '[space][space]-[space][space]' is
+          a
+          reserved word!</div>
+        <div [ngClass]="{
+          'errorTextarea': saveMessage.includes('Error'),
+          'successTextarea': !saveMessage.includes('Error')
+        }">
+          {{saveMessage}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

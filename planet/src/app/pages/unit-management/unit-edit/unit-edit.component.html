@@ -1,0 +1,175 @@
+<div class="row" [ngSwitch]="phase">
+  <div class="col">
+
+    <nb-card accent="primary">
+      <nb-card-header>Flexibility Unit Type Modification</nb-card-header>
+      <nb-card-body>
+
+        <div class="row">
+          <div class="col-md-2">
+            <button nbButton hero status="info" (click)="handleClick()">Save Data to Middleware</button>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-3">
+            <div *ngIf="message" [ngClass]="{
+                  'errorTextarea': message.includes('Error'),
+                  'successTextarea': !message.includes('Error')
+                }">
+              {{message}}
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <div *ngSwitchCase="'1'">
+      <h2>Edit Unit</h2>
+
+      <div class="row">
+        <div class="col-md-3" *ngFor="let unit of flexUnits">
+          <div class="imageCard">
+            <nb-card accent="primary">
+              <nb-card-body (click)="handleModel(unit.id)">
+                <img class="component-icon" src="assets/images/{{unit.id}}.jpg"
+                  [ngStyle]="{'width': '15rem', 'height': '11rem'}">
+                <label class="component-name">{{unit.label}}</label>
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'2'">
+
+      <div class="row">
+        <div class="col-md-1">
+          <nb-actions size="large">
+            <nb-action icon="arrow-back" (click)="phase=phase - 1; message=''"></nb-action>
+          </nb-actions>
+        </div>
+        <div class="col-md-10">
+          <h2>Select one of the {{activeModel}} Units</h2>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+
+      <div class="row" [ngSwitch]="activeModel">
+
+        <div class="col-md-12" *ngSwitchCase="'P2G'">
+          <ngx-unit-models [loading]="loading" [models]="p2gUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
+
+        <div class="col-md-12" *ngSwitchCase="'P2H'">
+          <ngx-unit-models [loading]="loading" [models]="p2hUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
+
+        <div class="col-md-12" *ngSwitchCase="'VES'">
+          <ngx-unit-models [loading]="loading" [models]="vesUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
+
+        <div class="col-md-12" *ngSwitchCase="'Sim'">
+          <ngx-unit-models [loading]="loading" [models]="simUnit" [modelType]="activeModel"
+            (selectedModel)="handleSelectedModel($event,transitionController,transitionName)"></ngx-unit-models>
+        </div>
+
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'3'" [suiTransition]="transitionController">
+
+      <div class="row">
+        <div class="col-md-1">
+          <nb-actions size="large">
+            <nb-action icon="arrow-back" (click)="phase=phase - 1; message=''"></nb-action>
+          </nb-actions>
+        </div>
+        <div class="col-md-10">
+          <h2>Modify the values of the Unit</h2>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <nb-reveal-card [ngSwitch]="activeModel">
+            <nb-card-front>
+              <nb-card size="giant" status="success" accent="primary">
+                <nb-card-header *ngSwitchCase="'P2G'">Power 2 Gas Unit</nb-card-header>
+                <nb-card-header *ngSwitchCase="'VES'">Virtual Energy Storage</nb-card-header>
+                <nb-card-header *ngSwitchCase="'P2H'">Power 2 Heat Unit</nb-card-header>
+                <nb-card-header *ngSwitchCase="'Sim'">Simulator Unit</nb-card-header>
+                <nb-card-body>
+                  <b>Unit Description: </b> <i> {{selectedModel['description']}}</i>
+                  <br>
+                  <br>
+                  <b><strong>Click the bottom arrow to set the Unit</strong></b>
+                </nb-card-body>
+              </nb-card>
+            </nb-card-front>
+            <nb-card-back>
+              <nb-card size="giant" status="success" accent="primary">
+                <nb-card-body>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group row">
+
+                        <label for="'unitName'" class="col-md-3 formLabel">Unit IP</label>
+                        <div class="col-md-5">
+                          <input type="text" fullWidth nbInput shape="semi-round" id="'unitIP'" [(ngModel)]="unitIP">
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+
+                        <label for="'unitName'" class="col-md-3 formLabel">Unit REST Port</label>
+                        <div class="col-md-5">
+                          <input type="text" fullWidth nbInput shape="semi-round" id="'unitPort'"
+                            [(ngModel)]="unitPort">
+                        </div>
+                      </div>
+
+                      <ngx-p2g-unit *ngSwitchCase="'P2G'" (p2g)="selectedModel=$event" [p2gInput]="selectedModel"
+                        [mode]="'edit'">
+                      </ngx-p2g-unit>
+                      <ngx-p2h-unit *ngSwitchCase="'P2H'" (p2h)="selectedModel=$event" [p2hInput]="selectedModel"
+                        [mode]="'edit'">
+                      </ngx-p2h-unit>
+                      <ngx-ves-unit *ngSwitchCase="'VES'" (ves)="selectedModel=$event" [vesInput]="selectedModel"
+                        [mode]="'edit'"></ngx-ves-unit>
+
+                      <div class="form-group row" *ngSwitchCase="'Sim'">
+
+                        <label for="'unitName'" class="col-md-2 formLabel">Simulator Type</label>
+                        <div class="col-md-2">
+                          <sui-checkbox [ngModel]="selectedModel['metadata']['Simulink']"
+                            [isReadonly]="selectedModel['metadata']['Simulink']"
+                            (ngModelChange)="handleSimulator($event,'Simulink')">
+                            <p class="formLabel">Simulink</p>
+                          </sui-checkbox>
+                        </div>
+                        <div class=" col-md-2">
+                          <sui-checkbox [ngModel]="selectedModel['metadata']['OpalRT']"
+                            [isReadonly]="selectedModel['metadata']['OpalRT']"
+                            (ngModelChange)="handleSimulator($event,'OpalRT')">
+                            <p class="formLabel">OpalRT</p>
+                          </sui-checkbox>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+            </nb-card-back>
+          </nb-reveal-card>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

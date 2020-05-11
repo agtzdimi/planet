@@ -1,0 +1,11 @@
+@import '../../../@theme/styles/themes';
+
+.errorTextarea {
+    color: nb-theme(color-danger-default);
+    margin-top: 2.5%;
+  }
+  
+  .successTextarea {
+    color: nb-theme(color-success-default);
+    margin-top: 2.5%;
+  }

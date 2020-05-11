@@ -1,0 +1,35 @@
+<div *ngIf="isChecked" class="listItem">
+
+    <ul *ngIf="label1">
+        <li>
+            <div class="form-group row">
+                <label [for]="compId" [class]="columnLength1+ ' col-form-label'">{{label1}}</label>
+                <div [class]="columnLength1">
+                    <input *ngIf="isReadOnly !== true" [type]="inputType" class="form-control" [id]="compId"
+                        (change)="onChange($event)" [value]="val">
+                    <input *ngIf="isReadOnly === true" [type]="inputType" class="form-control" [id]="compId"
+                        (change)="onChange($event)" [value]="val" readonly>
+                </div>
+                <label [for]="compId" [class]="columnLength2+ ' col-form-label'">{{label2}}</label>
+            </div>
+        </li>
+    </ul>
+
+    <ul *ngIf="inputHtmlLabel1" class="innerHtmlStructure">
+        <li>
+            <div class="form-group row">
+                <label [for]="compId" [class]="columnLength1+ ' col-form-label innerHtmlLabels'"
+                    [innerHtml]="inputHtmlLabel1"></label>
+                <div [class]="columnLength1">
+                    <input *ngIf="isReadOnly !== true" [type]="inputType" class="form-control" [id]="compId"
+                        (change)="onChange($event)" [value]="val">
+                    <input *ngIf="isReadOnly === true" [type]="inputType" class="form-control" [id]="compId"
+                        (change)="onChange($event)" [value]="val" readonly>
+                </div>
+                <label [for]="compId" [class]="columnLength2 + ' col-form-label innerHtmlLabels'"
+                    [innerHtml]="inputHtmlLabel2"></label>
+            </div>
+        </li>
+    </ul>
+
+</div>
