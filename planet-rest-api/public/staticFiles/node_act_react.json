@@ -1,0 +1,34 @@
+{
+   "node.1": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   },
+   "node.2": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   },
+   "node.3": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   },
+   "node.4": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   },
+   "node.5": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   },
+   "node.6": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   },
+   "node.7": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   },
+   "node.8": {
+      "ActivePower": 0,
+      "ReactivePower": 0
+   }
+}

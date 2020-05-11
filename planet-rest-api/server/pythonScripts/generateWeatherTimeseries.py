@@ -16,9 +16,7 @@ weather = list(map(float, weather))
 with open(path + "/Parameters_initialization.txt", "r") as read_file:
    data = json.load(read_file)
 
-timeStep = data['payload']['simulation']['time.step'] * 60
-
-valuesLength = data['payload']['electric.grid']['node.1']['VES']['parameters']['noSteps']
+valuesLength = data['payload']['simulation']['simulation.time']
 
 nodes = 43
 

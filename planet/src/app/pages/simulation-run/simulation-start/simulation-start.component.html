@@ -17,8 +17,9 @@
             </button>
           </div>
           <div class="col-md-3">
-            <sui-progress *ngIf="!status && formName !== 'Select Saved Scenario' && showSimBar" class="active indicating"
-              [value]="changingValue" [ngStyle]="{'margin-top': '10px', 'height': '42%'}" [autoSuccess]="true">
+            <sui-progress *ngIf="!status && formName !== 'Select Saved Scenario' && showSimBar"
+              class="active indicating" [value]="changingValue" [ngStyle]="{'margin-top': '10px', 'height': '42%'}"
+              [autoSuccess]="true">
             </sui-progress>
             <div *ngIf="status">
               <div [ngClass]="{
@@ -36,7 +37,7 @@
       </nb-card-body>
     </nb-card>
 
-    <div *ngIf="showNodes">
+    <div *ngIf="true">
       <nb-card *ngFor="let nodeCh of nodesChart" accent="primary" size="large">
         <nb-card-header>{{nodeCh.title}}</nb-card-header>
         <nb-card-body>

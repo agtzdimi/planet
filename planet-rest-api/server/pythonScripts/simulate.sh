@@ -8,12 +8,11 @@ mode="$3"
 dirName="$4"
 
 echo "$formName ############"
-mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
-   --collection files --authenticationDatabase $MONGO_AUTH_DB --db planet --out "$dirName/$simulationType/allDocuments.txt" \
-   -q '{"payload.formName": "'"$formName"'"}'
-grep '"formName":"'"$formName"'"' "$dirName/$simulationType/allDocuments.txt" | grep 'Parameters_initialization' > "$dirName/$simulationType/Parameters_initialization.txt"
-grep '"formName":"'"$formName"'"' "$dirName/$simulationType/allDocuments.txt" | grep 'Economy_environment_initialization' > "$dirName/$simulationType/Economy_environment_initialization.txt"
-grep '"formName":"'"$formName"'"' "$dirName/$simulationType/allDocuments.txt" | grep 'Control_initialization' > "$dirName/$simulationType/Control_initialization.txt"
+
+mongoexport --quiet --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
+   --collection files --authenticationDatabase $MONGO_AUTH_DB --db planet \
+   --eval 'db.files.find({$and: [{"payload.formName": "'"$formName"'"},{"payload.simulation": {$exists: true}}]},{_id: 0})' > "$dirName/$simulationType/Parameters_initialization.txt"
+
 mongoexport --port $MONGO_PORT --host $MONGO_IP -u $MONGO_USER -p $MONGO_PASSWORD \
    --authenticationDatabase $MONGO_AUTH_DB --db planet --collection files --type=csv --fields DH_demand,LH_demand,"formName",Time --out "$dirName/$simulationType/Heat.csv"
 egrep ','"$formName"',|DH_demand|LH_demand' "$dirName/$simulationType/Heat.csv" | sed 's|,'"$formName"'||' | sed 's/,formName//' | sed '/^,,.*/d' > "$dirName/tempFile$simulationType"
@@ -38,8 +37,9 @@ egrep ','"$formName"',|Wind_node' "$dirName/$simulationType/Wind.csv" | sed 's|,
 sortField=$(awk 'BEGIN {FS=OFS=","} {print NF}' "$dirName/tempFile$simulationType" | head -n1)
 (head -n 1 "$dirName/tempFile$simulationType" && tail -n +2 "$dirName/tempFile$simulationType" | sort -n -k$sortField,$sortField -t,) > "$dirName/$simulationType/Wind.csv"
 
-rm "$dirName/$simulationType/allDocuments.txt" "$dirName/tempFile$simulationType"
+rm "$dirName/tempFile$simulationType"
 
+python ./server/pythonScripts/timeSynchronizer.py --dir "$dirName/$simulationType"
 }
 
 form="$1"
